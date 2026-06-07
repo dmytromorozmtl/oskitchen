@@ -6611,3 +6611,11 @@ Category: feat
 Result: done — /dashboard/floor-plans MICROS parity (section zone filter, RECTANGLE/CIRCLE/SQUARE shapes, drag canvas, realtime badge); updateTableShapeAction; policy + audit + 4 tests
 Tests: npm run test:ci:visual-floor-plan-editor:cert 4/4 pass
 Commit: 5eeefe48
+
+---
+Cycle: 20260606-225300
+Task: 93 — KDS daisy-chain config NCR Aloha parity (P3)
+Category: feat
+Result: done — /dashboard/kitchen/daisy-chain with 20 Prep→line→Expo bump handoff links; settingsCenterJson storage; toggle per link; routing-rules cross-link; nav + i18n; policy + audit + 5 tests
+Tests: npm run test:ci:kds-daisy-chain-config:cert 5/5 pass
+Commit: be9389b6
