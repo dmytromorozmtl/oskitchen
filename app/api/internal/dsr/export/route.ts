@@ -33,7 +33,6 @@ export async function POST(request: Request) {
 
   const mfaOk = verifyImpersonationMfa({
     totpCode: body.totpCode ?? "",
-    actorUserId: sessionUser.id,
   });
   if (!mfaOk) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
