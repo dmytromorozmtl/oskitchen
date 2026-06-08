@@ -31,9 +31,9 @@ export const viewport: Viewport = {
 export default async function HandheldPOSPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ tableId?: string }>;
-} = {}) {
-  const { tableId } = await (searchParams ?? Promise.resolve({}));
+  searchParams: Promise<{ tableId?: string }>;
+}) {
+  const { tableId } = await searchParams;
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
