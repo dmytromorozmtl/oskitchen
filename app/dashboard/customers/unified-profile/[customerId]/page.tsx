@@ -36,7 +36,7 @@ export default async function UnifiedCustomerProfilePage({
           ← Unified profiles
         </Link>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">Unified profile</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{snapshot.displayName}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{snapshot.identity.displayName}</p>
       </div>
       <UnifiedCustomerProfilePanel snapshot={snapshot} />
     </div>
