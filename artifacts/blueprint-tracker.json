@@ -19,5 +19,6 @@
   "18-invoice-scanner-accuracy": "done",
   "19-bank-import-reconciliation": "done",
   "20-cross-tenant-isolation-e2e": "done",
+  "21-api-mutation-rate-limit": "done",
   "34-migration-health-checker": "done"
 }

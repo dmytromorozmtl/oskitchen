@@ -7118,3 +7118,12 @@ Priority: P0
 Artifact: npm run benchmark:cross-tenant-isolation-e2e, artifacts/cross-tenant-isolation-e2e-benchmark-summary.json
 Result: PASS — 6/6 contract scenarios (403 throw/structural). test:ci:cross-tenant-isolation-e2e → 14/14 PASS. Staging Playwright vault-gated via e2e/cross-tenant-isolation-staging.spec.ts
 Vault: 11/11 | P0: Sentry blocked | GO: NO-GO
+
+---
+Cycle: 225
+Task: Blueprint P1-21 — API mutation rate limit (103+ routes)
+Role: Backend
+Priority: P1
+Artifact: npm run audit:api-mutation-rate-limit, artifacts/api-mutation-rate-limit-audit.json
+Result: PASS — 198 mutation routes: 77 middleware (enforceApiMutationRateLimitMiddleware) + 20 dedicated + 101 exempt (webhook/cron/storefront/public). test:ci:api-mutation-rate-limit 8/8 PASS. CI: deploy-prod-gate.yml audit step added
+Vault: 11/11 | P0: Sentry blocked | GO: NO-GO

@@ -27,3 +27,8 @@ Result: DONE — 3-month corpus (90 tx), lib/qa/bank-import-reconciliation-*.ts 
 Task: 20 — Cross-tenant isolation E2E [QA]
 Department: QA
 Result: DONE — lib/qa/cross-tenant-isolation-contract.ts (6 scenarios, Tenant A→B assert 403). npm run benchmark:cross-tenant-isolation-e2e → 6/6 PASS. test:ci:cross-tenant-isolation-e2e → 14/14 PASS. e2e/cross-tenant-isolation.spec.ts + staging spec vault-gated.
+
+=== CYCLE 20260609-193200 ===
+Task: 21 — API mutation rate limit [Backend]
+Department: Backend
+Result: DONE — Verified 198/198 mutation routes covered (77 middleware + 20 dedicated + 101 exempt). Strengthened audit assert + deploy-prod-gate CI step. test:ci:api-mutation-rate-limit → 8/8 PASS.
