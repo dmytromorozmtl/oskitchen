@@ -16,5 +16,6 @@
   "15-doordash-live": "done",
   "16-uber-eats-live": "done",
   "17-sso-idp-smoke": "done",
+  "18-invoice-scanner-accuracy": "done",
   "34-migration-health-checker": "done"
 }
