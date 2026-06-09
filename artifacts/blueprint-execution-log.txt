@@ -17,3 +17,8 @@ Result: DONE — scripts/check-migration-health.ts + lib/devops/migration-health
 Task: 18 — Invoice scanner accuracy benchmark [QA]
 Department: QA
 Result: DONE — 52-invoice golden corpus, lib/qa/invoice-scanner-ocr-mapper.ts + scoring. npm run benchmark:invoice-scanner-accuracy → supplier/amount/line-items/overall 100% (threshold 85%). tests/unit/invoice-scanner-accuracy-benchmark.test.ts 4/4 PASS. Artifact: artifacts/invoice-scanner-accuracy-benchmark-summary.json.
+
+=== CYCLE 20260609-192746 ===
+Task: 19 — Bank import reconciliation accuracy [QA]
+Department: QA
+Result: DONE — 3-month corpus (90 tx), lib/qa/bank-import-reconciliation-*.ts + lib/finance/bank-statement-csv-parser.ts. npm run benchmark:bank-import-reconciliation → CSV parse 100%, category match 100% (threshold 85%). tests/unit/bank-import-reconciliation-benchmark.test.ts 4/4 PASS.

@@ -2,6 +2,9 @@ import OpenAI from "openai";
 
 import { assertAiAllowed } from "@/lib/ai/assert-ai-allowed";
 import { estimateTokens, recordAIUsage } from "@/lib/ai/budget-guard";
+import { categorizeBankTransaction } from "@/lib/finance/bank-transaction-categorization";
+import { parseBankStatementCsv as parseBankStatementCsvPure } from "@/lib/finance/bank-statement-csv-parser";
+import type { BankLineType } from "@/lib/finance/bank-statement-types";
 import { prisma } from "@/lib/prisma";
 import {
   bankTransactionListWhereForOwner,
@@ -13,7 +16,7 @@ const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 
-export type BankLineType = "DEPOSIT" | "WITHDRAWAL";
+export type { BankLineType } from "@/lib/finance/bank-statement-types";
 
 export type ParsedBankLine = {
   date: string;
@@ -53,22 +56,13 @@ export type BankStatementImportPreview = {
 const AUTO_RECONCILE_CONFIDENCE = 0.85;
 const AMOUNT_TOLERANCE = 0.02;
 
-function normalizeHeader(value: string): string {
-  return value.trim().toLowerCase().replace(/[\s_-]+/g, "");
-}
+export { categorizeBankTransaction } from "@/lib/finance/bank-transaction-categorization";
 
 function inferTypeFromAmount(amount: number, explicit?: string): BankLineType {
   const normalized = explicit?.trim().toUpperCase();
   if (normalized === "DEPOSIT" || normalized === "CREDIT") return "DEPOSIT";
   if (normalized === "WITHDRAWAL" || normalized === "DEBIT") return "WITHDRAWAL";
   return amount < 0 ? "WITHDRAWAL" : "DEPOSIT";
-}
-
-function parseAmount(raw: string): number | null {
-  const cleaned = raw.replace(/[$,]/g, "").trim();
-  if (!cleaned) return null;
-  const value = Number(cleaned);
-  return Number.isFinite(value) ? Math.abs(value) : null;
 }
 
 function normalizeDate(raw: string): string | null {
@@ -84,89 +78,25 @@ function normalizeDate(raw: string): string | null {
   return null;
 }
 
-export function categorizeBankTransaction(
-  description: string,
-  type: BankLineType,
-): string {
-  const text = description.toLowerCase();
-
-  if (type === "DEPOSIT") {
-    if (
-      /stripe|square|settlement|payout|deposit|pos|toast|clover|shopify/.test(text)
-    ) {
-      return "POS deposit";
-    }
-    return "Other deposit";
-  }
-
-  if (/sysco|supplier|vendor|foods|us foods|gordon|produce|wholesale/.test(text)) {
-    return "Supplier payment";
-  }
-  if (/adp|payroll|gusto|wages|salary/.test(text)) {
-    return "Payroll";
-  }
-  if (/rent|lease|landlord/.test(text)) {
-    return "Rent";
-  }
-  if (/utility|electric|gas|water|internet/.test(text)) {
-    return "Utilities";
-  }
-
-  return "Uncategorized expense";
+function parseAmount(raw: string): number | null {
+  const cleaned = raw.replace(/[$,]/g, "").trim();
+  if (!cleaned) return null;
+  const value = Number(cleaned);
+  return Number.isFinite(value) ? Math.abs(value) : null;
 }
 
 export function parseBankStatementCsv(csv: string): {
   lines: ParsedBankLine[];
   warnings: string[];
 } {
-  const warnings: string[] = [];
-  const rows = csv
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  if (rows.length === 0) {
-    return { lines: [], warnings: ["CSV is empty."] };
-  }
-
-  const headerCells = rows[0].split(",").map((cell) => normalizeHeader(cell));
-  const dateIdx = headerCells.findIndex((h) => h === "date" || h === "transactiondate");
-  const descIdx = headerCells.findIndex((h) =>
-    ["description", "memo", "details", "narrative"].includes(h),
-  );
-  const amountIdx = headerCells.findIndex((h) =>
-    ["amount", "value", "transactionamount"].includes(h),
-  );
-  const typeIdx = headerCells.findIndex((h) => h === "type" || h === "transactiontype");
-
-  if (dateIdx < 0 || descIdx < 0 || amountIdx < 0) {
-    warnings.push("Missing required CSV columns (date, description, amount).");
-    return { lines: [], warnings };
-  }
-
-  const lines: ParsedBankLine[] = [];
-  for (const row of rows.slice(1)) {
-    const cells = row.split(",").map((cell) => cell.trim());
-    const date = normalizeDate(cells[dateIdx] ?? "");
-    const description = cells[descIdx] ?? "";
-    const rawAmount = cells[amountIdx] ?? "";
-    const amount = parseAmount(rawAmount);
-    if (!date || !description || amount == null) {
-      warnings.push(`Skipped row: ${row}`);
-      continue;
-    }
-    const signed = Number(rawAmount.replace(/[$,]/g, ""));
-    const type = inferTypeFromAmount(signed, typeIdx >= 0 ? cells[typeIdx] : undefined);
-    lines.push({
-      date,
-      description,
-      amount,
-      type,
-      category: categorizeBankTransaction(description, type),
-    });
-  }
-
-  return { lines, warnings };
+  const parsed = parseBankStatementCsvPure(csv);
+  return {
+    warnings: parsed.warnings,
+    lines: parsed.lines.map((line) => ({
+      ...line,
+      category: categorizeBankTransaction(line.description, line.type),
+    })),
+  };
 }
 
 export function parseBankStatementText(text: string): {

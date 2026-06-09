@@ -17,5 +17,6 @@
   "16-uber-eats-live": "done",
   "17-sso-idp-smoke": "done",
   "18-invoice-scanner-accuracy": "done",
+  "19-bank-import-reconciliation": "done",
   "34-migration-health-checker": "done"
 }
