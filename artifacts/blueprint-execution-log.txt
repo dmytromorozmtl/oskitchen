@@ -22,3 +22,8 @@ Result: DONE — 52-invoice golden corpus, lib/qa/invoice-scanner-ocr-mapper.ts 
 Task: 19 — Bank import reconciliation accuracy [QA]
 Department: QA
 Result: DONE — 3-month corpus (90 tx), lib/qa/bank-import-reconciliation-*.ts + lib/finance/bank-statement-csv-parser.ts. npm run benchmark:bank-import-reconciliation → CSV parse 100%, category match 100% (threshold 85%). tests/unit/bank-import-reconciliation-benchmark.test.ts 4/4 PASS.
+
+=== CYCLE 20260609-192943 ===
+Task: 20 — Cross-tenant isolation E2E [QA]
+Department: QA
+Result: DONE — lib/qa/cross-tenant-isolation-contract.ts (6 scenarios, Tenant A→B assert 403). npm run benchmark:cross-tenant-isolation-e2e → 6/6 PASS. test:ci:cross-tenant-isolation-e2e → 14/14 PASS. e2e/cross-tenant-isolation.spec.ts + staging spec vault-gated.
