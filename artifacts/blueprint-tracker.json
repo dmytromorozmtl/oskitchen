@@ -1,0 +1,14 @@
+{
+  "1-sentry-dsn-production": "blocked",
+  "2-p0-orchestrator-pass": "done",
+  "3-remove-deploy-skip-vitest": "done",
+  "4-split-maintenance-mode-panel": "pending",
+  "5-fix-channel-live-smoke": "pending",
+  "6-pilot-gono-go-summary": "pending",
+  "7-full-test-suite-baseline": "pending",
+  "8-page-maturity-sweep-test": "pending",
+  "9-authed-rsc-dashboard-probe": "pending",
+  "10-error-boundaries-top-20": "pending",
+  "11-suspense-wrap-today": "pending",
+  "12-fix-n-plus-1-queries": "pending"
+}

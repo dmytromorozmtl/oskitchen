@@ -98,11 +98,6 @@ echo ""
 echo "[3/6] OpenAPI manifest + tests..."
 export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=16384}"
 node scripts/generate-openapi-manifest.cjs
-if [[ "${DEPLOY_SKIP_VITEST:-0}" == "1" ]]; then
-  echo "❌ DEPLOY_SKIP_VITEST=1 is no longer supported — tests must pass before production deploy."
-  echo "   Run: npm test && npm run deploy:prod"
-  exit 1
-fi
 echo "  → materialize disk-backed test paths (iCloud / Desktop flake guard)..."
 node ./node_modules/tsx/dist/cli.mjs scripts/materialize-vitest-disk-paths.ts
 echo "  → unit tests (vitest) — required gate before deploy..."
