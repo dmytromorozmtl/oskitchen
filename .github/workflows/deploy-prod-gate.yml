@@ -37,6 +37,9 @@ jobs:
       - name: Prisma generate
         run: npx prisma generate
 
+      - name: Migration health (schema validate + optional DB drift)
+        run: npm run check:migration-health
+
       - name: Unit tests (deploy gate)
         run: npm test
 

@@ -10,5 +10,11 @@
   "9-authed-rsc-dashboard-probe": "done",
   "10-error-boundaries-top-20": "done",
   "11-suspense-wrap-today": "done",
-  "12-fix-n-plus-1-queries": "done"
+  "12-fix-n-plus-1-queries": "done",
+  "13-woocommerce-live-smoke": "blocked",
+  "14-shopify-live-smoke": "blocked",
+  "15-doordash-live": "done",
+  "16-uber-eats-live": "done",
+  "17-sso-idp-smoke": "done",
+  "34-migration-health-checker": "done"
 }
