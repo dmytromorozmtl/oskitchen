@@ -62,9 +62,8 @@ export function runCrossTenantIsolationContract(): CrossTenantDenialResult[] {
     { userId: TENANT_A.userId, workspaceId: TENANT_A.workspaceId },
     TENANT_B.orderId,
   );
-  const structuralPass =
-    where.workspaceId === TENANT_A.workspaceId &&
-    where.workspaceId !== TENANT_B.workspaceId;
+  const scopedWorkspaceId = where.workspaceId as string | undefined;
+  const structuralPass = scopedWorkspaceId === TENANT_A.workspaceId;
   results.push({
     scenarioId: "scoped-id-where-workspace-bind",
     passed: structuralPass,

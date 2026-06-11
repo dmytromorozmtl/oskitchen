@@ -33,10 +33,10 @@ describe("Vertical-specific messaging (Absolute Final Task 79)", () => {
   it("ships five vertical segments with dedicated landing paths", () => {
     expect(VERTICAL_MESSAGING_SEGMENTS).toHaveLength(5);
     expect(VERTICAL_MESSAGING_SEGMENTS.map((s) => s.href)).toEqual([
-      "/solutions/ghost-kitchens",
-      "/solutions/ghost-kitchens",
+      "/ghost-kitchen-software",
+      "/ghost-kitchen-software",
       "/meal-prep-software",
-      "/commissary-kitchen-software",
+      "/commissary-software",
       "/catering-management",
     ]);
   });

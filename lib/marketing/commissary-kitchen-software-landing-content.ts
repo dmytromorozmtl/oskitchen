@@ -1,7 +1,7 @@
 import type { RichSolutionLanding } from '@/lib/marketing/solution-landing-content';
 import type { SolutionSegmentMeta } from '@/lib/marketing/solution-segment-meta';
 
-export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_PATH = '/commissary-kitchen-software' as const;
+export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_PATH = '/commissary-software' as const;
 
 export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_META = {
   title: 'Commissary Kitchen Software — Multi-Tenant Production | OS Kitchen',

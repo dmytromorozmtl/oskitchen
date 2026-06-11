@@ -1,19 +1,8 @@
-import type { Metadata } from 'next';
+import { permanentRedirect } from 'next/navigation';
 
-import { CommissaryKitchenSoftwareLanding } from '@/components/marketing/commissary-kitchen-software-landing';
-import {
-  COMMISSARY_KITCHEN_SOFTWARE_LANDING_META,
-  COMMISSARY_KITCHEN_SOFTWARE_LANDING_PATH,
-} from '@/lib/marketing/commissary-kitchen-software-landing-content';
-import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
+import { COMMISSARY_SOFTWARE_ICP_PATH } from '@/lib/marketing/icp-landing-pages-policy';
 
-export const metadata: Metadata = marketingPageMetadata({
-  title: COMMISSARY_KITCHEN_SOFTWARE_LANDING_META.title,
-  description: COMMISSARY_KITCHEN_SOFTWARE_LANDING_META.description,
-  path: COMMISSARY_KITCHEN_SOFTWARE_LANDING_PATH,
-  keywords: [...COMMISSARY_KITCHEN_SOFTWARE_LANDING_META.keywords],
-});
-
-export default function CommissaryKitchenSoftwareLandingPage() {
-  return <CommissaryKitchenSoftwareLanding />;
+/** Legacy route — canonical ICP landing is /commissary-software (P1-79). */
+export default function LegacyCommissaryKitchenSoftwareLandingPage() {
+  permanentRedirect(COMMISSARY_SOFTWARE_ICP_PATH);
 }

@@ -4,7 +4,7 @@ import * as React from "react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/feedback/error-state";
 import { LoadingState } from "@/components/feedback/loading-state";
-import { ERROR_STATE_ROUTE_WRAPPER_CLASS } from "@/lib/design/error-state-patterns";
+import { ERROR_TEMPLATE_WRAPPER_CLASS } from "@/lib/design/error-template-design-tokens-policy";
 import { ROUTE_LOADING_MIN_HEIGHT_CLASS } from "@/lib/design/route-loading-patterns";
 import {
   CHUNK_LOAD_USER_MESSAGE,
@@ -69,7 +69,7 @@ export function RouteError({
     : reset;
 
   return (
-    <div className={ERROR_STATE_ROUTE_WRAPPER_CLASS}>
+    <div className={ERROR_TEMPLATE_WRAPPER_CLASS}>
       <ErrorState
         title={resolvedTitle}
         description={resolvedDescription}

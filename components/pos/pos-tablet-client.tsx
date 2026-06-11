@@ -49,6 +49,7 @@ export function PosTabletClient(props: {
       className={cn(posTabletShellClass(orientation), posIpadNativeShellClass())}
       data-testid="pos-tablet-shell"
       data-ipad-native-polish="true"
+      data-mobile-pos-kds="true"
     >
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">

@@ -1,0 +1,57 @@
+{
+  "version": "sentry-p0-unblock-status-v1",
+  "updatedAt": "2026-06-10T20:00:00.000Z",
+  "lastVerifiedCycle": 361,
+  "blueprintTask": "1-sentry-dsn-production",
+  "taskNumber": 1,
+  "department": "DevOps",
+  "status": "blocked",
+  "healthCheck": {
+    "url": "https://os-kitchen.com/api/health",
+    "sentryServer": {
+      "ok": false,
+      "configured": false,
+      "status": "not_configured"
+    },
+    "verifiedAt": "2026-06-10T20:00:00.000Z"
+  },
+  "preflight": {
+    "healthOk": false,
+    "localReady": false,
+    "vercelReady": false,
+    "templateExists": true,
+    "readyToApply": false,
+    "passed": false,
+    "lastPreflightAt": "2026-06-10T20:00:00.000Z",
+    "lastPreflightCycle": 361
+  },
+  "localDryRun": {
+    "script": "npm run sentry:production:activate",
+    "missingRequiredKeys": [
+      "SENTRY_DSN"
+    ],
+    "readyOptionalKeys": [
+      "SENTRY_TRACES_SAMPLE_RATE",
+      "NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE"
+    ],
+    "envTemplate": ".env.production.local.example"
+  },
+  "vercelProduction": {
+    "project": "aervio/kitchen-os",
+    "sentryEnvVarsPresent": false,
+    "checkedKeys": [
+      "SENTRY_DSN",
+      "NEXT_PUBLIC_SENTRY_DSN",
+      "SENTRY_TRACES_SAMPLE_RATE"
+    ]
+  },
+  "unblockSteps": [
+    "Copy .env.production.local.example → .env.production.local and set SENTRY_DSN.",
+    "Create Sentry project at sentry.io → copy server DSN (never commit).",
+    "npm run sentry:production:activate -- --apply --deploy --mirror-public-dsn",
+    "npm run sentry:production:verify",
+    "curl -s https://os-kitchen.com/api/health | jq '.checks.sentryServer'",
+    "Update artifacts/blueprint-tracker.json: 1-sentry-dsn-production → done"
+  ],
+  "honestyNote": "Activation script wired and tested dry-run PASS. Blocked on secret SENTRY_DSN — requires operator with Sentry + Vercel access."
+}

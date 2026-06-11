@@ -64,14 +64,14 @@ export const SOLUTIONS_HUB_PRIMARY: SolutionsHubCard[] = [
     title: 'Ghost kitchens',
     description: 'Multi-brand command center and channel imports.',
     emoji: '👻',
-    href: '/solutions/ghost-kitchens',
+    href: '/ghost-kitchen-software',
   },
   {
     slug: 'commissary',
     title: 'Commissary',
     description: 'Multi-tenant production, packing, and B2B supply (BETA).',
     emoji: '🏭',
-    href: '/commissary-kitchen-software',
+    href: '/commissary-software',
   },
 ];
 

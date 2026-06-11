@@ -7,6 +7,11 @@ import { RoiCalculator } from "@/components/marketing/roi-calculator";
 import { CompareFaqSection } from "@/components/marketing/compare-faq-section";
 import { CommissionComparisonCalculator } from "@/components/marketing/commission-comparison-calculator";
 import { PricingCompetitorBenchmark } from "@/components/marketing/pricing-competitor-benchmark";
+import { ToastPositioningSection } from "@/components/marketing/toast-positioning-section";
+import { SquarePositioningSection } from "@/components/marketing/square-positioning-section";
+import { LightspeedPositioningSection } from "@/components/marketing/lightspeed-positioning-section";
+import { MarketmanPositioningSection } from "@/components/marketing/marketman-positioning-section";
+import { MarginedgePositioningSection } from "@/components/marketing/marginedge-positioning-section";
 import { TcoCalculator } from "@/components/marketing/tco-calculator";
 import { PRICING_FAQ_ITEMS } from "@/lib/marketing/pricing-faq";
 import {
@@ -171,6 +176,16 @@ export function PricingPage() {
         </div>
 
         <PricingCompetitorBenchmark />
+
+        <ToastPositioningSection variant="compact" className="mt-4 border-t-0 py-12" />
+
+        <SquarePositioningSection variant="compact" className="border-t-0 py-12" />
+
+        <LightspeedPositioningSection variant="compact" className="border-t-0 py-12" />
+
+        <MarketmanPositioningSection variant="compact" className="border-t-0 py-12" />
+
+        <MarginedgePositioningSection variant="compact" className="border-t-0 py-12" />
 
         <section className="mt-20" aria-labelledby="marketplace-pricing-heading">
           <div className="text-center">

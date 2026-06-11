@@ -81,3 +81,12 @@ function buildFixture(index: number): InvoiceScannerAccuracyFixture {
 export function buildInvoiceScannerAccuracyCorpus(): InvoiceScannerAccuracyFixture[] {
   return Array.from({ length: 52 }, (_, index) => buildFixture(index));
 }
+
+/** Blueprint P2-96 — 100 invoice fixtures for extended OCR accuracy benchmark. */
+export const INVOICE_OCR_ACCURACY_CORPUS_P2_96_COUNT = 100 as const;
+
+export function buildInvoiceOcrAccuracyCorpusP2_96(): InvoiceScannerAccuracyFixture[] {
+  return Array.from({ length: INVOICE_OCR_ACCURACY_CORPUS_P2_96_COUNT }, (_, index) =>
+    buildFixture(index),
+  );
+}

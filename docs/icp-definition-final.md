@@ -15,7 +15,7 @@ OS Kitchen’s **first paid pilot** targets owner-operated food businesses that 
 
 | Segment | Priority | Landing / demo |
 |---------|----------|----------------|
-| **Ghost kitchen** | P0 — primary | `/landing/ghost-kitchen`, demo `ghost-kitchen` |
+| **Ghost kitchen** | P0 — primary | `/ghost-kitchen-software`, demo `ghost-kitchen` |
 | **Commissary** | P0 — primary | `/dashboard/commissary/*`, marketplace B2B angle |
 | **Meal prep** | P0 — primary | `/landing/meal-prep`, `/landing/weekly-preorder` |
 
@@ -112,7 +112,7 @@ Live DoorDash/Uber Eats marketplace ops, rush-hour KDS SLA certification, unifie
 
 ### Landing alignment
 
-- **Page:** `/landing/ghost-kitchen`
+- **Page:** `/ghost-kitchen-software`
 - **Claims:** Software-first order hub + KDS; honest BETA labels on marketplace and delivery integrations.
 - **UTM:** `utm_campaign=ghost-kitchen-icp`
 
@@ -172,9 +172,9 @@ Full ERP/MRP, automated tenant rent accounting, SOC2 multi-tenant attestation, l
 ### Product surface alignment
 
 - **Routes:** `/dashboard/commissary/*` (production, scheduling, tenant views)
-- **SEO landing:** `/commissary-kitchen-software`
+- **SEO landing:** `/commissary-software`
 - **Marketplace angle:** B2B catalog — label **BETA** in all sales materials
-- **Legacy:** `/landing/ghost-kitchen` + commissary demo narrative for multi-brand overlap
+- **Legacy:** `/landing/ghost-kitchen` → `/ghost-kitchen-software` + commissary demo narrative for multi-brand overlap
 
 ---
 
@@ -289,8 +289,8 @@ Do **not** spend LOI cycles on:
 | Discovery call script | `docs/discovery-call-script.md` | 30-min qualification (MKT-21) |
 | Pilot ICP contract template | `docs/pilot-icp-contract-template-era17.md` | Legal/SOW |
 | ICP qualification JSON | `PILOT_GONOGO_ICP_INPUT_JSON` | GO/NO-GO gate |
-| Ghost kitchen landing | `/landing/ghost-kitchen` | Outbound + ads |
-| Commissary landing | `/commissary-kitchen-software` | Outbound + ads |
+| Ghost kitchen landing | `/ghost-kitchen-software` | Outbound + ads |
+| Commissary landing | `/commissary-software` | Outbound + ads |
 | Catering landing (secondary ICP) | `/catering-management` | Outbound + SEO |
 | Vertical messaging hub | `/solutions` — "Built for multi-concept operators" | GTM + SEO |
 | Integration Health marketing | `/integration-health-center` | Outbound + moat positioning |

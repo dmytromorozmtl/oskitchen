@@ -18,6 +18,7 @@ import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
 import { SolutionComparisonTable } from '@/components/marketing/solution-comparison-table';
 import { SolutionFinalCta } from '@/components/marketing/solution-final-cta';
+import { IntegrationHealthMarketingExplainerSection } from '@/components/marketing/integration-health-marketing-explainer-section';
 import { SyncHealthDashboardMarketing } from '@/components/marketing/sync-health-dashboard-marketing';
 import { SectionHeader } from '@/components/marketing/section-header';
 import { Breadcrumbs } from '@/components/seo/breadcrumbs';
@@ -128,6 +129,8 @@ export function IntegrationHealthCenterMarketingLanding() {
             </p>
           </div>
         </section>
+
+        <IntegrationHealthMarketingExplainerSection />
 
         <section className="border-t border-border/60 py-16 sm:py-20" data-testid="ihc-marketing-pain">
           <SectionHeader

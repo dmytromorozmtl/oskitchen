@@ -29,7 +29,7 @@ export const SEO_10_ICP_KEYWORDS: readonly IcpSeoKeywordEntry[] = [
     primaryKeyword: "ghost kitchen software",
     icpSegment: "ghost_kitchen",
     searchIntent: "commercial",
-    targetPath: "/solutions/ghost-kitchens",
+    targetPath: "/ghost-kitchen-software",
     secondaryKeywords: [
       "virtual brand management",
       "multi brand restaurant software",
@@ -53,7 +53,7 @@ export const SEO_10_ICP_KEYWORDS: readonly IcpSeoKeywordEntry[] = [
     primaryKeyword: "commissary kitchen software",
     icpSegment: "commissary",
     searchIntent: "commercial",
-    targetPath: "/commissary-kitchen-software",
+    targetPath: "/commissary-software",
     secondaryKeywords: [
       "shared kitchen software",
       "commissary production management",
@@ -73,7 +73,7 @@ export const SEO_10_ICP_KEYWORDS: readonly IcpSeoKeywordEntry[] = [
     primaryKeyword: "virtual brand kitchen software",
     icpSegment: "ghost_kitchen",
     searchIntent: "commercial",
-    targetPath: "/landing/ghost-kitchen",
+    targetPath: "/ghost-kitchen-software",
     secondaryKeywords: ["delivery kitchen software", "virtual restaurant platform"],
   },
   {

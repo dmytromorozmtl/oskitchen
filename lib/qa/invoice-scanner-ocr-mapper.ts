@@ -16,8 +16,8 @@ export type InvoiceOcrFixtureResult = {
     quantity: number;
     unitPrice: number;
     totalPrice: number;
-    ingredientName: string | null;
-    ingredientId: string | null;
+    ingredientName?: string | null;
+    ingredientId?: string | null;
   }>;
   rawText: string;
   confidence: number;

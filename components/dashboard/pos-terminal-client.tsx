@@ -6,6 +6,10 @@ import { Tag, Wifi, WifiOff } from "lucide-react";
 
 import { posCheckoutAction } from "@/actions/pos";
 import {
+  logPosOfflineSaleQueuedAction,
+  logPosOfflineSyncConflictAction,
+} from "@/actions/pos-offline-audit";
+import {
   enqueueOfflineCardCaptureAction,
   linkOfflineCardCaptureAction,
   syncOfflineCardCapturesAction,
@@ -18,10 +22,15 @@ import {
 import { QuickOrderButtons, type QuickOrderItem } from "@/components/pos/quick-order-buttons";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
-  posCheckoutButtonClass,
   posTouchCompactClass,
   posTouchTileClass,
 } from "@/lib/pos/touch-targets";
+import {
+  POS_TERMINAL_DENSITY_PRODUCT_GRID_CLASS,
+  POS_TERMINAL_DENSITY_PRODUCT_PRICE_CLASS,
+  POS_TERMINAL_DENSITY_PRODUCT_TILE_SURFACE_CLASS,
+  POS_TERMINAL_DENSITY_PRODUCT_TITLE_CLASS,
+} from "@/lib/design/pos-terminal-density-policy";
 import {
   posCheckoutStatusClassName,
   type PosCheckoutStatus,
@@ -33,6 +42,11 @@ import {
 } from "@/components/pos/stripe-terminal-reader";
 import { posQuickCreateKitchenCustomerAction, posSearchKitchenCustomersAction } from "@/actions/pos-terminal-customers";
 import { POS_OFFLINE_LIMITATIONS } from "@/lib/pos/pos-offline";
+import {
+  clearPosLocalCart,
+  loadPosLocalCart,
+  savePosLocalCart,
+} from "@/lib/pos/pos-local-cart";
 
 /** ReceiptPanel checkout status live region — data-testid="pos-checkout-status". */
 import {
@@ -329,6 +343,12 @@ export function PosTerminalClient(props: {
         syncError: res.error,
         conflictReason: reason,
       });
+      void logPosOfflineSyncConflictAction({
+        offlineSaleId: entry.id,
+        registerId: String(payload.registerId),
+        reason,
+        message: res.error,
+      });
     }
 
     await refreshOfflineCounts();
@@ -372,6 +392,43 @@ export function PosTerminalClient(props: {
       window.removeEventListener("offline", off);
     };
   }, [offlineQueueEnabled, conflictResolution]);
+
+  useEffect(() => {
+    if (!registerId) return;
+    const snapshot = loadPosLocalCart(registerId);
+    if (!snapshot?.cart.length) return;
+    setCart((prev) => {
+      if (prev.length > 0) return prev;
+      return snapshot.cart.map((line, index) => ({
+        key: line.productId
+          ? `${line.productId}-restored-${index}`
+          : `restored-${index}-${Date.now()}`,
+        productId: line.productId,
+        title: line.title,
+        quantity: line.quantity,
+        unitPrice: line.unitPrice,
+        notes: line.notes ?? undefined,
+      }));
+    });
+  }, [registerId]);
+
+  useEffect(() => {
+    if (!registerId) return;
+    if (cart.length === 0) {
+      clearPosLocalCart(registerId);
+      return;
+    }
+    savePosLocalCart(
+      registerId,
+      cart.map((line) => ({
+        productId: line.productId,
+        title: line.title,
+        quantity: line.quantity,
+        unitPrice: line.unitPrice,
+        notes: line.notes ?? undefined,
+      })),
+    );
+  }, [registerId, cart]);
 
   useEffect(() => {
     const q = customerQuery.trim();
@@ -627,7 +684,16 @@ export function PosTerminalClient(props: {
         }
       }
       startTransition(async () => {
-        const offlineSaleId = await enqueueOfflinePosCheckout(buildCheckoutPayload());
+        const payload = buildCheckoutPayload();
+        const offlineSaleId = await enqueueOfflinePosCheckout(payload);
+        const subtotal = cart.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
+        void logPosOfflineSaleQueuedAction({
+          offlineSaleId,
+          registerId,
+          paymentMode,
+          lineCount: cart.length,
+          total: subtotal,
+        });
         if (paymentMode === "OFFLINE_CARD_QUEUED" && registerId) {
           const last4 = offlineCardLast4.replace(/\D/g, "").slice(-4);
           await enqueueOfflineCardClientCapture({
@@ -640,6 +706,7 @@ export function PosTerminalClient(props: {
         }
         await refreshOfflineCounts();
         setCart([]);
+        clearPosLocalCart(registerId);
         resetDiscountState();
         setOfflineCardLast4("");
         showCheckoutStatus(
@@ -678,6 +745,7 @@ export function PosTerminalClient(props: {
       }
       setCart([]);
       resetDiscountState();
+      clearPosLocalCart(registerId);
       showCheckoutStatus(
         `Sale complete — order ${res.orderId.slice(0, 8)}… receipt ${res.receiptNumber}`,
         "success",
@@ -931,7 +999,7 @@ export function PosTerminalClient(props: {
         ) : null}
         <div
           className={cn(
-            "grid flex-1 gap-3 overflow-y-auto pb-24",
+            POS_TERMINAL_DENSITY_PRODUCT_GRID_CLASS,
             posCashierSpeedProductGridClass(speedMode),
           )}
           data-testid={speedMode ? "pos-speed-product-grid" : "pos-product-grid"}
@@ -979,7 +1047,9 @@ export function PosTerminalClient(props: {
                   }
                 : { onClick: () => addProduct(p) })}
               className={cn(
-                `flex ${posTouchTileClass} flex-col rounded-2xl border border-border/80 bg-card text-left shadow-sm transition hover:border-primary/40 hover:shadow-md`,
+                POS_TERMINAL_DENSITY_PRODUCT_TILE_SURFACE_CLASS,
+                posTouchTileClass,
+                "flex-col",
                 posCashierSpeedProductTileClass(speedMode),
                 tabletMode && posIpadNativeProductTileClass(),
               )}
@@ -989,7 +1059,7 @@ export function PosTerminalClient(props: {
               ) : null}
               <span
                 className={cn(
-                  "line-clamp-2 font-semibold leading-snug",
+                  POS_TERMINAL_DENSITY_PRODUCT_TITLE_CLASS,
                   speedMode ? "text-sm" : "mt-2 text-base",
                 )}
               >
@@ -997,7 +1067,7 @@ export function PosTerminalClient(props: {
               </span>
               <span
                 className={cn(
-                  "mt-auto pt-2 font-semibold tabular-nums",
+                  POS_TERMINAL_DENSITY_PRODUCT_PRICE_CLASS,
                   speedMode ? "text-base" : "pt-3 text-lg",
                 )}
               >

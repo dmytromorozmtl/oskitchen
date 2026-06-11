@@ -2,12 +2,13 @@ import Link from "next/link";
 import { ClipboardList } from "lucide-react";
 
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { MarketplaceEmptyState } from "@/components/marketplace/marketplace-empty-state";
 import { MarketplaceOrdersListClient } from "@/components/marketplace/marketplace-orders-list-client";
 import { MarketplaceRecurringOrdersSection } from "@/components/marketplace/marketplace-recurring-orders-section";
 import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
-import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
+import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-access";
 import {
   parseMarketplaceOrdersFilters,
   type MarketplaceOrdersFilters,
@@ -72,7 +73,13 @@ export default async function MarketplaceOrdersPage({
     );
   }
 
-  const access = await resolveMarketplaceHubAccess();
+  const accessGate = await requireMarketplaceReadPage({
+    operation: "marketplace.orders.read",
+    route: "/dashboard/marketplace/orders",
+  });
+  if (!accessGate.ok) return accessGate.deny;
+
+  const access = accessGate;
   const sp = searchParams ? await searchParams : {};
   const filters = parseMarketplaceOrdersFilters(sp);
 
@@ -120,15 +127,7 @@ export default async function MarketplaceOrdersPage({
               </Button>
             }
           />
-          <EmptyState
-            icon={ClipboardList}
-            title="No marketplace orders yet"
-            description="Checkout from the catalog to create purchase orders with your approved vendors."
-            primaryLabel="Browse catalog"
-            primaryHref="/dashboard/marketplace/catalog"
-            secondaryLabel="Marketplace home"
-            secondaryHref="/dashboard/marketplace"
-          />
+          <MarketplaceEmptyState scenario="orders_empty" variant="card" />
         </div>
       );
     }

@@ -56,6 +56,7 @@ Source: full audit battle map (June 2026) reconciled with [`competitor-feature-g
 | Artifact | Scope |
 |----------|-------|
 | [`competitive-battle-cards.md`](./competitive-battle-cards.md) | 8 core battle cards (Toast → Olo) |
+| [`competitor-battle-cards-index.md`](./competitor-battle-cards-index.md) | 21 one-page battle cards (P1-85) |
 | [`artifacts/competitor-feature-tracker.json`](../artifacts/competitor-feature-tracker.json) | 8/8 sales-safe claims + engineering ledger |
 | [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md) | Era 17 evidence-aligned gap matrix |
 | [`competitor-comparison-honest.md`](./competitor-comparison-honest.md) | Head-to-head honesty profiles |

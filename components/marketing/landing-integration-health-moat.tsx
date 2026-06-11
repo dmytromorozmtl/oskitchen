@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AlertTriangle, Cable, CheckCircle2, XCircle } from "lucide-react";
 
+import { IntegrationHealthMarketingExplainerSection } from "@/components/marketing/integration-health-marketing-explainer-section";
 import { integrationHealthStatusColors } from "@/lib/design/color-tokens";
 
 const STATUS_ROWS = [
@@ -180,6 +181,8 @@ export function LandingIntegrationHealthMoat() {
             </div>
           </div>
         </div>
+
+        <IntegrationHealthMarketingExplainerSection variant="compact" className="border-t-0" />
       </div>
     </section>
   );

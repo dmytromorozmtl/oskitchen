@@ -25,7 +25,7 @@ export {
   type ScannedInvoiceLineItem,
 } from "@/lib/inventory/invoice-scanner-types";
 
-import { mapOcrResultToScannedInvoice } from "@/lib/qa/invoice-scanner-ocr-mapper";
+/**
  * AI Invoice Scanner — photograph invoice → structured supply data with confidence scores.
  * Uses OpenAI Vision (gpt-4o-mini) when OPENAI_API_KEY is configured.
  */

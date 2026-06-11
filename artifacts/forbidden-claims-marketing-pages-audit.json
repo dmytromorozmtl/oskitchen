@@ -1,0 +1,51 @@
+{
+  "policyId": "forbidden-claims-audit-p1-71-v1",
+  "auditedAt": "2026-06-09",
+  "routes": [
+    {
+      "route": "/",
+      "pageModule": "app/page.tsx",
+      "realClaimCount": 0,
+      "honestyMarkers": ["partner-gated", "not live today", "Integration Health"],
+      "passed": true
+    },
+    {
+      "route": "/pricing",
+      "pageModule": "app/pricing/page.tsx",
+      "realClaimCount": 0,
+      "honestyMarkers": [
+        "Conservative estimate",
+        "not as a guaranteed",
+        "no hardware lock-in"
+      ],
+      "passed": true
+    },
+    {
+      "route": "/demo",
+      "pageModule": "app/demo/page.tsx",
+      "realClaimCount": 0,
+      "honestyMarkers": ["demo", "No signup", "temp workspace"],
+      "passed": true
+    },
+    {
+      "route": "/trust",
+      "pageModule": "app/trust/page.tsx",
+      "realClaimCount": 0,
+      "honestyMarkers": ["not formal SOC 2", "BETA", "SKIPPED"],
+      "passed": true
+    },
+    {
+      "route": "/shopify",
+      "pageModule": "app/shopify/page.tsx",
+      "realClaimCount": 0,
+      "honestyMarkers": [
+        "beta",
+        "not listed on Shopify App Store",
+        "Honest scope"
+      ],
+      "passed": true
+    }
+  ],
+  "totalRealClaims": 0,
+  "passed": true
+}

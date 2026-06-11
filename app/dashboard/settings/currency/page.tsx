@@ -1,11 +1,10 @@
-import { notFound } from "next/navigation";
-
 import { MultiCurrencySettingsPanel } from "@/components/dashboard/settings/multi-currency-settings-panel";
 import { SectionHeader } from "@/components/dashboard/settings/section-header";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import { canUseSettings } from "@/lib/settings/settings-permissions";
 import { loadMultiCurrencySettingsModel } from "@/services/finance/multi-currency-service";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 
 export default async function CurrencySettingsPage() {
   const { sessionUser: session, userId } = await getTenantActor();
@@ -19,7 +18,7 @@ export default async function CurrencySettingsPage() {
     role: (profile?.role ?? null) as string | null,
   };
   if (!canUseSettings(actor, "manage_workspace")) {
-    notFound();
+    return <PermissionDeniedSurfaceCard surfaceId="settings_workspace" />;
   }
 
   const model = await loadMultiCurrencySettingsModel(userId);

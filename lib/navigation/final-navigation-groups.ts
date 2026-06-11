@@ -234,6 +234,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
     id: "setup",
     title: "Setup",
     links: [
+      { href: "/dashboard/onboarding-hub", labelKey: "nav.onboardingHub", icon: Rocket },
       { href: "/dashboard/implementation", labelKey: "nav.implementation", icon: ClipboardList },
       { href: "/dashboard/launch-wizard", labelKey: "nav.launchWizard", icon: Rocket },
       { href: "/dashboard/import-center", labelKey: "nav.importCenter", icon: Upload },

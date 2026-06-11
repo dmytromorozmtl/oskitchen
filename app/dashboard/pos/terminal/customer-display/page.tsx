@@ -1,0 +1,12 @@
+import { PosCustomerDisplayClient } from "@/components/pos/pos-customer-display-client";
+
+export const metadata = {
+  title: "Customer Display — POS",
+  description: "Second-screen customer-facing order total for multi-monitor desktop POS.",
+};
+
+/** PAGE_LAYOUT_EXCEPTION — fullscreen customer display (second monitor). */
+
+export default function PosCustomerDisplayPage() {
+  return <PosCustomerDisplayClient />;
+}

@@ -68,8 +68,10 @@ import {
 } from "@/lib/commercial/era20-integration-health-recovery-flow-proof-era20";
 import { IntegrationHealthSupportAdminPanel } from "@/components/dashboard/integration-health-support-admin-panel";
 import { IntegrationHealthSummaryPanel } from "@/components/integrations/integration-health-summary";
+import { IntegrationHealthLiveDashboardSection } from "@/components/integrations/integration-health-live-dashboard-section";
 import { buildIntegrationHealthRecoveryModel } from "@/lib/integrations/integration-health-recovery-era19";
 import { loadIntegrationHealthChannelCardsModel } from "@/services/integrations/integration-health-channel-cards-service";
+import { loadLiveIntegrationHealthDashboard } from "@/services/integrations/integration-health-live-service";
 import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
 import { loadIntegrationHealthSupportAdminModel } from "@/services/integrations/integration-health-support-admin-service";
 import { loadHardwareDeviceFleetModel } from "@/services/integration-health/hardware-device-fleet-service";
@@ -108,7 +110,7 @@ export default async function IntegrationHealthDashboardPage({
   const supportCompact = resolvedSearchParams.mode === "support";
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts, channelCards, supportAdmin, hardwareFleet] =
+  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts, channelCards, supportAdmin, hardwareFleet, liveHealthDashboard] =
     await Promise.all([
     prisma.integrationConnection.findMany({
       where: await integrationConnectionListWhereForOwner(dataUserId),
@@ -140,6 +142,7 @@ export default async function IntegrationHealthDashboardPage({
       platformBypass: actor.platformBypass,
     }),
     loadHardwareDeviceFleetModel(dataUserId),
+    loadLiveIntegrationHealthDashboard(dataUserId),
   ]);
 
   const workspaceDemo = kitchen?.demoMode ?? false;
@@ -210,6 +213,8 @@ export default async function IntegrationHealthDashboardPage({
       <IntegrationHealthSupportAdminPanel model={supportAdmin} compact={supportCompact} />
 
       <IntegrationHealthSummaryPanel summary={healthSummary} />
+
+      <IntegrationHealthLiveDashboardSection dashboard={liveHealthDashboard} />
 
       <DeviceStatusDashboardStrip />
       <HardwareDeviceFleetPanel model={hardwareFleet} />

@@ -1,17 +1,17 @@
 /**
- * Absolute Final Task 77 — /commissary-kitchen-software SEO landing page.
+ * Absolute Final Task 77 — /commissary-software SEO landing page.
  *
- * @see app/commissary-kitchen-software/page.tsx
+ * @see app/commissary-software/page.tsx
  * @see docs/icp-definition-final.md
  */
 
 export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_ABSOLUTE_FINAL_POLICY_ID =
   "commissary-kitchen-software-landing-absolute-final-v1" as const;
 
-export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_ROUTE = "/commissary-kitchen-software" as const;
+export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_ROUTE = "/commissary-software" as const;
 
 export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_PAGE_PATH =
-  "app/commissary-kitchen-software/page.tsx" as const;
+  "app/commissary-software/page.tsx" as const;
 
 export const COMMISSARY_KITCHEN_SOFTWARE_LANDING_COMPONENT_PATH =
   "components/marketing/commissary-kitchen-software-landing.tsx" as const;

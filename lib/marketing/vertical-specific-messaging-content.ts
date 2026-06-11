@@ -27,7 +27,7 @@ export const VERTICAL_MESSAGING_SEGMENTS: VerticalMessagingSegment[] = [
     title: "Multi-concept operators",
     tagline:
       "Switch brands, locations, and production lanes without spreadsheet chaos — one command center for ≤5 locations in pilot scope.",
-    href: "/solutions/ghost-kitchens",
+    href: "/ghost-kitchen-software",
     icpTier: "P0",
   },
   {
@@ -35,7 +35,7 @@ export const VERTICAL_MESSAGING_SEGMENTS: VerticalMessagingSegment[] = [
     emoji: "👻",
     title: "Ghost kitchens",
     tagline: "Multi-brand order hub, channel imports, and KDS routing with honest BETA labels.",
-    href: "/solutions/ghost-kitchens",
+    href: "/ghost-kitchen-software",
     icpTier: "P0",
   },
   {
@@ -51,7 +51,7 @@ export const VERTICAL_MESSAGING_SEGMENTS: VerticalMessagingSegment[] = [
     emoji: "🏭",
     title: "Commissary & shared kitchen",
     tagline: "Multi-tenant production, packing verification, and optional B2B catalog (BETA).",
-    href: "/commissary-kitchen-software",
+    href: "/commissary-software",
     icpTier: "P0",
   },
   {
