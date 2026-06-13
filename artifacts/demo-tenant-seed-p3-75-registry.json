@@ -1,0 +1,16 @@
+{
+  "policyId": "demo-tenant-seed-p3-75-v1",
+  "department": "Backend",
+  "upstreamPolicyId": "demo-tenant-seed-p1-35-v1",
+  "targets": {
+    "orders": 50,
+    "vendors": 3,
+    "inventory": 20
+  },
+  "auditScripts": [
+    "audit:demo-tenant-seed-p3-75",
+    "check:demo-tenant-seed-p3-75",
+    "db:seed-demo",
+    "test:ci:demo-tenant-seed-p3-75:cert"
+  ]
+}

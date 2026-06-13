@@ -49,6 +49,9 @@ jobs:
       - name: Webhook replay UI P3-74 audit
         run: npm run audit:webhook-replay-ui-p3-74
 
+      - name: Demo tenant seed P3-75 audit
+        run: npm run audit:demo-tenant-seed-p3-75
+
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 

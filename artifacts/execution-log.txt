@@ -9196,3 +9196,15 @@ Evidence: check:webhook-replay-ui-p3-74 PASS (7/7); audit:webhook-replay-ui-p3-7
 Result: DONE — operators triage failures on Integration Health → replay on webhook center
 Tracker: 74/80 (p3-74 done)
 Next: P3-75 seed demo tenant — Backend
+
+---
+Cycle: ultimate-v11-75
+Timestamp: 2026-06-15T06:00:00.000Z
+Task: P3-75 Seed/demo tenant — 50 orders, 3 vendors, 20 inventory
+Department: Backend
+Action: /demo import wired to seedCommercialDemoWorkspace; P3-75 policy/measurement/audit cert; npm scripts; deploy gate
+Files: actions/demo.ts, lib/demo/demo-tenant-seed-p3-75-{policy,measurement,audit}.ts, docs/demo-tenant-seed-p3-75.md, artifacts/demo-tenant-seed-p3-75-registry.json, scripts/audit-demo-tenant-seed-p3-75.ts, tests/unit/demo-tenant-seed-p3-75.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: check:demo-tenant-seed-p3-75 PASS (7/7); audit:demo-tenant-seed-p3-75 PASS; targets 50/3/20 locked; db:seed-demo + /demo wired
+Result: DONE — interactive demo and CLI seed full commercial tenant dataset
+Tracker: 75/80 (p3-75 done)
+Next: P3-76 integration sandbox mode — Backend

@@ -73,7 +73,7 @@
   "p3-72-bundle-analysis": "done",
   "p3-73-prisma-index-audit": "done",
   "p3-74-webhook-replay-ui": "done",
-  "p3-75-seed-demo-tenant": "pending",
+  "p3-75-seed-demo-tenant": "done",
   "p3-76-integration-sandbox": "pending",
   "p3-77-migration-health-checker": "pending",
   "p3-78-idempotency-keys": "pending",
