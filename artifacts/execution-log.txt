@@ -8692,3 +8692,15 @@ Evidence: vitest qr-scan-storefront-kds-e2e PASS; audit:qr-scan-storefront-kds-e
 Result: DONE — unified QR scan entry through storefront checkout to KDS
 Tracker: 32/80 (p2-32 done)
 Next: P2-33 AI invoice scanner accuracy regression
+
+---
+Cycle: ultimate-v11-33
+Timestamp: 2026-06-14T02:00:00.000Z
+Task: P2-33 AI invoice scanner accuracy regression — 50 test invoices, 80%+ accuracy
+Department: AI/QA
+Action: Added P2-33 invoice scanner accuracy regression — 50-invoice golden corpus, 80% threshold gate (supplier/amount/line-items/overall), artifact JSON, policy/audit/scoring; wired audit:invoice-scanner-accuracy-regression-p2-33 + deploy gate
+Files: lib/qa/invoice-scanner-accuracy-regression-p2-33-{policy,scoring,audit}.ts, scripts/{run,audit}-invoice-scanner-accuracy-regression-p2-33.ts, tests/unit/invoice-scanner-accuracy-regression-p2-33.test.ts, artifacts/invoice-scanner-accuracy-regression-p2-33-summary.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml, package.json
+Evidence: vitest invoice-scanner-accuracy-regression-p2-33 5/5 PASS; audit:invoice-scanner-accuracy-regression-p2-33 PASS (50 invoices, 100% overall)
+Result: DONE — 50-invoice scanner regression gate at 80% accuracy
+Tracker: 33/80 (p2-33 done)
+Next: P2-34 audit 20 skipped tests

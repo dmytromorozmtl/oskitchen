@@ -109,6 +109,9 @@ jobs:
       - name: AI invoice accuracy regression audit
         run: npm run audit -- ai-invoice-accuracy-regression
 
+      - name: Invoice scanner accuracy regression P2-33 audit
+        run: npm run audit -- invoice-scanner-accuracy-regression-p2-33
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
