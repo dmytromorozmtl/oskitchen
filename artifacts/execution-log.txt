@@ -8476,3 +8476,15 @@ Evidence: vitest cross-tenant-e2e 4/4 PASS; benchmark:cross-tenant-e2e 14/14 sce
 Result: DONE — 2-workspace IDOR matrix across orders/customers/finance/marketplace/inventory/pos/kitchen/analytics/integrations/staff/products/locations
 Tracker: 14/80 (p1-14 done)
 Next: P1-15 migrate Prisma config to prisma.config.ts
+
+---
+Cycle: ultimate-v11-15
+Timestamp: 2026-06-13T18:54:00.000Z
+Task: P1-15 migrate Prisma config to prisma.config.ts
+Department: Backend
+Action: Verified prisma.config.ts migration (defineConfig schema/migrations/seed); added prisma-config-policy + test:ci:prisma-config; removed deprecated package.json#prisma
+Files: prisma.config.ts, lib/prisma/prisma-config-policy.ts, tests/unit/prisma-config.test.ts
+Evidence: vitest prisma-config 4/4 PASS; package.json prisma field undefined; schema datasource env refs intact
+Result: DONE — Prisma CLI config centralized in prisma.config.ts
+Tracker: 15/80 (p1-15 done)
+Next: P1-16 consolidate npm scripts 1902→<200
