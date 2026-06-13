@@ -23,8 +23,8 @@ describe("Commissary kitchen software landing (Absolute Final Task 77)", () => {
     expect(COMMISSARY_KITCHEN_SOFTWARE_LANDING_ABSOLUTE_FINAL_POLICY_ID).toBe(
       "commissary-kitchen-software-landing-absolute-final-v1",
     );
-    expect(COMMISSARY_KITCHEN_SOFTWARE_LANDING_ROUTE).toBe("/commissary-software");
-    expect(COMMISSARY_KITCHEN_SOFTWARE_LANDING_PATH).toBe("/commissary-software");
+    expect(COMMISSARY_KITCHEN_SOFTWARE_LANDING_ROUTE).toBe("/commissary-kitchen-software");
+    expect(COMMISSARY_KITCHEN_SOFTWARE_LANDING_PATH).toBe("/commissary-kitchen-software");
     expect(COMMISSARY_KITCHEN_SOFTWARE_PRIMARY_KEYWORD).toBe("commissary kitchen software");
   });
 
@@ -35,9 +35,9 @@ describe("Commissary kitchen software landing (Absolute Final Task 77)", () => {
     expect(COMMISSARY_KITCHEN_SOFTWARE_LANDING_META.title.toLowerCase()).toContain("commissary");
   });
 
-  it("maps SEO 10 ICP keyword to /commissary-software", () => {
+  it("maps SEO 10 ICP keyword to /commissary-kitchen-software", () => {
     const entry = getSeo10IcpKeywordById("commissary-kitchen-software");
-    expect(entry?.targetPath).toBe("/commissary-software");
+    expect(entry?.targetPath).toBe("/commissary-kitchen-software");
     expect(entry?.primaryKeyword).toBe("commissary kitchen software");
     expect(entry?.icpSegment).toBe("commissary");
   });

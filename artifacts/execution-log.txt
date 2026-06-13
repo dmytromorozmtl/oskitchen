@@ -9028,3 +9028,15 @@ Evidence: vitest lighthouse-ci-gate-p3-60 PASS; audit:lighthouse-ci-gate-p3-60 P
 Result: DONE — Lighthouse CI fails FCP>2s, LCP>3.5s, CLS>0.1 on /, /pricing, /login, /shopify
 Tracker: 60/80 (p3-60 done)
 Next: P3-61 commissary landing page — Marketing
+
+---
+Cycle: ultimate-v11-61
+Timestamp: 2026-06-14T21:30:00.000Z
+Task: P3-61 Commissary landing page — /commissary-kitchen-software
+Department: Marketing
+Action: canonical route /commissary-kitchen-software; legacy /commissary-software redirect; commissary-landing-p3-61 policy/audit; npm cert scripts; deploy gate
+Files: app/commissary-kitchen-software/page.tsx, app/commissary-software/page.tsx, lib/marketing/commissary-landing-p3-61-{policy,measurement,audit}.ts, lib/marketing/{commissary-kitchen-software-landing-content,icp-landing-pages-policy,sitemap-urls}.ts, docs/commissary-landing-p3-61.md, artifacts/commissary-landing-p3-61-registry.json, scripts/audit-commissary-landing-p3-61.ts, tests/unit/commissary-landing-p3-61.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest commissary-landing-p3-61 PASS; audit:commissary-landing-p3-61 PASS; icp-landing-pages + commissary absolute-final PASS
+Result: DONE — SEO landing at /commissary-kitchen-software with honest commissary ICP content
+Tracker: 61/80 (p3-61 done)
+Next: P3-62 shopify-to-kds landing page — Marketing

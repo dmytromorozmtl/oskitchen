@@ -71,7 +71,7 @@ export const SOLUTIONS_HUB_PRIMARY: SolutionsHubCard[] = [
     title: 'Commissary',
     description: 'Multi-tenant production, packing, and B2B supply (BETA).',
     emoji: '🏭',
-    href: '/commissary-software',
+    href: '/commissary-kitchen-software',
   },
 ];
 

@@ -8,7 +8,7 @@ Blueprint tasks **P1-79** (canonical routes) and **P1-23** (pilot highlights on 
 |-------------|------|-----------|
 | Meal prep | `/meal-prep-software` | `MealPrepSoftwareLanding` |
 | Ghost kitchen | `/ghost-kitchen-software` | `GhostKitchenLanding` |
-| Commissary | `/commissary-software` | `CommissaryKitchenSoftwareLanding` |
+| Commissary | `/commissary-kitchen-software` | `CommissaryKitchenSoftwareLanding` |
 
 ## P1-23 pilot highlights (meal prep + ghost kitchen)
 
@@ -25,7 +25,7 @@ Policy: `icp-pilot-highlights-p1-23-v1`
 | Legacy path | Redirects to |
 |-------------|--------------|
 | `/landing/ghost-kitchen` | `/ghost-kitchen-software` |
-| `/commissary-kitchen-software` | `/commissary-software` |
+| `/commissary-software` | `/commissary-kitchen-software` |
 
 ## Honesty
 

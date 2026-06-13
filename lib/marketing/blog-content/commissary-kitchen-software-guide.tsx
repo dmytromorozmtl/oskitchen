@@ -66,7 +66,7 @@ export function CommissaryKitchenSoftwareGuideContent() {
       </p>
 
       <p>
-        <Link href="/commissary-software">See commissary kitchen software</Link>,{' '}
+        <Link href="/commissary-kitchen-software">See commissary kitchen software</Link>,{' '}
         <Link href="/book-demo">book a commissary fit call</Link>, or read the{' '}
         <Link href="/blog/ghost-kitchen-setup-complete-guide">ghost kitchen setup guide</Link> for
         multi-brand overlap.

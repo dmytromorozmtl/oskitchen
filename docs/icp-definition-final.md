@@ -172,7 +172,7 @@ Full ERP/MRP, automated tenant rent accounting, SOC2 multi-tenant attestation, l
 ### Product surface alignment
 
 - **Routes:** `/dashboard/commissary/*` (production, scheduling, tenant views)
-- **SEO landing:** `/commissary-software`
+- **SEO landing:** `/commissary-kitchen-software`
 - **Marketplace angle:** B2B catalog — label **BETA** in all sales materials
 - **Legacy:** `/landing/ghost-kitchen` → `/ghost-kitchen-software` + commissary demo narrative for multi-brand overlap
 
@@ -290,7 +290,7 @@ Do **not** spend LOI cycles on:
 | Pilot ICP contract template | `docs/pilot-icp-contract-template-era17.md` | Legal/SOW |
 | ICP qualification JSON | `PILOT_GONOGO_ICP_INPUT_JSON` | GO/NO-GO gate |
 | Ghost kitchen landing | `/ghost-kitchen-software` | Outbound + ads |
-| Commissary landing | `/commissary-software` | Outbound + ads |
+| Commissary landing | `/commissary-kitchen-software` | Outbound + ads |
 | Catering landing (secondary ICP) | `/catering-management` | Outbound + SEO |
 | Vertical messaging hub | `/solutions` — "Built for multi-concept operators" | GTM + SEO |
 | Integration Health marketing | `/integration-health-center` | Outbound + moat positioning |

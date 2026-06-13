@@ -36,7 +36,7 @@ describe("Vertical-specific messaging (Absolute Final Task 79)", () => {
       "/ghost-kitchen-software",
       "/ghost-kitchen-software",
       "/meal-prep-software",
-      "/commissary-software",
+      "/commissary-kitchen-software",
       "/catering-management",
     ]);
   });

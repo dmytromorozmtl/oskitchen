@@ -57,7 +57,7 @@ export function marketingSitemapPaths(): Array<{
     { path: '/landing/meal-prep', priority: 0.84, changeFrequency: 'monthly' },
     { path: '/meal-prep-software', priority: 0.86, changeFrequency: 'monthly' },
     { path: '/ghost-kitchen-software', priority: 0.86, changeFrequency: 'monthly' },
-    { path: '/commissary-software', priority: 0.86, changeFrequency: 'monthly' },
+    { path: '/commissary-kitchen-software', priority: 0.86, changeFrequency: 'monthly' },
     { path: '/toast-alternative', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/square-alternative', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/marketman-alternative', priority: 0.85, changeFrequency: 'monthly' },

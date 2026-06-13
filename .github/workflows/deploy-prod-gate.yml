@@ -193,6 +193,9 @@ jobs:
       - name: Lighthouse CI gate P3-60 audit
         run: npm run audit -- lighthouse-ci-gate-p3-60
 
+      - name: Commissary landing P3-61 audit
+        run: npm run audit -- commissary-landing-p3-61
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

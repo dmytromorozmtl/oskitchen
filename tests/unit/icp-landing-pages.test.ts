@@ -36,7 +36,7 @@ describe("ICP landing pages (P1-79 + P1-23 pilot highlights)", () => {
     expect(ICP_LANDING_PAGE_ENTRIES).toHaveLength(3);
     expect(MEAL_PREP_SOFTWARE_ICP_PATH).toBe("/meal-prep-software");
     expect(GHOST_KITCHEN_SOFTWARE_ICP_PATH).toBe("/ghost-kitchen-software");
-    expect(COMMISSARY_SOFTWARE_ICP_PATH).toBe("/commissary-software");
+    expect(COMMISSARY_SOFTWARE_ICP_PATH).toBe("/commissary-kitchen-software");
     expect(ICP_PILOT_HIGHLIGHTS_LANDING_IDS).toEqual(["meal-prep", "ghost-kitchen"]);
     expect(ICP_PILOT_LIVE_INTEGRATION_COUNT).toBe(18);
     expect(ICP_PILOT_HIGHLIGHTS).toHaveLength(3);

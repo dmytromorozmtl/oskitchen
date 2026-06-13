@@ -51,7 +51,7 @@ export const VERTICAL_MESSAGING_SEGMENTS: VerticalMessagingSegment[] = [
     emoji: "🏭",
     title: "Commissary & shared kitchen",
     tagline: "Multi-tenant production, packing verification, and optional B2B catalog (BETA).",
-    href: "/commissary-software",
+    href: "/commissary-kitchen-software",
     icpTier: "P0",
   },
   {

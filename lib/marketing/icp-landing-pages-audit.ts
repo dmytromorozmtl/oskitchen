@@ -59,12 +59,8 @@ export function auditIcpLandingPages(root = process.cwd()): IcpLandingPagesAudit
   });
 
   legacyRedirectsWired = ICP_LANDING_LEGACY_REDIRECTS.every((redirect) => {
-    const legacyPage =
-      redirect.from === "/landing/ghost-kitchen"
-        ? "app/landing/ghost-kitchen/page.tsx"
-        : "app/commissary-kitchen-software/page.tsx";
-    if (!existsSync(join(root, legacyPage))) return false;
-    const source = readFileSync(join(root, legacyPage), "utf8");
+    if (!existsSync(join(root, redirect.legacyPagePath))) return false;
+    const source = readFileSync(join(root, redirect.legacyPagePath), "utf8");
     return (
       (source.includes("redirect") || source.includes("Redirect")) &&
       source.includes(redirect.to)

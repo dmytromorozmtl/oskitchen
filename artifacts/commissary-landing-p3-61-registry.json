@@ -1,0 +1,12 @@
+{
+  "policyId": "commissary-landing-p3-61-v1",
+  "department": "Marketing",
+  "canonicalPath": "/commissary-kitchen-software",
+  "legacyPath": "/commissary-software",
+  "primaryKeyword": "commissary kitchen software",
+  "auditScripts": [
+    "audit:commissary-landing-p3-61",
+    "check:commissary-landing-p3-61",
+    "test:ci:commissary-kitchen-software-landing:cert"
+  ]
+}

@@ -66,7 +66,7 @@ export function auditCommissaryKitchenSoftwareLandingWiring(
 
   const icpDoc = readFileSync(join(root, COMMISSARY_KITCHEN_SOFTWARE_ICP_DOC), "utf8");
   if (!icpDoc.includes(COMMISSARY_KITCHEN_SOFTWARE_LANDING_ROUTE)) {
-    failures.push("icp-definition-final.md missing link to /commissary-software");
+    failures.push(`icp-definition-final.md missing link to ${COMMISSARY_KITCHEN_SOFTWARE_LANDING_ROUTE}`);
   }
 
   return { ok: failures.length === 0, failures };

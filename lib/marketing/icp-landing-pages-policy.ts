@@ -24,7 +24,7 @@ export const MEAL_PREP_SOFTWARE_ICP_PATH = "/meal-prep-software" as const;
 
 export const GHOST_KITCHEN_SOFTWARE_ICP_PATH = "/ghost-kitchen-software" as const;
 
-export const COMMISSARY_SOFTWARE_ICP_PATH = "/commissary-software" as const;
+export const COMMISSARY_SOFTWARE_ICP_PATH = "/commissary-kitchen-software" as const;
 
 export const ICP_LANDING_PAGE_ENTRIES = [
   {
@@ -48,7 +48,7 @@ export const ICP_LANDING_PAGE_ENTRIES = [
   {
     id: "commissary",
     path: COMMISSARY_SOFTWARE_ICP_PATH,
-    pagePath: "app/commissary-software/page.tsx",
+    pagePath: "app/commissary-kitchen-software/page.tsx",
     contentPath: "lib/marketing/commissary-kitchen-software-landing-content.ts",
     componentPath: "components/marketing/commissary-kitchen-software-landing.tsx",
     pathConstant: "COMMISSARY_KITCHEN_SOFTWARE_LANDING_PATH",
@@ -57,8 +57,8 @@ export const ICP_LANDING_PAGE_ENTRIES = [
 ] as const;
 
 export const ICP_LANDING_LEGACY_REDIRECTS = [
-  { from: "/landing/ghost-kitchen", to: GHOST_KITCHEN_SOFTWARE_ICP_PATH },
-  { from: "/commissary-kitchen-software", to: COMMISSARY_SOFTWARE_ICP_PATH },
+  { from: "/landing/ghost-kitchen", to: GHOST_KITCHEN_SOFTWARE_ICP_PATH, legacyPagePath: "app/landing/ghost-kitchen/page.tsx" },
+  { from: "/commissary-software", to: COMMISSARY_SOFTWARE_ICP_PATH, legacyPagePath: "app/commissary-software/page.tsx" },
 ] as const;
 
 export const ICP_PILOT_HIGHLIGHTS_LANDING_IDS = ["meal-prep", "ghost-kitchen"] as const;
