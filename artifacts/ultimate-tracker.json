@@ -3,7 +3,7 @@
   "p0-2-woocommerce-live-smoke": "done",
   "p0-3-shopify-live-smoke": "done",
   "p0-4-remove-deploy-skip-vitest": "done",
-  "p0-5-blueprint-sentry-done": "pending",
+  "p0-5-blueprint-sentry-done": "done",
   "p0-6-cross-tenant-e2e": "pending",
   "p0-7-rate-limit-audit": "pending",
   "p0-8-offline-pos-pci-review": "pending",

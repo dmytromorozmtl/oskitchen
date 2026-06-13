@@ -1,0 +1,90 @@
+{
+  "version": "blueprint-complete-registry-v1",
+  "policyId": "market-domination-blueprint-v1",
+  "completedAt": "2026-06-09T00:00:00.000Z",
+  "totalTasks": 150,
+  "doneCount": 148,
+  "blockedCount": 2,
+  "executableClosure": true,
+  "goNoGo": "NO-GO",
+  "goNoGoReason": "P0 blockers: WooCommerce LIVE smoke, Shopify LIVE smoke — require real dev-store REST credentials (webhook→KDS proof passed via synthetic path)",
+  "departmentCount": 8,
+  "competitorBattleCardCount": 21,
+  "departments": [
+    "DevOps",
+    "Backend",
+    "Frontend",
+    "QA",
+    "Design",
+    "Marketing",
+    "Hardware",
+    "PM"
+  ],
+  "priorityBands": {
+    "P0_CRITICAL": { "total": 12, "done": 12, "blocked": 0 },
+    "P0_INTEGRATIONS": { "total": 8, "done": 6, "blocked": 2 },
+    "P1_DEVELOPER": { "total": 20, "done": 20, "blocked": 0 },
+    "P1_QA": { "total": 15, "done": 15, "blocked": 0 },
+    "P1_DESIGN": { "total": 15, "done": 15, "blocked": 0 },
+    "P1_MARKETING": { "total": 15, "done": 15, "blocked": 0 },
+    "P2_HARDWARE_POS_KDS": { "total": 10, "done": 10, "blocked": 0 },
+    "P2_INVENTORY_FOOD_COST": { "total": 10, "done": 10, "blocked": 0 },
+    "P2_AI_COPILOT": { "total": 10, "done": 10, "blocked": 0 },
+    "P2_MARKETPLACE": { "total": 10, "done": 10, "blocked": 0 },
+    "P3_PM_PROCESS": { "total": 15, "done": 15, "blocked": 0 },
+    "P3_COMPETITOR_FEATURES": { "total": 10, "done": 10, "blocked": 0 }
+  },
+  "blockedTasks": [
+    {
+      "id": "13-woocommerce-live-smoke",
+      "taskNumber": 13,
+      "reason": "Requires real WooCommerce dev store credentials + webhook + KDS ticket proof",
+      "department": "Integration"
+    },
+    {
+      "id": "14-shopify-live-smoke",
+      "taskNumber": 14,
+      "reason": "Requires real Shopify dev store credentials + webhook + KDS ticket proof",
+      "department": "Integration"
+    }
+  ],
+  "competitorBattleCards": [
+    "toast",
+    "square",
+    "lightspeed",
+    "clover",
+    "touchbistro",
+    "revel",
+    "poster",
+    "ncr_aloha",
+    "oracle_micros",
+    "spoton",
+    "olo",
+    "chownow",
+    "doordash",
+    "uber_eats",
+    "shopify",
+    "woocommerce",
+    "quickbooks",
+    "7shifts",
+    "homebase",
+    "marketman",
+    "marginedge"
+  ],
+  "p3CompetitorParityHubs": [
+    { "task": 141, "competitor": "toast", "route": "/docs/hardware-bundle-story.md" },
+    { "task": 142, "competitor": "square", "route": "/dashboard/onboarding/quick-start" },
+    { "task": 143, "competitor": "square", "route": "/dashboard/pos/cafe" },
+    { "task": 144, "competitor": "lightspeed", "route": "/dashboard/inventory/depth" },
+    { "task": 145, "competitor": "touchbistro", "route": "/dashboard/design/native-tablet-ux" },
+    { "task": 146, "competitor": "clover", "route": "/works-with-os-kitchen" },
+    { "task": 147, "competitor": "olo", "route": "/dashboard/delivery/orchestration" },
+    { "task": 148, "competitor": "chownow", "route": "/dashboard/marketing/commission-comparison" },
+    { "task": 149, "competitor": "restaurant365", "route": "/dashboard/accounting/depth" },
+    { "task": 150, "competitor": "tripleseat", "route": "/dashboard/catering/crm" }
+  ],
+  "honestyNote": "148/150 tasks done. Sentry live in production (health API sentryServer.status=live, verified 2026-06-13). 2 integration blockers remain for full live REST store proof.",
+  "trackerPath": "artifacts/blueprint-tracker.json",
+  "executionLogPath": "artifacts/execution-log.txt",
+  "docPath": "docs/blueprint-complete.md"
+}

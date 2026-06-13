@@ -1,5 +1,5 @@
 {
-  "1-sentry-dsn-production": "blocked",
+  "1-sentry-dsn-production": "done",
   "2-p0-orchestrator-pass": "done",
   "3-remove-deploy-skip-vitest": "done",
   "4-split-maintenance-mode-panel": "done",

@@ -8356,3 +8356,15 @@ Evidence: grep scripts/deploy-prebuilt-prod.sh — no DEPLOY_SKIP_VITEST; vitest
 Result: DONE — tests required before prod deploy
 Tracker: 4/80 (p0-4 done)
 Next: P0-5 update blueprint registry — Sentry marked DONE
+
+---
+Cycle: ultimate-v11-5
+Timestamp: 2026-06-13T18:05:00.000Z
+Task: P0-5 Update blueprint registry — Sentry marked DONE
+Department: DevOps
+Action: Removed 1-sentry-dsn-production from blockedTasks; blueprint-tracker → done; sentry-p0-unblock-status → done
+Evidence: curl https://os-kitchen.com/api/health → checks.sentryServer { ok: true, configured: true, status: "live" }
+Files: artifacts/blueprint-complete-registry.json, artifacts/blueprint-tracker.json, artifacts/sentry-p0-unblock-status.json
+Registry: doneCount 148/150, blockedCount 2, P0_CRITICAL 12/12 done
+Tracker: 5/80 (p0-5 done)
+Next: P0-6 cross-tenant data leak E2E — IDOR detection
