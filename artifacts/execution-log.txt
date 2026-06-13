@@ -8764,3 +8764,15 @@ Evidence: vitest predictive-daily-briefing-p2-38 5/5 PASS; audit:predictive-dail
 Result: DONE — predictive daily briefing with all-channel today forecasts on Today
 Tracker: 38/80 (p2-38 done)
 Next: P2-39 certified devices iPad models
+
+---
+Cycle: ultimate-v11-39
+Timestamp: 2026-06-14T05:00:00.000Z
+Task: P2-39 Certified devices — iPad models list
+Department: Hardware
+Action: Added certified iPad model registry (10 models: Pro/Air/mini/legacy tiers); docs/certified-devices-ipad.md with counter POS, KDS expo, handheld routes; P2-39 policy/content/audit + registry artifact; wired audit:certified-devices-ipad-p2-39 + deploy gate
+Files: docs/certified-devices-ipad.md, lib/hardware/certified-devices-ipad-p2-39-{policy,content,audit}.ts, artifacts/certified-devices-ipad-p2-39-registry.json, scripts/audit-certified-devices-ipad-p2-39.ts, tests/unit/certified-devices-ipad-p2-39.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest certified-devices-ipad-p2-39 5/5 PASS; audit:certified-devices-ipad-p2-39 PASS
+Result: DONE — certified iPad devices list with 10 models and deployment tiers
+Tracker: 39/80 (p2-39 done)
+Next: P2-40 onboarding TTV measurement

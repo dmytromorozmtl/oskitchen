@@ -127,6 +127,9 @@ jobs:
       - name: Predictive daily briefing P2-38 audit
         run: npm run audit -- predictive-daily-briefing-p2-38
 
+      - name: Certified iPad devices P2-39 audit
+        run: npm run audit -- certified-devices-ipad-p2-39
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

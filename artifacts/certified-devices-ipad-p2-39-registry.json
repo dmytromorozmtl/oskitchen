@@ -1,0 +1,37 @@
+{
+  "policyId": "certified-devices-ipad-p2-39-v1",
+  "modelCount": 10,
+  "minIos": "16",
+  "tiers": {
+    "certified": 7,
+    "baseline": 2,
+    "legacy": 1
+  },
+  "modelIds": [
+    "ipad-pro-13-m4",
+    "ipad-pro-11-m4",
+    "ipad-air-13-m2",
+    "ipad-air-11-m2",
+    "ipad-11-a16",
+    "ipad-10-2022",
+    "ipad-mini-7-a17",
+    "ipad-mini-6",
+    "ipad-pro-129-m2",
+    "ipad-9-2021"
+  ],
+  "routes": [
+    "/dashboard/pos/tablet",
+    "/dashboard/kitchen",
+    "/dashboard/pos/handheld",
+    "/dashboard/packing"
+  ],
+  "relatedDocs": [
+    "docs/certified-hardware-guide.md",
+    "docs/hardware-compatibility-roadmap-toast.md",
+    "docs/hardware-compatibility.md"
+  ],
+  "auditScripts": [
+    "audit:certified-devices-ipad-p2-39",
+    "audit:certified-hardware-guide"
+  ]
+}
