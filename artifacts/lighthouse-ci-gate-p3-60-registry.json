@@ -1,0 +1,18 @@
+{
+  "policyId": "lighthouse-ci-gate-p3-60-v1",
+  "department": "DevOps",
+  "thresholds": {
+    "fcpMaxMs": 2000,
+    "lcpMaxMs": 3500,
+    "clsMax": 0.1
+  },
+  "paths": ["/", "/pricing", "/login", "/shopify"],
+  "lhciConfig": "lighthouserc.core-web-vitals.cjs",
+  "workflow": ".github/workflows/lighthouse.yml",
+  "auditScripts": [
+    "audit:lighthouse-ci-gate-p3-60",
+    "check:lighthouse-ci-gate-p3-60",
+    "lighthouse:core-web-vitals",
+    "test:ci:lighthouse-core-web-vitals"
+  ]
+}

@@ -9016,3 +9016,15 @@ Evidence: vitest bundle-budget-gate-p3-59 PASS; audit:bundle-budget-gate-p3-59 P
 Result: DONE — CI gate fails routes with First Load JS > 1000 kB
 Tracker: 59/80 (p3-59 done)
 Next: P3-60 Lighthouse CI gate — DevOps
+
+---
+Cycle: ultimate-v11-60
+Timestamp: 2026-06-14T21:00:00.000Z
+Task: P3-60 Lighthouse CI gate — FCP<2s, LCP<3.5s, CLS<0.1
+Department: DevOps
+Action: lighthouse-ci-gate-p3-60 policy/measurement/audit; LHCI config + lighthouse.yml workflow; four marketing paths; deploy gate
+Files: lib/qa/lighthouse-ci-gate-p3-60-{policy,measurement,audit}.ts, e2e/lighthouse-ci-gate-p3-60.spec.ts, e2e/helpers/lighthouse-ci-gate-p3-60-{flow,ready}.ts, docs/lighthouse-ci-gate-p3-60.md, artifacts/lighthouse-ci-gate-p3-60-registry.json, scripts/audit-lighthouse-ci-gate-p3-60.ts, tests/unit/lighthouse-ci-gate-p3-60.test.ts, package.json, config/npm-scripts/archive-v1.json, playwright.config.ts, .github/workflows/{lighthouse,deploy-prod-gate}.yml
+Evidence: vitest lighthouse-ci-gate-p3-60 PASS; audit:lighthouse-ci-gate-p3-60 PASS; lighthouse-core-web-vitals wiring PASS
+Result: DONE — Lighthouse CI fails FCP>2s, LCP>3.5s, CLS>0.1 on /, /pricing, /login, /shopify
+Tracker: 60/80 (p3-60 done)
+Next: P3-61 commissary landing page — Marketing

@@ -10,6 +10,7 @@ on:
       - "components/**"
       - "lib/**"
       - "lighthouserc.core-web-vitals.cjs"
+      - "lib/qa/lighthouse-ci-gate-p3-60-policy.ts"
       - "artifacts/cwv-performance-baseline.json"
       - "lib/performance/cwv-performance-regression-policy.ts"
       - "scripts/check-cwv-performance-regression.ts"

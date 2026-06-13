@@ -190,6 +190,9 @@ jobs:
       - name: Bundle budget gate P3-59 audit
         run: npm run audit -- bundle-budget-gate-p3-59
 
+      - name: Lighthouse CI gate P3-60 audit
+        run: npm run audit -- lighthouse-ci-gate-p3-60
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

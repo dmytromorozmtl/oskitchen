@@ -143,6 +143,7 @@ if (dashboardE2EEnabled) {
         "**/load-test-suite-p3-56.spec.ts",
         "**/visual-regression-dark-mode-p3-58.spec.ts",
         "**/bundle-budget-gate-p3-59.spec.ts",
+        "**/lighthouse-ci-gate-p3-60.spec.ts",
       ],
       use: {
         ...desktop,
