@@ -1,0 +1,11 @@
+{
+  "policyId": "public-roadmap-p3-69-v1",
+  "department": "Marketing",
+  "publicPath": "/roadmap",
+  "upstreamDoc": "docs/PRODUCT_ROADMAP_2026.md",
+  "auditScripts": [
+    "audit:public-roadmap-p3-69",
+    "check:public-roadmap-p3-69",
+    "test:ci:public-roadmap:cert"
+  ]
+}

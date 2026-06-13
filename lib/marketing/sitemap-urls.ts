@@ -61,6 +61,7 @@ export function marketingSitemapPaths(): Array<{
     { path: '/shopify-to-kds', priority: 0.86, changeFrequency: 'monthly' },
     { path: '/restaurant-integration-health', priority: 0.86, changeFrequency: 'monthly' },
     { path: '/commission-comparison', priority: 0.85, changeFrequency: 'monthly' },
+    { path: '/roadmap', priority: 0.72, changeFrequency: 'weekly' },
     { path: '/toast-alternative', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/square-alternative', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/marketman-alternative', priority: 0.85, changeFrequency: 'monthly' },

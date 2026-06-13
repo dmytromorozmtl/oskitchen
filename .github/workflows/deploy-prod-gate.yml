@@ -217,6 +217,9 @@ jobs:
       - name: Founder story blog P3-68 audit
         run: npm run audit -- founder-story-blog-p3-68
 
+      - name: Public roadmap P3-69 audit
+        run: npm run audit -- public-roadmap-p3-69
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
