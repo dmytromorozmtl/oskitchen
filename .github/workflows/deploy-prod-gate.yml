@@ -64,6 +64,9 @@ jobs:
       - name: Loyalty earn/redeem E2E audit
         run: npm run audit -- loyalty-earn-redeem-e2e
 
+      - name: QR scan→storefront→KDS E2E audit
+        run: npm run audit -- qr-scan-storefront-kds-e2e
+
       - name: KDS bump → expo E2E audit
         run: npm run audit -- kds-bump-expo-e2e
 

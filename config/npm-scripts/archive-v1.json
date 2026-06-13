@@ -1074,6 +1074,7 @@
     "audit:storefront-publish-order-kds-e2e": "tsx scripts/audit-storefront-publish-order-kds-e2e.ts",
     "audit:webhook-ingest-order-creation-e2e": "tsx scripts/audit-webhook-ingest-order-creation-e2e.ts",
     "audit:loyalty-earn-redeem-e2e": "tsx scripts/audit-loyalty-earn-redeem-e2e.ts",
+    "audit:qr-scan-storefront-kds-e2e": "tsx scripts/audit-qr-scan-storefront-kds-e2e.ts",
     "audit:offline-pos-reconnect-sync-e2e": "tsx scripts/audit-offline-pos-reconnect-sync-e2e.ts",
     "audit:role-permissions-matrix-e2e": "tsx scripts/audit-role-permissions-matrix-e2e.ts",
     "audit:kds-playwright-e2e": "tsx scripts/audit-kds-playwright-e2e.ts",
@@ -1749,6 +1750,7 @@
     "test:ci:rate-limit-regression": "node ./node_modules/vitest/vitest.mjs run tests/unit/rate-limit-regression.test.ts",
     "test:ci:pos-checkout-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-checkout-e2e.test.ts",
     "test:ci:loyalty-earn-redeem-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/loyalty-earn-redeem-e2e.test.ts",
+    "test:ci:qr-scan-storefront-kds-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/qr-scan-storefront-kds-e2e.test.ts",
     "test:ci:offline-pos-pci-flow-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/offline-pos-pci-flow-e2e.test.ts",
     "test:ci:webhook-signature-regression": "node ./node_modules/vitest/vitest.mjs run tests/unit/webhook-signature-regression.test.ts"
   }

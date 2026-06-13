@@ -8680,3 +8680,15 @@ Evidence: vitest loyalty-earn-redeem-e2e 6/6 PASS; audit:loyalty-earn-redeem-e2e
 Result: DONE — loyalty earn/redeem E2E on POS checkout with balance verification
 Tracker: 31/80 (p2-31 done)
 Next: P2-32 QR scan→storefront→KDS E2E
+
+---
+Cycle: ultimate-v11-32
+Timestamp: 2026-06-14T01:30:00.000Z
+Task: P2-32 QR scan→storefront→KDS E2E — scan → menu → checkout → order in KDS
+Department: QA
+Action: Added Playwright QR scan→storefront→KDS E2E — scanned /q/{slug}/{table} entry, storefront /s/{slug}/menu add-to-cart, pay-later checkout, KDS ticket assert; P2-32 policy/audit; wired audit:qr-scan-storefront-kds-e2e + deploy gate
+Files: e2e/qr-scan-storefront-kds-e2e.spec.ts, e2e/helpers/qr-scan-storefront-kds-e2e-{flow,ready}.ts, lib/qa/qr-scan-storefront-kds-e2e-{policy,audit}.ts, scripts/audit-qr-scan-storefront-kds-e2e.ts, tests/unit/qr-scan-storefront-kds-e2e.test.ts, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml, package.json
+Evidence: vitest qr-scan-storefront-kds-e2e PASS; audit:qr-scan-storefront-kds-e2e PASS
+Result: DONE — unified QR scan entry through storefront checkout to KDS
+Tracker: 32/80 (p2-32 done)
+Next: P2-33 AI invoice scanner accuracy regression
