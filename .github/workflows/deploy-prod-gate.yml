@@ -121,6 +121,9 @@ jobs:
       - name: Sentry alert firing P2-36 audit
         run: npm run audit -- sentry-alert-firing-p2-36
 
+      - name: Hardware compatibility roadmap P2-37 audit
+        run: npm run audit -- hardware-compatibility-roadmap-p2-37
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

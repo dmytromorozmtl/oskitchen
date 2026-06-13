@@ -8740,3 +8740,15 @@ Evidence: vitest sentry-alert-firing-p2-36 5/5 PASS; audit:sentry-alert-firing-p
 Result: DONE — Sentry alert firing verification with safe cron_failure trigger and 5-min SLA runbook
 Tracker: 36/80 (p2-36 done)
 Next: P2-37 hardware compatibility roadmap
+
+---
+Cycle: ultimate-v11-37
+Timestamp: 2026-06-14T04:00:00.000Z
+Task: P2-37 Hardware compatibility roadmap — USB/Bluetooth printers, iPad holder (Toast parity)
+Department: Hardware
+Action: Added Toast-parity hardware roadmap doc with USB receipt printers (Epson/Star), Bluetooth receipt printers, iPad counter mounts (Heckler/Bouncepad/Kensington vs Toast Tap); P2-37 policy/content/audit + registry artifact; wired audit:hardware-compatibility-roadmap-p2-37 + deploy gate
+Files: docs/hardware-compatibility-roadmap-toast.md, lib/hardware/hardware-compatibility-roadmap-p2-37-{policy,content,audit}.ts, artifacts/hardware-compatibility-roadmap-p2-37-registry.json, scripts/audit-hardware-compatibility-roadmap-p2-37.ts, tests/unit/hardware-compatibility-roadmap-p2-37.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest hardware-compatibility-roadmap-p2-37 5/5 PASS; audit:hardware-compatibility-roadmap-p2-37 PASS
+Result: DONE — Toast parity hardware roadmap for USB/BT printers and iPad mounts
+Tracker: 37/80 (p2-37 done)
+Next: P2-38 predictive daily briefing

@@ -1,0 +1,38 @@
+{
+  "policyId": "hardware-compatibility-roadmap-p2-37-v1",
+  "competitor": "toast",
+  "headline": "Hardware compatibility roadmap — Toast parity baseline",
+  "positioningLine": "Bring your own iPad and printers — no Toast hardware lease.",
+  "updatedAt": "2026-06-14",
+  "roadmapItemCount": 6,
+  "roadmapItemIds": [
+    "usb_receipt_printer",
+    "bluetooth_receipt_printer",
+    "ipad_counter_mount",
+    "toast_go_handheld",
+    "printer_diagnostics",
+    "native_escpos_roadmap"
+  ],
+  "usbPrinterCount": 3,
+  "bluetoothPrinterCount": 3,
+  "ipadMountCount": 4,
+  "honestyMarkers": [
+    "not affiliated",
+    "browser-first",
+    "BETA",
+    "roadmap",
+    "verify",
+    "0 signed LOIs"
+  ],
+  "relatedDocs": [
+    "docs/competitor-battle-cards/toast.md",
+    "docs/hardware-compatibility.md",
+    "docs/certified-hardware-guide.md",
+    "docs/POS_HARDWARE_READINESS.md"
+  ],
+  "auditScripts": [
+    "audit:hardware-compatibility-roadmap-p2-37",
+    "audit:hardware-compatibility-center",
+    "audit:certified-hardware-guide"
+  ]
+}
