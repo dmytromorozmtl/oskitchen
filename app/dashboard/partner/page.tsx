@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { PlanGate } from "@/components/plans/plan-gate";
-import { PartnerOperationsCenter } from "@/components/partner/partner-operations-center";
+import { LazyPartnerOperationsCenter } from "@/components/charts/lazy-chart-panels";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { canProvisionPartnerOrganizations } from "@/lib/partner/partner-permissions";
 import { prisma } from "@/lib/prisma";
@@ -24,7 +24,7 @@ export default async function PartnerDashboardPage() {
 
   return (
     <PlanGate userId={dataUserId} feature="api_access" title="Partner operations center">
-      <PartnerOperationsCenter initial={snapshot} canProvision={canProvision} />
+      <LazyPartnerOperationsCenter initial={snapshot} canProvision={canProvision} />
     </PlanGate>
   );
 }

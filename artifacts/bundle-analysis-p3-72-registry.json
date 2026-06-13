@@ -1,0 +1,13 @@
+{
+  "policyId": "bundle-analysis-p3-72-v1",
+  "department": "Frontend",
+  "upstreamPolicyId": "bundle-analysis-p1-39-v1",
+  "wave2Targets": 3,
+  "totalCodeSplitTargets": 8,
+  "auditScripts": [
+    "audit:bundle-analysis-p3-72",
+    "check:bundle-analysis-p3-72",
+    "audit:bundle-chunks",
+    "test:ci:bundle-analysis-p3-72:cert"
+  ]
+}

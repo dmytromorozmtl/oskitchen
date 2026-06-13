@@ -52,6 +52,9 @@ jobs:
       - name: Bundle chunk audit (top-5 code-split wiring)
         run: npm run audit -- bundle-chunks
 
+      - name: Bundle analysis optimization P3-72 audit
+        run: npm run audit:bundle-analysis-p3-72
+
       - name: Preview route guard audit (≥280 hidden routes)
         run: npm run audit -- preview-routes-hidden
 

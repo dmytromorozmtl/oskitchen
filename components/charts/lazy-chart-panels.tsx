@@ -46,3 +46,28 @@ export const LazyOverviewCharts = dynamic(
     })),
   { loading, ssr: false },
 );
+
+/** P3-72 wave 2 — partner, growth, vendor analytics recharts panels. */
+export const LazyPartnerOperationsCenter = dynamic(
+  () =>
+    import("@/components/partner/partner-operations-center").then((m) => ({
+      default: m.PartnerOperationsCenter,
+    })),
+  { loading, ssr: false },
+);
+
+export const LazyGrowthCommandCenter = dynamic(
+  () =>
+    import("@/components/growth/growth-command-center").then((m) => ({
+      default: m.GrowthCommandCenter,
+    })),
+  { loading, ssr: false },
+);
+
+export const LazyVendorAnalyticsClient = dynamic(
+  () =>
+    import("@/components/marketplace/vendor-analytics-client").then((m) => ({
+      default: m.VendorAnalyticsClient,
+    })),
+  { loading, ssr: false },
+);

@@ -47,7 +47,8 @@ describe("bundle analysis (P1-39)", () => {
     expect(pkg.scripts?.analyze).toContain("ANALYZE=true");
 
     const workflow = readFileSync(join(ROOT, BUNDLE_ANALYSIS_CI_WORKFLOW), "utf8");
-    expect(workflow).toContain("audit:bundle-chunks");
+    expect(workflow).toContain("bundle-chunks");
+    expect(workflow).toContain("bundle-analysis-p3-72");
 
     const nextConfig = readFileSync(join(ROOT, "next.config.ts"), "utf8");
     expect(nextConfig).toContain("@next/bundle-analyzer");

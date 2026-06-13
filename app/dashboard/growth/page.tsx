@@ -1,4 +1,5 @@
-import { GrowthCommandCenter, type GrowthCommandCenterSerialized } from "@/components/growth/growth-command-center";
+import { LazyGrowthCommandCenter } from "@/components/charts/lazy-chart-panels";
+import type { GrowthCommandCenterSerialized } from "@/components/growth/growth-command-center";
 import { getGrowthCommandCenterSnapshot } from "@/services/growth/growth-service";
 
 function serializeCommandCenter(
@@ -37,7 +38,7 @@ export default async function GrowthOverviewPage() {
         Founder Growth Command Center — revenue, acquisition, activation, retention, and expansion in one surface. Data is
         internal; never exposed to tenant staff outside Growth permissions.
       </div>
-      <GrowthCommandCenter data={data} />
+      <LazyGrowthCommandCenter data={data} />
     </div>
   );
 }
