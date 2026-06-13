@@ -2,6 +2,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 
 import { createDeliveryRouteFromOrdersFormAction } from "@/actions/delivery-route";
+import { DriverTrackingWidget } from "@/components/dashboard/routes/driver-tracking-widget";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import { routeTerminologyForMode } from "@/lib/routes/route-types";
 import { ROUTE_STATUS_LABEL } from "@/lib/routes/route-status";
 import { loadRouteOverviewKpis } from "@/services/routes/route-overview";
 import { listRoutesForUser } from "@/services/routes/route-service";
+import { loadDriverTrackingWidgetModel } from "@/services/delivery/delivery-routing-optimization-p2-45-service";
 
 function Kpi({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
@@ -33,9 +35,10 @@ export default async function RoutesOverviewPage() {
   const businessType = kitchen?.businessType ?? null;
   const terminology = routeTerminologyForMode(businessType);
 
-  const [kpis, routes] = await Promise.all([
+  const [kpis, routes, driverTracking] = await Promise.all([
     loadRouteOverviewKpis(userId),
     listRoutesForUser({ userId }, { take: 12 }),
+    loadDriverTrackingWidgetModel(userId),
   ]);
 
   return (
@@ -73,6 +76,8 @@ export default async function RoutesOverviewPage() {
             hint="Partially completed or failed"
           />
         </div>
+
+        <DriverTrackingWidget model={driverTracking} />
 
         <Card className="border-border/80 shadow-sm">
           <CardHeader>

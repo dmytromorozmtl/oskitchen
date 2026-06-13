@@ -1,0 +1,20 @@
+{
+  "policyId": "delivery-routing-optimization-p2-45-v1",
+  "parityTarget": "Olo",
+  "primaryRoute": "/dashboard/routes",
+  "optimizeRoute": "/dashboard/routes/optimize",
+  "flowSteps": [
+    "optimize_stop_order",
+    "minimize_drive_time",
+    "track_driver_progress",
+    "driver_handoff"
+  ],
+  "testIds": {
+    "widget": "driver-tracking-widget",
+    "routeRow": "driver-tracking-route-row"
+  },
+  "auditScripts": [
+    "audit:delivery-routing-optimization-p2-45",
+    "check:delivery-routing-optimization-p2-45"
+  ]
+}

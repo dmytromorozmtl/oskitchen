@@ -1106,6 +1106,8 @@
     "test:ci:par-levels-auto-reorder-p2-43": "node ./node_modules/vitest/vitest.mjs run tests/unit/par-levels-auto-reorder-p2-43.test.ts",
     "audit:invoice-ai-accuracy-benchmark-p2-44": "tsx scripts/audit-invoice-ai-accuracy-benchmark-p2-44.ts",
     "test:ci:invoice-ai-accuracy-benchmark-p2-44": "node ./node_modules/vitest/vitest.mjs run tests/unit/invoice-ai-accuracy-benchmark-p2-44.test.ts",
+    "audit:delivery-routing-optimization-p2-45": "tsx scripts/audit-delivery-routing-optimization-p2-45.ts",
+    "test:ci:delivery-routing-optimization-p2-45": "node ./node_modules/vitest/vitest.mjs run tests/unit/delivery-routing-optimization-p2-45.test.ts",
     "run:sentry-alert-firing-p2-36": "tsx scripts/run-sentry-alert-firing-p2-36.ts",
     "audit:nav-audit-preview-labels": "tsx scripts/audit-nav-audit-preview-labels.ts",
     "audit:single-onboarding-entry": "tsx scripts/audit-single-onboarding-entry.ts",
