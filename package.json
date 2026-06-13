@@ -93,6 +93,8 @@
     "test:e2e:offline-pos-pci-flow": "playwright test e2e/auth.setup.ts e2e/offline-pos-pci-flow.spec.ts --project=setup --project=chromium-authed",
     "audit:offline-pos-pci-flow-e2e": "tsx scripts/audit-offline-pos-pci-flow-e2e.ts",
     "check:offline-pos-pci-flow-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/offline-pos-pci-flow-e2e.test.ts",
+    "benchmark:webhook-signature-regression": "tsx scripts/run-webhook-signature-regression-benchmark.ts",
+    "check:webhook-signature-regression": "node ./node_modules/vitest/vitest.mjs run tests/unit/webhook-signature-regression.test.ts",
     "test:e2e:kds-keyboard": "playwright test e2e/auth.setup.ts e2e/kds-keyboard-navigation.spec.ts --project=setup --project=chromium-authed",
     "test:e2e:today-keyboard": "playwright test e2e/auth.setup.ts e2e/today-keyboard-navigation.spec.ts --project=setup --project=chromium-authed",
     "predeploy:verify": "bash scripts/predeploy-verify.sh",

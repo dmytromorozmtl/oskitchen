@@ -8560,3 +8560,15 @@ Evidence: vitest offline-pos-pci-flow-e2e 6/6 PASS; audit:offline-pos-pci-flow-e
 Result: DONE — offline POS PCI flow with noop-v1 guard wired
 Tracker: 21/80 (p1-21 done)
 Next: P1-22 webhook signature regression — 59 routes
+
+---
+Cycle: ultimate-v11-22
+Timestamp: 2026-06-13T20:23:00.000Z
+Task: P1-22 webhook signature regression — 59 routes invalid signature → 401 fail-closed
+Department: QA
+Action: Added webhook signature regression policy/scoring (59 ingress routes, bearer probe 401, static fail-closed patterns including SCIM Unauthorized→401), benchmark script + unit tests + deploy gate
+Files: lib/qa/webhook-signature-regression-{policy,scoring}.ts, tests/unit/webhook-signature-regression.test.ts, scripts/run-webhook-signature-regression-benchmark.ts, package.json, deploy-prod-gate.yml
+Evidence: vitest webhook-signature-regression 5/5 PASS; benchmark 59/59 routes PASS
+Result: DONE — webhook signature regression suite wired
+Tracker: 22/80 (p1-22 done)
+Next: P1-23 ICP landing pages — meal prep + ghost kitchen

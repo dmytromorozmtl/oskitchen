@@ -211,6 +211,9 @@ jobs:
       - name: API mutation rate limit audit
         run: npm run audit -- api-mutation-rate-limit
 
+      - name: Webhook signature regression (59 routes)
+        run: npm run check:webhook-signature-regression
+
       - name: Dashboard error boundary audit
         run: npm run audit -- dashboard-error-boundaries
 
