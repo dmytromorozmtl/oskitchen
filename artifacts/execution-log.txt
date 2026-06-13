@@ -8776,3 +8776,15 @@ Evidence: vitest certified-devices-ipad-p2-39 5/5 PASS; audit:certified-devices-
 Result: DONE — certified iPad devices list with 10 models and deployment tiers
 Tracker: 39/80 (p2-39 done)
 Next: P2-40 onboarding TTV measurement
+
+---
+Cycle: ultimate-v11-40
+Timestamp: 2026-06-14T05:30:00.000Z
+Task: P2-40 Onboarding TTV measurement — target <30 min to first order
+Department: Onboarding
+Action: Added TTV measurement from UserProfile.createdAt to first order; recordOnboardingTtvOnFirstOrder lifecycle hook on order creation; OnboardingTtvStrip on /dashboard/today; P2-40 policy/measurement/audit/doc; wired audit:onboarding-ttv-p2-40 + deploy gate
+Files: lib/onboarding/onboarding-ttv-p2-40-{policy,measurement,audit}.ts, lib/onboarding/onboarding-ttv-record.ts, services/onboarding/onboarding-ttv-service.ts, components/onboarding/onboarding-ttv-strip.tsx, services/orders/order-creation-service.ts, app/dashboard/today/page.tsx, docs/onboarding-ttv-p2-40.md, artifacts/onboarding-ttv-p2-40-registry.json, scripts/audit-onboarding-ttv-p2-40.ts, tests/unit/onboarding-ttv-p2-40.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest onboarding-ttv-p2-40 PASS; audit:onboarding-ttv-p2-40 PASS
+Result: DONE — onboarding TTV measurement with 30-min target and Today strip
+Tracker: 40/80 (p2-40 done)
+Next: P2-41 loyalty earn/redeem — Square parity

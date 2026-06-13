@@ -130,6 +130,9 @@ jobs:
       - name: Certified iPad devices P2-39 audit
         run: npm run audit -- certified-devices-ipad-p2-39
 
+      - name: Onboarding TTV P2-40 audit
+        run: npm run audit -- onboarding-ttv-p2-40
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

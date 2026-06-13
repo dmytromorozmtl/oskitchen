@@ -1,0 +1,19 @@
+{
+  "policyId": "onboarding-ttv-p2-40-v1",
+  "targetMinutes": 30,
+  "signupAnchor": "UserProfile.createdAt",
+  "firstOrderAnchor": "Order.createdAt (earliest in workspace scope)",
+  "lifecycleEvent": "onboarding_ttv_first_order",
+  "todayRoute": "/dashboard/today",
+  "stripTestId": "onboarding-ttv-strip",
+  "statusValues": [
+    "pending_on_track",
+    "pending_overdue",
+    "met_target",
+    "missed_target"
+  ],
+  "auditScripts": [
+    "audit:onboarding-ttv-p2-40",
+    "check:onboarding-ttv-p2-40"
+  ]
+}

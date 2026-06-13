@@ -9,6 +9,7 @@ import { resolveTodayCommercialInflectionUiSlice } from "@/lib/commercial/commer
 import { augmentPilotIntegrationHealthStripWithCommercialInflection } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import { DemoModeGuidedPath } from "@/components/dashboard/demo-mode-guided-path";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
+import { OnboardingTtvStrip } from "@/components/onboarding/onboarding-ttv-strip";
 import { PlaybookTodayStrip } from "@/components/dashboard/playbooks/playbook-today-strip";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
 import { LaunchWizardTodayStripSection } from "@/components/dashboard/today/launch-wizard-today-strip-section";
@@ -33,6 +34,7 @@ import {
 import { canUseFullSupportInbox } from "@/lib/support/support-permissions";
 import { prisma } from "@/lib/prisma";
 import { loadGettingStartedStatus } from "@/services/onboarding/getting-started-status";
+import { loadOnboardingTtvMeasurement } from "@/services/onboarding/onboarding-ttv-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
 import { resolveOwnerDailyBriefingVisibility } from "@/services/briefing/owner-daily-briefing-service";
@@ -119,6 +121,12 @@ export default async function TodayOperationsPage({
     console.error("[today] getting started load failed", error);
     return emptyGettingStartedPayload();
   });
+  const onboardingTtv = profile?.createdAt
+    ? await loadOnboardingTtvMeasurement(dataUserId, profile.createdAt).catch((error) => {
+        console.error("[today] onboarding TTV load failed", error);
+        return null;
+      })
+    : null;
   let commercialInflectionUiSlice = null;
   try {
     commercialInflectionUiSlice = commercialOps
@@ -149,6 +157,9 @@ export default async function TodayOperationsPage({
         !gettingStarted.allDone &&
         !showPilotOwnerBriefing ? (
           <GettingStartedAttentionStrip data={gettingStarted} />
+        ) : null}
+        {onboardingTtv?.showStrip && !showPilotOwnerBriefing ? (
+          <OnboardingTtvStrip data={onboardingTtv} />
         ) : null}
         {aiBriefingError ? (
           <AiFeatureApiError
