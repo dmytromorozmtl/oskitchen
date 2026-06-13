@@ -12,13 +12,17 @@ describe("money actions audit (P1-31)", () => {
     expect(MONEY_ACTIONS_AUDIT_POLICY_ID).toBe("money-actions-audit-p1-31-v1");
   });
 
-  it("covers payment, refund, void, payout, marketplace PO", () => {
+  it("covers payment, refund, void, payout, marketplace PO, billing, terminal, storefront, cash", () => {
     const kinds = new Set(MONEY_ACTION_AUDIT_REGISTRY.map((entry) => entry.kind));
     expect(kinds.has("payment")).toBe(true);
     expect(kinds.has("refund")).toBe(true);
     expect(kinds.has("void")).toBe(true);
     expect(kinds.has("payout")).toBe(true);
     expect(kinds.has("marketplace_po")).toBe(true);
+    expect(kinds.has("billing")).toBe(true);
+    expect(kinds.has("terminal")).toBe(true);
+    expect(kinds.has("storefront")).toBe(true);
+    expect(kinds.has("cash")).toBe(true);
   });
 
   it.each(MONEY_ACTION_AUDIT_REGISTRY.map((entry) => [entry.kind, entry.servicePath, entry] as const))(

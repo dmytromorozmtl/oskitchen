@@ -61,6 +61,9 @@ jobs:
       - name: Idempotency keys P3-78 audit
         run: npm run audit:idempotency-keys-p3-78
 
+      - name: Money actions audit P3-79 audit
+        run: npm run audit:money-actions-audit-p3-79
+
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 

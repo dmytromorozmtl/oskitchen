@@ -9,13 +9,24 @@ import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
 
 export const MONEY_ACTIONS_AUDIT_POLICY_ID = "money-actions-audit-p1-31-v1" as const;
 
-export type MoneyActionKind = "payment" | "refund" | "void" | "payout" | "marketplace_po";
+export type MoneyActionKind =
+  | "payment"
+  | "refund"
+  | "void"
+  | "payout"
+  | "marketplace_po"
+  | "billing"
+  | "storefront"
+  | "terminal"
+  | "cash";
 
 export type MoneyActionAuditEntry = {
   kind: MoneyActionKind;
   action: (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
   servicePath: string;
   auditCallPattern: RegExp;
+  /** When set, wiring passes if helper (e.g. logPosTerminalControlEvent) + action pattern match. */
+  auditHelperPattern?: RegExp;
 };
 
 /** Canonical registry — payment, refund, void, payout, marketplace PO. */
@@ -56,6 +67,57 @@ export const MONEY_ACTION_AUDIT_REGISTRY: readonly MoneyActionAuditEntry[] = [
     servicePath: "services/marketplace/checkout-service.ts",
     auditCallPattern: /AUDIT_ACTIONS\.MARKETPLACE_PO_CREATED/,
   },
+  {
+    kind: "payment",
+    action: AUDIT_ACTIONS.MARKETPLACE_PAYMENT_INITIATED,
+    servicePath: "services/marketplace/checkout-service.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.MARKETPLACE_PAYMENT_INITIATED/,
+  },
+  {
+    kind: "billing",
+    action: AUDIT_ACTIONS.BILLING_PLAN_CHANGED,
+    servicePath: "services/marketplace/billing-integration-service.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.BILLING_PLAN_CHANGED/,
+  },
+  {
+    kind: "terminal",
+    action: AUDIT_ACTIONS.POS_TERMINAL_PAYMENT_INTENT_CREATED,
+    servicePath: "app/api/pos/terminal/route.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.POS_TERMINAL_PAYMENT_INTENT_CREATED/,
+    auditHelperPattern: /logPosTerminalControlEvent/,
+  },
+  {
+    kind: "terminal",
+    action: AUDIT_ACTIONS.POS_TERMINAL_PAYMENT_CAPTURED,
+    servicePath: "app/api/pos/terminal/route.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.POS_TERMINAL_PAYMENT_CAPTURED/,
+    auditHelperPattern: /logPosTerminalControlEvent/,
+  },
+  {
+    kind: "terminal",
+    action: AUDIT_ACTIONS.POS_TERMINAL_PAYMENT_CANCELLED,
+    servicePath: "app/api/pos/terminal/route.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.POS_TERMINAL_PAYMENT_CANCELLED/,
+    auditHelperPattern: /logPosTerminalControlEvent/,
+  },
+  {
+    kind: "storefront",
+    action: AUDIT_ACTIONS.STOREFRONT_PAYMENT_FAILED,
+    servicePath: "services/storefront/storefront-payment-audit.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.STOREFRONT_PAYMENT_FAILED/,
+  },
+  {
+    kind: "storefront",
+    action: AUDIT_ACTIONS.STOREFRONT_PAYMENT_RETRY_STARTED,
+    servicePath: "services/storefront/storefront-payment-audit.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.STOREFRONT_PAYMENT_RETRY_STARTED/,
+  },
+  {
+    kind: "cash",
+    action: AUDIT_ACTIONS.POS_CASH_COUNTED,
+    servicePath: "services/pos/pos-cash-count-service.ts",
+    auditCallPattern: /AUDIT_ACTIONS\.POS_CASH_COUNTED/,
+  },
 ] as const;
 
 export const MONEY_ACTIONS_AUDIT_CI_SCRIPTS = ["test:ci:money-actions-audit"] as const;
@@ -77,7 +139,12 @@ export function auditMoneyActionEntry(
   let auditWired = false;
   if (servicePresent) {
     const source = readFileSync(absPath, "utf8");
-    auditWired = source.includes("auditLog(") && entry.auditCallPattern.test(source);
+    const directAudit = source.includes("auditLog(") && entry.auditCallPattern.test(source);
+    const helperAudit =
+      entry.auditHelperPattern != null &&
+      entry.auditHelperPattern.test(source) &&
+      entry.auditCallPattern.test(source);
+    auditWired = directAudit || helperAudit;
   }
   return {
     policyId: MONEY_ACTIONS_AUDIT_POLICY_ID,

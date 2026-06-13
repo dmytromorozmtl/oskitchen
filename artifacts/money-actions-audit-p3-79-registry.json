@@ -1,0 +1,23 @@
+{
+  "policyId": "money-actions-audit-p3-79-v1",
+  "department": "Backend",
+  "upstreamPolicyId": "money-actions-audit-p1-31-v1",
+  "registryEntries": 14,
+  "kinds": [
+    "payment",
+    "refund",
+    "void",
+    "payout",
+    "marketplace_po",
+    "billing",
+    "terminal",
+    "storefront",
+    "cash"
+  ],
+  "auditScripts": [
+    "audit:money-actions-audit-p3-79",
+    "check:money-actions-audit-p3-79",
+    "test:ci:money-actions-audit",
+    "test:ci:money-actions-audit-p3-79:cert"
+  ]
+}
