@@ -1,0 +1,21 @@
+{
+  "policyId": "daily-pl-widget-p2-47-v1",
+  "parityTarget": "R365",
+  "todayRoute": "/dashboard/today",
+  "flowSteps": [
+    "aggregate_revenue_today",
+    "aggregate_revenue_yesterday",
+    "resolve_daily_target",
+    "render_pl_widget"
+  ],
+  "testIds": {
+    "root": "daily-pl-widget-p2-47",
+    "today": "daily-pl-revenue-today",
+    "yesterday": "daily-pl-revenue-yesterday",
+    "target": "daily-pl-revenue-target"
+  },
+  "auditScripts": [
+    "audit:daily-pl-widget-p2-47",
+    "check:daily-pl-widget-p2-47"
+  ]
+}

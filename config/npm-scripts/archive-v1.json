@@ -1110,6 +1110,8 @@
     "test:ci:delivery-routing-optimization-p2-45": "node ./node_modules/vitest/vitest.mjs run tests/unit/delivery-routing-optimization-p2-45.test.ts",
     "audit:commission-comparison-calculator-p2-46": "tsx scripts/audit-commission-comparison-calculator-p2-46.ts",
     "test:ci:commission-comparison-calculator-p2-46": "node ./node_modules/vitest/vitest.mjs run tests/unit/commission-comparison-calculator-p2-46.test.ts",
+    "audit:daily-pl-widget-p2-47": "tsx scripts/audit-daily-pl-widget-p2-47.ts",
+    "test:ci:daily-pl-widget-p2-47": "node ./node_modules/vitest/vitest.mjs run tests/unit/daily-pl-widget-p2-47.test.ts",
     "run:sentry-alert-firing-p2-36": "tsx scripts/run-sentry-alert-firing-p2-36.ts",
     "audit:nav-audit-preview-labels": "tsx scripts/audit-nav-audit-preview-labels.ts",
     "audit:single-onboarding-entry": "tsx scripts/audit-single-onboarding-entry.ts",

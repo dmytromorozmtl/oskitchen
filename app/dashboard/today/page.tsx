@@ -10,6 +10,7 @@ import { augmentPilotIntegrationHealthStripWithCommercialInflection } from "@/li
 import { DemoModeGuidedPath } from "@/components/dashboard/demo-mode-guided-path";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { OnboardingTtvStrip } from "@/components/onboarding/onboarding-ttv-strip";
+import { DailyPlWidgetStrip } from "@/components/finance/daily-pl-widget-strip";
 import { PlaybookTodayStrip } from "@/components/dashboard/playbooks/playbook-today-strip";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
 import { LaunchWizardTodayStripSection } from "@/components/dashboard/today/launch-wizard-today-strip-section";
@@ -35,6 +36,7 @@ import { canUseFullSupportInbox } from "@/lib/support/support-permissions";
 import { prisma } from "@/lib/prisma";
 import { loadGettingStartedStatus } from "@/services/onboarding/getting-started-status";
 import { loadOnboardingTtvMeasurement } from "@/services/onboarding/onboarding-ttv-service";
+import { loadDailyPlWidgetModel } from "@/services/finance/daily-pl-widget-p2-47-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
 import { resolveOwnerDailyBriefingVisibility } from "@/services/briefing/owner-daily-briefing-service";
@@ -127,6 +129,10 @@ export default async function TodayOperationsPage({
         return null;
       })
     : null;
+  const dailyPlWidget = await loadDailyPlWidgetModel(dataUserId).catch((error) => {
+    console.error("[today] daily P&L widget load failed", error);
+    return null;
+  });
   let commercialInflectionUiSlice = null;
   try {
     commercialInflectionUiSlice = commercialOps
@@ -160,6 +166,9 @@ export default async function TodayOperationsPage({
         ) : null}
         {onboardingTtv?.showStrip && !showPilotOwnerBriefing ? (
           <OnboardingTtvStrip data={onboardingTtv} />
+        ) : null}
+        {dailyPlWidget && !showPilotOwnerBriefing ? (
+          <DailyPlWidgetStrip data={dailyPlWidget} />
         ) : null}
         {aiBriefingError ? (
           <AiFeatureApiError

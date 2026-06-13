@@ -8860,3 +8860,15 @@ Evidence: vitest commission-comparison-calculator-p2-46 PASS; audit:commission-c
 Result: DONE — ChowNow parity DoorDash 30% vs owned 0% calculator
 Tracker: 46/80 (p2-46 done)
 Next: P2-47 daily P&L widget — R365 parity
+
+---
+Cycle: ultimate-v11-47
+Timestamp: 2026-06-14T09:00:00.000Z
+Task: P2-47 Daily P&L widget — revenue today vs yesterday vs target (R365 parity)
+Department: Finance
+Action: DailyPlWidgetStrip on /dashboard/today; loadDailyPlWidgetModel aggregates today/yesterday revenue + configured or 7-day avg target; P2-47 policy/audit/doc; deploy gate
+Files: lib/finance/daily-pl-widget-p2-47-{policy,measurement,audit,storage}.ts, services/finance/daily-pl-widget-p2-47-service.ts, components/finance/daily-pl-widget-strip.tsx, app/dashboard/today/page.tsx, docs/daily-pl-widget-p2-47.md, artifacts/daily-pl-widget-p2-47-registry.json, scripts/audit-daily-pl-widget-p2-47.ts, tests/unit/daily-pl-widget-p2-47.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest daily-pl-widget-p2-47 PASS; audit:daily-pl-widget-p2-47 PASS
+Result: DONE — R365 parity daily P&L revenue snapshot widget
+Tracker: 47/80 (p2-47 done)
+Next: P2-48 scheduled reports — Lightspeed parity

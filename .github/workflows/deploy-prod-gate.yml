@@ -151,6 +151,9 @@ jobs:
       - name: Commission comparison calculator P2-46 audit
         run: npm run audit -- commission-comparison-calculator-p2-46
 
+      - name: Daily P&L widget P2-47 audit
+        run: npm run audit -- daily-pl-widget-p2-47
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
