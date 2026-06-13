@@ -1,5 +1,5 @@
 /**
- * Blueprint P1-51 — KDS Playwright E2E (open shift → order → KDS → bump → expo → complete).
+ * Blueprint P1-19 — KDS Playwright E2E (order → KDS → bump → expo → DONE).
  *
  * @see e2e/kds-playwright.spec.ts
  * @see lib/kitchen/kds-bump-expo-e2e-policy.ts

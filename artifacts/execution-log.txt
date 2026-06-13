@@ -8524,3 +8524,15 @@ Evidence: vitest rate-limit-regression 5/5 PASS; fixed shared-bucket false fail 
 Result: DONE — mutation rate-limit regression suite wired
 Tracker: 18/80 (p1-18 done)
 Next: P1-19 KDS Playwright E2E — bump+expo handoff
+
+---
+Cycle: ultimate-v11-19
+Timestamp: 2026-06-13T20:15:00.000Z
+Task: P1-19 KDS Playwright E2E — order→KDS→bump→expo→DONE
+Department: QA
+Action: Wired existing KDS Playwright golden path (open shift→POS order→KDS ticket→bump→expo→complete); added npm scripts test:e2e:kds-playwright, audit:kds-playwright-e2e, check:kds-playwright-e2e; fixed unit test for archive router + deploy gate
+Files: e2e/kds-playwright.spec.ts, e2e/helpers/kds-playwright-{flow,ready}.ts, lib/qa/kds-playwright-e2e-{policy,audit}.ts, tests/unit/kds-playwright-e2e.test.ts, package.json
+Evidence: vitest kds-playwright-e2e 7/7 PASS; audit:kds-playwright-e2e PASS (6 flow steps wired)
+Result: DONE — KDS bump+expo handoff Playwright E2E certified
+Tracker: 19/80 (p1-19 done)
+Next: P1-20 POS checkout E2E — full scenario

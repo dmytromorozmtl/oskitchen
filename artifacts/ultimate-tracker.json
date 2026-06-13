@@ -17,7 +17,7 @@
   "p1-16-consolidate-npm-scripts": "done",
   "p1-17-archive-workflows": "done",
   "p1-18-rate-limit-regression": "done",
-  "p1-19-kds-playwright-e2e": "pending",
+  "p1-19-kds-playwright-e2e": "done",
   "p1-20-pos-checkout-e2e": "pending",
   "p1-21-offline-pos-pci-test": "pending",
   "p1-22-webhook-signature-regression": "pending",
