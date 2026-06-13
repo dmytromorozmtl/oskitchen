@@ -46,6 +46,9 @@ jobs:
       - name: Prisma index audit P3-73 (hot-path FK wave 2)
         run: npm run audit:prisma-index-audit-p3-73
 
+      - name: Webhook replay UI P3-74 audit
+        run: npm run audit:webhook-replay-ui-p3-74
+
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 

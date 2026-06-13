@@ -1,0 +1,13 @@
+{
+  "policyId": "webhook-replay-ui-p3-74-v1",
+  "department": "Backend",
+  "upstreamPolicyId": "webhook-replay-ui-p1-37-v1",
+  "surfaces": ["workspace", "platform", "integration-health"],
+  "healthRoute": "/dashboard/integrations/health",
+  "auditScripts": [
+    "audit:webhook-replay-ui-p3-74",
+    "check:webhook-replay-ui-p3-74",
+    "check:webhook-replay-ui",
+    "test:ci:webhook-replay-ui-p3-74:cert"
+  ]
+}

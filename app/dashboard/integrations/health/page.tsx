@@ -19,12 +19,14 @@ import { CapabilityBadge } from "@/components/capabilities/capability-badge";
 import { BetaIntegrationEnvReadinessPanel } from "@/components/integrations/beta-integration-env-readiness-panel";
 import { LiveIntegrationDodPanel } from "@/components/integrations/live-integration-dod-panel";
 import { IntegrationForceSyncPanel } from "@/components/integrations/integration-force-sync-panel";
+import { WebhookReplayHealthPanel } from "@/components/integrations/webhook-replay-health-panel";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
   getCachedIntegrationConnectionListWhere,
   getCachedWebhookEventListWhere,
 } from "@/lib/scope/cached-workspace-resource-scope";
 import { describeIntegrationConnectionHealth } from "@/lib/integrations/integration-connection-health";
+import { buildWebhookQueueFocusSnapshot } from "@/lib/integrations/webhook-queue-focus-era18";
 import { prisma } from "@/lib/prisma";
 
 export default async function IntegrationHealthPage() {
@@ -34,7 +36,8 @@ export default async function IntegrationHealthPage() {
     getCachedIntegrationConnectionListWhere(),
     getCachedWebhookEventListWhere(),
   ]);
-  const [connections, webhookFailCount] = await Promise.all([
+  const [connections, unprocessedCount, invalidSignatureCount, processingErrorCount] =
+    await Promise.all([
     prisma.integrationConnection.findMany({
       where: connectionWhere,
       orderBy: { updatedAt: "desc" },
@@ -43,9 +46,23 @@ export default async function IntegrationHealthPage() {
       },
     }),
     prisma.webhookEvent.count({
+      where: { AND: [webhookWhere, { processed: false }] },
+    }),
+    prisma.webhookEvent.count({
       where: { AND: [webhookWhere, { processed: false, signatureValid: false }] },
     }),
+    prisma.webhookEvent.count({
+      where: {
+        AND: [webhookWhere, { processingError: { not: null } }],
+      },
+    }),
   ]);
+
+  const webhookFocusSnapshot = buildWebhookQueueFocusSnapshot({
+    unprocessedCount,
+    invalidSignatureCount,
+    processingErrorCount,
+  });
 
   return (
     <PageShell narrow className="space-y-8">
@@ -59,17 +76,7 @@ export default async function IntegrationHealthPage() {
         }
       />
 
-      {webhookFailCount > 0 ? (
-        <Card className="border-amber-500/40 bg-amber-500/5">
-          <CardHeader>
-            <CardTitle className="text-base">Webhook attention</CardTitle>
-            <CardDescription>
-              {webhookFailCount} event(s) with invalid signature or still unprocessed — inspect the
-              webhook log.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      ) : null}
+      <WebhookReplayHealthPanel snapshot={webhookFocusSnapshot} />
 
       <IntegrationForceSyncPanel />
 

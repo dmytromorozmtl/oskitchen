@@ -9184,3 +9184,15 @@ Evidence: check:prisma-index-audit-p3-73 PASS (8/8); audit:prisma-index-audit-p3
 Result: DONE — Prisma index audit cert with hot-path FK enforcement
 Tracker: 73/80 (p3-73 done)
 Next: P3-74 webhook replay UI — Backend
+
+---
+Cycle: ultimate-v11-74
+Timestamp: 2026-06-15T05:00:00.000Z
+Task: P3-74 Webhook replay/retry UI — integration health bridge + cert
+Department: Backend
+Action: WebhookReplayHealthPanel on integration health; P3-74 policy/measurement/audit; npm scripts; deploy gate; upstream P1-37 surfaces validated
+Files: components/integrations/webhook-replay-health-panel.tsx, app/dashboard/integrations/health/page.tsx, lib/webhooks/webhook-replay-ui-p3-74-{policy,measurement,audit}.ts, docs/webhook-replay-ui-p3-74.md, artifacts/webhook-replay-ui-p3-74-registry.json, scripts/audit-webhook-replay-ui-p3-74.ts, tests/unit/webhook-replay-ui-p3-74.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: check:webhook-replay-ui-p3-74 PASS (7/7); audit:webhook-replay-ui-p3-74 PASS; 3 replay routes + health bridge wired
+Result: DONE — operators triage failures on Integration Health → replay on webhook center
+Tracker: 74/80 (p3-74 done)
+Next: P3-75 seed demo tenant — Backend
