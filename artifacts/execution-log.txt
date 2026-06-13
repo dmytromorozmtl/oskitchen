@@ -8788,3 +8788,15 @@ Evidence: vitest onboarding-ttv-p2-40 PASS; audit:onboarding-ttv-p2-40 PASS
 Result: DONE — onboarding TTV measurement with 30-min target and Today strip
 Tracker: 40/80 (p2-40 done)
 Next: P2-41 loyalty earn/redeem — Square parity
+
+---
+Cycle: ultimate-v11-41
+Timestamp: 2026-06-14T06:00:00.000Z
+Task: P2-41 Loyalty earn/redeem — earn points storefront, redeem at checkout (Square parity)
+Department: Loyalty
+Action: Added storefront earn on order (pay-later + Stripe paid), redeem at checkout with balance panel; restore on payment failure; P2-41 policy/measurement/audit/doc; wired audit:loyalty-earn-redeem-p2-41 + deploy gate
+Files: lib/loyalty/loyalty-earn-redeem-p2-41-{policy,measurement,audit}.ts, services/storefront/loyalty-service.ts, components/storefront/{storefront-loyalty-checkout-panel,store-checkout-client}.tsx, actions/storefront-order.ts, services/storefront/{storefront-stripe-checkout-service,storefront-payment-recovery-service}.ts, app/s/[storeSlug]/checkout/page.tsx, lib/storefront/contracts/checkout-v2.ts, docs/loyalty-earn-redeem-p2-41.md, artifacts/loyalty-earn-redeem-p2-41-registry.json, scripts/audit-loyalty-earn-redeem-p2-41.ts, tests/unit/loyalty-earn-redeem-p2-41.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest loyalty-earn-redeem-p2-41 PASS; audit:loyalty-earn-redeem-p2-41 PASS
+Result: DONE — storefront loyalty earn/redeem with Square parity checkout panel
+Tracker: 41/80 (p2-41 done)
+Next: P2-42 cashier shift flow — Square parity

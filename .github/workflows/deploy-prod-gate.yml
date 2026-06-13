@@ -133,6 +133,9 @@ jobs:
       - name: Onboarding TTV P2-40 audit
         run: npm run audit -- onboarding-ttv-p2-40
 
+      - name: Loyalty earn/redeem P2-41 audit
+        run: npm run audit -- loyalty-earn-redeem-p2-41
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

@@ -1,0 +1,14 @@
+{
+  "policyId": "loyalty-earn-redeem-p2-41-v1",
+  "parityTarget": "Square",
+  "earnTrigger": "storefront order confirmed or Stripe paid",
+  "redeemSurface": "/s/[storeSlug]/checkout",
+  "balanceApi": "/api/storefront/loyalty/balance",
+  "redeemApi": "/api/storefront/loyalty/redeem",
+  "balanceTestId": "storefront-loyalty-balance",
+  "redeemTestId": "storefront-loyalty-redeem",
+  "auditScripts": [
+    "audit:loyalty-earn-redeem-p2-41",
+    "check:loyalty-earn-redeem-p2-41"
+  ]
+}
