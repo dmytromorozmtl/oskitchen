@@ -5,7 +5,7 @@
   "p0-4-remove-deploy-skip-vitest": "done",
   "p0-5-blueprint-sentry-done": "done",
   "p0-6-cross-tenant-e2e": "done",
-  "p0-7-rate-limit-audit": "pending",
+  "p0-7-rate-limit-audit": "done",
   "p0-8-offline-pos-pci-review": "pending",
   "p1-9-npm-audit-ci": "pending",
   "p1-10-suspense-wave1": "pending",

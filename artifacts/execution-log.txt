@@ -8380,3 +8380,15 @@ Evidence: benchmark 11/11 scenarios PASS (100%); unit cross-tenant-api-idor 3/3 
 Result: DONE — tenant A cannot read tenant B via /api/orders, /api/customers, /api/finance, /api/marketplace (403/404/empty)
 Tracker: 6/80 (p0-6 done)
 Next: P0-7 rate-limit 103 API mutation routes
+
+---
+Cycle: ultimate-v11-7
+Timestamp: 2026-06-13T18:20:00.000Z
+Task: P0-7 Rate-limit 103 API mutation routes
+Department: Security
+Action: Webhook signed routes now get enforceWebhookIpRateLimit via middleware (was exempt with no limit); added withApiMutationRateLimit handler wrapper; audit counts webhooks as middleware-covered
+Files: lib/api/middleware-api-rate-limit.ts, lib/api/with-api-mutation-rate-limit.ts, lib/rate-limit.ts, scripts/lib/api-mutation-rate-limit-audit.ts, tests/unit/api-mutation-rate-limit.test.ts
+Evidence: vitest api-mutation-rate-limit 10/10 PASS; audit in-test middlewareCovered≥120, all /api/webhooks/* middleware|dedicated; POS /api/pos/* already dashboard_session middleware
+Result: DONE — enforceApiRateLimit on dashboard mutations + webhook IP ingest on /api/webhooks/*; withApiMutationRateLimit wrapper for handler-level opt-in
+Tracker: 7/80 (p0-7 done)
+Next: P0-8 offline POS PCI review — noop-v1 fallback

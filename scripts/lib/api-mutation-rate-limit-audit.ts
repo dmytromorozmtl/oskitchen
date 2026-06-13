@@ -3,6 +3,7 @@ import { join, relative, sep } from "node:path";
 
 import {
   API_MUTATION_RATE_LIMIT_EXEMPT_ROUTE_CLASSES,
+  isApiMutationMiddlewareCovered,
   isApiMutationRateLimitExempt,
 } from "@/lib/api/middleware-api-rate-limit";
 import { getApiRoutePolicy } from "@/lib/api/route-registry";
@@ -87,7 +88,7 @@ export function auditApiMutationRateLimit(root = process.cwd()): ApiMutationRate
     const routePath = routePathFromFile(apiRoot, filePath);
     const policy = getApiRoutePolicy(routePath);
     const dedicated = hasDedicatedRateLimit(source);
-    const middlewareEligible = !isApiMutationRateLimitExempt(routePath);
+    const middlewareEligible = isApiMutationMiddlewareCovered(routePath);
 
     let coverage: ApiMutationRateLimitAuditRow["coverage"];
     if (dedicated) {

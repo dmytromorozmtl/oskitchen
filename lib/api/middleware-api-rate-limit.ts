@@ -42,6 +42,38 @@ export function isApiMutationRateLimitExempt(pathname: string): boolean {
   return API_MUTATION_RATE_LIMIT_EXEMPT_ROUTE_CLASSES.includes(policy.routeClass);
 }
 
+/** Signed webhook routes get IP ingest limits via middleware (not generic api_mutation). */
+export function isApiMutationMiddlewareCovered(pathname: string): boolean {
+  if (!pathname.startsWith("/api/")) return false;
+  if (isApiMutationRateLimitExempt(pathname)) {
+    const policy = getApiRoutePolicy(pathname);
+    return policy?.routeClass === "webhook_signed";
+  }
+  return true;
+}
+
+/** Provider scope for webhook IP buckets — e.g. doordash.orders, shopify.orders-create */
+export function webhookProviderScopeFromPathname(pathname: string): string {
+  const normalized = pathname.replace(/\/+$/, "");
+  if (!normalized.startsWith("/api/webhooks/")) return "webhook";
+  const suffix = normalized.slice("/api/webhooks/".length);
+  return suffix.replace(/\//g, ".") || "root";
+}
+
+export async function enforceWebhookMutationRateLimitOrNull(
+  request: Request,
+  pathname: string,
+): Promise<NextResponse | null> {
+  const ip = getClientIpFromRequest(request);
+  const provider = webhookProviderScopeFromPathname(pathname);
+  const limited = await enforceRateLimit(
+    `webhook_ip:${provider}:${ip}`,
+    "webhook_ingest",
+  );
+  if (limited.ok) return null;
+  return apiRateLimitExceededResponse(limited);
+}
+
 export async function enforceApiRateLimit(
   request: Request,
   scopeKey: string,
@@ -84,6 +116,12 @@ export async function enforceApiMutationRateLimitMiddleware(
   const pathname = request.nextUrl.pathname;
   if (!pathname.startsWith("/api/")) return null;
   if (!isApiMutationMethod(request.method)) return null;
+
+  const policy = getApiRoutePolicy(pathname);
+  if (policy?.routeClass === "webhook_signed") {
+    return enforceWebhookMutationRateLimitOrNull(request, pathname);
+  }
+
   if (isApiMutationRateLimitExempt(pathname)) return null;
 
   return enforceApiRateLimitOrNull(request, apiMutationScopeKey(pathname));
