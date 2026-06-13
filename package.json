@@ -639,7 +639,7 @@
     "test:ci:api-mutation-rate-limit:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/api-mutation-rate-limit.test.ts",
     "test:ci:dashboard-error-boundaries-blueprint": "node ./node_modules/vitest/vitest.mjs run tests/unit/dashboard-error-boundaries-blueprint.test.ts",
     "test:ci:dashboard-error-boundaries-blueprint:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/dashboard-error-boundaries-blueprint.test.ts",
-    "test:ci:suspense-skeleton": "node ./node_modules/vitest/vitest.mjs run tests/unit/suspense-skeleton.test.ts tests/unit/today-page-suspense.test.ts tests/unit/loading-skeleton-audit-policy.test.ts",
+    "test:ci:suspense-skeleton": "node ./node_modules/vitest/vitest.mjs run tests/unit/suspense-skeleton.test.ts tests/unit/today-page-suspense.test.ts tests/unit/suspense-wave1-critical-routes.test.ts tests/unit/suspense-wrap-critical-surfaces.test.ts tests/unit/loading-skeleton-audit-policy.test.ts",
     "test:ci:async-page-skeletons": "node ./node_modules/vitest/vitest.mjs run tests/unit/async-page-skeletons.test.ts tests/unit/loading-skeleton-audit-policy.test.ts",
     "test:ci:error-state-design-system": "node ./node_modules/vitest/vitest.mjs run tests/unit/error-state-design-system.test.ts tests/unit/error-state-audit-policy.test.ts",
     "test:ci:pos-terminal-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-icon-buttons.test.ts",

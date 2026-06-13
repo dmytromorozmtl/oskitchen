@@ -42,6 +42,7 @@ export const SUSPENSE_SKELETON_MAX_HANG_MS = 8_000;
 export const SUSPENSE_SKELETON_UNIT_TESTS = [
   "tests/unit/suspense-skeleton.test.ts",
   "tests/unit/today-page-suspense.test.ts",
+  "tests/unit/suspense-wave1-critical-routes.test.ts",
   "tests/unit/loading-skeleton-audit-policy.test.ts",
 ] as const;
 
@@ -51,12 +52,52 @@ export const SUSPENSE_SKELETON_HARNESS_MODULE = "lib/testing/suspense-skeleton-h
 
 export const SUSPENSE_SKELETON_PAGE_PATH = "app/dashboard/today/page.tsx" as const;
 
+/** Wave 1 — top operator routes with in-page Suspense + named skeleton (P1-10). */
+export const SUSPENSE_WAVE_1_ROUTES = [
+  {
+    id: "today",
+    pagePath: "app/dashboard/today/page.tsx",
+    skeleton: "TodaySkeleton",
+    asyncMarkers: ["OwnerDailyBriefingHeroSection", "PlaybookTodayStrip"],
+  },
+  {
+    id: "marketplace",
+    pagePath: "app/dashboard/marketplace/page.tsx",
+    asyncComponent: "MarketplaceDashboardAsyncSection",
+    skeleton: "MarketplaceSkeleton",
+  },
+  {
+    id: "pos-terminal",
+    pagePath: "app/dashboard/pos/terminal/page.tsx",
+    asyncComponent: "PosTerminalAsyncSection",
+    skeleton: "POSSkeleton",
+  },
+  {
+    id: "kitchen",
+    pagePath: "app/dashboard/kitchen/page.tsx",
+    asyncMarkers: ["KitchenDailyAsyncSection", "KitchenStandardAsyncSection"],
+    skeleton: "KDSSkeleton",
+  },
+  {
+    id: "analytics-suite",
+    pagePath: "app/dashboard/analytics/suite/page.tsx",
+    asyncComponent: "AnalyticsSuiteAsyncSection",
+    skeleton: "AnalyticsSuiteSkeleton",
+  },
+] as const;
+
 /** POS, Marketplace, KDS, Inventory — in-page Suspense + named skeleton (P1-23). */
 export const SUSPENSE_SKELETON_CRITICAL_SURFACES = [
   {
     id: "pos",
     pagePath: "app/dashboard/pos/page.tsx",
     asyncComponent: "PosOverviewAsyncSection",
+    skeleton: "POSSkeleton",
+  },
+  {
+    id: "pos-terminal",
+    pagePath: "app/dashboard/pos/terminal/page.tsx",
+    asyncComponent: "PosTerminalAsyncSection",
     skeleton: "POSSkeleton",
   },
   {

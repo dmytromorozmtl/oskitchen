@@ -20,6 +20,7 @@ export const LOADING_SKELETON_CRITICAL_MODULES = [
   "app/dashboard/orders/loading.tsx",
   "app/dashboard/today/profit/loading.tsx",
   "app/dashboard/integrations/health/loading.tsx",
+  "app/dashboard/analytics/suite/loading.tsx",
 ] as const;
 
 /** Named async-page skeleton components (Absolute Final Task 21). */
@@ -30,6 +31,7 @@ export const ASYNC_PAGE_SKELETON_COMPONENTS = [
   "components/dashboard/kds-skeleton.tsx",
   "components/dashboard/inventory-skeleton.tsx",
   "components/dashboard/money-page-skeletons.tsx",
+  "components/analytics/analytics-suite-skeleton.tsx",
 ] as const;
 
 /** Spinner-only loading acceptable on full-screen operator surfaces. */
@@ -75,7 +77,7 @@ export const ERROR_SKELETON_DARK_MODE_MODULES = [
 ] as const;
 
 export const LOADING_SKELETON_PRIMITIVE_PATTERN =
-  /PageSkeleton|DashboardPageSkeleton|LoadingSkeleton|TableSkeleton|CardGridSkeleton|KPISkeleton|ChartSkeleton|TodaySkeleton|MarketplaceSkeleton|POSSkeleton|KDSSkeleton|InventorySkeleton|POSCheckoutSkeleton|MarketplaceCartSkeleton|VendorFinanceSkeleton/;
+  /PageSkeleton|DashboardPageSkeleton|LoadingSkeleton|TableSkeleton|CardGridSkeleton|KPISkeleton|ChartSkeleton|TodaySkeleton|MarketplaceSkeleton|POSSkeleton|KDSSkeleton|InventorySkeleton|AnalyticsSuiteSkeleton|POSCheckoutSkeleton|MarketplaceCartSkeleton|VendorFinanceSkeleton/;
 
 export type LoadingSkeletonCriticalModule = (typeof LOADING_SKELETON_CRITICAL_MODULES)[number];
 export type LoadingSkeletonExceptionModule = (typeof LOADING_SKELETON_EXCEPTION_MODULES)[number];

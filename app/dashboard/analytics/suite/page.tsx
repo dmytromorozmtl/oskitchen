@@ -1,12 +1,13 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
-import { AnalyticsSuitePanel } from "@/components/analytics/analytics-suite-panel";
+import { AnalyticsSuiteAsyncSection } from "@/components/analytics/analytics-suite-async-section";
+import { AnalyticsSuiteSkeleton } from "@/components/analytics/analytics-suite-skeleton";
 import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { PageHeader } from "@/components/layout/page-header";
 import { PlanGate } from "@/components/plans/plan-gate";
 import { Button } from "@/components/ui/button";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { loadAnalyticsSuiteSnapshot } from "@/services/analytics/analytics-suite-service";
 
 export const metadata = {
   title: "Analytics Suite",
@@ -15,7 +16,6 @@ export const metadata = {
 
 export default async function AnalyticsSuitePage() {
   const { dataUserId } = await getTenantActor();
-  const snapshot = await loadAnalyticsSuiteSnapshot(dataUserId);
 
   return (
     <PlanGate userId={dataUserId} feature="analytics" title="Analytics Suite">
@@ -29,7 +29,9 @@ export default async function AnalyticsSuitePage() {
             </Button>
           }
         />
-        <AnalyticsSuitePanel snapshot={snapshot} />
+        <Suspense fallback={<AnalyticsSuiteSkeleton />}>
+          <AnalyticsSuiteAsyncSection dataUserId={dataUserId} />
+        </Suspense>
       </div>
     </PlanGate>
   );
