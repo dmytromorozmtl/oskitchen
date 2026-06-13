@@ -8344,3 +8344,15 @@ Artifact: artifacts/shopify-live-smoke-summary.json → overall PASSED, proofSta
 Test: smoke-shopify-live + shopify-live-smoke-era72 unit tests (13 passed); npm run smoke:shopify-live --write (KDS orderId 0f2e68ac-3d70-4dee-9ad4-2356b66ce453 status CONFIRMED)
 Tracker: 3/80 (p0-3 done)
 Next: P0-4 remove DEPLOY_SKIP_VITEST from prod deploy
+
+---
+Cycle: ultimate-v11-4
+Timestamp: 2026-06-13T18:00:00.000Z
+Task: P0-4 Remove DEPLOY_SKIP_VITEST from prod deploy
+Department: DevOps
+Action: Verified already enforced — no DEPLOY_SKIP_VITEST in scripts/deploy-prebuilt-prod.sh; vitest.mjs run is unconditional step [3/6] (line 104); CI gate in .github/workflows/deploy-prod-gate.yml asserts both
+Files: (no code change required)
+Evidence: grep scripts/deploy-prebuilt-prod.sh — no DEPLOY_SKIP_VITEST; vitest.mjs run present; deploy-prod-gate.yml lines 214-223
+Result: DONE — tests required before prod deploy
+Tracker: 4/80 (p0-4 done)
+Next: P0-5 update blueprint registry — Sentry marked DONE
