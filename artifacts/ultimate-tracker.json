@@ -53,7 +53,7 @@
   "p3-52-button-regression-suite": "done",
   "p3-53-integration-test-pack": "done",
   "p3-54-negative-tests": "done",
-  "p3-55-visual-qa": "pending",
+  "p3-55-visual-qa": "done",
   "p3-56-load-test": "pending",
   "p3-57-storybook-top20": "pending",
   "p3-58-visual-regression": "pending",

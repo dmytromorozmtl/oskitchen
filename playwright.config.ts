@@ -139,6 +139,7 @@ if (dashboardE2EEnabled) {
         "**/cross-tenant-e2e.spec.ts",
         "**/role-permissions-matrix.spec.ts",
         "**/negative-test-suite-p3-54.spec.ts",
+        "**/visual-qa-p3-55.spec.ts",
       ],
       use: {
         ...desktop,

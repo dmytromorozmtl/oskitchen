@@ -1,0 +1,20 @@
+{
+  "policyId": "visual-qa-p3-55-v1",
+  "department": "QA",
+  "surfaceCount": 3,
+  "surfaces": [
+    "pos_tablet",
+    "kds_kitchen",
+    "mobile_today"
+  ],
+  "viewports": {
+    "pos_tablet": "1024x768",
+    "kds_kitchen": "1280x800",
+    "mobile_today": "390x844"
+  },
+  "auditScripts": [
+    "audit:visual-qa-p3-55",
+    "check:visual-qa-p3-55",
+    "test:visual:qa-p3-55"
+  ]
+}
