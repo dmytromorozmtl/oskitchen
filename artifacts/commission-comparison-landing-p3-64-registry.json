@@ -1,0 +1,11 @@
+{
+  "policyId": "commission-comparison-landing-p3-64-v1",
+  "department": "Marketing",
+  "canonicalPath": "/commission-comparison",
+  "primaryKeyword": "commission comparison calculator",
+  "auditScripts": [
+    "audit:commission-comparison-landing-p3-64",
+    "check:commission-comparison-landing-p3-64",
+    "test:ci:commission-comparison-landing:cert"
+  ]
+}

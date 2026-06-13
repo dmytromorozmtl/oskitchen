@@ -58,10 +58,15 @@ export function auditCommissionComparisonCalculatorP2_46(
 
   let publicPageWired = false;
   if (existsSync(join(root, COMMISSION_COMPARISON_CALCULATOR_P2_46_PUBLIC_PAGE))) {
-    const source = readFileSync(join(root, COMMISSION_COMPARISON_CALCULATOR_P2_46_PUBLIC_PAGE), "utf8");
+    const pageSource = readFileSync(join(root, COMMISSION_COMPARISON_CALCULATOR_P2_46_PUBLIC_PAGE), "utf8");
+    const landingSource = existsSync(join(root, "components/marketing/commission-comparison-landing.tsx"))
+      ? readFileSync(join(root, "components/marketing/commission-comparison-landing.tsx"), "utf8")
+      : "";
     publicPageWired =
-      source.includes("CommissionComparisonDoorDashPanel") &&
-      source.includes(COMMISSION_COMPARISON_CALCULATOR_P2_46_PUBLIC_ROUTE);
+      (pageSource.includes("CommissionComparisonDoorDashPanel") ||
+        (pageSource.includes("CommissionComparisonLanding") &&
+          landingSource.includes("CommissionComparisonDoorDashPanel"))) &&
+      pageSource.includes(COMMISSION_COMPARISON_CALCULATOR_P2_46_PUBLIC_ROUTE);
   }
 
   const golden = computeDoorDashVsOwnedCommission({

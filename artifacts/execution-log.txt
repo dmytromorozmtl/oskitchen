@@ -9064,3 +9064,15 @@ Evidence: vitest restaurant-integration-health-landing-p3-63 PASS; audit:restaur
 Result: DONE — SEO landing at /restaurant-integration-health with DoorDash diagnostic and honest SKIPPED labels
 Tracker: 63/80 (p3-63 done)
 Next: P3-64 commission comparison calculator — Marketing
+
+---
+Cycle: ultimate-v11-64
+Timestamp: 2026-06-14T23:00:00.000Z
+Task: P3-64 Commission comparison page — interactive calculator at /commission-comparison
+Department: Marketing
+Action: Full marketing landing with DoorDash 30% vs owned 0% panel + multi-channel calculator; honest limitations; commission-comparison-landing-p3-64 policy/audit; sitemap; P2-46 audit updated for landing wrapper; deploy gate
+Files: app/commission-comparison/page.tsx, components/marketing/commission-comparison-landing.tsx, lib/marketing/commission-comparison-landing-{content,audit,p3-64-policy,p3-64-measurement,p3-64-audit}.ts, lib/marketing/commission-comparison-calculator-p2-46-audit.ts, lib/marketing/sitemap-urls.ts, docs/commission-comparison-landing-p3-64.md, artifacts/commission-comparison-landing-p3-64-registry.json, scripts/audit-commission-comparison-landing-p3-64.ts, tests/unit/commission-comparison-landing-p3-64.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest commission-comparison-landing-p3-64 PASS; audit:commission-comparison-landing-p3-64 PASS; P2-46 upstream PASS
+Result: DONE — interactive commission calculator at /commission-comparison with DoorDash 30% vs owned 0% compare
+Tracker: 64/80 (p3-64 done)
+Next: P3-65 Product Hunt launch prep — Marketing
