@@ -142,6 +142,7 @@ if (dashboardE2EEnabled) {
         "**/visual-qa-p3-55.spec.ts",
         "**/load-test-suite-p3-56.spec.ts",
         "**/visual-regression-dark-mode-p3-58.spec.ts",
+        "**/bundle-budget-gate-p3-59.spec.ts",
       ],
       use: {
         ...desktop,

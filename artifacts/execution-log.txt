@@ -9004,3 +9004,15 @@ Evidence: vitest visual-regression-dark-mode-p3-58 PASS; audit:visual-regression
 Result: DONE — 5 fixtures × light/dark = 10 snapshot pairs with Chromatic-style Playwright baselines
 Tracker: 58/80 (p3-58 done)
 Next: P3-59 bundle budget CI gate — DevOps
+
+---
+Cycle: ultimate-v11-59
+Timestamp: 2026-06-14T20:30:00.000Z
+Task: P3-59 Bundle budget CI gate — fail when First Load JS > 1000 kB
+Department: DevOps
+Action: bundle-budget-gate-p3-59 policy/measurement/audit; wraps check-bundle-size-regression; 500 kB warn / 1000 kB fail; ci.yml + deploy gate
+Files: lib/qa/bundle-budget-gate-p3-59-{policy,measurement,audit}.ts, e2e/bundle-budget-gate-p3-59.spec.ts, e2e/helpers/bundle-budget-gate-p3-59-{flow,ready}.ts, docs/bundle-budget-gate-p3-59.md, artifacts/bundle-budget-gate-p3-59-registry.json, scripts/audit-bundle-budget-gate-p3-59.ts, tests/unit/bundle-budget-gate-p3-59.test.ts, package.json, config/npm-scripts/archive-v1.json, playwright.config.ts, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest bundle-budget-gate-p3-59 PASS; audit:bundle-budget-gate-p3-59 PASS; bundle-size-regression wiring PASS
+Result: DONE — CI gate fails routes with First Load JS > 1000 kB
+Tracker: 59/80 (p3-59 done)
+Next: P3-60 Lighthouse CI gate — DevOps

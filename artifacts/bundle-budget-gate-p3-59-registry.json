@@ -1,0 +1,16 @@
+{
+  "policyId": "bundle-budget-gate-p3-59-v1",
+  "department": "DevOps",
+  "warnThresholdKb": 500,
+  "failThresholdKb": 1000,
+  "baselineArtifact": "artifacts/bundle-size-baseline.json",
+  "buildLog": "artifacts/build-route-sizes.log",
+  "checkScript": "scripts/check-bundle-size-regression.ts",
+  "auditScripts": [
+    "audit:bundle-budget-gate-p3-59",
+    "check:bundle-budget-gate-p3-59",
+    "check:bundle-size-regression",
+    "test:ci:bundle-size-regression"
+  ],
+  "ciWorkflow": ".github/workflows/ci.yml"
+}

@@ -187,6 +187,9 @@ jobs:
       - name: Visual regression dark mode P3-58 audit
         run: npm run audit -- visual-regression-dark-mode-p3-58
 
+      - name: Bundle budget gate P3-59 audit
+        run: npm run audit -- bundle-budget-gate-p3-59
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
