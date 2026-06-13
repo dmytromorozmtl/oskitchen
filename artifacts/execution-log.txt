@@ -8920,3 +8920,15 @@ Evidence: vitest auth-e2e-matrix-p3-51 PASS; audit:auth-e2e-matrix-p3-51 PASS
 Result: DONE — five-role auth E2E matrix with driver routes probe
 Tracker: 51/80 (p3-51 done)
 Next: P3-52 30 pages button regression — QA
+
+---
+Cycle: ultimate-v11-52
+Timestamp: 2026-06-14T17:45:00.000Z
+Task: P3-52 30 critical pages button-by-button regression suite
+Department: QA
+Action: button-regression-p3-52 policy/measurement/audit; Playwright spec + flow helpers; 30 dashboard routes × shell button probes; deploy gate
+Files: lib/qa/button-regression-p3-52-{policy,measurement,audit}.ts, e2e/button-regression-p3-52.spec.ts, e2e/helpers/button-regression-p3-52-{flow,ready}.ts, docs/button-regression-p3-52.md, artifacts/button-regression-p3-52-registry.json, scripts/audit-button-regression-p3-52.ts, tests/unit/button-regression-p3-52.test.ts, playwright.config.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest button-regression-p3-52 PASS; audit:button-regression-p3-52 PASS
+Result: DONE — 30 critical pages with shell + page-specific button probes
+Tracker: 52/80 (p3-52 done)
+Next: P3-53 integration test pack — QA

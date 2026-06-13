@@ -1,0 +1,25 @@
+{
+  "policyId": "button-regression-p3-52-v1",
+  "department": "QA",
+  "criticalPageCount": 30,
+  "flowSteps": [
+    "validate_button_regression_contract",
+    "authed_page_button_smoke"
+  ],
+  "shellButtons": [
+    "nav_menu",
+    "account_menu",
+    "theme_toggle"
+  ],
+  "sampleRoutes": [
+    "/dashboard/today",
+    "/dashboard/pos/terminal",
+    "/dashboard/kitchen",
+    "/dashboard/marketplace/catalog",
+    "/dashboard/ai/co-pilot"
+  ],
+  "auditScripts": [
+    "audit:button-regression-p3-52",
+    "check:button-regression-p3-52"
+  ]
+}

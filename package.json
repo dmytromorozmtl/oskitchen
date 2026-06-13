@@ -58,6 +58,8 @@
     "check:case-study-template-p2-50": "node ./node_modules/vitest/vitest.mjs run tests/unit/case-study-template-p2-50.test.ts",
     "audit:auth-e2e-matrix-p3-51": "tsx scripts/audit-auth-e2e-matrix-p3-51.ts",
     "check:auth-e2e-matrix-p3-51": "node ./node_modules/vitest/vitest.mjs run tests/unit/auth-e2e-matrix-p3-51.test.ts",
+    "audit:button-regression-p3-52": "tsx scripts/audit-button-regression-p3-52.ts",
+    "check:button-regression-p3-52": "node ./node_modules/vitest/vitest.mjs run tests/unit/button-regression-p3-52.test.ts",
     "test:e2e:scim-provision-ui-e2e": "playwright test e2e/auth.setup.ts e2e/scim-provision-ui-e2e.spec.ts --project=setup --project=chromium-authed",
     "benchmark:bank-import-reconciliation": "tsx scripts/run-bank-import-reconciliation-benchmark.ts",
     "benchmark:cross-tenant-isolation-e2e": "tsx scripts/run-cross-tenant-isolation-e2e-benchmark.ts",

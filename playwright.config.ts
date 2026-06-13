@@ -130,6 +130,7 @@ if (dashboardE2EEnabled) {
         "**/referral-program.spec.ts",
         "**/scim-provision-ui-e2e.spec.ts",
         "**/auth-e2e-matrix-p3-51.spec.ts",
+        "**/button-regression-p3-52.spec.ts",
       ],
       use: {
         ...desktop,

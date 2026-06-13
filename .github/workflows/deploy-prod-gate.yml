@@ -166,6 +166,9 @@ jobs:
       - name: Auth E2E matrix P3-51 audit
         run: npm run audit -- auth-e2e-matrix-p3-51
 
+      - name: Button regression P3-52 audit
+        run: npm run audit -- button-regression-p3-52
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
