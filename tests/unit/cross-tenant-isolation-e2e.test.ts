@@ -21,6 +21,9 @@ import {
   CROSS_TENANT_ISOLATION_E2E_SPEC,
   CROSS_TENANT_ISOLATION_MIN_SCENARIOS,
   CROSS_TENANT_ISOLATION_STAGING_SPEC,
+  CROSS_TENANT_API_IDOR_E2E_SPEC,
+  CROSS_TENANT_API_IDOR_UNIT_TEST,
+  CROSS_TENANT_API_IDOR_CONTRACT,
 } from "@/lib/qa/cross-tenant-isolation-e2e-policy";
 import { WorkspaceAccessDeniedError } from "@/lib/scope/assert-user-workspace-access";
 import { assertOwnedByUser } from "@/lib/scope/user-owned-guards";
@@ -34,6 +37,9 @@ describe("cross-tenant isolation E2E contract (P0-20)", () => {
     expect(existsSync(join(ROOT, CROSS_TENANT_ISOLATION_BENCHMARK_SCRIPT))).toBe(true);
     expect(existsSync(join(ROOT, CROSS_TENANT_ISOLATION_E2E_SPEC))).toBe(true);
     expect(existsSync(join(ROOT, CROSS_TENANT_ISOLATION_STAGING_SPEC))).toBe(true);
+    expect(existsSync(join(ROOT, CROSS_TENANT_API_IDOR_E2E_SPEC))).toBe(true);
+    expect(existsSync(join(ROOT, CROSS_TENANT_API_IDOR_UNIT_TEST))).toBe(true);
+    expect(existsSync(join(ROOT, CROSS_TENANT_API_IDOR_CONTRACT))).toBe(true);
     expect(CROSS_TENANT_ISOLATION_BENCHMARK_UNIT_TEST).toBe(
       "tests/unit/cross-tenant-isolation-e2e.test.ts",
     );
@@ -87,6 +93,9 @@ describe("cross-tenant isolation E2E contract (P0-20)", () => {
     };
     expect(pkg.scripts?.[CROSS_TENANT_ISOLATION_BENCHMARK_NPM_SCRIPT]).toContain(
       "cross-tenant-isolation-e2e.test.ts",
+    );
+    expect(pkg.scripts?.[CROSS_TENANT_ISOLATION_BENCHMARK_NPM_SCRIPT]).toContain(
+      "cross-tenant-api-idor.test.ts",
     );
     expect(pkg.scripts?.["benchmark:cross-tenant-isolation-e2e"]).toContain(
       "run-cross-tenant-isolation-e2e-benchmark.ts",

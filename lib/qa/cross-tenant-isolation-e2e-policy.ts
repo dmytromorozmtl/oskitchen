@@ -25,5 +25,16 @@ export const CROSS_TENANT_ISOLATION_E2E_SPEC =
 export const CROSS_TENANT_ISOLATION_STAGING_SPEC =
   "e2e/cross-tenant-isolation-staging.spec.ts" as const;
 
+export const CROSS_TENANT_API_IDOR_E2E_SPEC =
+  "e2e/cross-tenant-api-idor.spec.ts" as const;
+
+export const CROSS_TENANT_API_IDOR_UNIT_TEST =
+  "tests/unit/cross-tenant-api-idor.test.ts" as const;
+
+export const CROSS_TENANT_API_IDOR_CONTRACT =
+  "lib/qa/cross-tenant-api-idor-contract.ts" as const;
+
+export const CROSS_TENANT_ISOLATION_MIN_API_IDOR_SCENARIOS = 4 as const;
+
 /** HTTP statuses that prove tenant isolation (403 forbidden, 404 not found). */
 export const CROSS_TENANT_ACCEPTED_DENIAL_STATUSES = [403, 404] as const;

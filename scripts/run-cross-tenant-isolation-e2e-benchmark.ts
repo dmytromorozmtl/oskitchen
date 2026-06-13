@@ -13,25 +13,32 @@ import {
   scoreCrossTenantIsolationContract,
 } from "@/lib/qa/cross-tenant-isolation-contract";
 import {
+  runCrossTenantApiIdorContract,
+} from "@/lib/qa/cross-tenant-api-idor-contract";
+import {
   CROSS_TENANT_ISOLATION_BENCHMARK_ARTIFACT,
   CROSS_TENANT_ISOLATION_E2E_POLICY_ID,
   CROSS_TENANT_ISOLATION_MIN_SCENARIOS,
+  CROSS_TENANT_ISOLATION_MIN_API_IDOR_SCENARIOS,
 } from "@/lib/qa/cross-tenant-isolation-e2e-policy";
 
 const ROOT = process.cwd();
 const artifactPath = join(ROOT, CROSS_TENANT_ISOLATION_BENCHMARK_ARTIFACT);
 
 function main(): void {
-  const scenarios = runCrossTenantIsolationContract();
+  const coreScenarios = runCrossTenantIsolationContract();
+  const apiIdorScenarios = runCrossTenantApiIdorContract();
+  const scenarios = [...coreScenarios, ...apiIdorScenarios];
   const result = scoreCrossTenantIsolationContract(
     scenarios,
-    CROSS_TENANT_ISOLATION_MIN_SCENARIOS,
+    CROSS_TENANT_ISOLATION_MIN_SCENARIOS + CROSS_TENANT_ISOLATION_MIN_API_IDOR_SCENARIOS,
   );
 
   const summary = {
     policyId: CROSS_TENANT_ISOLATION_E2E_POLICY_ID,
     generatedAt: new Date().toISOString(),
     mode: "contract-regression",
+    apiIdorScenarioCount: apiIdorScenarios.length,
     ...result,
   };
 

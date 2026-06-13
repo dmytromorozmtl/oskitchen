@@ -633,7 +633,7 @@
     "test:ci:invoice-scanner-accuracy-benchmark:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/invoice-scanner-accuracy-benchmark.test.ts",
     "test:ci:bank-import-reconciliation-benchmark": "node ./node_modules/vitest/vitest.mjs run tests/unit/bank-import-reconciliation-benchmark.test.ts",
     "test:ci:bank-import-reconciliation-benchmark:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/bank-import-reconciliation-benchmark.test.ts",
-    "test:ci:cross-tenant-isolation-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/cross-tenant-isolation-e2e.test.ts tests/unit/cross-tenant-denial.test.ts tests/unit/public-api-cross-tenant.test.ts",
+    "test:ci:cross-tenant-isolation-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/cross-tenant-isolation-e2e.test.ts tests/unit/cross-tenant-api-idor.test.ts tests/unit/cross-tenant-denial.test.ts tests/unit/public-api-cross-tenant.test.ts",
     "test:ci:cross-tenant-isolation-e2e:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/cross-tenant-isolation-e2e.test.ts",
     "test:ci:api-mutation-rate-limit": "node ./node_modules/vitest/vitest.mjs run tests/unit/api-mutation-rate-limit.test.ts",
     "test:ci:api-mutation-rate-limit:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/api-mutation-rate-limit.test.ts",

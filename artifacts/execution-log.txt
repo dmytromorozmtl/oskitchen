@@ -8368,3 +8368,15 @@ Files: artifacts/blueprint-complete-registry.json, artifacts/blueprint-tracker.j
 Registry: doneCount 148/150, blockedCount 2, P0_CRITICAL 12/12 done
 Tracker: 5/80 (p0-5 done)
 Next: P0-6 cross-tenant data leak E2E — IDOR detection
+
+---
+Cycle: ultimate-v11-6
+Timestamp: 2026-06-13T18:10:00.000Z
+Task: P0-6 Cross-tenant data leak E2E — IDOR detection
+Department: QA/Security
+Action: Added API IDOR contract (orders, customers, finance, marketplace), unit tests, Playwright HTTP spec (chromium-authed); wired into benchmark + CI test:ci:cross-tenant-isolation-e2e + playwright.config
+Files: lib/qa/cross-tenant-api-idor-contract.ts, tests/unit/cross-tenant-api-idor.test.ts, e2e/cross-tenant-api-idor.spec.ts, lib/qa/cross-tenant-isolation-e2e-policy.ts, scripts/run-cross-tenant-isolation-e2e-benchmark.ts, tests/unit/cross-tenant-isolation-e2e.test.ts, playwright.config.ts, package.json
+Evidence: benchmark 11/11 scenarios PASS (100%); unit cross-tenant-api-idor 3/3 passed; artifact artifacts/cross-tenant-isolation-e2e-benchmark-summary.json
+Result: DONE — tenant A cannot read tenant B via /api/orders, /api/customers, /api/finance, /api/marketplace (403/404/empty)
+Tracker: 6/80 (p0-6 done)
+Next: P0-7 rate-limit 103 API mutation routes
