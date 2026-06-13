@@ -62,6 +62,7 @@ export function marketingSitemapPaths(): Array<{
     { path: '/restaurant-integration-health', priority: 0.86, changeFrequency: 'monthly' },
     { path: '/commission-comparison', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/roadmap', priority: 0.72, changeFrequency: 'weekly' },
+    { path: '/status', priority: 0.7, changeFrequency: 'hourly' },
     { path: '/toast-alternative', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/square-alternative', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/marketman-alternative', priority: 0.85, changeFrequency: 'monthly' },

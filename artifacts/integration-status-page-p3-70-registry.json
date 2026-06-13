@@ -1,0 +1,12 @@
+{
+  "policyId": "integration-status-page-p3-70-v1",
+  "department": "Marketing",
+  "publicPath": "/status",
+  "upstreamArtifact": "artifacts/live-integrations-staging-smoke-summary.json",
+  "expectedIntegrationCount": 18,
+  "auditScripts": [
+    "audit:integration-status-page-p3-70",
+    "check:integration-status-page-p3-70",
+    "test:ci:integration-status-page:cert"
+  ]
+}

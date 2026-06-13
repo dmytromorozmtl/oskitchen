@@ -220,6 +220,9 @@ jobs:
       - name: Public roadmap P3-69 audit
         run: npm run audit -- public-roadmap-p3-69
 
+      - name: Integration status page P3-70 audit
+        run: npm run audit -- integration-status-page-p3-70
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
