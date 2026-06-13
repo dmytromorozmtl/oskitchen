@@ -1,0 +1,22 @@
+{
+  "policyId": "load-test-suite-p3-56-v1",
+  "department": "QA",
+  "moduleCount": 3,
+  "modules": [
+    "webhook_burst",
+    "kds_refresh",
+    "pos_checkout_concurrency"
+  ],
+  "k6Scripts": [
+    "scripts/load/webhook-burst-p3-56.k6.js",
+    "scripts/load/kds-refresh-p3-56.k6.js",
+    "scripts/load/pos-checkout-concurrency-p3-56.k6.js"
+  ],
+  "auditScripts": [
+    "audit:load-test-suite-p3-56",
+    "check:load-test-suite-p3-56",
+    "test:k6:load-webhook-burst-p3-56",
+    "test:k6:load-kds-refresh-p3-56",
+    "test:k6:load-pos-checkout-p3-56"
+  ]
+}

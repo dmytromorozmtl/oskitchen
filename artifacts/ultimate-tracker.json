@@ -54,7 +54,7 @@
   "p3-53-integration-test-pack": "done",
   "p3-54-negative-tests": "done",
   "p3-55-visual-qa": "done",
-  "p3-56-load-test": "pending",
+  "p3-56-load-test": "done",
   "p3-57-storybook-top20": "pending",
   "p3-58-visual-regression": "pending",
   "p3-59-bundle-budget-ci": "pending",

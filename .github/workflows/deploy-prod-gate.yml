@@ -178,6 +178,9 @@ jobs:
       - name: Visual QA P3-55 audit
         run: npm run audit -- visual-qa-p3-55
 
+      - name: Load test suite P3-56 audit
+        run: npm run audit -- load-test-suite-p3-56
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
