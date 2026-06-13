@@ -1,0 +1,12 @@
+{
+  "policyId": "product-hunt-launch-prep-p3-65-v1",
+  "department": "Marketing",
+  "upstreamPolicyId": "product-hunt-launch-prep-absolute-final-v1",
+  "playbookDoc": "docs/product-hunt-launch-prep.md",
+  "archiveDir": "artifacts/product-hunt-launch",
+  "auditScripts": [
+    "audit:product-hunt-launch-prep-p3-65",
+    "check:product-hunt-launch-prep-p3-65",
+    "test:ci:product-hunt-launch-prep:cert"
+  ]
+}

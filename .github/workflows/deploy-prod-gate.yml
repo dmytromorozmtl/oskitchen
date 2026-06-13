@@ -205,6 +205,9 @@ jobs:
       - name: Commission comparison landing P3-64 audit
         run: npm run audit -- commission-comparison-landing-p3-64
 
+      - name: Product Hunt launch prep P3-65 audit
+        run: npm run audit -- product-hunt-launch-prep-p3-65
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

@@ -9076,3 +9076,15 @@ Evidence: vitest commission-comparison-landing-p3-64 PASS; audit:commission-comp
 Result: DONE — interactive commission calculator at /commission-comparison with DoorDash 30% vs owned 0% compare
 Tracker: 64/80 (p3-64 done)
 Next: P3-65 Product Hunt launch prep — Marketing
+
+---
+Cycle: ultimate-v11-65
+Timestamp: 2026-06-14T23:30:00.000Z
+Task: P3-65 Product Hunt launch prep — timeline, assets, listing copy, hunter outreach
+Department: Marketing
+Action: Wrapped existing product-hunt-launch-prep playbook with P3-65 policy/audit; listing-draft archive; npm cert scripts; deploy gate; DEFER status preserved until LG1–LG8 + HG1–HG10
+Files: docs/product-hunt-launch-prep-p3-65.md, docs/product-hunt-launch-prep.md, artifacts/product-hunt-launch/{README,listing-draft}.md, lib/marketing/product-hunt-launch-prep-p3-65-{policy,measurement,audit}.ts, artifacts/product-hunt-launch-prep-p3-65-registry.json, scripts/audit-product-hunt-launch-prep-p3-65.ts, tests/unit/product-hunt-launch-prep-p3-65.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest product-hunt-launch-prep-p3-65 PASS; absolute-final upstream PASS; audit:product-hunt-launch-prep-p3-65 PASS
+Result: DONE — PH launch prep playbook wired with T-minus timeline, human gates, and honest defer policy
+Tracker: 65/80 (p3-65 done)
+Next: P3-66 email nurture sequence — Marketing
