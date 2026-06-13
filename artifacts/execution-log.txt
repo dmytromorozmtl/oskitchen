@@ -8392,3 +8392,15 @@ Evidence: vitest api-mutation-rate-limit 10/10 PASS; audit in-test middlewareCov
 Result: DONE — enforceApiRateLimit on dashboard mutations + webhook IP ingest on /api/webhooks/*; withApiMutationRateLimit wrapper for handler-level opt-in
 Tracker: 7/80 (p0-7 done)
 Next: P0-8 offline POS PCI review — noop-v1 fallback
+
+---
+Cycle: ultimate-v11-8
+Timestamp: 2026-06-13T18:35:00.000Z
+Task: P0-8 Offline POS PCI review — noop-v1 fallback blocked
+Department: Security
+Action: Removed insecure noop-v1 btoa(trimmed) fallback; seal throws OfflinePciEncryptionUnavailableError; OFFLINE_CARD_QUEUED blocked without Web Crypto+IndexedDB; filterPosTerminalPaymentModes hides offline card mode; docs updated for QSA review
+Files: lib/pos/offline-pci-local-encryption.ts, services/pos/pos-payment-service.ts, lib/pos/pos-terminal-discount-ui.ts, components/dashboard/pos-terminal-client.tsx, lib/pos/offline-pos-pci-review-policy.ts, docs/offline-pos-pci-review.md, tests/unit/offline-pos-pci-review.test.ts, tests/unit/offline-pos-pci-encryption.test.ts
+Evidence: vitest offline-pos-pci-review 7/7 PASS; auditOfflinePosPciEncryptionHardening passes (no btoa(trimmed))
+Result: DONE — offline card blocked when AES-GCM unavailable; cash offline queue unchanged
+Tracker: 8/80 (p0-8 done, P0 COMPLETE)
+Next: P1-9 npm audit gate before deploy

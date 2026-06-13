@@ -14,6 +14,7 @@ import {
   linkOfflineCardCaptureAction,
   syncOfflineCardCapturesAction,
 } from "@/actions/pos-offline-card";
+import { canQueueOfflineCardCapture } from "@/lib/pos/offline-pci-local-encryption";
 import {
   enqueueOfflineCardClientCapture,
   listOfflineCardClientCaptures,
@@ -175,9 +176,11 @@ export function PosTerminalClient(props: {
     () => buildPosProductCategories(props.products),
     [props.products],
   );
+  const offlinePciEncryptionAvailable = canQueueOfflineCardCapture();
+  const offlinePaymentGate = { offlinePciEncryptionAvailable };
   const availablePaymentModes = useMemo(
-    () => filterPosTerminalPaymentModes(canApplyPosDiscount),
-    [canApplyPosDiscount],
+    () => filterPosTerminalPaymentModes(canApplyPosDiscount, offlinePciEncryptionAvailable),
+    [canApplyPosDiscount, offlinePciEncryptionAvailable],
   );
   const [online, setOnline] = useState(() =>
     typeof navigator === "undefined" ? true : navigator.onLine,
@@ -675,7 +678,7 @@ export function PosTerminalClient(props: {
       showCheckoutStatus("Enter a valid discount amount before completing the sale.", "error");
       return;
     }
-    if (!online && offlineQueueEnabled && posPaymentAllowedWhileOffline(paymentMode)) {
+    if (!online && offlineQueueEnabled && posPaymentAllowedWhileOffline(paymentMode, offlinePaymentGate)) {
       if (paymentMode === "OFFLINE_CARD_QUEUED") {
         const last4 = offlineCardLast4.replace(/\D/g, "").slice(-4);
         if (last4.length !== 4) {
@@ -723,8 +726,13 @@ export function PosTerminalClient(props: {
       showCheckoutStatus("Offline queue is disabled — reconnect before completing sales.", "error");
       return;
     }
-    if (!online && !posPaymentAllowedWhileOffline(paymentMode)) {
-      showCheckoutStatus("Reconnect before using card or Stripe placeholder modes.", "error");
+    if (!online && !posPaymentAllowedWhileOffline(paymentMode, offlinePaymentGate)) {
+      showCheckoutStatus(
+        paymentMode === "OFFLINE_CARD_QUEUED" && !offlinePciEncryptionAvailable
+          ? "Offline card requires Web Crypto on this device — use cash or reconnect."
+          : "Reconnect before using card or Stripe placeholder modes.",
+        "error",
+      );
       return;
     }
     startTransition(async () => {
@@ -891,7 +899,7 @@ export function PosTerminalClient(props: {
         posTabletMainLayoutClass(layoutOrientation, tabletMode),
       )}
     >
-      <div className="flex flex-1 flex-col gap-3">
+      <div className="flex min-w-0 flex-1 basis-0 flex-col gap-3 overflow-hidden">
         <OfflineSyncStatusBar className="w-full" showWhenIdle={offlineQueueEnabled} />
         <div
           className="flex flex-wrap items-center gap-3 rounded-2xl border border-border/70 bg-muted/20 p-3"
