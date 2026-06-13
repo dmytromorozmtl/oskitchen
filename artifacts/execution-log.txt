@@ -8932,3 +8932,15 @@ Evidence: vitest button-regression-p3-52 PASS; audit:button-regression-p3-52 PAS
 Result: DONE — 30 critical pages with shell + page-specific button probes
 Tracker: 52/80 (p3-52 done)
 Next: P3-53 integration test pack — QA
+
+---
+Cycle: ultimate-v11-53
+Timestamp: 2026-06-14T18:00:00.000Z
+Task: P3-53 Integration test pack — Shopify + WooCommerce webhook + KDS + POS + refund + void + shift
+Department: QA
+Action: integration-test-pack-p3-53 policy/measurement/audit; Shopify webhook order hub E2E; seven-module orchestrator; playwright + deploy gate
+Files: lib/qa/integration-test-pack-p3-53-{policy,measurement,audit}.ts, lib/integrations/shopify-webhook-order-hub-e2e-policy.ts, e2e/{shopify-webhook-order-hub,integration-test-pack-p3-53}.spec.ts, e2e/helpers/{shopify-webhook-order-hub,integration-test-pack-p3-53}-{flow,ready}.ts, docs/integration-test-pack-p3-53.md, artifacts/integration-test-pack-p3-53-registry.json, scripts/audit-integration-test-pack-p3-53.ts, tests/unit/integration-test-pack-p3-53.test.ts, playwright.config.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest integration-test-pack-p3-53 PASS; audit:integration-test-pack-p3-53 PASS
+Result: DONE — seven-module integration test pack with Shopify webhook E2E
+Tracker: 53/80 (p3-53 done)
+Next: P3-54 negative test suite — QA

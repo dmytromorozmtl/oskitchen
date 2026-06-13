@@ -131,6 +131,10 @@ if (dashboardE2EEnabled) {
         "**/scim-provision-ui-e2e.spec.ts",
         "**/auth-e2e-matrix-p3-51.spec.ts",
         "**/button-regression-p3-52.spec.ts",
+        "**/shopify-webhook-order-hub.spec.ts",
+        "**/kds-playwright.spec.ts",
+        "**/pos-checkout-e2e.spec.ts",
+        "**/integration-test-pack-p3-53.spec.ts",
       ],
       use: {
         ...desktop,

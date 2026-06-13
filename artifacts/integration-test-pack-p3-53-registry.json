@@ -1,0 +1,26 @@
+{
+  "policyId": "integration-test-pack-p3-53-v1",
+  "department": "QA",
+  "moduleCount": 7,
+  "modules": [
+    "shopify_webhook",
+    "woocommerce_webhook",
+    "kds",
+    "pos",
+    "refund",
+    "void",
+    "shift"
+  ],
+  "orchestratorSpecs": [
+    "e2e/shopify-webhook-order-hub.spec.ts",
+    "e2e/woocommerce-webhook-order-hub.spec.ts",
+    "e2e/kds-playwright.spec.ts",
+    "e2e/pos-checkout-e2e.spec.ts",
+    "e2e/integration-test-pack-p3-53.spec.ts"
+  ],
+  "auditScripts": [
+    "audit:integration-test-pack-p3-53",
+    "check:integration-test-pack-p3-53",
+    "test:e2e:integration-test-pack-p3-53"
+  ]
+}

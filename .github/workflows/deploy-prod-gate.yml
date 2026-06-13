@@ -169,6 +169,9 @@ jobs:
       - name: Button regression P3-52 audit
         run: npm run audit -- button-regression-p3-52
 
+      - name: Integration test pack P3-53 audit
+        run: npm run audit -- integration-test-pack-p3-53
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
