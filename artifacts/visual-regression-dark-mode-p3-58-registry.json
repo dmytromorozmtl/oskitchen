@@ -1,0 +1,15 @@
+{
+  "policyId": "visual-regression-dark-mode-p3-58-v1",
+  "department": "QA",
+  "targetCount": 5,
+  "themeModes": ["light", "dark"],
+  "snapshotPairCount": 10,
+  "spec": "tests/visual/dark-mode-parity.spec.ts",
+  "workflow": ".github/workflows/chromatic-visual.yml",
+  "auditScripts": [
+    "audit:visual-regression-dark-mode-p3-58",
+    "check:visual-regression-dark-mode-p3-58",
+    "test:visual:dark-mode",
+    "test:ci:visual-regression-dark-mode"
+  ]
+}

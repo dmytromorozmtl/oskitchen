@@ -8992,3 +8992,15 @@ Evidence: vitest storybook-top20-p3-57 PASS; audit:storybook-top20-p3-57 PASS; t
 Result: DONE — 20 Storybook stories with Design System/Top 20 title prefix
 Tracker: 57/80 (p3-57 done)
 Next: P3-58 visual regression dark mode — QA
+
+---
+Cycle: ultimate-v11-58
+Timestamp: 2026-06-14T20:00:00.000Z
+Task: P3-58 Visual regression dark mode — Chromatic/Percy-style light + dark parity
+Department: QA
+Action: visual-regression-dark-mode-p3-58 policy/measurement/audit; five fixture targets × two themes; Playwright spec + chromatic-visual workflow; deploy gate
+Files: lib/qa/visual-regression-dark-mode-p3-58-{policy,measurement,audit}.ts, e2e/visual-regression-dark-mode-p3-58.spec.ts, e2e/helpers/visual-regression-dark-mode-p3-58-{flow,ready}.ts, docs/visual-regression-dark-mode-p3-58.md, artifacts/visual-regression-dark-mode-p3-58-registry.json, scripts/audit-visual-regression-dark-mode-p3-58.ts, tests/unit/visual-regression-dark-mode-p3-58.test.ts, package.json, config/npm-scripts/archive-v1.json, playwright.config.ts, .github/workflows/{chromatic-visual,deploy-prod-gate}.yml
+Evidence: vitest visual-regression-dark-mode-p3-58 PASS; audit:visual-regression-dark-mode-p3-58 PASS; test:ci:visual-regression-dark-mode PASS
+Result: DONE — 5 fixtures × light/dark = 10 snapshot pairs with Chromatic-style Playwright baselines
+Tracker: 58/80 (p3-58 done)
+Next: P3-59 bundle budget CI gate — DevOps

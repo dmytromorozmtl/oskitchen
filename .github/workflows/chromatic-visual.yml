@@ -22,6 +22,7 @@ on:
       - "app/visual-test/**"
       - "tests/visual/**"
       - "lib/testing/visual-regression-dark-mode-policy.ts"
+      - "lib/qa/visual-regression-dark-mode-p3-58-policy.ts"
       - "components/providers/public-theme-lock.tsx"
       - "playwright.config.ts"
   push:
@@ -32,6 +33,7 @@ on:
       - "app/visual-test/**"
       - "tests/visual/**"
       - "lib/testing/visual-regression-dark-mode-policy.ts"
+      - "lib/qa/visual-regression-dark-mode-p3-58-policy.ts"
 
 permissions:
   contents: read

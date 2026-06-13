@@ -184,6 +184,9 @@ jobs:
       - name: Storybook top-20 P3-57 audit
         run: npm run audit -- storybook-top20-p3-57
 
+      - name: Visual regression dark mode P3-58 audit
+        run: npm run audit -- visual-regression-dark-mode-p3-58
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
