@@ -1,0 +1,21 @@
+{
+  "policyId": "commission-comparison-calculator-p2-46-v1",
+  "parityTarget": "ChowNow",
+  "publicRoute": "/commission-comparison",
+  "doordashBenchmarkPct": 30,
+  "ownedMarketplacePct": 0,
+  "flowSteps": [
+    "enter_delivery_volume",
+    "compare_doordash_30",
+    "compare_owned_0_marketplace",
+    "annual_savings_delta"
+  ],
+  "testIds": {
+    "root": "commission-comparison-doordash-p2-46",
+    "savings": "commission-comparison-doordash-savings"
+  },
+  "auditScripts": [
+    "audit:commission-comparison-calculator-p2-46",
+    "check:commission-comparison-calculator-p2-46"
+  ]
+}

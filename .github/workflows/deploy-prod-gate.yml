@@ -148,6 +148,9 @@ jobs:
       - name: Delivery routing optimization P2-45 audit
         run: npm run audit -- delivery-routing-optimization-p2-45
 
+      - name: Commission comparison calculator P2-46 audit
+        run: npm run audit -- commission-comparison-calculator-p2-46
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

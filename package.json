@@ -46,6 +46,8 @@
     "check:invoice-ai-accuracy-benchmark-p2-44": "node ./node_modules/vitest/vitest.mjs run tests/unit/invoice-ai-accuracy-benchmark-p2-44.test.ts",
     "audit:delivery-routing-optimization-p2-45": "tsx scripts/audit-delivery-routing-optimization-p2-45.ts",
     "check:delivery-routing-optimization-p2-45": "node ./node_modules/vitest/vitest.mjs run tests/unit/delivery-routing-optimization-p2-45.test.ts",
+    "audit:commission-comparison-calculator-p2-46": "tsx scripts/audit-commission-comparison-calculator-p2-46.ts",
+    "check:commission-comparison-calculator-p2-46": "node ./node_modules/vitest/vitest.mjs run tests/unit/commission-comparison-calculator-p2-46.test.ts",
     "test:e2e:scim-provision-ui-e2e": "playwright test e2e/auth.setup.ts e2e/scim-provision-ui-e2e.spec.ts --project=setup --project=chromium-authed",
     "benchmark:bank-import-reconciliation": "tsx scripts/run-bank-import-reconciliation-benchmark.ts",
     "benchmark:cross-tenant-isolation-e2e": "tsx scripts/run-cross-tenant-isolation-e2e-benchmark.ts",

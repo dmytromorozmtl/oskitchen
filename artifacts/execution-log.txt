@@ -8848,3 +8848,15 @@ Evidence: vitest delivery-routing-optimization-p2-45 PASS; audit:delivery-routin
 Result: DONE — Olo parity dispatch optimization + driver tracking widget
 Tracker: 45/80 (p2-45 done)
 Next: P2-46 commission comparison calculator — ChowNow parity
+
+---
+Cycle: ultimate-v11-46
+Timestamp: 2026-06-14T08:30:00.000Z
+Task: P2-46 Commission comparison calculator — DoorDash 30% vs owned 0% marketplace (ChowNow parity)
+Department: Marketing
+Action: CommissionComparisonDoorDashPanel on /commission-comparison; computeDoorDashVsOwnedCommission; P2-46 policy/audit/doc; wired audit:commission-comparison-calculator-p2-46 + deploy gate
+Files: lib/marketing/commission-comparison-calculator-p2-46-{policy,measurement,audit}.ts, components/marketing/commission-comparison-doordash-panel.tsx, app/commission-comparison/page.tsx, docs/commission-comparison-calculator-p2-46.md, artifacts/commission-comparison-calculator-p2-46-registry.json, scripts/audit-commission-comparison-calculator-p2-46.ts, tests/unit/commission-comparison-calculator-p2-46.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest commission-comparison-calculator-p2-46 PASS; audit:commission-comparison-calculator-p2-46 PASS
+Result: DONE — ChowNow parity DoorDash 30% vs owned 0% calculator
+Tracker: 46/80 (p2-46 done)
+Next: P2-47 daily P&L widget — R365 parity

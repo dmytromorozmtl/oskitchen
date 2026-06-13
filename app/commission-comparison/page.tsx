@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { CommissionComparisonCalculator } from '@/components/marketing/commission-comparison-calculator';
+import { CommissionComparisonDoorDashPanel } from '@/components/marketing/commission-comparison-doordash-panel';
 import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeader } from '@/components/marketing/site-header';
 import {
@@ -38,7 +39,8 @@ export default function CommissionComparisonPage() {
             with payment processing only. Directional benchmarks — not a tax or settlement guarantee.
           </p>
         </div>
-        <div className="mt-10">
+        <div className="mt-10 space-y-8">
+          <CommissionComparisonDoorDashPanel />
           <CommissionComparisonCalculator />
         </div>
       </main>
