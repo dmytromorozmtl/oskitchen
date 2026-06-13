@@ -19,7 +19,7 @@
   "p1-18-rate-limit-regression": "done",
   "p1-19-kds-playwright-e2e": "done",
   "p1-20-pos-checkout-e2e": "done",
-  "p1-21-offline-pos-pci-test": "pending",
+  "p1-21-offline-pos-pci-test": "done",
   "p1-22-webhook-signature-regression": "pending",
   "p1-23-icp-landing-pages": "pending",
   "p1-24-integration-health-sales": "pending",

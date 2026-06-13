@@ -82,6 +82,9 @@ jobs:
       - name: Offline POS → reconnect → sync E2E audit
         run: npm run audit -- offline-pos-reconnect-sync-e2e
 
+      - name: Offline POS PCI flow E2E audit
+        run: npm run audit -- offline-pos-pci-flow-e2e
+
       - name: Role permissions matrix E2E audit
         run: npm run audit -- role-permissions-matrix-e2e
 

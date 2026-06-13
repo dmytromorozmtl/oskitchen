@@ -8548,3 +8548,15 @@ Evidence: vitest pos-checkout-e2e 6/6 PASS; audit:pos-checkout-e2e PASS
 Result: DONE — POS checkout full scenario E2E wired
 Tracker: 20/80 (p1-20 done)
 Next: P1-21 offline POS PCI flow — noop-v1 fallback
+
+---
+Cycle: ultimate-v11-21
+Timestamp: 2026-06-13T20:21:00.000Z
+Task: P1-21 offline POS PCI flow — network off→transaction→network on→sync + noop-v1 check
+Department: QA
+Action: Added offline POS PCI flow E2E (5 steps): go offline, queue cash sale, noop-v1 PCI contract (empty-only, no btoa fallback, OFFLINE_CARD_QUEUED gated), reconnect, sync drain; composes reconnect-sync flow + scoring
+Files: lib/qa/offline-pos-pci-flow-e2e-{policy,scoring,audit}.ts, e2e/offline-pos-pci-flow.spec.ts, e2e/helpers/offline-pos-pci-flow-{flow,ready}.ts, scripts/audit-offline-pos-pci-flow-e2e.ts, tests/unit/offline-pos-pci-flow-e2e.test.ts, package.json, deploy-prod-gate.yml
+Evidence: vitest offline-pos-pci-flow-e2e 6/6 PASS; audit:offline-pos-pci-flow-e2e PASS (noop-v1 contract 5/5)
+Result: DONE — offline POS PCI flow with noop-v1 guard wired
+Tracker: 21/80 (p1-21 done)
+Next: P1-22 webhook signature regression — 59 routes
