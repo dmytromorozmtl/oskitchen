@@ -1,0 +1,21 @@
+{
+  "policyId": "case-study-template-p2-50-v1",
+  "department": "Marketing",
+  "coreSections": ["Challenge", "Solution", "Results"],
+  "milestones": ["W1", "M1", "M3"],
+  "flowSteps": [
+    "define_challenge",
+    "define_solution",
+    "capture_results_w1",
+    "capture_results_m1_m3"
+  ],
+  "docs": {
+    "canonical": "docs/case-study-template-p2-50.md",
+    "fillIn": "docs/case-studies/_MILESTONE_TEMPLATE.md",
+    "mkt11": "docs/case-study-template.md"
+  },
+  "auditScripts": [
+    "audit:case-study-template-p2-50",
+    "check:case-study-template-p2-50"
+  ]
+}

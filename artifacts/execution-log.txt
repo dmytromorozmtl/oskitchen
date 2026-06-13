@@ -8896,3 +8896,15 @@ Evidence: vitest labor-cost-widget-p2-49 PASS; audit:labor-cost-widget-p2-49 PAS
 Result: DONE — 7shifts parity real-time labor cost widget
 Tracker: 49/80 (p2-49 done)
 Next: P2-50 case study template — Marketing
+
+---
+Cycle: ultimate-v11-50
+Timestamp: 2026-06-14T12:00:00.000Z
+Task: P2-50 Case study template — Challenge→Solution→Results (W1/M1/M3)
+Department: Marketing
+Action: case-study-template-p2-50 doc + _MILESTONE_TEMPLATE fill-in scaffold; W1/M1/M3 milestone metrics; links MKT-11; P2-50 policy/audit; deploy gate
+Files: lib/marketing/case-study-template-p2-50-{policy,content,measurement,audit}.ts, docs/case-study-template-p2-50.md, docs/case-studies/_MILESTONE_TEMPLATE.md, docs/case-study-template.md, artifacts/case-study-template-p2-50-registry.json, scripts/audit-case-study-template-p2-50.ts, tests/unit/case-study-template-p2-50.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest case-study-template-p2-50 PASS; audit:case-study-template-p2-50 PASS
+Result: DONE — Challenge→Solution→Results with W1/M1/M3 milestone template
+Tracker: 50/80 (p2-50 done — P2 THIS MONTH complete)
+Next: P3-51 auth E2E matrix — QA

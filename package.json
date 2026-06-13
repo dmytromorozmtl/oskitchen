@@ -54,6 +54,8 @@
     "check:scheduled-reports-p2-48": "node ./node_modules/vitest/vitest.mjs run tests/unit/scheduled-reports-p2-48.test.ts",
     "audit:labor-cost-widget-p2-49": "tsx scripts/audit-labor-cost-widget-p2-49.ts",
     "check:labor-cost-widget-p2-49": "node ./node_modules/vitest/vitest.mjs run tests/unit/labor-cost-widget-p2-49.test.ts",
+    "audit:case-study-template-p2-50": "tsx scripts/audit-case-study-template-p2-50.ts",
+    "check:case-study-template-p2-50": "node ./node_modules/vitest/vitest.mjs run tests/unit/case-study-template-p2-50.test.ts",
     "test:e2e:scim-provision-ui-e2e": "playwright test e2e/auth.setup.ts e2e/scim-provision-ui-e2e.spec.ts --project=setup --project=chromium-authed",
     "benchmark:bank-import-reconciliation": "tsx scripts/run-bank-import-reconciliation-benchmark.ts",
     "benchmark:cross-tenant-isolation-e2e": "tsx scripts/run-cross-tenant-isolation-e2e-benchmark.ts",

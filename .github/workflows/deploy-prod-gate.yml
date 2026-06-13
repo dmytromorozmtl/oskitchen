@@ -160,6 +160,9 @@ jobs:
       - name: Labor cost widget P2-49 audit
         run: npm run audit -- labor-cost-widget-p2-49
 
+      - name: Case study template P2-50 audit
+        run: npm run audit -- case-study-template-p2-50
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
