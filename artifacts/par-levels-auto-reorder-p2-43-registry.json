@@ -1,0 +1,21 @@
+{
+  "policyId": "par-levels-auto-reorder-p2-43-v1",
+  "parityTarget": "MarketMan",
+  "primaryRoute": "/dashboard/purchasing/reorder-queue",
+  "purchasingRoute": "/dashboard/purchasing",
+  "flowSteps": [
+    "sync_par_levels_to_queue",
+    "review_reorder_queue",
+    "generate_draft_pos_by_supplier",
+    "buyer_approval"
+  ],
+  "testIds": {
+    "root": "par-levels-reorder-root",
+    "syncButton": "par-levels-sync-button",
+    "draftPoButton": "par-levels-draft-po-button"
+  },
+  "auditScripts": [
+    "audit:par-levels-auto-reorder-p2-43",
+    "check:par-levels-auto-reorder-p2-43"
+  ]
+}

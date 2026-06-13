@@ -5,6 +5,10 @@ import { redirect } from "next/navigation";
 
 import { requireSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  createDraftPurchaseOrdersFromReorderQueue,
+  syncReorderQueueFromBelowParLevels,
+} from "@/services/inventory/par-levels-auto-reorder-service";
 import { nextPurchaseOrderNumber, seedReorderQueueFromDemandShortages } from "@/services/purchasing/purchasing-service";
 
 export async function seedReorderFromDemandAction() {
@@ -12,6 +16,25 @@ export async function seedReorderFromDemandAction() {
   await seedReorderQueueFromDemandShortages(user.id);
   revalidatePath("/dashboard/purchasing");
   revalidatePath("/dashboard/purchasing/reorder-queue");
+}
+
+export async function syncParLevelsToReorderQueueAction() {
+  const user = await requireSessionUser();
+  await syncReorderQueueFromBelowParLevels(user.id);
+  revalidatePath("/dashboard/purchasing");
+  revalidatePath("/dashboard/purchasing/reorder-queue");
+}
+
+export async function createDraftPosFromReorderQueueAction() {
+  const user = await requireSessionUser();
+  const result = await createDraftPurchaseOrdersFromReorderQueue(user.id);
+  revalidatePath("/dashboard/purchasing");
+  revalidatePath("/dashboard/purchasing/reorder-queue");
+  revalidatePath("/dashboard/purchasing/purchase-orders");
+  if (result.poIds.length === 1) {
+    redirect(`/dashboard/purchasing/purchase-orders/${result.poIds[0]}`);
+  }
+  redirect("/dashboard/purchasing/purchase-orders");
 }
 
 export async function createSupplierAction(formData: FormData) {

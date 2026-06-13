@@ -39,6 +39,8 @@
     "check:loyalty-earn-redeem-p2-41": "node ./node_modules/vitest/vitest.mjs run tests/unit/loyalty-earn-redeem-p2-41.test.ts",
     "audit:cashier-shift-flow-p2-42": "tsx scripts/audit-cashier-shift-flow-p2-42.ts",
     "check:cashier-shift-flow-p2-42": "node ./node_modules/vitest/vitest.mjs run tests/unit/cashier-shift-flow-p2-42.test.ts",
+    "audit:par-levels-auto-reorder-p2-43": "tsx scripts/audit-par-levels-auto-reorder-p2-43.ts",
+    "check:par-levels-auto-reorder-p2-43": "node ./node_modules/vitest/vitest.mjs run tests/unit/par-levels-auto-reorder-p2-43.test.ts",
     "test:e2e:scim-provision-ui-e2e": "playwright test e2e/auth.setup.ts e2e/scim-provision-ui-e2e.spec.ts --project=setup --project=chromium-authed",
     "benchmark:bank-import-reconciliation": "tsx scripts/run-bank-import-reconciliation-benchmark.ts",
     "benchmark:cross-tenant-isolation-e2e": "tsx scripts/run-cross-tenant-isolation-e2e-benchmark.ts",

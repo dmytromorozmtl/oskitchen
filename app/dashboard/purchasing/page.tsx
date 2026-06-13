@@ -2,7 +2,10 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { Package, Plus, ShoppingCart, Truck } from "lucide-react";
 
-import { seedReorderFromDemandAction } from "@/app/dashboard/purchasing/actions";
+import {
+  seedReorderFromDemandAction,
+  syncParLevelsToReorderQueueAction,
+} from "@/app/dashboard/purchasing/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -108,6 +111,16 @@ export default async function PurchasingPage({
             <form action={seedReorderFromDemandAction}>
               <Button type="submit" variant="default" className="rounded-full">
                 Generate from demand
+              </Button>
+            </form>
+            <form action={syncParLevelsToReorderQueueAction}>
+              <Button
+                type="submit"
+                variant="outline"
+                className="rounded-full"
+                data-testid="par-levels-sync-button"
+              >
+                Sync from par levels
               </Button>
             </form>
             <Button asChild variant="outline" className="rounded-full">

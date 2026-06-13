@@ -8812,3 +8812,15 @@ Evidence: vitest cashier-shift-flow-p2-42 PASS; audit:cashier-shift-flow-p2-42 P
 Result: DONE — Square parity cashier shift flow with 5-step wiring
 Tracker: 42/80 (p2-42 done)
 Next: P2-43 par levels + auto-reorder — MarketMan parity
+
+---
+Cycle: ultimate-v11-43
+Timestamp: 2026-06-14T07:00:00.000Z
+Task: P2-43 Par levels + auto-reorder — stock below par → reorder queue → draft PO by supplier (MarketMan parity)
+Department: Inventory
+Action: syncReorderQueueFromBelowParLevels + createDraftPurchaseOrdersFromReorderQueue; UI on reorder queue + purchasing overview; P2-43 policy/audit/doc; wired audit:par-levels-auto-reorder-p2-43 + deploy gate
+Files: lib/inventory/par-levels-auto-reorder-p2-43-{policy,measurement,audit}.ts, services/inventory/par-levels-auto-reorder-service.ts, app/dashboard/purchasing/{actions,reorder-queue/page,purchasing/page}.tsx, docs/par-levels-auto-reorder-p2-43.md, artifacts/par-levels-auto-reorder-p2-43-registry.json, scripts/audit-par-levels-auto-reorder-p2-43.ts, tests/unit/par-levels-auto-reorder-p2-43.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest par-levels-auto-reorder-p2-43 PASS; audit:par-levels-auto-reorder-p2-43 PASS
+Result: DONE — MarketMan parity par levels with auto-reorder queue and draft PO generation
+Tracker: 43/80 (p2-43 done)
+Next: P2-44 invoice AI accuracy benchmark — 95%+ target

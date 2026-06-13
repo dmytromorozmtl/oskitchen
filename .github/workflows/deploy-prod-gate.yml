@@ -139,6 +139,9 @@ jobs:
       - name: Cashier shift flow P2-42 audit
         run: npm run audit -- cashier-shift-flow-p2-42
 
+      - name: Par levels auto-reorder P2-43 audit
+        run: npm run audit -- par-levels-auto-reorder-p2-43
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

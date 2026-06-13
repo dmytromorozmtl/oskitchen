@@ -1,13 +1,18 @@
 import { format } from "date-fns";
 
+import {
+  createDraftPosFromReorderQueueAction,
+  syncParLevelsToReorderQueueAction,
+} from "@/app/dashboard/purchasing/actions";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 
 export default async function ReorderQueuePage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { dataUserId } = await getTenantActor();
   const items = await prisma.reorderQueueItem.findMany({
     where: { userId: dataUserId, status: "OPEN" },
     orderBy: [{ requiredByDate: "asc" }],
@@ -19,21 +24,49 @@ export default async function ReorderQueuePage() {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" data-testid="par-levels-reorder-root">
       <PageHeader
         title="Reorder queue"
-        description="Open items from shortages, par targets, or future demand feeds. Add to PO from the purchase order workflow (next iteration)."
+        description="Open items from shortages, par targets, or demand feeds. Sync below-par ingredients or generate draft POs grouped by supplier."
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <form action={syncParLevelsToReorderQueueAction}>
+              <Button
+                type="submit"
+                variant="outline"
+                className="rounded-full"
+                data-testid="par-levels-sync-button"
+              >
+                Sync from par levels
+              </Button>
+            </form>
+            <form action={createDraftPosFromReorderQueueAction}>
+              <Button
+                type="submit"
+                variant="default"
+                className="rounded-full"
+                data-testid="par-levels-draft-po-button"
+                disabled={items.length === 0}
+              >
+                Generate draft POs
+              </Button>
+            </form>
+          </div>
+        }
       />
       <Card>
         <CardContent className="overflow-x-auto pt-6">
           {items.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No open reorder items — use “Generate from demand” on Overview.</p>
+            <p className="text-sm text-muted-foreground">
+              No open reorder items — use “Sync from par levels” or “Generate from demand” on Overview.
+            </p>
           ) : (
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-muted-foreground">
                   <th className="pb-2 pr-4">Ingredient</th>
                   <th className="pb-2 pr-4">Supplier</th>
+                  <th className="pb-2 pr-4">Source</th>
                   <th className="pb-2 pr-4">Required by</th>
                   <th className="pb-2 text-right">Suggested</th>
                   <th className="pb-2 pl-4">Urgency</th>
@@ -44,6 +77,7 @@ export default async function ReorderQueuePage() {
                   <tr key={i.id} className="border-b border-border/60">
                     <td className="py-2 pr-4 font-medium">{i.ingredient.name}</td>
                     <td className="py-2 pr-4 text-muted-foreground">{i.supplier?.name ?? "—"}</td>
+                    <td className="py-2 pr-4 text-muted-foreground">{i.sourceType.replace(/_/g, " ")}</td>
                     <td className="py-2 pr-4">{format(i.requiredByDate, "MMM d, yyyy")}</td>
                     <td className="py-2 text-right tabular-nums">
                       {Number(i.suggestedPurchaseQuantity).toFixed(2)} {i.unit}
