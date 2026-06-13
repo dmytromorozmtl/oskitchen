@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { ReportsHubNextActionsPanel } from "@/components/dashboard/reports-hub-next-actions-panel";
+import { ScheduledReportsP2_48Panel } from "@/components/reports/scheduled-reports-p2-48-panel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   hasReportsHubPageAccess,
@@ -18,6 +19,7 @@ import {
 import { listReportDefinitions } from "@/lib/reports/report-registry";
 import { buildReportsHubNextActionCards } from "@/lib/reports/reports-hub-next-actions-era21";
 import { hasPermission } from "@/lib/permissions/guards";
+import { loadScheduledReportsPanelModel } from "@/services/analytics/scheduled-reports-p2-48-service";
 
 export default async function ReportsCommandCenterPage() {
   const actor = await loadWorkspacePermissionPageActor();
@@ -28,7 +30,7 @@ export default async function ReportsCommandCenterPage() {
   const { userId } = actor;
   const scope = createReportActorScope(actor);
 
-  const [profile, exportHistory, saved, monthExports] = await Promise.all([
+  const [profile, exportHistory, saved, monthExports, scheduledReports] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: userId },
       select: { kitchenSettings: { select: { businessType: true } } },
@@ -40,6 +42,10 @@ export default async function ReportsCommandCenterPage() {
         userId,
         createdAt: { gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) },
       },
+    }),
+    loadScheduledReportsPanelModel(userId).catch((error) => {
+      console.error("[reports] scheduled reports panel load failed", error);
+      return null;
     }),
   ]);
 
@@ -88,6 +94,8 @@ export default async function ReportsCommandCenterPage() {
       </header>
 
       <ReportsHubNextActionsPanel cards={nextActionCards} />
+
+      {scheduledReports ? <ScheduledReportsP2_48Panel data={scheduledReports} /> : null}
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <KpiCard label="Reports this month" value={monthExports.toLocaleString()} />

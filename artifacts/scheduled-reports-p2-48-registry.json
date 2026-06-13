@@ -1,0 +1,22 @@
+{
+  "policyId": "scheduled-reports-p2-48-v1",
+  "parityTarget": "Lightspeed",
+  "reportsRoute": "/dashboard/reports",
+  "cronPath": "/api/cron/scheduled-reports-weekly",
+  "cronSchedule": "0 7 * * 1",
+  "flowSteps": [
+    "resolve_weekly_window",
+    "run_executive_summary",
+    "generate_pdf_attachment",
+    "email_weekly_digest"
+  ],
+  "testIds": {
+    "root": "scheduled-reports-p2-48",
+    "enabled": "scheduled-reports-enabled",
+    "nextSend": "scheduled-reports-next-send"
+  },
+  "auditScripts": [
+    "audit:scheduled-reports-p2-48",
+    "check:scheduled-reports-p2-48"
+  ]
+}

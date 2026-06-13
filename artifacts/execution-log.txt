@@ -8872,3 +8872,15 @@ Evidence: vitest daily-pl-widget-p2-47 PASS; audit:daily-pl-widget-p2-47 PASS
 Result: DONE — R365 parity daily P&L revenue snapshot widget
 Tracker: 47/80 (p2-47 done)
 Next: P2-48 scheduled reports — Lightspeed parity
+
+---
+Cycle: ultimate-v11-48
+Timestamp: 2026-06-14T10:00:00.000Z
+Task: P2-48 Scheduled reports — email PDF weekly (Lightspeed parity)
+Department: Analytics
+Action: ScheduledReportsP2_48Panel on /dashboard/reports; weekly cron /api/cron/scheduled-reports-weekly emails executive summary PDF; P2-48 policy/audit/doc; deploy gate
+Files: lib/analytics/scheduled-reports-p2-48-{policy,measurement,audit,storage,pdf}.ts, services/analytics/scheduled-reports-p2-48-service.ts, components/reports/scheduled-reports-p2-48-panel.tsx, actions/scheduled-reports-p2-48.ts, app/api/cron/scheduled-reports-weekly/route.ts, app/dashboard/reports/page.tsx, docs/scheduled-reports-p2-48.md, artifacts/scheduled-reports-p2-48-registry.json, scripts/audit-scheduled-reports-p2-48.ts, tests/unit/scheduled-reports-p2-48.test.ts, vercel.json, services/cron/production-manifest.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest scheduled-reports-p2-48 PASS; audit:scheduled-reports-p2-48 PASS
+Result: DONE — Lightspeed parity weekly email PDF scheduled reports
+Tracker: 48/80 (p2-48 done)
+Next: P2-49 labor cost widget — 7shifts parity

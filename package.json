@@ -50,6 +50,8 @@
     "check:commission-comparison-calculator-p2-46": "node ./node_modules/vitest/vitest.mjs run tests/unit/commission-comparison-calculator-p2-46.test.ts",
     "audit:daily-pl-widget-p2-47": "tsx scripts/audit-daily-pl-widget-p2-47.ts",
     "check:daily-pl-widget-p2-47": "node ./node_modules/vitest/vitest.mjs run tests/unit/daily-pl-widget-p2-47.test.ts",
+    "audit:scheduled-reports-p2-48": "tsx scripts/audit-scheduled-reports-p2-48.ts",
+    "check:scheduled-reports-p2-48": "node ./node_modules/vitest/vitest.mjs run tests/unit/scheduled-reports-p2-48.test.ts",
     "test:e2e:scim-provision-ui-e2e": "playwright test e2e/auth.setup.ts e2e/scim-provision-ui-e2e.spec.ts --project=setup --project=chromium-authed",
     "benchmark:bank-import-reconciliation": "tsx scripts/run-bank-import-reconciliation-benchmark.ts",
     "benchmark:cross-tenant-isolation-e2e": "tsx scripts/run-cross-tenant-isolation-e2e-benchmark.ts",

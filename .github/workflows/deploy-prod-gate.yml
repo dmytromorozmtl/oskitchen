@@ -154,6 +154,9 @@ jobs:
       - name: Daily P&L widget P2-47 audit
         run: npm run audit -- daily-pl-widget-p2-47
 
+      - name: Scheduled reports P2-48 audit
+        run: npm run audit -- scheduled-reports-p2-48
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
