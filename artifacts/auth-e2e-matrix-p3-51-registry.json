@@ -1,0 +1,22 @@
+{
+  "policyId": "auth-e2e-matrix-p3-51-v1",
+  "department": "QA",
+  "roles": ["owner", "manager", "cashier", "chef", "driver"],
+  "flowSteps": [
+    "validate_auth_matrix_contract",
+    "owner_login_smoke",
+    "role_route_matrix_smoke"
+  ],
+  "routeProbes": [
+    "/dashboard/today",
+    "/dashboard/pos/terminal",
+    "/dashboard/kitchen",
+    "/dashboard/staff",
+    "/dashboard/billing",
+    "/dashboard/routes"
+  ],
+  "auditScripts": [
+    "audit:auth-e2e-matrix-p3-51",
+    "check:auth-e2e-matrix-p3-51"
+  ]
+}

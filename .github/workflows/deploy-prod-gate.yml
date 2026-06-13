@@ -163,6 +163,9 @@ jobs:
       - name: Case study template P2-50 audit
         run: npm run audit -- case-study-template-p2-50
 
+      - name: Auth E2E matrix P3-51 audit
+        run: npm run audit -- auth-e2e-matrix-p3-51
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

@@ -129,6 +129,7 @@ if (dashboardE2EEnabled) {
         "**/white-label-pwa.spec.ts",
         "**/referral-program.spec.ts",
         "**/scim-provision-ui-e2e.spec.ts",
+        "**/auth-e2e-matrix-p3-51.spec.ts",
       ],
       use: {
         ...desktop,

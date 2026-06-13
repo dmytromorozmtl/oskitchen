@@ -1118,6 +1118,8 @@
     "test:ci:labor-cost-widget-p2-49": "node ./node_modules/vitest/vitest.mjs run tests/unit/labor-cost-widget-p2-49.test.ts",
     "audit:case-study-template-p2-50": "tsx scripts/audit-case-study-template-p2-50.ts",
     "test:ci:case-study-template-p2-50": "node ./node_modules/vitest/vitest.mjs run tests/unit/case-study-template-p2-50.test.ts",
+    "audit:auth-e2e-matrix-p3-51": "tsx scripts/audit-auth-e2e-matrix-p3-51.ts",
+    "test:ci:auth-e2e-matrix-p3-51": "node ./node_modules/vitest/vitest.mjs run tests/unit/auth-e2e-matrix-p3-51.test.ts",
     "run:sentry-alert-firing-p2-36": "tsx scripts/run-sentry-alert-firing-p2-36.ts",
     "audit:nav-audit-preview-labels": "tsx scripts/audit-nav-audit-preview-labels.ts",
     "audit:single-onboarding-entry": "tsx scripts/audit-single-onboarding-entry.ts",
