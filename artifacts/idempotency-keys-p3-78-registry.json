@@ -1,0 +1,17 @@
+{
+  "policyId": "idempotency-keys-p3-78-v1",
+  "department": "Backend",
+  "upstreamPolicyId": "idempotency-keys-p1-32-v1",
+  "registryEntries": 10,
+  "criticalPosPaths": [
+    "services/pos/pos-checkout-service.ts",
+    "services/pos/pos-refund-service.ts",
+    "services/pos/pos-void-service.ts"
+  ],
+  "auditScripts": [
+    "audit:idempotency-keys-p3-78",
+    "check:idempotency-keys-p3-78",
+    "test:ci:idempotency-keys",
+    "test:ci:idempotency-keys-p3-78:cert"
+  ]
+}

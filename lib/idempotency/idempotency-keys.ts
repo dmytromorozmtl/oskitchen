@@ -45,6 +45,14 @@ export function posRefundIdempotencyKey(
   return `pos_refund_${transactionId}_full`;
 }
 
+export function posCheckoutIdempotencyKey(offlineSaleId: string): string {
+  return `pos_checkout:${offlineSaleId.trim()}`;
+}
+
+export function posVoidIdempotencyKey(transactionId: string): string {
+  return `pos_void:${transactionId}`;
+}
+
 export function vendorPayoutTransferKey(vendorId: string, payoutId: string): string {
   return `vendor_payout_transfer:${vendorId}:${payoutId}`;
 }

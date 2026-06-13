@@ -51,6 +51,21 @@ export const IDEMPOTENCY_KEY_REGISTRY: readonly IdempotencyKeyEntry[] = [
     servicePath: "services/marketplace/vendor-finance-service.ts",
     wiringPattern: /buildStablePayoutId/,
   },
+  {
+    surface: "payment_capture",
+    servicePath: "services/pos/pos-refund-service.ts",
+    wiringPattern: /posRefundIdempotencyKey/,
+  },
+  {
+    surface: "payment_capture",
+    servicePath: "services/pos/pos-checkout-service.ts",
+    wiringPattern: /posCheckoutIdempotencyKey/,
+  },
+  {
+    surface: "payment_capture",
+    servicePath: "services/pos/pos-void-service.ts",
+    wiringPattern: /posVoidIdempotencyKey/,
+  },
 ] as const;
 
 export const IDEMPOTENCY_KEYS_CI_SCRIPTS = ["test:ci:idempotency-keys"] as const;

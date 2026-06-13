@@ -25,6 +25,7 @@ import {
   computePosCheckoutDiscountTotal,
   validateExplicitPosDiscountAmount,
 } from "@/lib/pos/pos-discount-guard";
+import { posCheckoutIdempotencyKey } from "@/lib/idempotency/idempotency-keys";
 import { offlinePaymentReference } from "@/lib/pos/offline-sync";
 import { linkOfflineCardCaptureToOrder } from "@/services/pos/offline-card-service";
 import { logPosOfflineSyncCompleted } from "@/services/pos/pos-offline-audit-service";
@@ -359,7 +360,14 @@ export async function checkoutPosSale(
       source: "USER",
       severity: "INFO",
       entity: { type: "Order", id: order.id, label: "POS_SALE" },
-      metadata: { registerId: register.id, paymentMode: input.paymentMode, total },
+      metadata: {
+        registerId: register.id,
+        paymentMode: input.paymentMode,
+        total,
+        ...(input.offlineSaleId
+          ? { idempotencyKey: posCheckoutIdempotencyKey(input.offlineSaleId) }
+          : {}),
+      },
       maskPiiInMetadata: true,
     });
 

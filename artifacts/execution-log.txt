@@ -9232,3 +9232,15 @@ Evidence: check:migration-health-p3-77 PASS (7/7); audit:migration-health-p3-77 
 Result: DONE — offline deploy gate + scheduled prod schema diff vs prisma
 Tracker: 77/80 (p3-77 done)
 Next: P3-78 idempotency keys — Backend
+
+---
+Cycle: ultimate-v11-78
+Timestamp: 2026-06-15T09:00:00.000Z
+Task: P3-78 Idempotency keys — critical money operations
+Department: Backend
+Action: posCheckoutIdempotencyKey + posVoidIdempotencyKey wired in POS checkout/void audit metadata; P3-78 policy/measurement/audit cert layer; deploy gate audit
+Files: lib/idempotency/idempotency-keys-p3-78-{policy,measurement,audit}.ts, services/pos/pos-{checkout,void}-service.ts, docs/idempotency-keys-p3-78.md, artifacts/idempotency-keys-p3-78-registry.json, scripts/audit-idempotency-keys-p3-78.ts, tests/unit/idempotency-keys-p3-78.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: check:idempotency-keys-p3-78 PASS; audit:idempotency-keys-p3-78 PASS; 10 registry entries all wired
+Result: DONE — POS checkout/void/refund idempotency keys + P3-78 deploy gate cert
+Tracker: 78/80 (p3-78 done)
+Next: P3-79 audit log money actions — Backend

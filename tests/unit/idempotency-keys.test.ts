@@ -5,6 +5,8 @@ import {
   marketplacePaymentCaptureKey,
   marketplacePaymentIntentKey,
   posRefundIdempotencyKey,
+  posCheckoutIdempotencyKey,
+  posVoidIdempotencyKey,
   posTerminalPaymentIntentKey,
   stripeIdempotencyRequestOptions,
   vendorInstantPayoutDebitKey,
@@ -51,6 +53,8 @@ describe("idempotency keys (P1-32)", () => {
     expect(marketplacePaymentCaptureKey("pi_123")).toContain("pi_123");
     expect(posTerminalPaymentIntentKey("order-2")).toContain("order-2");
     expect(posRefundIdempotencyKey("tx-1", 12.5)).toContain("partial_1250");
+    expect(posCheckoutIdempotencyKey("offline-sale-1")).toBe("pos_checkout:offline-sale-1");
+    expect(posVoidIdempotencyKey("tx-void-1")).toBe("pos_void:tx-void-1");
     expect(vendorPayoutTransferKey("v1", "PAYOUT-ABC")).toContain("PAYOUT-ABC");
     expect(vendorInstantPayoutTransferKey("v1", "INSTANT-ABC")).toContain("INSTANT-ABC");
     expect(vendorInstantPayoutDebitKey("v1", "INSTANT-ABC")).toContain("INSTANT-ABC");
