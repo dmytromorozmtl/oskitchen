@@ -12,7 +12,7 @@
   "p1-11-batch-n-plus-1": "done",
   "p1-12-error-tsx-remaining": "done",
   "p1-13-ai-accuracy-benchmarks": "done",
-  "p1-14-cross-tenant-e2e": "pending",
+  "p1-14-cross-tenant-e2e": "done",
   "p1-15-prisma-config": "pending",
   "p1-16-consolidate-npm-scripts": "pending",
   "p1-17-archive-workflows": "pending",

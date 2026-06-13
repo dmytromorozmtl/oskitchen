@@ -8464,3 +8464,15 @@ Evidence: vitest ai-accuracy-benchmark 5/5 PASS; benchmark:ai-accuracy invoice 5
 Result: DONE — 50 invoice PDF + 20 co-pilot questions regression harness
 Tracker: 13/80 (p1-13 done)
 Next: P1-14 cross-tenant E2E — IDOR detection
+
+---
+Cycle: ultimate-v11-14
+Timestamp: 2026-06-13T18:50:00.000Z
+Task: P1-14 cross-tenant E2E — IDOR detection
+Department: QA/Security
+Action: Extended P0-6 with P1-14 contract (13 key API routes × 2 workspaces), Playwright e2e/cross-tenant-e2e.spec.ts, benchmark script
+Files: lib/qa/cross-tenant-e2e-{policy,contract}.ts, e2e/cross-tenant-e2e.spec.ts, scripts/run-cross-tenant-e2e-benchmark.ts, tests/unit/cross-tenant-e2e.test.ts
+Evidence: vitest cross-tenant-e2e 4/4 PASS; benchmark:cross-tenant-e2e 14/14 scenarios 100%
+Result: DONE — 2-workspace IDOR matrix across orders/customers/finance/marketplace/inventory/pos/kitchen/analytics/integrations/staff/products/locations
+Tracker: 14/80 (p1-14 done)
+Next: P1-15 migrate Prisma config to prisma.config.ts
