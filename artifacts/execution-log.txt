@@ -8440,3 +8440,15 @@ Evidence: vitest n-plus-one-p0-fixes + n-plus-one-regression 18/18 PASS; no .map
 Result: DONE — 8 P0 N+1 patterns batched with query-count regression guards
 Tracker: 11/80 (p1-11 done)
 Next: P1-12 error.tsx on remaining 45 dashboard routes
+
+---
+Cycle: ultimate-v11-12
+Timestamp: 2026-06-13T18:44:00.000Z
+Task: P1-12 error.tsx on remaining 45 dashboard routes
+Department: Frontend
+Action: Ran scaffold:dashboard-error-boundaries — created 45 error.tsx from ErrorBoundaryTemplate; 707/707 dashboard page routes now covered
+Files: 45 new app/dashboard/**/error.tsx (ErrorBoundaryTemplate wrapper), artifacts/dashboard-error-boundaries-audit.json
+Evidence: scaffold PASS created=45 afterMissing=0; vitest dashboard-error-boundaries-blueprint + critical 7/7 PASS; audit 707/707 passed
+Result: DONE — all dashboard routes have error.tsx with retry reset
+Tracker: 12/80 (p1-12 done)
+Next: P1-13 AI accuracy benchmarks — invoice OCR + co-pilot
