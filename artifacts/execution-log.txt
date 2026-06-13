@@ -8644,3 +8644,15 @@ Evidence: vitest seo-blog-articles-p1-28 5/5 PASS; audit:seo-blog-articles PASS 
 Result: DONE — 6 SEO blog articles with honest BETA/verify language
 Tracker: 28/80 (p1-28 done)
 Next: P1-29 demo page — interactive sandbox workspace with Integration Health
+
+---
+Cycle: ultimate-v11-29
+Timestamp: 2026-06-14T00:00:00.000Z
+Task: P1-29 demo page — interactive sandbox workspace with Integration Health
+Department: Dev+Design
+Action: Added DemoInteractiveSandboxWorkspace on /demo — 5 workspace nav stops, 6 clickable Integration Health channels (PASS/SKIPPED/FAILED) with recovery playbooks; P1-29 policy/audit; wired audit:demo-page + check:demo-page
+Files: components/marketing/demo-interactive-sandbox-workspace.tsx, lib/marketing/demo-page-p1-29-{policy,content,audit}.ts, app/demo/page.tsx, docs/demo-page-p1-29.md, scripts/audit-demo-page-p1-29.ts, tests/unit/demo-page-p1-29.test.ts, package.json
+Evidence: vitest demo-page-p1-29 6/6 PASS; audit:demo-page PASS (6 channels, 5 stops, honesty markers)
+Result: DONE — interactive sandbox workspace with Integration Health on /demo
+Tracker: 29/80 (p1-29 done)
+Next: P1-30 pricing page — public Design Partner tier

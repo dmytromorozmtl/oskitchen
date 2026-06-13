@@ -5,6 +5,7 @@ import { AlertCircle, Clock, Package, Sparkles, Users } from "lucide-react";
 import { DemoImportForm } from "@/components/demo/demo-import-form";
 import { DemoLaunchButton } from "@/components/demo/demo-launch-button";
 import { DemoGuidedTourSection } from "@/components/marketing/demo-guided-tour-section";
+import { DemoInteractiveSandboxWorkspace } from "@/components/marketing/demo-interactive-sandbox-workspace";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { Badge } from "@/components/ui/badge";
@@ -83,6 +84,8 @@ export default async function DemoHubPage({
             </div>
           </div>
         </section>
+
+        <DemoInteractiveSandboxWorkspace />
 
         <DemoGuidedTourSection />
 
