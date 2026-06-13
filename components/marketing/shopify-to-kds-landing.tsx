@@ -14,6 +14,7 @@ import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
 import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
+import { SocialProofSection } from '@/components/marketing/social-proof-section';
 import { SolutionComparisonTable } from '@/components/marketing/solution-comparison-table';
 import { SolutionFinalCta } from '@/components/marketing/solution-final-cta';
 import { SectionHeader } from '@/components/marketing/section-header';
@@ -31,6 +32,7 @@ import {
   SHOPIFY_TO_KDS_PAIN_POINTS,
   SHOPIFY_TO_KDS_SCREENSHOTS,
   SHOPIFY_TO_KDS_SOLUTION,
+  SHOPIFY_TO_KDS_TESTIMONIAL_PLACEHOLDER,
   shopifyToKdsCtaHref,
 } from '@/lib/marketing/shopify-to-kds-landing-content';
 
@@ -231,6 +233,11 @@ export function ShopifyToKdsLanding() {
             ))}
           </div>
         </section>
+
+        <SocialProofSection
+          segmentLabel="Shopify + kitchen operators"
+          testimonial={SHOPIFY_TO_KDS_TESTIMONIAL_PLACEHOLDER}
+        />
 
         {content.comparison ? (
           <SolutionComparisonTable

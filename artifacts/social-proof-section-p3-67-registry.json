@@ -1,0 +1,12 @@
+{
+  "policyId": "social-proof-section-p3-67-v1",
+  "department": "Marketing",
+  "componentPath": "components/marketing/social-proof-section.tsx",
+  "testId": "social-proof-section",
+  "landingCount": 6,
+  "auditScripts": [
+    "audit:social-proof-section-p3-67",
+    "check:social-proof-section-p3-67",
+    "test:ci:social-proof-section:cert"
+  ]
+}

@@ -9,6 +9,7 @@ import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
 import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
+import { SocialProofSection } from '@/components/marketing/social-proof-section';
 import { SolutionFinalCta } from '@/components/marketing/solution-final-cta';
 import { SectionHeader } from '@/components/marketing/section-header';
 import { Breadcrumbs } from '@/components/seo/breadcrumbs';
@@ -22,6 +23,7 @@ import {
   COMMISSION_COMPARISON_LANDING_PAIN_POINTS,
   COMMISSION_COMPARISON_LANDING_PATH,
   COMMISSION_COMPARISON_LANDING_SUBTITLE,
+  COMMISSION_COMPARISON_LANDING_TESTIMONIAL_PLACEHOLDER,
   commissionComparisonLandingCtaHref,
 } from '@/lib/marketing/commission-comparison-landing-content';
 
@@ -123,6 +125,16 @@ export function CommissionComparisonLanding() {
             <CommissionComparisonCalculator />
           </div>
         </section>
+
+        <SocialProofSection
+          segmentLabel="delivery-heavy operators"
+          testimonial={COMMISSION_COMPARISON_LANDING_TESTIMONIAL_PLACEHOLDER}
+          stats={[
+            { value: '30%', label: 'DoorDash benchmark', caveat: 'Directional — verify your rate' },
+            { value: '0%', label: 'Owned marketplace fee', caveat: 'Processing only on owned channel' },
+            { value: '14-day', label: 'Free trial', caveat: 'Model savings before commit' },
+          ]}
+        />
 
         <section className="border-t border-border/60 py-12 sm:py-16">
           <div className="mx-auto max-w-3xl rounded-2xl border border-amber-500/25 bg-amber-500/5 p-6 sm:p-8">

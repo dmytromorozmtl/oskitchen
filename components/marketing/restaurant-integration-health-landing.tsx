@@ -16,6 +16,7 @@ import { MarketingCard } from '@/components/marketing/card';
 import { IntegrationHealthDoordashFailureSection } from '@/components/marketing/integration-health-doordash-failure-section';
 import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
+import { SocialProofSection } from '@/components/marketing/social-proof-section';
 import { SolutionComparisonTable } from '@/components/marketing/solution-comparison-table';
 import { SolutionFinalCta } from '@/components/marketing/solution-final-cta';
 import { SectionHeader } from '@/components/marketing/section-header';
@@ -33,6 +34,7 @@ import {
   RESTAURANT_INTEGRATION_HEALTH_PAIN_POINTS,
   RESTAURANT_INTEGRATION_HEALTH_SCREENSHOTS,
   RESTAURANT_INTEGRATION_HEALTH_SOLUTION,
+  RESTAURANT_INTEGRATION_HEALTH_TESTIMONIAL_PLACEHOLDER,
   restaurantIntegrationHealthCtaHref,
 } from '@/lib/marketing/restaurant-integration-health-landing-content';
 
@@ -253,6 +255,11 @@ export function RestaurantIntegrationHealthLanding() {
             ))}
           </div>
         </section>
+
+        <SocialProofSection
+          segmentLabel="multi-channel operators"
+          testimonial={RESTAURANT_INTEGRATION_HEALTH_TESTIMONIAL_PLACEHOLDER}
+        />
 
         {content.comparison ? (
           <SolutionComparisonTable

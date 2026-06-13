@@ -16,6 +16,7 @@ import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
 import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
+import { SocialProofSection } from '@/components/marketing/social-proof-section';
 import { SolutionComparisonTable } from '@/components/marketing/solution-comparison-table';
 import { SolutionFinalCta } from '@/components/marketing/solution-final-cta';
 import { SectionHeader } from '@/components/marketing/section-header';
@@ -237,21 +238,10 @@ export function CommissaryKitchenSoftwareLanding() {
           </div>
         </section>
 
-        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="commissary-kitchen-software-testimonial">
-          <div className="mx-auto max-w-3xl rounded-2xl border border-dashed border-border/80 bg-muted/20 p-8 text-center">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Operator story — placeholder
-            </p>
-            <blockquote className="mt-4 text-lg leading-relaxed text-foreground">
-              &ldquo;{COMMISSARY_KITCHEN_SOFTWARE_TESTIMONIAL_PLACEHOLDER.quote}&rdquo;
-            </blockquote>
-            <p className="mt-4 font-semibold">{COMMISSARY_KITCHEN_SOFTWARE_TESTIMONIAL_PLACEHOLDER.name}</p>
-            <p className="text-sm text-muted-foreground">{COMMISSARY_KITCHEN_SOFTWARE_TESTIMONIAL_PLACEHOLDER.role}</p>
-            <p className="mt-4 text-xs italic text-muted-foreground">
-              {COMMISSARY_KITCHEN_SOFTWARE_TESTIMONIAL_PLACEHOLDER.disclaimer}
-            </p>
-          </div>
-        </section>
+        <SocialProofSection
+          segmentLabel="commissary operators"
+          testimonial={COMMISSARY_KITCHEN_SOFTWARE_TESTIMONIAL_PLACEHOLDER}
+        />
 
         {content.comparison ? (
           <SolutionComparisonTable

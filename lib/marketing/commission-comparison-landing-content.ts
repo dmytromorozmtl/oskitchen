@@ -79,6 +79,15 @@ export const COMMISSION_COMPARISON_LANDING_FAQ = [
   },
 ] as const;
 
+export const COMMISSION_COMPARISON_LANDING_TESTIMONIAL_PLACEHOLDER = {
+  quote:
+    'Running the DoorDash 30% vs owned-channel math in one calculator changed how we talked about storefront investment — still directional, but better than guessing from settlement PDFs.',
+  name: 'Pilot operator — name withheld',
+  role: 'Delivery-heavy operator (design partner cohort)',
+  disclaimer:
+    'Illustrative placeholder — not a verified customer quote. Calculator output is directional — reconcile against settlement statements.',
+} as const;
+
 export const COMMISSION_COMPARISON_LANDING_REQUIRED_SECTIONS = [
   'data-testid="commission-comparison-landing"',
   'data-testid="commission-comparison-calculator"',

@@ -144,6 +144,15 @@ export const SHOPIFY_TO_KDS_SCREENSHOTS = [
   { id: 'health', title: 'Integration Health', caption: 'Failed syncs with retry guidance.' },
 ] as const;
 
+export const SHOPIFY_TO_KDS_TESTIMONIAL_PLACEHOLDER = {
+  quote:
+    'Shopify orders finally hit KDS without someone re-typing modifiers — we caught mapping gaps in the first ten test tickets before launch week.',
+  name: 'Pilot operator — name withheld',
+  role: 'Meal prep operator, Shopify + production line (design partner cohort)',
+  disclaimer:
+    'Illustrative placeholder — not a verified customer quote. Real case studies publish at /customers when available.',
+} as const;
+
 export const SHOPIFY_TO_KDS_LIMITATIONS = [
   'Shopify custom app connector is BETA — not listed on Shopify App Store yet; scope disclosed in pilot.',
   'Third-party delivery label auto-routing (DoorDash/Uber) is partner-gated — SKIPPED in default pilot.',

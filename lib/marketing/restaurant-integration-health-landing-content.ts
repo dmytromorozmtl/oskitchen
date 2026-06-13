@@ -147,6 +147,15 @@ export const RESTAURANT_INTEGRATION_HEALTH_SCREENSHOTS = [
   { id: 'playbook', title: 'Recovery playbook', caption: 'Failure code → operator next step.' },
 ] as const;
 
+export const RESTAURANT_INTEGRATION_HEALTH_TESTIMONIAL_PLACEHOLDER = {
+  quote:
+    'When DoorDash auth degraded we used to find out from angry customers — Integration Health showed AUTH_DEGRADED with a re-auth playbook before Saturday service.',
+  name: 'Pilot operator — name withheld',
+  role: 'Multi-channel operator (design partner cohort)',
+  disclaimer:
+    'Illustrative placeholder — not a verified customer quote. Real case studies publish at /customers when available.',
+} as const;
+
 export const RESTAURANT_INTEGRATION_HEALTH_LIMITATIONS = [
   'Health scores are workspace operational signals — not third-party SLA guarantees or investor-grade uptime claims.',
   'Live DoorDash and Uber Eats ops remain partner-gated or SKIPPED until pilot credentials are wired.',
