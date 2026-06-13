@@ -1,0 +1,25 @@
+{
+  "policyId": "negative-test-suite-p3-54-v1",
+  "department": "QA",
+  "moduleCount": 5,
+  "modules": [
+    "invalid_signature",
+    "replay_webhook",
+    "wrong_tenant",
+    "expired_session",
+    "no_permission"
+  ],
+  "orchestratorSpecs": [
+    "tests/unit/webhook-signature-regression.test.ts",
+    "e2e/webhook-replay-idempotency.spec.ts",
+    "e2e/cross-tenant-e2e.spec.ts",
+    "e2e/expired-session-e2e.spec.ts",
+    "e2e/role-permissions-matrix.spec.ts",
+    "e2e/negative-test-suite-p3-54.spec.ts"
+  ],
+  "auditScripts": [
+    "audit:negative-test-suite-p3-54",
+    "check:negative-test-suite-p3-54",
+    "test:e2e:negative-test-suite-p3-54"
+  ]
+}

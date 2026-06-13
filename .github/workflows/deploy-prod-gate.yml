@@ -172,6 +172,9 @@ jobs:
       - name: Integration test pack P3-53 audit
         run: npm run audit -- integration-test-pack-p3-53
 
+      - name: Negative test suite P3-54 audit
+        run: npm run audit -- negative-test-suite-p3-54
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

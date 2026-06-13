@@ -8944,3 +8944,15 @@ Evidence: vitest integration-test-pack-p3-53 PASS; audit:integration-test-pack-p
 Result: DONE — seven-module integration test pack with Shopify webhook E2E
 Tracker: 53/80 (p3-53 done)
 Next: P3-54 negative test suite — QA
+
+---
+Cycle: ultimate-v11-54
+Timestamp: 2026-06-14T18:15:00.000Z
+Task: P3-54 Negative test suite — invalid signature, replay webhook, wrong tenant, expired session, no permission
+Department: QA
+Action: negative-test-suite-p3-54 policy/measurement/audit; expired-session E2E; five-module orchestrator; playwright + deploy gate
+Files: lib/qa/negative-test-suite-p3-54-{policy,measurement,audit}.ts, lib/qa/expired-session-e2e-policy.ts, e2e/{expired-session-e2e,negative-test-suite-p3-54}.spec.ts, e2e/helpers/negative-test-suite-p3-54-{flow,ready}.ts, docs/negative-test-suite-p3-54.md, artifacts/negative-test-suite-p3-54-registry.json, scripts/audit-negative-test-suite-p3-54.ts, tests/unit/negative-test-suite-p3-54.test.ts, playwright.config.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest negative-test-suite-p3-54 PASS; audit:negative-test-suite-p3-54 PASS
+Result: DONE — five negative-path modules with expired session E2E
+Tracker: 54/80 (p3-54 done)
+Next: P3-55 visual QA — QA

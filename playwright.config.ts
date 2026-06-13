@@ -135,6 +135,10 @@ if (dashboardE2EEnabled) {
         "**/kds-playwright.spec.ts",
         "**/pos-checkout-e2e.spec.ts",
         "**/integration-test-pack-p3-53.spec.ts",
+        "**/webhook-replay-idempotency.spec.ts",
+        "**/cross-tenant-e2e.spec.ts",
+        "**/role-permissions-matrix.spec.ts",
+        "**/negative-test-suite-p3-54.spec.ts",
       ],
       use: {
         ...desktop,
