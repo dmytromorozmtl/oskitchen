@@ -1,0 +1,22 @@
+{
+  "policyId": "labor-cost-widget-p2-49-v1",
+  "parityTarget": "7shifts",
+  "todayRoute": "/dashboard/today",
+  "laborRoute": "/dashboard/staff/labor-realtime",
+  "flowSteps": [
+    "aggregate_labor_hours_today",
+    "aggregate_revenue_today",
+    "compute_labor_percent",
+    "render_labor_widget"
+  ],
+  "testIds": {
+    "root": "labor-cost-widget-p2-49",
+    "percent": "labor-cost-percent",
+    "revenue": "labor-cost-revenue",
+    "target": "labor-cost-target"
+  },
+  "auditScripts": [
+    "audit:labor-cost-widget-p2-49",
+    "check:labor-cost-widget-p2-49"
+  ]
+}

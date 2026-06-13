@@ -8884,3 +8884,15 @@ Evidence: vitest scheduled-reports-p2-48 PASS; audit:scheduled-reports-p2-48 PAS
 Result: DONE — Lightspeed parity weekly email PDF scheduled reports
 Tracker: 48/80 (p2-48 done)
 Next: P2-49 labor cost widget — 7shifts parity
+
+---
+Cycle: ultimate-v11-49
+Timestamp: 2026-06-14T11:00:00.000Z
+Task: P2-49 Labor cost % widget — real-time labor/revenue (7shifts parity)
+Department: Staff
+Action: LaborCostWidgetStrip on /dashboard/today; loadLaborCostWidgetModel via getLaborRealtimeData + configured target; P2-49 policy/audit/doc; deploy gate
+Files: lib/staff/labor-cost-widget-p2-49-{policy,measurement,audit,storage}.ts, services/staff/labor-cost-widget-p2-49-service.ts, components/staff/labor-cost-widget-strip.tsx, app/dashboard/today/page.tsx, docs/labor-cost-widget-p2-49.md, artifacts/labor-cost-widget-p2-49-registry.json, scripts/audit-labor-cost-widget-p2-49.ts, tests/unit/labor-cost-widget-p2-49.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest labor-cost-widget-p2-49 PASS; audit:labor-cost-widget-p2-49 PASS
+Result: DONE — 7shifts parity real-time labor cost widget
+Tracker: 49/80 (p2-49 done)
+Next: P2-50 case study template — Marketing

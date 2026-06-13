@@ -157,6 +157,9 @@ jobs:
       - name: Scheduled reports P2-48 audit
         run: npm run audit -- scheduled-reports-p2-48
 
+      - name: Labor cost widget P2-49 audit
+        run: npm run audit -- labor-cost-widget-p2-49
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

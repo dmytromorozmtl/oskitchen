@@ -1114,6 +1114,8 @@
     "test:ci:daily-pl-widget-p2-47": "node ./node_modules/vitest/vitest.mjs run tests/unit/daily-pl-widget-p2-47.test.ts",
     "audit:scheduled-reports-p2-48": "tsx scripts/audit-scheduled-reports-p2-48.ts",
     "test:ci:scheduled-reports-p2-48": "node ./node_modules/vitest/vitest.mjs run tests/unit/scheduled-reports-p2-48.test.ts",
+    "audit:labor-cost-widget-p2-49": "tsx scripts/audit-labor-cost-widget-p2-49.ts",
+    "test:ci:labor-cost-widget-p2-49": "node ./node_modules/vitest/vitest.mjs run tests/unit/labor-cost-widget-p2-49.test.ts",
     "run:sentry-alert-firing-p2-36": "tsx scripts/run-sentry-alert-firing-p2-36.ts",
     "audit:nav-audit-preview-labels": "tsx scripts/audit-nav-audit-preview-labels.ts",
     "audit:single-onboarding-entry": "tsx scripts/audit-single-onboarding-entry.ts",
