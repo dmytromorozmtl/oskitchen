@@ -20,6 +20,8 @@
     "regression:invoice-scanner-accuracy-p2-33": "tsx scripts/run-invoice-scanner-accuracy-regression-p2-33.ts",
     "audit:invoice-scanner-accuracy-regression-p2-33": "tsx scripts/audit-invoice-scanner-accuracy-regression-p2-33.ts",
     "check:invoice-scanner-accuracy-regression-p2-33": "node ./node_modules/vitest/vitest.mjs run tests/unit/invoice-scanner-accuracy-regression-p2-33.test.ts",
+    "audit:skipped-tests-p2-34": "tsx scripts/audit-skipped-tests-p2-34.ts",
+    "check:skipped-tests-p2-34": "node ./node_modules/vitest/vitest.mjs run tests/unit/skipped-tests-audit-p2-34.test.ts",
     "benchmark:bank-import-reconciliation": "tsx scripts/run-bank-import-reconciliation-benchmark.ts",
     "benchmark:cross-tenant-isolation-e2e": "tsx scripts/run-cross-tenant-isolation-e2e-benchmark.ts",
     "predev": "node ./node_modules/prisma/build/index.js generate && node scripts/ensure-prisma-client-default.cjs && node scripts/ensure-sentry-otel-shim.cjs",

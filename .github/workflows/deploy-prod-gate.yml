@@ -112,6 +112,9 @@ jobs:
       - name: Invoice scanner accuracy regression P2-33 audit
         run: npm run audit -- invoice-scanner-accuracy-regression-p2-33
 
+      - name: Skipped tests audit P2-34
+        run: npm run audit -- skipped-tests-p2-34
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

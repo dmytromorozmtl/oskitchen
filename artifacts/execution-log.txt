@@ -8704,3 +8704,15 @@ Evidence: vitest invoice-scanner-accuracy-regression-p2-33 5/5 PASS; audit:invoi
 Result: DONE — 50-invoice scanner regression gate at 80% accuracy
 Tracker: 33/80 (p2-33 done)
 Next: P2-34 audit 20 skipped tests
+
+---
+Cycle: ultimate-v11-34
+Timestamp: 2026-06-14T02:30:00.000Z
+Task: P2-34 audit 20 skipped tests — fix or delete
+Department: QA
+Action: Audited 20 historically skipped Playwright specs; fixed all 20 by wiring to chromium-authed (removed E2E_SESSION_COOKIE + login redirect skips); added skip-pattern inventory scanner, registry doc, policy/audit; wired audit:skipped-tests-p2-34 + deploy gate
+Files: e2e/{verticals,real-time-profit,dynamic-pricing,invoice-scanner,loyalty-2.0,gift-cards-system,menu-templates,instant-payouts,qr-ordering,handheld-ordering,voice-ordering,white-label-pwa,referral-program}*.spec.ts, lib/qa/skipped-tests-{inventory,audit-p2-34-policy,audit-p2-34-audit}.ts, docs/skipped-tests-audit-p2-34.md, playwright.config.ts, scripts/audit-skipped-tests-p2-34.ts, tests/unit/skipped-tests-audit-p2-34.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest skipped-tests-audit-p2-34 5/5 PASS; audit:skipped-tests-p2-34 PASS (20 fixed, chromium-authed wired)
+Result: DONE — 20 skipped dashboard E2E tests fixed via auth project wiring
+Tracker: 34/80 (p2-34 done)
+Next: P2-35 SCIM provision UI E2E
