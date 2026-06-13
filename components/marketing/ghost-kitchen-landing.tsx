@@ -3,12 +3,12 @@
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
-  Calendar,
-  ChefHat,
-  ClipboardList,
+  BarChart3,
   Layers,
   Package,
   ShoppingBag,
+  Sparkles,
+  ChefHat,
 } from 'lucide-react';
 
 import { MarketingButton } from '@/components/marketing/button';
@@ -24,45 +24,45 @@ import { Breadcrumbs } from '@/components/seo/breadcrumbs';
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo/schema-org';
 import { PRODUCTION_APP_URL } from '@/lib/auth/public-site-url';
 import {
-  getMealPrepSoftwareLandingContent,
-  getMealPrepSoftwareSegmentMeta,
-  MEAL_PREP_SOFTWARE_FEATURE_HIGHLIGHTS,
-  MEAL_PREP_SOFTWARE_LANDING_PATH,
-  MEAL_PREP_SOFTWARE_LIMITATIONS,
-  MEAL_PREP_SOFTWARE_PAIN_POINTS,
-  MEAL_PREP_SOFTWARE_SCREENSHOTS,
-  MEAL_PREP_SOFTWARE_SOLUTION,
-  MEAL_PREP_SOFTWARE_TESTIMONIAL_PLACEHOLDER,
-  mealPrepSoftwareCtaHref,
-} from '@/lib/marketing/meal-prep-software-landing-content';
+  GHOST_KITCHEN_FEATURE_HIGHLIGHTS,
+  GHOST_KITCHEN_LANDING_PATH,
+  GHOST_KITCHEN_LIMITATIONS,
+  GHOST_KITCHEN_PAIN_POINTS,
+  GHOST_KITCHEN_SCREENSHOTS,
+  GHOST_KITCHEN_SOLUTION,
+  GHOST_KITCHEN_TESTIMONIAL_PLACEHOLDER,
+  ghostKitchenCtaHref,
+  getGhostKitchenLandingContent,
+  getGhostKitchenSegmentMeta,
+} from '@/lib/marketing/ghost-kitchen-landing-content';
 import { faqForSolution } from '@/lib/marketing/solution-page-faq';
 
 const FEATURE_ICONS = {
-  'Weekly menu publishing': Calendar,
+  'Unified Order Hub': Layers,
+  'HoReCa marketplace': ShoppingBag,
+  'AI Purchasing': Sparkles,
   'Production board': ChefHat,
-  'Packing & labels': Package,
-  'Storefront preorders': ShoppingBag,
-  'Ingredient demand': ClipboardList,
+  'Profit per brand': BarChart3,
 } as const;
 
-export function MealPrepSoftwareLanding() {
-  const content = getMealPrepSoftwareLandingContent();
-  const meta = getMealPrepSoftwareSegmentMeta();
-  const faq = faqForSolution('meal-prep');
+export function GhostKitchenLanding() {
+  const content = getGhostKitchenLandingContent();
+  const meta = getGhostKitchenSegmentMeta();
+  const faq = faqForSolution('ghost-kitchens');
 
   const breadcrumbItems = [
     { name: 'Home', href: '/' },
-    { name: 'Solutions', href: '/solutions' },
-    { name: 'Meal prep software', href: MEAL_PREP_SOFTWARE_LANDING_PATH },
+    { name: 'Landing', href: '/solutions' },
+    { name: 'Ghost kitchen', href: GHOST_KITCHEN_LANDING_PATH },
   ];
   const breadcrumbSchemaItems = [
     { name: 'Home', url: PRODUCTION_APP_URL },
-    { name: 'Solutions', url: `${PRODUCTION_APP_URL}/solutions` },
-    { name: 'Meal prep software', url: `${PRODUCTION_APP_URL}${MEAL_PREP_SOFTWARE_LANDING_PATH}` },
+    { name: 'Landing', url: `${PRODUCTION_APP_URL}/solutions` },
+    { name: 'Ghost kitchen', url: `${PRODUCTION_APP_URL}${GHOST_KITCHEN_LANDING_PATH}` },
   ];
 
   return (
-    <div className="min-h-screen bg-background" data-testid="meal-prep-software-landing">
+    <div className="min-h-screen bg-background" data-testid="ghost-kitchen-landing">
       <BreadcrumbSchema items={breadcrumbSchemaItems} />
       <FAQSchema questions={faq} />
       <SiteHeaderClient isAuthenticated={false} />
@@ -74,7 +74,7 @@ export function MealPrepSoftwareLanding() {
         <section className="relative overflow-hidden py-12 sm:py-16 lg:py-20">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(37,99,235,0.1),_transparent_55%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(99,102,241,0.12),_transparent_55%)]"
           />
           <div className="relative mx-auto max-w-4xl text-center">
             <motion.div
@@ -83,7 +83,7 @@ export function MealPrepSoftwareLanding() {
               transition={{ duration: 0.4 }}
               className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/5 shadow-card"
             >
-              <SolutionSegmentIcon slug="meal-prep" />
+              <SolutionSegmentIcon slug="ghost-kitchens" />
             </motion.div>
             <p className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
               {content.badge}
@@ -95,14 +95,14 @@ export function MealPrepSoftwareLanding() {
               {content.subtitle}
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <MarketingButton href={mealPrepSoftwareCtaHref('/signup')} size="lg">
+              <MarketingButton href={ghostKitchenCtaHref('/signup')} size="lg">
                 Start free trial
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </MarketingButton>
-              <MarketingButton href={mealPrepSoftwareCtaHref('/demo')} variant="secondary" size="lg">
+              <MarketingButton href={ghostKitchenCtaHref('/demo')} variant="secondary" size="lg">
                 See live demo
               </MarketingButton>
-              <MarketingButton href={mealPrepSoftwareCtaHref('/pricing')} variant="ghost" size="lg">
+              <MarketingButton href={ghostKitchenCtaHref('/pricing')} variant="ghost" size="lg">
                 View pricing
               </MarketingButton>
             </div>
@@ -110,19 +110,19 @@ export function MealPrepSoftwareLanding() {
           </div>
         </section>
 
-        <IcpPilotHighlightsSection segmentLabel="meal prep operators" />
+        <IcpPilotHighlightsSection segmentLabel="ghost kitchen operators" />
 
-        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="meal-prep-software-pain">
+        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="ghost-kitchen-pain">
           <SectionHeader
-            tag="Meal prep pain"
-            title="Scaling weekly volume should not break your Sunday workflow"
-            description="Operators outgrow spreadsheets when preorder volume crosses ~200 meals/week — errors show up in production, not in the CRM."
+            tag="Multi-brand pain"
+            title="More brands should mean more margin — not more chaos"
+            description="Ghost kitchens lose leverage when every channel runs on a separate workflow and nobody sees profit per brand."
             centered
             className="mx-auto"
           />
           <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {MEAL_PREP_SOFTWARE_PAIN_POINTS.map((pain) => (
-              <MarketingCard key={pain.title} className="h-full border-primary/10">
+            {GHOST_KITCHEN_PAIN_POINTS.map((pain) => (
+              <MarketingCard key={pain.title} className="h-full border-indigo-500/10">
                 <h3 className="text-lg font-semibold tracking-tight">{pain.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{pain.description}</p>
               </MarketingCard>
@@ -130,14 +130,14 @@ export function MealPrepSoftwareLanding() {
           </div>
         </section>
 
-        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="meal-prep-software-solution">
+        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="ghost-kitchen-solution">
           <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-2 lg:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-primary">The solution</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">{MEAL_PREP_SOFTWARE_SOLUTION.title}</h2>
-              <p className="mt-4 text-muted-foreground">{MEAL_PREP_SOFTWARE_SOLUTION.description}</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">{GHOST_KITCHEN_SOLUTION.title}</h2>
+              <p className="mt-4 text-muted-foreground">{GHOST_KITCHEN_SOLUTION.description}</p>
               <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-                {MEAL_PREP_SOFTWARE_SOLUTION.bullets.map((bullet) => (
+                {GHOST_KITCHEN_SOLUTION.bullets.map((bullet) => (
                   <li key={bullet} className="flex items-start gap-2">
                     <span className="mt-1 text-primary" aria-hidden>
                       ✓
@@ -149,22 +149,22 @@ export function MealPrepSoftwareLanding() {
             </div>
             <div className="rounded-2xl border border-border/80 bg-muted/20 p-6">
               <div className="flex items-center gap-3 text-sm font-medium">
-                <Layers className="h-5 w-5 text-primary" aria-hidden />
-                Weekly meal prep loop
+                <Package className="h-5 w-5 text-primary" aria-hidden />
+                Virtual brand loop
               </div>
               <ol className="mt-4 space-y-3 text-sm text-muted-foreground">
-                <li className="rounded-lg border border-border/60 bg-background px-3 py-2">1. Menu + cutoff → storefront</li>
-                <li className="rounded-lg border border-border/60 bg-background px-3 py-2">2. Orders → production board</li>
-                <li className="rounded-lg border border-border/60 bg-background px-3 py-2">3. Batch prep → packing lanes</li>
+                <li className="rounded-lg border border-border/60 bg-background px-3 py-2">1. Channels → Order Hub</li>
+                <li className="rounded-lg border border-border/60 bg-background px-3 py-2">2. Production board → batch prep</li>
+                <li className="rounded-lg border border-border/60 bg-background px-3 py-2">3. AI Purchasing → approve PO</li>
                 <li className="rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 font-medium text-foreground">
-                  4. Handoff → pickup / delivery
+                  4. Brand P&L → kill or scale
                 </li>
               </ol>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="meal-prep-software-features">
+        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="ghost-kitchen-features">
           <SectionHeader
             tag={meta.featuresTag}
             title={meta.featuresTitle}
@@ -173,8 +173,8 @@ export function MealPrepSoftwareLanding() {
             className="mx-auto"
           />
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            {MEAL_PREP_SOFTWARE_FEATURE_HIGHLIGHTS.map((feature) => {
-              const Icon = FEATURE_ICONS[feature.title as keyof typeof FEATURE_ICONS] ?? ChefHat;
+            {GHOST_KITCHEN_FEATURE_HIGHLIGHTS.map((feature) => {
+              const Icon = FEATURE_ICONS[feature.title as keyof typeof FEATURE_ICONS] ?? Layers;
               return (
                 <MarketingCard key={feature.title} className="h-full">
                   <div className="flex items-start gap-3">
@@ -194,16 +194,16 @@ export function MealPrepSoftwareLanding() {
           </div>
         </section>
 
-        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="meal-prep-software-screenshots">
+        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="ghost-kitchen-screenshots">
           <SectionHeader
             tag="Product screenshots"
-            title="From menu cutoff to packed trays"
-            description="Illustrative UI snapshots — confirm live maturity in your trial workspace."
+            title="One kitchen, many brands — one screen"
+            description="Illustrative UI snapshots from multi-brand workspaces — confirm live maturity in your trial."
             centered
             className="mx-auto"
           />
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {MEAL_PREP_SOFTWARE_SCREENSHOTS.map((shot, index) => (
+            {GHOST_KITCHEN_SCREENSHOTS.map((shot, index) => (
               <motion.div
                 key={shot.id}
                 initial={{ opacity: 0, y: 12 }}
@@ -212,7 +212,7 @@ export function MealPrepSoftwareLanding() {
                 transition={{ delay: index * 0.08, duration: 0.35 }}
                 className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm"
               >
-                <div className="flex aspect-[4/3] flex-col justify-end bg-gradient-to-br from-primary/10 via-background to-primary/5 p-4">
+                <div className="flex aspect-[4/3] flex-col justify-end bg-gradient-to-br from-indigo-500/10 via-background to-primary/5 p-4">
                   <div className="space-y-2">
                     <div className="flex gap-2">
                       <div className="h-3 w-3 rounded-full bg-primary/30" />
@@ -235,18 +235,18 @@ export function MealPrepSoftwareLanding() {
           </div>
         </section>
 
-        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="meal-prep-software-testimonial">
+        <section className="border-t border-border/60 py-16 sm:py-20" data-testid="ghost-kitchen-testimonial">
           <div className="mx-auto max-w-3xl rounded-2xl border border-dashed border-border/80 bg-muted/20 p-8 text-center">
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Operator story — placeholder
             </p>
             <blockquote className="mt-4 text-lg leading-relaxed text-foreground">
-              &ldquo;{MEAL_PREP_SOFTWARE_TESTIMONIAL_PLACEHOLDER.quote}&rdquo;
+              &ldquo;{GHOST_KITCHEN_TESTIMONIAL_PLACEHOLDER.quote}&rdquo;
             </blockquote>
-            <p className="mt-4 font-semibold">{MEAL_PREP_SOFTWARE_TESTIMONIAL_PLACEHOLDER.name}</p>
-            <p className="text-sm text-muted-foreground">{MEAL_PREP_SOFTWARE_TESTIMONIAL_PLACEHOLDER.role}</p>
+            <p className="mt-4 font-semibold">{GHOST_KITCHEN_TESTIMONIAL_PLACEHOLDER.name}</p>
+            <p className="text-sm text-muted-foreground">{GHOST_KITCHEN_TESTIMONIAL_PLACEHOLDER.role}</p>
             <p className="mt-4 text-xs italic text-muted-foreground">
-              {MEAL_PREP_SOFTWARE_TESTIMONIAL_PLACEHOLDER.disclaimer}
+              {GHOST_KITCHEN_TESTIMONIAL_PLACEHOLDER.disclaimer}
             </p>
           </div>
         </section>
@@ -255,18 +255,15 @@ export function MealPrepSoftwareLanding() {
           <SolutionComparisonTable
             comparison={content.comparison}
             comparisonTag={meta.comparisonTag}
-            disclaimer="Comparison is directional — confirm integrations and pricing with each vendor."
+            disclaimer="Comparison is directional — confirm channel integrations and pricing with each vendor."
           />
         ) : null}
 
         <section className="border-t border-border/60 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl rounded-2xl border border-amber-500/25 bg-amber-500/5 p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-amber-950 dark:text-amber-100">Honest limitations</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              BETA and SKIPPED labels apply — see Integration Health Center during trial.
-            </p>
             <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
-              {MEAL_PREP_SOFTWARE_LIMITATIONS.map((line) => (
+              {GHOST_KITCHEN_LIMITATIONS.map((line) => (
                 <li key={line}>{line}</li>
               ))}
             </ul>
@@ -294,8 +291,8 @@ export function MealPrepSoftwareLanding() {
         <SolutionFinalCta
           title={content.ctaTitle}
           subtitle={content.ctaSubtitle}
-          signupHref={mealPrepSoftwareCtaHref('/signup')}
-          bookDemoHref={mealPrepSoftwareCtaHref('/book-demo')}
+          signupHref={ghostKitchenCtaHref('/signup')}
+          bookDemoHref={ghostKitchenCtaHref('/book-demo')}
         />
       </main>
       <SiteFooter />

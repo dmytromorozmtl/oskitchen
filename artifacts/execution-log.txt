@@ -8572,3 +8572,15 @@ Evidence: vitest webhook-signature-regression 5/5 PASS; benchmark 59/59 routes P
 Result: DONE — webhook signature regression suite wired
 Tracker: 22/80 (p1-22 done)
 Next: P1-23 ICP landing pages — meal prep + ghost kitchen
+
+---
+Cycle: ultimate-v11-23
+Timestamp: 2026-06-13T21:05:00.000Z
+Task: P1-23 ICP landing pages — /meal-prep-software + /ghost-kitchen-software with 18 LIVE integrations, KDS, profit engine highlights
+Department: Marketing
+Action: Added IcpPilotHighlightsSection to meal prep + ghost kitchen landings; pilot highlights content/audit; wired audit:icp-landing-pages + check:icp-landing-pages npm scripts
+Files: lib/marketing/icp-pilot-highlights-content.ts, components/marketing/icp-pilot-highlights-section.tsx, components/marketing/{meal-prep-software,ghost-kitchen}-landing.tsx, lib/marketing/icp-landing-pages-{policy,audit}.ts, tests/unit/icp-landing-pages.test.ts, docs/icp-landing-pages.md, package.json
+Evidence: vitest icp-landing-pages 5/5 PASS; audit:icp-landing-pages PASS (pilot highlights wired)
+Result: DONE — ICP landing pages with pilot highlights on meal prep + ghost kitchen
+Tracker: 23/80 (p1-23 done)
+Next: P1-24 Integration Health Center sales page
