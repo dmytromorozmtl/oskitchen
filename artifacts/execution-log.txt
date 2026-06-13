@@ -9171,4 +9171,16 @@ Files: components/charts/lazy-chart-panels.tsx, app/dashboard/{partner,growth}/p
 Evidence: vitest bundle-analysis-p3-72 + P1-39 PASS (8/8); audit:bundle-analysis-p3-72 PASS; wave 2 3/3 wired
 Result: DONE — recharts deferred from First Load JS on partner/growth/vendor analytics routes
 Tracker: 72/80 (p3-72 done)
-Next: P3-73 Prisma index audit — Backend
+Next: P3-74 webhook replay UI — Backend
+
+---
+Cycle: ultimate-v11-73
+Timestamp: 2026-06-15T04:00:00.000Z
+Task: P3-73 Prisma index audit — 401 models, hot-path FK wave 2
+Department: Backend
+Action: Added FK indexes on 8 hot-path models (POS/KDS/staff); P3-73 policy/measurement/audit cert layer; 12 hot-path models zero-gap requirement
+Files: prisma/schema.prisma, lib/prisma/prisma-index-audit-p3-73-{policy,measurement,audit}.ts, docs/prisma-index-audit-p3-73.md, artifacts/prisma-index-audit-p3-73-registry.json, scripts/audit-prisma-index-audit-p3-73.ts, tests/unit/prisma-index-audit-p3-73.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: check:prisma-index-audit-p3-73 PASS (8/8); audit:prisma-index-audit-p3-73 PASS; 401/401 models, 0 tenant gaps, 12/12 hot-path OK; FK gaps 145→131
+Result: DONE — Prisma index audit cert with hot-path FK enforcement
+Tracker: 73/80 (p3-73 done)
+Next: P3-74 webhook replay UI — Backend

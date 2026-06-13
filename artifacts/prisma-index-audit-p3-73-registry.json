@@ -1,0 +1,13 @@
+{
+  "policyId": "prisma-index-audit-p3-73-v1",
+  "department": "Backend",
+  "upstreamPolicyId": "prisma-index-audit-p1-36-v1",
+  "expectedModelCount": 401,
+  "hotPathModels": 12,
+  "auditScripts": [
+    "audit:prisma-index-audit-p3-73",
+    "check:prisma-index-audit-p3-73",
+    "check:prisma-indexes",
+    "test:ci:prisma-index-audit-p3-73:cert"
+  ]
+}

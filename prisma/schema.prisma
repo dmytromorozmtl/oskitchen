@@ -4615,6 +4615,7 @@ model CustomerFeedback {
   @@index([userId, createdAt])
   @@index([workspaceId, createdAt])
   @@index([orderId])
+  @@index([customerId])
   @@map("customer_feedback")
 }
 
@@ -7546,6 +7547,7 @@ model StaffShift {
   @@index([userId, shiftDate])
   @@index([userId, status])
   @@index([userId, locationId])
+  @@index([brandId])
   @@map("staff_shifts")
 }
 
@@ -7594,6 +7596,7 @@ model StaffEvent {
   @@index([userId, createdAt])
   @@index([userId, staffMemberId])
   @@index([userId, eventType])
+  @@index([performedById])
   @@map("staff_events")
 }
 
@@ -7657,6 +7660,10 @@ model KitchenTask {
   @@index([brandId])
   @@index([locationId])
   @@index([status])
+  @@index([relatedOrderId])
+  @@index([relatedProductId])
+  @@index([createdById])
+  @@index([completedById])
   @@map("kitchen_tasks")
 }
 
@@ -7672,6 +7679,7 @@ model KitchenTaskComment {
   author UserProfile? @relation("KitchenTaskCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([taskId, createdAt])
+  @@index([authorId])
   @@map("kitchen_task_comments")
 }
 
@@ -12708,6 +12716,8 @@ model POSShift {
   @@index([userId, registerId, status])
   @@index([registerId, status])
   @@index([workspaceId])
+  @@index([openedByStaffId])
+  @@index([closedByStaffId])
   @@map("pos_shifts")
 }
 
@@ -12773,6 +12783,7 @@ model POSTransaction {
   @@index([shiftId])
   @@index([shiftId, createdAt])
   @@index([staffId])
+  @@index([customerId])
   @@index([receiptNumber])
   @@map("pos_transactions")
 }
@@ -12852,6 +12863,9 @@ model POSAuditEvent {
 
   @@index([userId, createdAt])
   @@index([registerId])
+  @@index([shiftId])
+  @@index([transactionId])
+  @@index([staffId])
   @@map("pos_audit_events")
 }
 

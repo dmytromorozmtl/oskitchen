@@ -71,7 +71,7 @@
   "p3-70-integration-status-page": "done",
   "p3-71-console-log-sweep": "done",
   "p3-72-bundle-analysis": "done",
-  "p3-73-prisma-index-audit": "pending",
+  "p3-73-prisma-index-audit": "done",
   "p3-74-webhook-replay-ui": "pending",
   "p3-75-seed-demo-tenant": "pending",
   "p3-76-integration-sandbox": "pending",

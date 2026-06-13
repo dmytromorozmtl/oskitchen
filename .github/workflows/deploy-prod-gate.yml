@@ -43,6 +43,9 @@ jobs:
       - name: Prisma index audit (401 models, tenant-scope coverage)
         run: npm run check:prisma-indexes
 
+      - name: Prisma index audit P3-73 (hot-path FK wave 2)
+        run: npm run audit:prisma-index-audit-p3-73
+
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 
