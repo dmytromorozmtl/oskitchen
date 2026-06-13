@@ -9220,3 +9220,15 @@ Evidence: check:integration-sandbox-p3-76 PASS (12/12); audit:integration-sandbo
 Result: DONE — operators see sandbox credential readiness without secret exposure
 Tracker: 76/80 (p3-76 done)
 Next: P3-77 migration health checker — DevOps
+
+---
+Cycle: ultimate-v11-77
+Timestamp: 2026-06-15T08:00:00.000Z
+Task: P3-77 Migration health checker — CI diff prod vs prisma
+Department: DevOps
+Action: migration-health-prod-drift.yml weekly/manual prod diff; migration-health-audit wiring; P3-77 policy/measurement/audit; deploy gate cert
+Files: lib/devops/migration-health-audit.ts, lib/devops/migration-health-p3-77-{policy,measurement,audit}.ts, .github/workflows/migration-health-prod-drift.yml, docs/migration-health-p3-77.md, artifacts/migration-health-p3-77-registry.json, scripts/audit-migration-health-p3-77.ts, tests/unit/migration-health-p3-77.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: check:migration-health-p3-77 PASS (7/7); audit:migration-health-p3-77 PASS; prod drift workflow with --require-db + DIRECT_URL
+Result: DONE — offline deploy gate + scheduled prod schema diff vs prisma
+Tracker: 77/80 (p3-77 done)
+Next: P3-78 idempotency keys — Backend

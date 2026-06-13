@@ -1,0 +1,38 @@
+name: Migration health prod drift
+
+# Compare production DIRECT_URL schema against prisma/schema.prisma.
+# Requires repository secret DIRECT_URL (non-pooled Postgres URL).
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1"
+
+concurrency:
+  group: migration-health-prod-drift
+  cancel-in-progress: true
+
+jobs:
+  prod-schema-drift:
+    name: Prod DB vs prisma schema
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Migration health prod drift (--require-db)
+        env:
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          DATABASE_URL: ${{ secrets.DIRECT_URL }}
+        run: npm run check:migration-health -- --require-db

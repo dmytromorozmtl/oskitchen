@@ -1,0 +1,12 @@
+{
+  "policyId": "migration-health-p3-77-v1",
+  "department": "DevOps",
+  "upstreamPolicyId": "migration-health-checker-v1",
+  "prodDriftWorkflow": ".github/workflows/migration-health-prod-drift.yml",
+  "auditScripts": [
+    "audit:migration-health-p3-77",
+    "check:migration-health-p3-77",
+    "check:migration-health",
+    "test:ci:migration-health-p3-77:cert"
+  ]
+}

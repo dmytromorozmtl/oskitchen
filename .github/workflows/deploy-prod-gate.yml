@@ -40,6 +40,9 @@ jobs:
       - name: Migration health (schema validate + optional DB drift)
         run: npm run check:migration-health
 
+      - name: Migration health P3-77 audit
+        run: npm run audit:migration-health-p3-77
+
       - name: Prisma index audit (401 models, tenant-scope coverage)
         run: npm run check:prisma-indexes
 
