@@ -1,0 +1,15 @@
+{
+  "policyId": "hardware-compatibility-center-p3-80-v1",
+  "department": "Hardware",
+  "upstreamPolicyId": "hardware-compatibility-center-p2-87-v1",
+  "route": "/works-with-os-kitchen",
+  "tagline": "Works with OS Kitchen",
+  "diagnostics": 4,
+  "auditScripts": [
+    "audit:hardware-compatibility-center-p3-80",
+    "check:hardware-compatibility-center-p3-80",
+    "audit:hardware-compatibility-center",
+    "test:ci:hardware-compatibility-center",
+    "test:ci:hardware-compatibility-center-p3-80:cert"
+  ]
+}

@@ -64,6 +64,9 @@ jobs:
       - name: Money actions audit P3-79 audit
         run: npm run audit:money-actions-audit-p3-79
 
+      - name: Hardware compatibility center P3-80 audit
+        run: npm run audit:hardware-compatibility-center-p3-80
+
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 

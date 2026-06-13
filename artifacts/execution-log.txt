@@ -9256,3 +9256,15 @@ Evidence: check:money-actions-audit-p3-79 PASS; audit:money-actions-audit-p3-79 
 Result: DONE — payment/refund/void/payout/billing/terminal/storefront/cash audit coverage
 Tracker: 79/80 (p3-79 done)
 Next: P3-80 hardware compatibility center — Hardware
+
+---
+Cycle: ultimate-v11-80
+Timestamp: 2026-06-15T11:00:00.000Z
+Task: P3-80 Hardware compatibility center — Works with OS Kitchen
+Department: Hardware
+Action: P3-80 policy/measurement/audit cert wrapping P2-87 center; /works-with-os-kitchen public page + 4 diagnostics; roadmap + certified devices cross-refs; deploy gate cert
+Files: lib/hardware/hardware-compatibility-center-p3-80-{policy,measurement,audit}.ts, docs/hardware-compatibility-center-p3-80.md, artifacts/hardware-compatibility-center-p3-80-registry.json, scripts/audit-hardware-compatibility-center-p3-80.ts, tests/unit/hardware-compatibility-center-p3-80.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: check:hardware-compatibility-center-p3-80 PASS; audit:hardware-compatibility-center-p3-80 PASS; route /works-with-os-kitchen + 4 diagnostics
+Result: DONE — public Works with OS Kitchen hardware center certified
+Tracker: 80/80 (ALL TASKS COMPLETE)
+Next: FINAL — docs/ultimate-complete.md

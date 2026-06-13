@@ -78,5 +78,5 @@
   "p3-77-migration-health-checker": "done",
   "p3-78-idempotency-keys": "done",
   "p3-79-audit-log-money-actions": "done",
-  "p3-80-hardware-compatibility-center": "pending"
+  "p3-80-hardware-compatibility-center": "done"
 }
