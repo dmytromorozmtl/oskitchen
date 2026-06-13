@@ -7,7 +7,7 @@
   "p0-6-cross-tenant-e2e": "done",
   "p0-7-rate-limit-audit": "done",
   "p0-8-offline-pos-pci-review": "done",
-  "p1-9-npm-audit-ci": "pending",
+  "p1-9-npm-audit-ci": "done",
   "p1-10-suspense-wave1": "pending",
   "p1-11-batch-n-plus-1": "pending",
   "p1-12-error-tsx-remaining": "pending",
