@@ -214,6 +214,9 @@ jobs:
       - name: Social proof section P3-67 audit
         run: npm run audit -- social-proof-section-p3-67
 
+      - name: Founder story blog P3-68 audit
+        run: npm run audit -- founder-story-blog-p3-68
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

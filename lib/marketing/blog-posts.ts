@@ -125,6 +125,15 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     readTime: '8 min read',
     category: 'Ghost Kitchen',
   },
+  {
+    slug: 'why-we-built-os-kitchen',
+    title: 'Why We Built OS Kitchen — A Founder Story (Pre-Customer, Honest)',
+    description:
+      'The multi-channel kitchen pain we saw, why we built before the first customer, and why design partners matter more than fake logos.',
+    date: '2026-06-15',
+    readTime: '6 min read',
+    category: 'Founder',
+  },
 ];
 
 export function blogPostBySlug(slug: string): BlogPostMeta | undefined {

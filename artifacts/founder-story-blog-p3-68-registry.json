@@ -1,0 +1,12 @@
+{
+  "policyId": "founder-story-blog-p3-68-v1",
+  "department": "Marketing",
+  "upstreamPolicyId": "founding-customer-story-v1",
+  "upstreamDoc": "docs/founding-customer-story.md",
+  "publicPath": "/blog/why-we-built-os-kitchen",
+  "auditScripts": [
+    "audit:founder-story-blog-p3-68",
+    "check:founder-story-blog-p3-68",
+    "test:ci:founder-story-blog:cert"
+  ]
+}
