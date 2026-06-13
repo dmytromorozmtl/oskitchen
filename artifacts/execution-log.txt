@@ -9040,3 +9040,15 @@ Evidence: vitest commissary-landing-p3-61 PASS; audit:commissary-landing-p3-61 P
 Result: DONE — SEO landing at /commissary-kitchen-software with honest commissary ICP content
 Tracker: 61/80 (p3-61 done)
 Next: P3-62 shopify-to-kds landing page — Marketing
+
+---
+Cycle: ultimate-v11-62
+Timestamp: 2026-06-14T22:00:00.000Z
+Task: P3-62 Shopify-to-KDS landing page — /shopify-to-kds
+Department: Marketing
+Action: SEO landing at /shopify-to-kds; HMAC webhook→KDS flow content; honest limitations; shopify-to-kds-landing-p3-62 policy/audit; sitemap + blog link; deploy gate
+Files: app/shopify-to-kds/page.tsx, components/marketing/shopify-to-kds-landing.tsx, lib/marketing/shopify-to-kds-landing-{content,audit,p3-62-policy,p3-62-measurement,p3-62-audit}.ts, lib/marketing/{sitemap-urls,blog-content/shopify-orders-to-kds}.tsx, docs/shopify-to-kds-landing-p3-62.md, artifacts/shopify-to-kds-landing-p3-62-registry.json, scripts/audit-shopify-to-kds-landing-p3-62.ts, tests/unit/shopify-to-kds-landing-p3-62.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest shopify-to-kds-landing-p3-62 PASS; audit:shopify-to-kds-landing-p3-62 PASS
+Result: DONE — SEO landing at /shopify-to-kds with webhook→KDS flow and honest BETA labels
+Tracker: 62/80 (p3-62 done)
+Next: P3-63 integration health landing page — Marketing

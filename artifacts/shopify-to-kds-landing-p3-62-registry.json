@@ -1,0 +1,11 @@
+{
+  "policyId": "shopify-to-kds-landing-p3-62-v1",
+  "department": "Marketing",
+  "canonicalPath": "/shopify-to-kds",
+  "primaryKeyword": "shopify to kds",
+  "auditScripts": [
+    "audit:shopify-to-kds-landing-p3-62",
+    "check:shopify-to-kds-landing-p3-62",
+    "test:ci:shopify-to-kds-landing:cert"
+  ]
+}

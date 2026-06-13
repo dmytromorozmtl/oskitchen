@@ -196,6 +196,9 @@ jobs:
       - name: Commissary landing P3-61 audit
         run: npm run audit -- commissary-landing-p3-61
 
+      - name: Shopify-to-KDS landing P3-62 audit
+        run: npm run audit -- shopify-to-kds-landing-p3-62
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

@@ -36,6 +36,10 @@ export function ShopifyOrdersToKdsContent() {
         the first ten tickets.
       </p>
       <p>
+        <Link href="/shopify-to-kds" className="text-primary underline">
+          Shopify to KDS landing
+        </Link>{' '}
+        ·{' '}
         <Link href="/integrations/shopify" className="text-primary underline">
           Shopify integration
         </Link>{' '}
