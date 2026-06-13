@@ -38,6 +38,10 @@ export function RestaurantPosIntegrationHealthContent() {
         certification is still in progress.
       </p>
       <p>
+        <Link href="/restaurant-integration-health" className="text-primary underline">
+          Restaurant integration health
+        </Link>{' '}
+        ·{' '}
         <Link href="/integration-health-center" className="text-primary underline">
           Integration Health Center
         </Link>{' '}

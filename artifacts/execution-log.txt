@@ -9052,3 +9052,15 @@ Evidence: vitest shopify-to-kds-landing-p3-62 PASS; audit:shopify-to-kds-landing
 Result: DONE — SEO landing at /shopify-to-kds with webhook→KDS flow and honest BETA labels
 Tracker: 62/80 (p3-62 done)
 Next: P3-63 integration health landing page — Marketing
+
+---
+Cycle: ultimate-v11-63
+Timestamp: 2026-06-14T22:30:00.000Z
+Task: P3-63 Restaurant integration health landing — /restaurant-integration-health
+Department: Marketing
+Action: SEO landing at /restaurant-integration-health; DoorDash failure diagnostic; health scores + playbooks; honest limitations; restaurant-integration-health-landing-p3-63 policy/audit; sitemap + blog link; deploy gate
+Files: app/restaurant-integration-health/page.tsx, components/marketing/restaurant-integration-health-landing.tsx, lib/marketing/restaurant-integration-health-landing-{content,audit,p3-63-policy,p3-63-measurement,p3-63-audit}.ts, lib/marketing/{sitemap-urls,blog-content/restaurant-pos-integration-health}.tsx, docs/restaurant-integration-health-landing-p3-63.md, artifacts/restaurant-integration-health-landing-p3-63-registry.json, scripts/audit-restaurant-integration-health-landing-p3-63.ts, tests/unit/restaurant-integration-health-landing-p3-63.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest restaurant-integration-health-landing-p3-63 PASS; audit:restaurant-integration-health-landing-p3-63 PASS
+Result: DONE — SEO landing at /restaurant-integration-health with DoorDash diagnostic and honest SKIPPED labels
+Tracker: 63/80 (p3-63 done)
+Next: P3-64 commission comparison calculator — Marketing

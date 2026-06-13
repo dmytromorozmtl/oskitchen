@@ -1,0 +1,12 @@
+{
+  "policyId": "restaurant-integration-health-landing-p3-63-v1",
+  "department": "Marketing",
+  "canonicalPath": "/restaurant-integration-health",
+  "salesPagePath": "/integration-health-center",
+  "primaryKeyword": "restaurant integration health",
+  "auditScripts": [
+    "audit:restaurant-integration-health-landing-p3-63",
+    "check:restaurant-integration-health-landing-p3-63",
+    "test:ci:restaurant-integration-health-landing:cert"
+  ]
+}

@@ -199,6 +199,9 @@ jobs:
       - name: Shopify-to-KDS landing P3-62 audit
         run: npm run audit -- shopify-to-kds-landing-p3-62
 
+      - name: Restaurant integration health landing P3-63 audit
+        run: npm run audit -- restaurant-integration-health-landing-p3-63
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
