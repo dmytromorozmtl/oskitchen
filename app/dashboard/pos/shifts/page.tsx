@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { posCloseShiftFormAction, posOpenShiftFormAction } from "@/actions/pos";
 import { PosShiftsCloseoutFlowProofPanel } from "@/components/dashboard/pos/pos-shifts-closeout-flow-proof-panel";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
@@ -158,6 +160,15 @@ export default async function PosShiftsPage({
         <h1 className="text-2xl font-semibold tracking-tight">POS shifts</h1>
         <p className="text-sm text-muted-foreground">
           Open and close shifts — review recent closeouts and variance history.
+        </p>
+        <p className="mt-2 text-sm">
+          <Link
+            href="/dashboard/pos/cash"
+            className="text-primary underline-offset-4 hover:underline"
+            data-testid="cashier-shift-flow-link"
+          >
+            Cashier shift flow (open → assign drawer → count → close → report) →
+          </Link>
         </p>
       </div>
 

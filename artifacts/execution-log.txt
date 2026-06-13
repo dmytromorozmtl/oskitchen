@@ -8800,3 +8800,15 @@ Evidence: vitest loyalty-earn-redeem-p2-41 PASS; audit:loyalty-earn-redeem-p2-41
 Result: DONE — storefront loyalty earn/redeem with Square parity checkout panel
 Tracker: 41/80 (p2-41 done)
 Next: P2-42 cashier shift flow — Square parity
+
+---
+Cycle: ultimate-v11-42
+Timestamp: 2026-06-14T06:30:00.000Z
+Task: P2-42 Cashier shift flow — open, assign drawer, cash count, close, report (Square parity)
+Department: POS
+Action: Packaged Square-parity cashier shift flow on /dashboard/pos/cash (open→assign drawer→count→close→report); assign-drawer test id; shifts page flow link; P2-42 policy/audit/doc; wired audit:cashier-shift-flow-p2-42 + deploy gate
+Files: lib/pos/cashier-shift-flow-p2-42-{policy,audit}.ts, components/pos/pos-cash-management-client.tsx, app/dashboard/pos/shifts/page.tsx, docs/cashier-shift-flow-p2-42.md, artifacts/cashier-shift-flow-p2-42-registry.json, scripts/audit-cashier-shift-flow-p2-42.ts, tests/unit/cashier-shift-flow-p2-42.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest cashier-shift-flow-p2-42 PASS; audit:cashier-shift-flow-p2-42 PASS
+Result: DONE — Square parity cashier shift flow with 5-step wiring
+Tracker: 42/80 (p2-42 done)
+Next: P2-43 par levels + auto-reorder — MarketMan parity

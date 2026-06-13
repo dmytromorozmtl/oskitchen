@@ -1,0 +1,22 @@
+{
+  "policyId": "cashier-shift-flow-p2-42-v1",
+  "parityTarget": "Square",
+  "primaryRoute": "/dashboard/pos/cash",
+  "shiftsRoute": "/dashboard/pos/shifts",
+  "flowSteps": [
+    "open_shift",
+    "assign_drawer",
+    "cash_count",
+    "close_shift",
+    "shift_report"
+  ],
+  "testIds": {
+    "root": "pos-cash-management-root",
+    "assignDrawer": "pos-cash-assign-drawer",
+    "flowLink": "cashier-shift-flow-link"
+  },
+  "auditScripts": [
+    "audit:cashier-shift-flow-p2-42",
+    "check:cashier-shift-flow-p2-42"
+  ]
+}

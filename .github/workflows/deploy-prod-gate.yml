@@ -136,6 +136,9 @@ jobs:
       - name: Loyalty earn/redeem P2-41 audit
         run: npm run audit -- loyalty-earn-redeem-p2-41
 
+      - name: Cashier shift flow P2-42 audit
+        run: npm run audit -- cashier-shift-flow-p2-42
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
