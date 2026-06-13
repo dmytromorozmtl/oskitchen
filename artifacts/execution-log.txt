@@ -8632,3 +8632,15 @@ Evidence: vitest competitor-comparison-pages-p1-27 5/5 PASS; audit:competitor-co
 Result: DONE — honest competitor comparison pages for Toast, Square, Lightspeed
 Tracker: 27/80 (p1-27 done)
 Next: P1-28 SEO blog articles — 6 articles
+
+---
+Cycle: ultimate-v11-28
+Timestamp: 2026-06-13T23:45:00.000Z
+Task: P1-28 SEO blog articles — ghost kitchen software 2026, meal prep subscription management, restaurant pos integration health + 3 integration posts
+Department: Marketing
+Action: Added 6 SEO blog posts with content modules, pages, blog registry entries; P1-28 policy/audit; wired audit:seo-blog-articles + check:seo-blog-articles
+Files: docs/seo-blog-articles-p1-28.md, lib/marketing/seo-blog-articles-p1-28-{policy,audit}.ts, lib/marketing/blog-content/{ghost-kitchen-software-2026,meal-prep-subscription-management,restaurant-pos-integration-health,shopify-orders-to-kds,woocommerce-kds-restaurant-integration,multi-channel-delivery-order-hub}.tsx, app/blog/{ghost-kitchen-software-2026,meal-prep-subscription-management,restaurant-pos-integration-health,shopify-orders-to-kds,woocommerce-kds-restaurant-integration,multi-channel-delivery-order-hub}/page.tsx, lib/marketing/blog-posts.ts, lib/marketing/blog-related.ts, tests/unit/seo-blog-articles-p1-28.test.ts, package.json
+Evidence: vitest seo-blog-articles-p1-28 5/5 PASS; audit:seo-blog-articles PASS (6 posts, honesty markers)
+Result: DONE — 6 SEO blog articles with honest BETA/verify language
+Tracker: 28/80 (p1-28 done)
+Next: P1-29 demo page — interactive sandbox workspace with Integration Health

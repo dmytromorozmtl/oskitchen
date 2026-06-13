@@ -106,6 +106,8 @@
     "check:forbidden-claims-training": "node ./node_modules/vitest/vitest.mjs run tests/unit/forbidden-claims-training.test.ts",
     "audit:competitor-comparison-pages": "tsx scripts/audit-competitor-comparison-pages-p1-27.ts",
     "check:competitor-comparison-pages": "node ./node_modules/vitest/vitest.mjs run tests/unit/competitor-comparison-pages-p1-27.test.ts",
+    "audit:seo-blog-articles": "tsx scripts/audit-seo-blog-articles-p1-28.ts",
+    "check:seo-blog-articles": "node ./node_modules/vitest/vitest.mjs run tests/unit/seo-blog-articles-p1-28.test.ts",
     "test:e2e:kds-keyboard": "playwright test e2e/auth.setup.ts e2e/kds-keyboard-navigation.spec.ts --project=setup --project=chromium-authed",
     "test:e2e:today-keyboard": "playwright test e2e/auth.setup.ts e2e/today-keyboard-navigation.spec.ts --project=setup --project=chromium-authed",
     "predeploy:verify": "bash scripts/predeploy-verify.sh",
