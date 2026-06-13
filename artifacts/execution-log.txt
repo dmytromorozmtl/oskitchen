@@ -8428,3 +8428,15 @@ Evidence: vitest suspense-wave1 + wrap-critical-surfaces + loading-skeleton-audi
 Result: DONE — wave 1 routes /today, /marketplace, /pos/terminal, /kitchen, /analytics/suite all have Suspense + named skeleton
 Tracker: 10/80 (p1-10 done)
 Next: P1-11 batch-fix 8 N+1 query patterns
+
+---
+Cycle: ultimate-v11-11
+Timestamp: 2026-06-13T18:43:00.000Z
+Task: P1-11 Batch-fix 8 N+1 query patterns
+Department: Backend
+Action: Verified already enforced — brand-analytics groupBy, pos-shift batch findMany, partner-oauth in:ids, SLA bulk load, vendor webhook mapWithConcurrency, export concurrency 5; 8 targets in n-plus-one-regression-policy
+Files: (no code change required)
+Evidence: vitest n-plus-one-p0-fixes + n-plus-one-regression 18/18 PASS; no .map(async in brand-analytics; shiftId: { in: shiftIds } in pos-shift-service
+Result: DONE — 8 P0 N+1 patterns batched with query-count regression guards
+Tracker: 11/80 (p1-11 done)
+Next: P1-12 error.tsx on remaining 45 dashboard routes
