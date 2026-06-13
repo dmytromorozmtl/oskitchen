@@ -1744,6 +1744,7 @@
     "test:ci:cross-tenant-e2e": "node ./node_modules/vitest/vitest.mjs run tests/unit/cross-tenant-e2e.test.ts",
     "test:ci:prisma-config": "node ./node_modules/vitest/vitest.mjs run tests/unit/prisma-config.test.ts",
     "test:ci:npm-script-consolidation": "node ./node_modules/vitest/vitest.mjs run tests/unit/npm-script-consolidation.test.ts",
-    "test:ci:github-workflow-archive": "node ./node_modules/vitest/vitest.mjs run tests/unit/github-workflow-archive.test.ts"
+    "test:ci:github-workflow-archive": "node ./node_modules/vitest/vitest.mjs run tests/unit/github-workflow-archive.test.ts",
+    "test:ci:rate-limit-regression": "node ./node_modules/vitest/vitest.mjs run tests/unit/rate-limit-regression.test.ts"
   }
 }

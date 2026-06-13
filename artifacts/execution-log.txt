@@ -8512,3 +8512,15 @@ Evidence: archive PASS active=33 archived=88; vitest github-workflow-archive 4/4
 Result: DONE — GitHub Actions surface 121→33 active (≤40)
 Tracker: 17/80 (p1-17 done)
 Next: P1-18 rate-limit regression — mutation routes
+
+---
+Cycle: ultimate-v11-18
+Timestamp: 2026-06-13T20:06:00.000Z
+Task: P1-18 rate-limit regression — POST/PUT/DELETE mutation routes → N+1 → 429
+Department: QA
+Action: Added rate-limit regression policy/scoring (7 priority targets: POS, webhooks, public API, PUT, DELETE), unit tests with simulated bucket max=5/burst=6, benchmark script + npm scripts
+Files: lib/qa/rate-limit-regression-{policy,scoring}.ts, tests/unit/rate-limit-regression.test.ts, scripts/run-rate-limit-regression-benchmark.ts, package.json, config/npm-scripts/archive-v1.json
+Evidence: vitest rate-limit-regression 5/5 PASS; fixed shared-bucket false fail (pos-terminal POST+PUT → uber-eats PUT + scim DELETE)
+Result: DONE — mutation rate-limit regression suite wired
+Tracker: 18/80 (p1-18 done)
+Next: P1-19 KDS Playwright E2E — bump+expo handoff
