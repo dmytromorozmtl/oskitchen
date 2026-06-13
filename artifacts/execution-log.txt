@@ -8536,3 +8536,15 @@ Evidence: vitest kds-playwright-e2e 7/7 PASS; audit:kds-playwright-e2e PASS (6 f
 Result: DONE — KDS bump+expo handoff Playwright E2E certified
 Tracker: 19/80 (p1-19 done)
 Next: P1-20 POS checkout E2E — full scenario
+
+---
+Cycle: ultimate-v11-20
+Timestamp: 2026-06-13T20:18:00.000Z
+Task: P1-20 POS checkout E2E — shift→item→discount→checkout→receipt→close + refund/void
+Department: QA
+Action: Added full POS checkout E2E (8 steps): open shift, add item, 10% discount, checkout/receipt, service-level refund, second sale void, shift close; policy/audit/spec/flow helpers + deploy gate
+Files: lib/pos/pos-checkout-e2e-{policy,audit}.ts, e2e/pos-checkout-e2e.spec.ts, e2e/helpers/pos-checkout-e2e-{flow,ready}.ts, scripts/audit-pos-checkout-e2e.ts, tests/unit/pos-checkout-e2e.test.ts, package.json, deploy-prod-gate.yml
+Evidence: vitest pos-checkout-e2e 6/6 PASS; audit:pos-checkout-e2e PASS
+Result: DONE — POS checkout full scenario E2E wired
+Tracker: 20/80 (p1-20 done)
+Next: P1-21 offline POS PCI flow — noop-v1 fallback

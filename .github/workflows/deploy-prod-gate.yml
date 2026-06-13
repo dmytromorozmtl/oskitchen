@@ -58,6 +58,9 @@ jobs:
       - name: POS shift → checkout → receipt E2E audit
         run: npm run audit -- pos-shift-checkout-receipt-e2e
 
+      - name: POS checkout full scenario E2E audit
+        run: npm run audit -- pos-checkout-e2e
+
       - name: KDS bump → expo E2E audit
         run: npm run audit -- kds-bump-expo-e2e
 
