@@ -8596,3 +8596,15 @@ Evidence: vitest integration-health-center-marketing 5/5 PASS; wiring audit PASS
 Result: DONE — Integration Health Center sales page with DoorDash failure diagnostic
 Tracker: 24/80 (p1-24 done)
 Next: P1-25 design partner outreach — 20 Montreal/Canada operators
+
+---
+Cycle: ultimate-v11-25
+Timestamp: 2026-06-13T22:05:00.000Z
+Task: P1-25 design partner outreach — list of 20 operators Montreal/Canada
+Department: Marketing
+Action: Added design-partner-outreach doc with 20 research targets (13 QC); structured content + audit; linked email sequence + LOI template; wired audit:design-partner-outreach + check:design-partner-outreach
+Files: docs/design-partner-outreach.md, lib/marketing/design-partner-outreach-{policy,content,audit}.ts, scripts/audit-design-partner-outreach.ts, tests/unit/design-partner-outreach.test.ts, docs/{design-partner-email-sequence,loi-design-partner-template}.md, package.json
+Evidence: vitest design-partner-outreach 5/5 PASS; audit:design-partner-outreach PASS (20 operators, 13 QC, all research_target)
+Result: DONE — design partner outreach list for Montreal + Canada
+Tracker: 25/80 (p1-25 done)
+Next: P1-26 forbidden claims training — team cheat-sheet
