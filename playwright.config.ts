@@ -128,6 +128,7 @@ if (dashboardE2EEnabled) {
         "**/voice-ordering.spec.ts",
         "**/white-label-pwa.spec.ts",
         "**/referral-program.spec.ts",
+        "**/scim-provision-ui-e2e.spec.ts",
       ],
       use: {
         ...desktop,
@@ -261,6 +262,7 @@ projects.push({
     "**/voice-ordering.spec.ts",
     "**/white-label-pwa.spec.ts",
     "**/referral-program.spec.ts",
+    "**/scim-provision-ui-e2e.spec.ts",
   ],
 });
 

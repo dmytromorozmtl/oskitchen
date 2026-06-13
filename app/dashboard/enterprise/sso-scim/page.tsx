@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 
 import { EnterpriseSsoScimLivePanel } from "@/components/enterprise/enterprise-sso-scim-live-panel";
+import { ScimProvisionedUsersPanel } from "@/components/enterprise/scim-provisioned-users-panel";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { listScimProvisionedUsersForAdmin } from "@/lib/enterprise/workspace-scim-admin-service";
 import { loadEnterpriseSsoScimLiveDashboard } from "@/services/enterprise/enterprise-sso-scim-live-service";
 
 export const metadata: Metadata = {
@@ -30,10 +32,14 @@ export default async function EnterpriseSsoScimLivePage() {
   }
 
   const dashboard = await loadEnterpriseSsoScimLiveDashboard(workspaceId);
+  const provisionedUsers = await listScimProvisionedUsersForAdmin(workspaceId);
 
   return (
     <div className="mx-auto max-w-6xl p-4 md:p-6 pb-10">
       <EnterpriseSsoScimLivePanel dashboard={dashboard} />
+      <div className="mt-6">
+        <ScimProvisionedUsersPanel users={provisionedUsers} />
+      </div>
     </div>
   );
 }

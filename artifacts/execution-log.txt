@@ -8716,3 +8716,15 @@ Evidence: vitest skipped-tests-audit-p2-34 5/5 PASS; audit:skipped-tests-p2-34 P
 Result: DONE — 20 skipped dashboard E2E tests fixed via auth project wiring
 Tracker: 34/80 (p2-34 done)
 Next: P2-35 SCIM provision UI E2E
+
+---
+Cycle: ultimate-v11-35
+Timestamp: 2026-06-14T03:00:00.000Z
+Task: P2-35 SCIM provision UI E2E — create user → verify dashboard → deactivate → verify revoked
+Department: QA
+Action: Added ScimProvisionedUsersPanel on /dashboard/enterprise/sso-scim with deactivate action; Playwright flow seeds SCIM, POST /api/scim/v2/Users, verifies UI row, deactivates, asserts DB revoked; P2-35 policy/audit; wired audit:scim-provision-ui-e2e + deploy gate
+Files: components/enterprise/scim-provisioned-users-panel.tsx, actions/workspace-scim.ts, app/dashboard/enterprise/sso-scim/page.tsx, lib/enterprise/workspace-scim-admin-service.ts, e2e/scim-provision-ui-e2e.spec.ts, e2e/helpers/scim-provision-ui-e2e-{flow,ready}.ts, lib/qa/scim-provision-ui-e2e-{policy,audit}.ts, scripts/audit-scim-provision-ui-e2e.ts, tests/unit/scim-provision-ui-e2e.test.ts, playwright.config.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest scim-provision-ui-e2e 6/6 PASS; audit:scim-provision-ui-e2e PASS
+Result: DONE — SCIM provision UI E2E with create/deactivate/revoke verification
+Tracker: 35/80 (p2-35 done)
+Next: P2-36 Sentry alert firing test

@@ -33,7 +33,7 @@
   "p2-32-qr-scan-storefront-kds-e2e": "done",
   "p2-33-invoice-scanner-regression": "done",
   "p2-34-audit-skipped-tests": "done",
-  "p2-35-scim-provision-e2e": "pending",
+  "p2-35-scim-provision-e2e": "done",
   "p2-36-sentry-alert-firing": "pending",
   "p2-37-hardware-roadmap": "pending",
   "p2-38-predictive-daily-briefing": "pending",

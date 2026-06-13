@@ -115,6 +115,9 @@ jobs:
       - name: Skipped tests audit P2-34
         run: npm run audit -- skipped-tests-p2-34
 
+      - name: SCIM provision UI E2E audit
+        run: npm run audit -- scim-provision-ui-e2e
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
