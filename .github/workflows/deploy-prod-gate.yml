@@ -181,6 +181,9 @@ jobs:
       - name: Load test suite P3-56 audit
         run: npm run audit -- load-test-suite-p3-56
 
+      - name: Storybook top-20 P3-57 audit
+        run: npm run audit -- storybook-top20-p3-57
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

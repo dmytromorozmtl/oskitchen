@@ -1,0 +1,14 @@
+{
+  "policyId": "storybook-top20-p3-57-v1",
+  "department": "Design",
+  "componentCount": 20,
+  "titlePrefix": "Design System/Top 20",
+  "storiesDir": "stories/top20",
+  "auditScripts": [
+    "audit:storybook-top20-p3-57",
+    "check:storybook-top20-p3-57",
+    "test:ci:storybook-top20:cert",
+    "storybook",
+    "build-storybook"
+  ]
+}

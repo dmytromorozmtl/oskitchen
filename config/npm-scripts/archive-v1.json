@@ -1137,6 +1137,8 @@
     "test:k6:load-webhook-burst-p3-56": "k6 run scripts/load/webhook-burst-p3-56.k6.js",
     "test:k6:load-kds-refresh-p3-56": "k6 run scripts/load/kds-refresh-p3-56.k6.js",
     "test:k6:load-pos-checkout-p3-56": "k6 run scripts/load/pos-checkout-concurrency-p3-56.k6.js",
+    "audit:storybook-top20-p3-57": "tsx scripts/audit-storybook-top20-p3-57.ts",
+    "test:ci:storybook-top20-p3-57": "node ./node_modules/vitest/vitest.mjs run tests/unit/storybook-top20-p3-57.test.ts",
     "run:sentry-alert-firing-p2-36": "tsx scripts/run-sentry-alert-firing-p2-36.ts",
     "audit:nav-audit-preview-labels": "tsx scripts/audit-nav-audit-preview-labels.ts",
     "audit:single-onboarding-entry": "tsx scripts/audit-single-onboarding-entry.ts",
