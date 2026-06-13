@@ -1,0 +1,18 @@
+{
+  "policyId": "invoice-ai-accuracy-benchmark-p2-44-v1",
+  "department": "AI",
+  "invoiceCount": 50,
+  "targetAccuracyPct": 95,
+  "corpus": "lib/qa/invoice-scanner-accuracy-corpus.ts",
+  "flowSteps": [
+    "load_corpus_50",
+    "score_all_invoices",
+    "assert_benchmark_threshold_95"
+  ],
+  "auditScripts": [
+    "audit:invoice-ai-accuracy-benchmark-p2-44",
+    "check:invoice-ai-accuracy-benchmark-p2-44",
+    "benchmark:invoice-ai-accuracy-p2-44"
+  ],
+  "artifact": "artifacts/invoice-ai-accuracy-benchmark-p2-44-summary.json"
+}

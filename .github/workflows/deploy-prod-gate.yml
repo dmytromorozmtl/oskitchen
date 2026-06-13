@@ -142,6 +142,9 @@ jobs:
       - name: Par levels auto-reorder P2-43 audit
         run: npm run audit -- par-levels-auto-reorder-p2-43
 
+      - name: Invoice AI accuracy benchmark P2-44 audit
+        run: npm run audit -- invoice-ai-accuracy-benchmark-p2-44
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

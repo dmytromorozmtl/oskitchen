@@ -8824,3 +8824,15 @@ Evidence: vitest par-levels-auto-reorder-p2-43 PASS; audit:par-levels-auto-reord
 Result: DONE — MarketMan parity par levels with auto-reorder queue and draft PO generation
 Tracker: 43/80 (p2-43 done)
 Next: P2-44 invoice AI accuracy benchmark — 95%+ target
+
+---
+Cycle: ultimate-v11-44
+Timestamp: 2026-06-14T07:30:00.000Z
+Task: P2-44 Invoice AI accuracy benchmark — 50 invoice test set, 95%+ target
+Department: AI
+Action: P2-44 policy/scoring/audit over 50-invoice golden corpus; 95% benchmark gate (stricter than P2-33 80%); run script + artifact; wired audit:invoice-ai-accuracy-benchmark-p2-44 + deploy gate
+Files: lib/ai/invoice-ai-accuracy-benchmark-p2-44-{policy,scoring,audit}.ts, docs/invoice-ai-accuracy-benchmark-p2-44.md, artifacts/invoice-ai-accuracy-benchmark-p2-44-registry.json, scripts/{run,audit}-invoice-ai-accuracy-benchmark-p2-44.ts, tests/unit/invoice-ai-accuracy-benchmark-p2-44.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest invoice-ai-accuracy-benchmark-p2-44 PASS; audit:invoice-ai-accuracy-benchmark-p2-44 PASS; benchmark:invoice-ai-accuracy-p2-44 PASS
+Result: DONE — 50-invoice AI accuracy benchmark with 95% target gate
+Tracker: 44/80 (p2-44 done)
+Next: P2-45 delivery routing optimization — Olo parity
