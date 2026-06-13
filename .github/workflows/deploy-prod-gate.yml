@@ -118,6 +118,9 @@ jobs:
       - name: SCIM provision UI E2E audit
         run: npm run audit -- scim-provision-ui-e2e
 
+      - name: Sentry alert firing P2-36 audit
+        run: npm run audit -- sentry-alert-firing-p2-36
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
