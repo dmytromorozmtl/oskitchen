@@ -1,0 +1,85 @@
+# LIVE integrations staging smoke — 18 LIVE surfaces with merchant credentials.
+# Required secrets: E2E_STAGING_BASE_URL, DATABASE_URL, ENCRYPTION_KEY,
+# CHANNEL_SMOKE_OWNER_EMAIL (or CHANNEL_SMOKE_CONNECTION_ID)
+# Optional per-provider merchant keys in repo secrets or `.env.smoke.local` mirror.
+
+name: LIVE integrations staging smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1"
+  pull_request:
+    paths:
+      - "lib/integrations/live-integrations-staging-smoke-*.ts"
+      - "scripts/smoke-live-integrations-staging.ts"
+      - "scripts/smoke-*-live.ts"
+      - ".github/workflows/live-integrations-staging-smoke.yml"
+
+jobs:
+  live-integrations-staging-cert:
+    name: LIVE staging smoke — policy cert
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: LIVE integrations staging smoke cert
+        run: npm run test:ci -- live-integrations-staging-smoke:cert
+
+  live-integrations-staging-fleet:
+    if: >-
+      ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.DATABASE_URL != '' &&
+          (secrets.CHANNEL_SMOKE_OWNER_EMAIL != '' || secrets.CHANNEL_SMOKE_CONNECTION_ID != '') }}
+    name: LIVE staging smoke — 18 integrations fleet
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    needs: live-integrations-staging-cert
+    env:
+      E2E_STAGING_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+      CHANNEL_SMOKE_OWNER_EMAIL: ${{ secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+      CHANNEL_SMOKE_CONNECTION_ID: ${{ secrets.CHANNEL_SMOKE_CONNECTION_ID }}
+      WOOCOMMERCE_BASE_URL: ${{ secrets.WOOCOMMERCE_BASE_URL }}
+      WOOCOMMERCE_CONSUMER_KEY: ${{ secrets.WOOCOMMERCE_CONSUMER_KEY }}
+      WOOCOMMERCE_CONSUMER_SECRET: ${{ secrets.WOOCOMMERCE_CONSUMER_SECRET }}
+      WOOCOMMERCE_WEBHOOK_SECRET: ${{ secrets.WOOCOMMERCE_WEBHOOK_SECRET }}
+      SHOPIFY_SHOP_DOMAIN: ${{ secrets.SHOPIFY_SHOP_DOMAIN }}
+      SHOPIFY_ADMIN_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ADMIN_ACCESS_TOKEN }}
+      SHOPIFY_APP_SECRET: ${{ secrets.SHOPIFY_APP_SECRET }}
+      UBER_EATS_CLIENT_ID: ${{ secrets.UBER_EATS_CLIENT_ID }}
+      UBER_EATS_CLIENT_SECRET: ${{ secrets.UBER_EATS_CLIENT_SECRET }}
+      UBER_EATS_STORE_ID: ${{ secrets.UBER_EATS_STORE_ID }}
+      UBER_EATS_WEBHOOK_SECRET: ${{ secrets.UBER_EATS_WEBHOOK_SECRET }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fleet smoke — 18 LIVE integrations (staging)
+        run: npm run smoke -- live-integrations-staging
+
+      - name: Upload staging smoke summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-integrations-staging-smoke-summary
+          path: artifacts/live-integrations-staging-smoke-summary.json
+          if-no-files-found: ignore

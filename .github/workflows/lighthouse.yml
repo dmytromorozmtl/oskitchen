@@ -64,4 +64,4 @@ jobs:
           LHCI_BASE_URL: http://127.0.0.1:3000
 
       - name: Performance regression (Core Web Vitals)
-        run: npm run test:ci:performance-regression-cwv
+        run: npm run test:ci -- performance-regression-cwv

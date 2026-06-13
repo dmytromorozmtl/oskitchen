@@ -1,0 +1,21 @@
+name: era25 Scale Readiness Convergence Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-scale-readiness-convergence-era25:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 scale readiness convergence (JSON summary)
+        run: npm run ops -- validate-scale-readiness-convergence-era25 -- --json
+      - name: era25 scale post-month2-convergence orchestrator (JSON summary)
+        run: npm run ops -- run-scale-readiness-convergence-post-month2-convergence-orchestrator-era25 -- --json
+        continue-on-error: true

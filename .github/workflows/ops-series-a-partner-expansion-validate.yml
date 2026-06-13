@@ -1,0 +1,39 @@
+# Series A / partner expansion env validation — workflow_dispatch (Step 7, post Scale).
+
+name: Series A Partner Expansion Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-series-a-partner-expansion-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Series A / partner expansion env (JSON summary)
+        run: npm run ops -- validate-series-a-partner-expansion-env -- --json
+        env:
+          SCALE_PER_CUSTOMER_GO_ISOLATION: ${{ secrets.SCALE_PER_CUSTOMER_GO_ISOLATION }}
+          SCALE_DATA_ROOM_INDEX_PUBLISHED: ${{ secrets.SCALE_DATA_ROOM_INDEX_PUBLISHED }}
+          SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED: ${{ secrets.SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED }}
+          SERIES_A_PARTNER_ONEPAGER_REVIEWED: ${{ secrets.SERIES_A_PARTNER_ONEPAGER_REVIEWED }}
+          SERIES_A_MULTI_REGION_PLAYBOOK_DRAFTED: ${{ secrets.SERIES_A_MULTI_REGION_PLAYBOOK_DRAFTED }}
+          SERIES_A_MARKETING_CLAIMS_STRICT_REVIEWED: ${{ secrets.SERIES_A_MARKETING_CLAIMS_STRICT_REVIEWED }}
+          SERIES_A_CS_PLAYBOOK_REVIEWED: ${{ secrets.SERIES_A_CS_PLAYBOOK_REVIEWED }}
+      - name: Series A post-Scale orchestrator (JSON summary)
+        run: npm run ops -- run-series-a-partner-expansion-post-scale-orchestrator -- --json --skip-template
+        continue-on-error: true
+        env:
+          SCALE_PER_CUSTOMER_GO_ISOLATION: ${{ secrets.SCALE_PER_CUSTOMER_GO_ISOLATION }}
+          SCALE_DATA_ROOM_INDEX_PUBLISHED: ${{ secrets.SCALE_DATA_ROOM_INDEX_PUBLISHED }}
+          SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED: ${{ secrets.SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED }}
+          SERIES_A_PARTNER_ONEPAGER_REVIEWED: ${{ secrets.SERIES_A_PARTNER_ONEPAGER_REVIEWED }}
+          SERIES_A_MULTI_REGION_PLAYBOOK_DRAFTED: ${{ secrets.SERIES_A_MULTI_REGION_PLAYBOOK_DRAFTED }}
+          SERIES_A_MARKETING_CLAIMS_STRICT_REVIEWED: ${{ secrets.SERIES_A_MARKETING_CLAIMS_STRICT_REVIEWED }}
+          SERIES_A_CS_PLAYBOOK_REVIEWED: ${{ secrets.SERIES_A_CS_PLAYBOOK_REVIEWED }}

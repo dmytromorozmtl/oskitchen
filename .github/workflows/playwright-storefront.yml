@@ -1,0 +1,171 @@
+# Storefront Playwright suite against a deployed host (preview / staging).
+# Wire Vercel "Deploy Preview" → repository_dispatch or call this workflow after deploy with target_url.
+#
+# Required secrets (staging):
+#   E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD — dashboard builder specs
+#   E2E_STORE_SLUG or repo variable E2E_STOREFRONT_SLUG — published storefront slug
+#
+# Required variables:
+#   PLAYWRIGHT_BASE_URL — staging base URL (https://…, no trailing slash)
+#
+# Optional secrets:
+#   E2E_STOREFRONT_TAX_LABEL — expected tax line label at checkout (e.g. GST) after tax preset on staging
+#   E2E_STOREFRONT_MARKET_ID — market query param for tax/market spec (default weekday)
+
+name: Playwright storefront
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: "Deployed base URL (overrides PLAYWRIGHT_BASE_URL variable)"
+        required: false
+        type: string
+  push:
+    branches: [main]
+    paths:
+      - "app/s/**"
+      - "components/storefront/**"
+      - "lib/storefront/**"
+      - "e2e/storefront*.ts"
+      - "e2e/storefront-checkout-tax-market.spec.ts"
+      - "e2e/storefront-order-commerce-dashboard.spec.ts"
+      - "components/orders/order-storefront-commerce-card.tsx"
+      - "services/orders/storefront-order-commerce-service.ts"
+      - "playwright.config.ts"
+  repository_dispatch:
+    types: [vercel.deployment.success]
+
+permissions:
+  contents: read
+  checks: write
+
+concurrency:
+  group: playwright-storefront-${{ github.ref }}-${{ github.event.inputs.target_url || vars.PLAYWRIGHT_BASE_URL || 'local' }}
+  cancel-in-progress: true
+
+env:
+  PLAYWRIGHT_BASE_URL: ${{ github.event.inputs.target_url || vars.PLAYWRIGHT_BASE_URL }}
+  E2E_STORE_SLUG: ${{ secrets.E2E_STORE_SLUG || vars.E2E_STOREFRONT_SLUG || 'demo' }}
+  E2E_STOREFRONT_SLUG: ${{ secrets.E2E_STORE_SLUG || vars.E2E_STOREFRONT_SLUG || 'demo' }}
+  # Turnstile off in CI — verifyTurnstileToken is a no-op without secret
+  TURNSTILE_SECRET_KEY: ""
+
+jobs:
+  storefront-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    if: ${{ github.event.inputs.target_url != '' || vars.PLAYWRIGHT_BASE_URL != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Storefront public specs
+        env:
+          CI: true
+        run: |
+          npx playwright test \
+            e2e/storefront.spec.ts \
+            e2e/storefront-phase3.spec.ts \
+            e2e/storefront-phase4.spec.ts \
+            e2e/storefront-checkout-turnstile.spec.ts \
+            e2e/storefront-checkout-pay-later.spec.ts \
+            e2e/storefront-checkout-tax-market.spec.ts \
+            e2e/storefront-forms-contact.spec.ts \
+            e2e/storefront-brand-host.spec.ts \
+            tests/e2e/storefront-hreflang-sitemap.spec.ts \
+            --project=chromium
+
+      - name: Storefront tax + market (label gate)
+        if: ${{ secrets.E2E_STOREFRONT_TAX_LABEL != '' }}
+        env:
+          CI: true
+          E2E_STOREFRONT_TAX_LABEL: ${{ secrets.E2E_STOREFRONT_TAX_LABEL }}
+          E2E_STOREFRONT_MARKET_ID: ${{ secrets.E2E_STOREFRONT_MARKET_ID || 'weekday' }}
+        run: npx playwright test e2e/storefront-checkout-tax-market.spec.ts --project=chromium
+
+      - name: Stripe checkout E2E (optional)
+        if: ${{ vars.STOREFRONT_E2E_STRIPE == '1' && secrets.STRIPE_SECRET_KEY != '' }}
+        env:
+          CI: true
+          STOREFRONT_E2E_STRIPE: "1"
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        run: npx playwright test e2e/storefront-checkout-stripe.spec.ts --project=chromium
+
+      - name: Storefront builder (authed)
+        if: ${{ secrets.E2E_LOGIN_EMAIL != '' }}
+        env:
+          CI: true
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+        run: npx playwright test e2e/auth.setup.ts --project=setup
+
+      - name: Storefront builder specs (authed)
+        if: ${{ secrets.E2E_LOGIN_EMAIL != '' }}
+        env:
+          CI: true
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+        run: |
+          npx playwright test \
+            e2e/storefront-builder-authed.spec.ts \
+            e2e/storefront-multi-store.spec.ts \
+            e2e/storefront-order-commerce-dashboard.spec.ts \
+            --project=storefront-authed
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-storefront-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+
+      - name: Publish JUnit
+        if: always()
+        continue-on-error: true
+        uses: dorny/test-reporter@v2
+        with:
+          name: Playwright storefront
+          path: test-results/junit.xml
+          reporter: java-junit
+          fail-on-error: true
+
+  load-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: storefront-e2e
+    if: ${{ github.event.inputs.target_url != '' || vars.PLAYWRIGHT_BASE_URL != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Storefront load probe (429 gate)
+        env:
+          BASE_URL: ${{ github.event.inputs.target_url || vars.PLAYWRIGHT_BASE_URL }}
+          STORE_SLUG: ${{ secrets.E2E_STORE_SLUG || vars.E2E_STOREFRONT_SLUG || 'demo' }}
+          REQUESTS: "30"
+          MAX_429_COUNT: "2"
+        run: node scripts/load-test-storefront.mjs

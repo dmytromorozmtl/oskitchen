@@ -1,0 +1,58 @@
+name: Woo Shopify Staging Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_live:
+        description: "Skip live REST API calls (--skip-live)"
+        type: boolean
+        default: true
+      owner_email:
+        description: "Workspace owner email (overrides CHANNEL_SMOKE_OWNER_EMAIL secret)"
+        type: string
+        required: false
+
+jobs:
+  live-channel-smoke:
+    if: ${{ secrets.DATABASE_URL != '' && secrets.ENCRYPTION_KEY != '' && (secrets.CHANNEL_SMOKE_OWNER_EMAIL != '' || inputs.owner_email != '') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+      CHANNEL_SMOKE_OWNER_EMAIL: ${{ inputs.owner_email || secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+      CHANNEL_SMOKE_CONNECTION_ID: ${{ secrets.CHANNEL_SMOKE_CONNECTION_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+      - run: npx prisma generate
+
+      - name: Era 17 Woo/Shopify live smoke (era17-channel-live-smoke-woo-v1 + shopify-v1)
+        run: |
+          ARGS=""
+          if [ "${{ inputs.skip_live }}" = "true" ]; then ARGS="--skip-live"; fi
+          npm run smoke -- woo-shopify-live -- $ARGS
+
+      - name: Upload smoke summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: channel-live-smoke-summary
+          path: artifacts/channel-live-smoke-summary.json
+          if-no-files-found: ignore
+
+  skip-report:
+    if: ${{ secrets.DATABASE_URL == '' || secrets.ENCRYPTION_KEY == '' || (secrets.CHANNEL_SMOKE_OWNER_EMAIL == '' && inputs.owner_email == '') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: SKIPPED WITH REASON
+        run: |
+          echo "[SKIPPED WITH REASON] Woo/Shopify live smoke requires DATABASE_URL, ENCRYPTION_KEY, and CHANNEL_SMOKE_OWNER_EMAIL (or workflow owner_email input)."
+          exit 0

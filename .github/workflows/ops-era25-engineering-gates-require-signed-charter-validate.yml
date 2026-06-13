@@ -1,0 +1,23 @@
+# era25 Engineering Gates Require Signed Charter Validate
+
+name: era25 Engineering Gates Require Signed Charter Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-era25-engineering-gates-require-signed-charter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 engineering gates require signed charter (JSON summary)
+        run: npm run ops -- validate-era25-engineering-gates-require-signed-charter -- --json
+      - name: era25 engineering gates post-readiness orchestrator (JSON summary)
+        run: npm run ops -- run-era25-engineering-gates-post-readiness-orchestrator -- --json
+        continue-on-error: true

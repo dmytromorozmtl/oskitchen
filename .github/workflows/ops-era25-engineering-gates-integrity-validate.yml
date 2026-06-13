@@ -1,0 +1,26 @@
+# Era25 engineering gates integrity — blocks gates attestation without honest first charter slice.
+
+name: Era25 Engineering Gates Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-engineering-gates-integrity-baseline.json"
+      - "artifacts/era25-engineering-gates-require-signed-charter-report.md"
+      - "lib/commercial/era25-engineering-gates-integrity-era44.ts"
+      - "scripts/ops/validate-era25-engineering-gates-integrity.ts"
+
+jobs:
+  validate-era25-engineering-gates-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 engineering gates integrity (JSON)
+        run: npm run ops -- validate-era25-engineering-gates-integrity -- --json

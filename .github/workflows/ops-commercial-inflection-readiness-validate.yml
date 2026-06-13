@@ -1,0 +1,24 @@
+# Commercial inflection readiness — workflow_dispatch (honest P0 blocker matrix).
+
+name: Commercial Inflection Readiness Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-commercial-inflection-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate commercial inflection readiness (JSON summary)
+        run: npm run ops -- validate-commercial-inflection-readiness -- --json
+        continue-on-error: true
+      - name: Commercial inflection readiness orchestrator (JSON summary)
+        run: npm run ops -- run-commercial-inflection-readiness-orchestrator -- --json
+        continue-on-error: true

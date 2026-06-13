@@ -1,0 +1,21 @@
+name: era25 Sustained Operational Excellence Convergence Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-sustained-operational-excellence-convergence-era25:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 sustained operational excellence convergence (JSON summary)
+        run: npm run ops -- validate-sustained-operational-excellence-convergence-era25 -- --json
+      - name: era25 sustained ops post-market-leader-convergence orchestrator (JSON summary)
+        run: npm run ops -- run-sustained-operational-excellence-convergence-post-market-leader-convergence-orchestrator-era25 -- --json
+        continue-on-error: true

@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Dependency audit (high severity gate)
-        run: npm run audit:dependencies:high
+        run: npm run audit -- dependencies:high
 
       - name: Prisma generate
         run: npx prisma generate
@@ -44,169 +44,169 @@ jobs:
         run: npm run check:prisma-indexes
 
       - name: Console.log surface audit (Tier A/B + top-50)
-        run: npm run audit:console-log-surface -- --write
+        run: npm run audit -- console-log-surface -- --write
 
       - name: Bundle chunk audit (top-5 code-split wiring)
-        run: npm run audit:bundle-chunks
+        run: npm run audit -- bundle-chunks
 
       - name: Preview route guard audit (≥280 hidden routes)
-        run: npm run audit:preview-routes-hidden
+        run: npm run audit -- preview-routes-hidden
 
       - name: Login → Today → Playbook E2E audit
-        run: npm run audit:login-today-playbook-e2e
+        run: npm run audit -- login-today-playbook-e2e
 
       - name: POS shift → checkout → receipt E2E audit
-        run: npm run audit:pos-shift-checkout-receipt-e2e
+        run: npm run audit -- pos-shift-checkout-receipt-e2e
 
       - name: KDS bump → expo E2E audit
-        run: npm run audit:kds-bump-expo-e2e
+        run: npm run audit -- kds-bump-expo-e2e
 
       - name: Marketplace cart → PO → fulfill E2E audit
-        run: npm run audit:marketplace-cart-po-fulfill-e2e
+        run: npm run audit -- marketplace-cart-po-fulfill-e2e
 
       - name: Invoice scan → PO → approve E2E audit
-        run: npm run audit:invoice-scan-po-approve-e2e
+        run: npm run audit -- invoice-scan-po-approve-e2e
 
       - name: Bank import → reconcile E2E audit
-        run: npm run audit:bank-import-reconcile-e2e
+        run: npm run audit -- bank-import-reconcile-e2e
 
       - name: Storefront publish → order → KDS E2E audit
-        run: npm run audit:storefront-publish-order-kds-e2e
+        run: npm run audit -- storefront-publish-order-kds-e2e
 
       - name: Webhook ingest → order creation E2E audit
-        run: npm run audit:webhook-ingest-order-creation-e2e
+        run: npm run audit -- webhook-ingest-order-creation-e2e
 
       - name: Offline POS → reconnect → sync E2E audit
-        run: npm run audit:offline-pos-reconnect-sync-e2e
+        run: npm run audit -- offline-pos-reconnect-sync-e2e
 
       - name: Role permissions matrix E2E audit
-        run: npm run audit:role-permissions-matrix-e2e
+        run: npm run audit -- role-permissions-matrix-e2e
 
       - name: KDS Playwright E2E audit
-        run: npm run audit:kds-playwright-e2e
+        run: npm run audit -- kds-playwright-e2e
 
       - name: POS shift open → close E2E audit
-        run: npm run audit:pos-shift-open-close-e2e
+        run: npm run audit -- pos-shift-open-close-e2e
 
       - name: Rate limit E2E audit
-        run: npm run audit:rate-limit-e2e
+        run: npm run audit -- rate-limit-e2e
 
       - name: Webhook replay idempotency E2E audit
-        run: npm run audit:webhook-replay-idempotency-e2e
+        run: npm run audit -- webhook-replay-idempotency-e2e
 
       - name: AI invoice accuracy regression audit
-        run: npm run audit:ai-invoice-accuracy-regression
+        run: npm run audit -- ai-invoice-accuracy-regression
 
       - name: Nav audit preview labels
-        run: npm run audit:nav-audit-preview-labels
+        run: npm run audit -- nav-audit-preview-labels
 
       - name: Single onboarding entry audit
-        run: npm run audit:single-onboarding-entry
+        run: npm run audit -- single-onboarding-entry
 
       - name: Skeleton design system audit
-        run: npm run audit:skeleton-design-system
+        run: npm run audit -- skeleton-design-system
 
       - name: Permission-denied state audit
-        run: npm run audit:permission-denied-state
+        run: npm run audit -- permission-denied-state
 
       - name: Error template design tokens audit
-        run: npm run audit:error-template-design-tokens
+        run: npm run audit -- error-template-design-tokens
 
       - name: POS terminal density audit
-        run: npm run audit:pos-terminal-density
+        run: npm run audit -- pos-terminal-density
 
       - name: KDS bump ticket UX audit
-        run: npm run audit:kds-bump-ticket-ux
+        run: npm run audit -- kds-bump-ticket-ux
 
       - name: Design token pass audit
-        run: npm run audit:design-token-pass
+        run: npm run audit -- design-token-pass
 
       - name: Mobile Today scroll audit
-        run: npm run audit:mobile-today-scroll
+        run: npm run audit -- mobile-today-scroll
 
       - name: Briefing-first design audit
-        run: npm run audit:briefing-first-design
+        run: npm run audit -- briefing-first-design
 
       - name: Command Center brand audit
-        run: npm run audit:command-center-brand
+        run: npm run audit -- command-center-brand
 
       - name: Marketplace empty states design audit
-        run: npm run audit:marketplace-empty-states-design
+        run: npm run audit -- marketplace-empty-states-design
 
       - name: A11y VoiceOver sweep audit
-        run: npm run audit:a11y-voiceover-sweep
+        run: npm run audit -- a11y-voiceover-sweep
 
       - name: BETA preview badge system audit
-        run: npm run audit:beta-preview-badge-system
+        run: npm run audit -- beta-preview-badge-system
 
       - name: Integration Health dashboard audit
-        run: npm run audit:integration-health-dashboard
+        run: npm run audit -- integration-health-dashboard
 
       - name: Forbidden claims marketing pages audit
-        run: npm run audit:forbidden-claims-marketing-pages
+        run: npm run audit -- forbidden-claims-marketing-pages
 
       - name: Positioning reformulation audit
-        run: npm run audit:positioning-reformulation
+        run: npm run audit -- positioning-reformulation
 
       - name: Integration Health marketing audit
-        run: npm run audit:integration-health-marketing
+        run: npm run audit -- integration-health-marketing
 
       - name: Toast positioning audit
-        run: npm run audit:toast-positioning
+        run: npm run audit -- toast-positioning
 
       - name: Square positioning audit
-        run: npm run audit:square-positioning
+        run: npm run audit -- square-positioning
 
       - name: Lightspeed positioning audit
-        run: npm run audit:lightspeed-positioning
+        run: npm run audit -- lightspeed-positioning
 
       - name: MarketMan positioning audit
-        run: npm run audit:marketman-positioning
+        run: npm run audit -- marketman-positioning
 
       - name: MarginEdge positioning audit
-        run: npm run audit:marginedge-positioning
+        run: npm run audit -- marginedge-positioning
 
       - name: ICP landing pages audit
-        run: npm run audit:icp-landing-pages
+        run: npm run audit -- icp-landing-pages
 
       - name: Competitor alternative pages audit
-        run: npm run audit:competitor-alternative-pages
+        run: npm run audit -- competitor-alternative-pages
 
       - name: Content marketing pipeline audit
-        run: npm run audit:content-marketing-pipeline
+        run: npm run audit -- content-marketing-pipeline
 
       - name: Sales assets package audit
-        run: npm run audit:sales-assets-package
+        run: npm run audit -- sales-assets-package
 
       - name: Demo page improvement audit
-        run: npm run audit:demo-page-improvement
+        run: npm run audit -- demo-page-improvement
 
       - name: Forbidden claims training audit
-        run: npm run audit:forbidden-claims-training
+        run: npm run audit -- forbidden-claims-training
 
       - name: Competitor battle cards audit
-        run: npm run audit:competitor-battle-cards-p1-85
+        run: npm run audit -- competitor-battle-cards-p1-85
 
       - name: Certified hardware guide audit
-        run: npm run audit:certified-hardware-guide
+        run: npm run audit -- certified-hardware-guide
 
       - name: Hardware compatibility center audit
-        run: npm run audit:hardware-compatibility-center
+        run: npm run audit -- hardware-compatibility-center
 
       - name: POS offline mode v1 audit
-        run: npm run audit:pos-offline-mode-v1
+        run: npm run audit -- pos-offline-mode-v1
 
       - name: Table service depth audit
-        run: npm run audit:table-service-depth
+        run: npm run audit -- table-service-depth
 
       - name: Multi-station KDS audit
-        run: npm run audit:multi-station-kds
+        run: npm run audit -- multi-station-kds
 
       - name: API mutation rate limit audit
-        run: npm run audit:api-mutation-rate-limit
+        run: npm run audit -- api-mutation-rate-limit
 
       - name: Dashboard error boundary audit
-        run: npm run audit:dashboard-error-boundaries
+        run: npm run audit -- dashboard-error-boundaries
 
       - name: Unit tests (deploy gate)
         run: npm test

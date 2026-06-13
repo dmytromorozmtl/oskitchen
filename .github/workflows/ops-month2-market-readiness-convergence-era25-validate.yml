@@ -1,0 +1,21 @@
+name: era25 Month 2 Market Readiness Convergence Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-month2-market-readiness-convergence-era25:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 month 2 market readiness convergence (JSON summary)
+        run: npm run ops -- validate-month2-market-readiness-convergence-era25 -- --json
+      - name: era25 month 2 post-week1-convergence orchestrator (JSON summary)
+        run: npm run ops -- run-month2-market-readiness-convergence-post-week1-convergence-orchestrator-era25 -- --json
+        continue-on-error: true

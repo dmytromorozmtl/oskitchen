@@ -1,0 +1,21 @@
+name: era25 Series A Partner Expansion Convergence Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-series-a-partner-expansion-convergence-era25:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 series a partner expansion convergence (JSON summary)
+        run: npm run ops -- validate-series-a-partner-expansion-convergence-era25 -- --json
+      - name: era25 series a post-scale-convergence orchestrator (JSON summary)
+        run: npm run ops -- run-series-a-partner-expansion-convergence-post-scale-convergence-orchestrator-era25 -- --json
+        continue-on-error: true

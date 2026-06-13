@@ -1,0 +1,26 @@
+# Era25 P0 market proof honest closure capstone integrity — blocks closure before honest sole-path + proof_passed artifact.
+
+name: Era25 P0 Market Proof Honest Closure Capstone Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-p0-market-proof-honest-closure-capstone-integrity-baseline.json"
+      - "lib/commercial/era25-p0-market-proof-honest-closure-capstone-integrity-era62.ts"
+      - "lib/commercial/era25-p0-market-proof-honest-closure-capstone-phases-era62.ts"
+      - "scripts/ops/validate-era25-p0-market-proof-honest-closure-capstone-integrity.ts"
+
+jobs:
+  validate-era25-p0-market-proof-honest-closure-capstone-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 P0 closure capstone integrity (JSON)
+        run: npm run ops -- validate-era25-p0-market-proof-honest-closure-capstone-integrity -- --json

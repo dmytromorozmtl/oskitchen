@@ -1,0 +1,603 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Dependency audit (high severity gate)
+        run: npm run audit -- dependencies:high
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Validate workflow script references
+        run: npm run validate -- ci-workflow-scripts
+
+      - name: Verify install chain
+        run: npm run verify -- install-chain
+
+      - name: Verify storefront migration artifacts
+        run: npm run verify -- storefront-migration
+
+      - name: Verify storefront action imports
+        run: npm run verify -- storefront-actions
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Prisma validate
+        run: npx prisma validate
+
+      - name: Validate production cron manifest
+        run: npm run validate -- production-crons
+
+      - name: Validate cron route inventory
+        run: npm run validate -- cron-inventory
+
+      - name: Validate API route registry
+        run: npm run validate -- api-route-registry
+
+      - name: Audit API route classification
+        run: npm run audit -- api-routes
+
+      - name: Validate tenant scope (pilot paths)
+        run: npm run validate -- tenant-scope-pilot
+
+      - name: Validate dashboard owner scope
+        run: npm run validate -- dashboard-owner-scope
+
+      - name: Workspace migration audit gate
+        run: npm run workspace -- audit:gate
+
+      - name: WorkspaceId schema coverage
+        run: npm run workspace -- coverage:check
+
+      - name: Service userId scope audit (strict)
+        run: npm run workspace -- audit:services:strict
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: POS RBAC focused tests
+        run: npm run test:pos-rbac
+
+      - name: Governance and public API focused bundles
+        run: npm run test:ci -- governance-bundles
+
+      - name: Era 3 RBAC wave 3 focused bundle
+        run: npm run test:ci -- rbac-wave3
+
+      - name: Public POST fail-closed bundle
+        run: npm run test:ci -- public-post-fail-closed
+
+      - name: Unit test coverage (threshold gate)
+        run: npm run test:coverage
+
+      - name: Storefront payment matrix
+        run: node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-stripe-matrix.test.ts tests/unit/storefront-i18n-structure.test.ts
+
+      - name: Demo scenario plans (static)
+        run: npm run check-demo-scenarios
+
+      - name: Marketing vs capability matrix
+        run: npm run verify-claims
+
+      - name: Forbidden claims enforcement auto-test
+        run: npm run test:ci -- forbidden-claims-enforcement
+        env:
+          MARKETING_CLAIMS_STRICT: "1"
+
+      - name: Build
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee artifacts/build-route-sizes.log
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/kitchenos_ci
+          DIRECT_URL: postgresql://postgres:postgres@localhost:5432/kitchenos_ci
+
+      - name: Performance regression (bundle size)
+        run: npm run test:ci -- bundle-size-regression
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Platform access E2E
+        run: |
+          npm run start -- -p 3000 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:3000/login >/dev/null && break
+            sleep 2
+          done
+          npx playwright test tests/e2e/platform-access-denial.spec.ts tests/e2e/a11y-marketing.spec.ts tests/e2e/a11y-auth-shell.spec.ts --project=chromium
+        env:
+          CI: "1"
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+
+      # Optional Playwright against a **deployed** host: use workflow `.github/workflows/e2e-remote-smoke.yml`
+      # (workflow_dispatch + target URL). Optional dashboard job: repo variable PLAYWRIGHT_INCLUDE_DASHBOARD=true
+      # and secrets E2E_LOGIN_EMAIL / E2E_LOGIN_PASSWORD — see docs/TESTING.md.
+
+      # Optional Playwright storefront smoke: requires a running app + published slug (see docs/STOREFRONT_E2E_SMOKE_TESTS.md).
+      # - name: Install Playwright Chromium
+      #   run: npx playwright install chromium --with-deps
+      # - name: Storefront E2E
+      #   run: npm run test:e2e:storefront
+      #   env:
+      #     PLAYWRIGHT_BASE_URL: "http://127.0.0.1:3000"
+      #     E2E_STOREFRONT_SLUG: ${{ vars.E2E_STOREFRONT_SLUG }}
+
+      # Optional: DB-backed demo audit when a workspace id and database URL are configured.
+      # - name: Demo scenario DB audit
+      #   run: npm run check-demo-scenarios:db
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DEMO_CI_DATABASE_URL }}
+      #     DEMO_AUDIT_WORKSPACE_ID: ${{ secrets.DEMO_AUDIT_WORKSPACE_ID }}
+      #     DEMO_DB_AUDIT_ALLOW_PRODUCTION: "true"
+
+  # Era 6 — optional parallel strict slices at 6GB heap (canonical gate remains quality → typecheck:full).
+  typecheck-slices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Typecheck strict slices (parallel memory path)
+        run: npm run typecheck:ci:slices
+
+  # Era 9 — optional parallel governance partitions (canonical gate remains quality → test:ci:governance-bundles).
+  governance-bundles-partitions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        partition: [platform, money-path, security-rbac, product-kds]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Governance bundle partition (${{ matrix.partition }})
+        run: npm run test:ci -- governance-bundles:partition-${{ matrix.partition }}
+
+  security-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitchenos_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d kitchenos_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      DIRECT_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+      RUN_DB_INTEGRATION: "1"
+      CRON_SECRET: ci-db-cron-secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Apply schema to CI database
+        run: node ./node_modules/prisma/build/index.js db push --skip-generate
+
+      - name: Security and tenant isolation tests
+        run: npm run test:security
+
+  storefront-money-path:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitchenos_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d kitchenos_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      DIRECT_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+      ENCRYPTION_KEY: ERERERERERERERERERERERERERERERERERERERERERE=
+      CI_STOREFRONT_SLUG: hello
+      E2E_STOREFRONT_SLUG: hello
+      E2E_STORE_SLUG: hello
+      TURNSTILE_SECRET_KEY: ""
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Apply schema to CI database
+        run: node ./node_modules/prisma/build/index.js db push --skip-generate
+
+      - name: Seed CI storefront checkout fixture
+        run: npm run storefront -- seed-ci-checkout
+
+      - name: Storefront money-path unit tests
+        run: npm run test:ci -- storefront-money-path:unit
+
+      - name: Build application
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Storefront pay-later checkout E2E
+        run: |
+          npm run start -- -p 3000 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:3000/api/health >/dev/null && break
+            sleep 2
+          done
+          npm run test:ci -- storefront-money-path:e2e
+
+      - name: Storefront Stripe live-card E2E (optional — STRIPE_SECRET_KEY required)
+        id: storefront_stripe_e2e
+        if: ${{ secrets.STRIPE_SECRET_KEY != '' }}
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STOREFRONT_E2E_STRIPE: "1"
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+        run: npm run test:ci -- storefront-money-path:stripe-e2e
+
+      - name: Storefront Stripe E2E CI policy summary
+        if: always()
+        env:
+          STOREFRONT_STRIPE_E2E_STEP_OUTCOME: ${{ steps.storefront_stripe_e2e.outcome }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STOREFRONT_E2E_STRIPE: ${{ secrets.STRIPE_SECRET_KEY != '' && '1' || '' }}
+        run: npm run test:ci -- storefront-stripe-e2e:policy
+
+      - name: Upload storefront Stripe E2E summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storefront-stripe-e2e-summary
+          path: ci-artifacts/storefront-stripe-e2e-summary.json
+          if-no-files-found: warn
+
+  pos-money-path:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitchenos_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d kitchenos_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      DIRECT_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+      ENCRYPTION_KEY: ERERERERERERERERERERERERERERERERERERERERERE=
+      RUN_DB_INTEGRATION: "1"
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Apply schema to CI database
+        run: node ./node_modules/prisma/build/index.js db push --skip-generate
+
+      - name: Seed CI POS checkout fixture
+        run: npm run pos:seed-ci-checkout
+
+      - name: POS money-path unit tests
+        run: npm run test:ci -- pos-money-path:unit
+
+      - name: POS checkout integration (cash sale + PII)
+        run: npm run test:ci -- pos-money-path:integration
+
+      - name: POS inventory depletion integration
+        run: npm run test:ci -- pos-money-path:inventory
+
+      - name: Build application
+        if: ${{ secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        if: ${{ secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
+        run: npx playwright install chromium --with-deps
+
+      - name: POS browser E2E (tier 2b — dashboard auth secrets required)
+        id: pos_browser_e2e
+        if: ${{ secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+          E2E_SEED_USER_ID: ${{ secrets.E2E_CI_POS_USER_ID }}
+          SEED_USER_ID: ${{ secrets.E2E_CI_POS_USER_ID }}
+        run: |
+          if [ -n "${E2E_SEED_USER_ID:-}" ]; then
+            npx tsx scripts/seed-e2e-pos-fixture.ts
+          fi
+          npm run start -- -p 3000 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:3000/api/health >/dev/null && break
+            sleep 2
+          done
+          npm run test:ci -- pos-money-path:e2e
+
+      - name: POS browser E2E CI policy summary
+        if: always()
+        env:
+          POS_BROWSER_E2E_STEP_OUTCOME: ${{ steps.pos_browser_e2e.outcome }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+        run: npm run test:ci -- pos-browser-e2e:policy
+
+      - name: Upload POS browser E2E summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pos-browser-e2e-summary
+          path: ci-artifacts/pos-browser-e2e-summary.json
+          if-no-files-found: warn
+
+  kds-v1-prototype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitchenos_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d kitchenos_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      DIRECT_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+      RUN_DB_INTEGRATION: "1"
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Apply schema to CI database
+        run: node ./node_modules/prisma/build/index.js db push --skip-generate
+
+      - name: KDS v1 queue → bump integration
+        run: npm run test:ci -- kds-v1:integration
+
+  p0-staging-smokes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: P0 staging proof policy unit gate (always-on)
+        run: npm run test:ci -- p0-staging-proof-unblock-era17
+
+      - name: Assess P0 vault secrets
+        id: p0_vault
+        env:
+          E2E_STAGING_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+          SSO_STAGING_WORKSPACE_ID: ${{ secrets.SSO_STAGING_WORKSPACE_ID }}
+          SSO_STAGING_IDP_VENDOR: ${{ secrets.SSO_STAGING_IDP_VENDOR }}
+          SSO_STAGING_ALLOWED_DOMAIN: ${{ secrets.SSO_STAGING_ALLOWED_DOMAIN }}
+          SSO_STAGING_TEST_EMAIL: ${{ secrets.SSO_STAGING_TEST_EMAIL }}
+          SSO_STAGING_SUPABASE_PROVIDER_REF: ${{ secrets.SSO_STAGING_SUPABASE_PROVIDER_REF }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          CHANNEL_SMOKE_OWNER_EMAIL: ${{ secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+        run: |
+          if npm run ops -- validate-p0-vault-env -- --json > /tmp/p0-vault.json 2>&1; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: P0 staging smokes (optional — all 11 vault secrets required)
+        id: p0_staging_smokes
+        if: steps.p0_vault.outputs.ready == 'true'
+        env:
+          E2E_STAGING_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+          SSO_STAGING_WORKSPACE_ID: ${{ secrets.SSO_STAGING_WORKSPACE_ID }}
+          SSO_STAGING_IDP_VENDOR: ${{ secrets.SSO_STAGING_IDP_VENDOR }}
+          SSO_STAGING_ALLOWED_DOMAIN: ${{ secrets.SSO_STAGING_ALLOWED_DOMAIN }}
+          SSO_STAGING_TEST_EMAIL: ${{ secrets.SSO_STAGING_TEST_EMAIL }}
+          SSO_STAGING_SUPABASE_PROVIDER_REF: ${{ secrets.SSO_STAGING_SUPABASE_PROVIDER_REF }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          CHANNEL_SMOKE_OWNER_EMAIL: ${{ secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+        run: npm run smoke -- p0-staging-proof-unblock
+
+      - name: P0 staging smokes CI policy summary
+        if: always()
+        env:
+          P0_STAGING_SMOKES_STEP_OUTCOME: ${{ steps.p0_staging_smokes.outcome }}
+          E2E_STAGING_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+          SSO_STAGING_WORKSPACE_ID: ${{ secrets.SSO_STAGING_WORKSPACE_ID }}
+          SSO_STAGING_IDP_VENDOR: ${{ secrets.SSO_STAGING_IDP_VENDOR }}
+          SSO_STAGING_ALLOWED_DOMAIN: ${{ secrets.SSO_STAGING_ALLOWED_DOMAIN }}
+          SSO_STAGING_TEST_EMAIL: ${{ secrets.SSO_STAGING_TEST_EMAIL }}
+          SSO_STAGING_SUPABASE_PROVIDER_REF: ${{ secrets.SSO_STAGING_SUPABASE_PROVIDER_REF }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          CHANNEL_SMOKE_OWNER_EMAIL: ${{ secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+        run: npm run test:ci -- p0-staging-smokes:policy
+
+      - name: Upload P0 staging smokes summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-staging-smokes-summary
+          path: ci-artifacts/p0-staging-smokes-summary.json
+          if-no-files-found: warn
+
+  authed-rsc-smoke:
+    if: >-
+      ${{ secrets.E2E_LOGIN_EMAIL != '' &&
+          (secrets.E2E_LOGIN_PASSWORD != '' || secrets.E2E_PASSWORD != '') &&
+          secrets.NEXT_PUBLIC_SUPABASE_URL != '' &&
+          secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SMOKE_BASE_URL: ${{ secrets.RSC_SMOKE_BASE_URL || secrets.E2E_STAGING_BASE_URL || 'https://os-kitchen.com' }}
+      E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+      E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD || secrets.E2E_PASSWORD }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Authed dashboard RSC probe (46 routes, document + RSC)
+        run: npm run smoke -- rsc-authed-dashboard

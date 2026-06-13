@@ -1,0 +1,26 @@
+# Linear chain terminus guard integrity — blocks Step 17 FORBIDDEN attestation without honest Linear path permanently closed.
+
+name: Linear Chain Terminus Guard Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/linear-chain-terminus-guard-integrity-baseline.json"
+      - "artifacts/linear-chain-terminus-guard-report.md"
+      - "lib/commercial/linear-chain-terminus-guard-integrity-era41.ts"
+      - "scripts/ops/validate-linear-chain-terminus-guard-integrity.ts"
+
+jobs:
+  validate-linear-chain-terminus-guard-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Linear chain terminus guard integrity (JSON)
+        run: npm run ops -- validate-linear-chain-terminus-guard-integrity -- --json

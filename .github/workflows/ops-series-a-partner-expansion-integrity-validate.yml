@@ -1,0 +1,26 @@
+# Series A / partner expansion integrity — blocks Series A without honest Scale.
+
+name: Series A Partner Expansion Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/competitor-feature-gap-matrix-summary.json"
+      - "artifacts/series-a-partner-expansion-integrity-baseline.json"
+      - "lib/commercial/series-a-partner-expansion-integrity-era31.ts"
+      - "scripts/ops/validate-series-a-partner-expansion-integrity.ts"
+
+jobs:
+  validate-series-a-partner-expansion-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Series A / partner expansion integrity (JSON)
+        run: npm run ops -- validate-series-a-partner-expansion-integrity -- --json

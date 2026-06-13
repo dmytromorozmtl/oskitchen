@@ -1,0 +1,23 @@
+# era25 Pilot Week 1 Execution Convergence Validate
+
+name: era25 Pilot Week 1 Execution Convergence Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-pilot-week1-execution-convergence-era25:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 pilot week 1 execution convergence (JSON summary)
+        run: npm run ops -- validate-pilot-week1-execution-convergence-era25 -- --json
+      - name: era25 pilot week 1 post-GO-convergence orchestrator (JSON summary)
+        run: npm run ops -- run-pilot-week1-execution-convergence-post-go-convergence-orchestrator-era25 -- --json
+        continue-on-error: true

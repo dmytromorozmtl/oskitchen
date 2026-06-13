@@ -1,0 +1,23 @@
+# era25 Paid Pilot GO Convergence Validate
+
+name: era25 Paid Pilot GO Convergence Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-paid-pilot-go-convergence-era25:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 paid pilot GO convergence (JSON summary)
+        run: npm run ops -- validate-paid-pilot-go-convergence-era25 -- --json
+      - name: era25 paid pilot GO convergence post-breakthrough orchestrator (JSON summary)
+        run: npm run ops -- run-paid-pilot-go-convergence-post-breakthrough-orchestrator-era25 -- --json
+        continue-on-error: true

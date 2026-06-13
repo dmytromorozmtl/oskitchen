@@ -1,0 +1,26 @@
+# Era25 commercial pilot convergence train closure integrity — blocks train closure attestation without honest era47–era54 baselines.
+
+name: Era25 Commercial Pilot Convergence Train Closure Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-commercial-pilot-convergence-train-closure-integrity-baseline.json"
+      - "lib/commercial/era25-commercial-pilot-convergence-train-closure-integrity-era55.ts"
+      - "lib/commercial/era25-commercial-pilot-convergence-train-closure-integrity-era55-registry.ts"
+      - "scripts/ops/validate-era25-commercial-pilot-convergence-train-closure-integrity.ts"
+
+jobs:
+  validate-era25-commercial-pilot-convergence-train-closure-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 commercial pilot convergence train closure integrity (JSON)
+        run: npm run ops -- validate-era25-commercial-pilot-convergence-train-closure-integrity -- --json

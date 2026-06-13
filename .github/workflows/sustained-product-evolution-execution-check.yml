@@ -1,0 +1,36 @@
+name: Sustained Product Evolution Execution Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lib/ops/sustained-product-evolution-execution-*.ts"
+      - "scripts/ops/run-sustained-product-evolution-execution.ts"
+      - "artifacts/sustained-product-evolution-execution-summary.json"
+  pull_request:
+    paths:
+      - "lib/ops/sustained-product-evolution-execution-*.ts"
+      - "scripts/ops/run-sustained-product-evolution-execution.ts"
+  workflow_dispatch:
+
+jobs:
+  sustained-product-evolution-execution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Assess sustained product evolution execution (honest blocked state in CI)
+        run: npm run ops -- run-sustained-product-evolution-execution -- --write || true
+      - name: Upload execution report artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sustained-product-evolution-execution-report
+          path: |
+            artifacts/sustained-product-evolution-execution-summary.json
+            artifacts/sustained-product-evolution-execution-report.html
+          if-no-files-found: warn

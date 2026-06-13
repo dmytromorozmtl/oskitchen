@@ -1,0 +1,23 @@
+# era25 First Charter Slice Readiness Validate
+
+name: era25 First Charter Slice Readiness Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-era25-first-charter-slice-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 first charter slice readiness (JSON summary)
+        run: npm run ops -- validate-era25-first-charter-slice-readiness -- --json
+      - name: era25 first charter slice readiness post-charter-exit orchestrator (JSON summary)
+        run: npm run ops -- run-era25-first-charter-slice-readiness-post-charter-exit-orchestrator -- --json
+        continue-on-error: true

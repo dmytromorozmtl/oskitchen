@@ -1,0 +1,36 @@
+name: Sustained Operational Excellence Execution Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lib/ops/sustained-operational-excellence-execution-*.ts"
+      - "scripts/ops/run-sustained-operational-excellence-execution.ts"
+      - "artifacts/sustained-operational-excellence-execution-summary.json"
+  pull_request:
+    paths:
+      - "lib/ops/sustained-operational-excellence-execution-*.ts"
+      - "scripts/ops/run-sustained-operational-excellence-execution.ts"
+  workflow_dispatch:
+
+jobs:
+  sustained-operational-excellence-execution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Assess sustained operational excellence execution (honest blocked state in CI)
+        run: npm run ops -- run-sustained-operational-excellence-execution -- --write || true
+      - name: Upload execution report artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sustained-operational-excellence-execution-report
+          path: |
+            artifacts/sustained-operational-excellence-execution-summary.json
+            artifacts/sustained-operational-excellence-execution-report.html
+          if-no-files-found: warn

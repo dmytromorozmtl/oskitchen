@@ -1,0 +1,26 @@
+# Era25 Band A market proof execution sole-path integrity — blocks sole-path before honest terminus freeze.
+
+name: Era25 Band A Market Proof Execution Sole Path Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-band-a-market-proof-execution-sole-path-integrity-baseline.json"
+      - "lib/commercial/era25-band-a-market-proof-execution-sole-path-integrity-era61.ts"
+      - "lib/commercial/era25-band-a-market-proof-execution-sole-path-phases-era61.ts"
+      - "scripts/ops/validate-era25-band-a-market-proof-execution-sole-path-integrity.ts"
+
+jobs:
+  validate-era25-band-a-market-proof-execution-sole-path-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 Band A sole-path integrity (JSON)
+        run: npm run ops -- validate-era25-band-a-market-proof-execution-sole-path-integrity -- --json

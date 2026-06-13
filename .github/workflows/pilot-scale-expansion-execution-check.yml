@@ -1,0 +1,36 @@
+name: Pilot Scale Expansion Execution Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lib/ops/pilot-scale-expansion-execution-*.ts"
+      - "scripts/ops/run-pilot-scale-expansion-execution.ts"
+      - "artifacts/pilot-scale-expansion-execution-summary.json"
+  pull_request:
+    paths:
+      - "lib/ops/pilot-scale-expansion-execution-*.ts"
+      - "scripts/ops/run-pilot-scale-expansion-execution.ts"
+  workflow_dispatch:
+
+jobs:
+  pilot-scale-expansion-execution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Assess pilot scale expansion execution (honest blocked state in CI)
+        run: npm run ops -- run-pilot-scale-expansion-execution -- --write || true
+      - name: Upload execution report artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pilot-scale-expansion-execution-report
+          path: |
+            artifacts/pilot-scale-expansion-execution-summary.json
+            artifacts/pilot-scale-expansion-execution-report.html
+          if-no-files-found: warn

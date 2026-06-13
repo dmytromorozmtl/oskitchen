@@ -1,0 +1,59 @@
+# Integration smoke suite — 18 LIVE order→KDS round-trip
+# Required secrets: E2E_STAGING_BASE_URL, DATABASE_URL, ENCRYPTION_KEY, CHANNEL_SMOKE_OWNER_EMAIL
+# Optional per-provider merchant creds in repo secrets / `.env.smoke.local`
+
+name: Integration smoke suite order→KDS
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 1"
+  pull_request:
+    paths:
+      - "lib/integrations/integration-smoke-suite-order-kds-*.ts"
+      - "scripts/smoke-integration-suite-order-kds.ts"
+      - "docs/integration-smoke-suite-order-kds-setup.md"
+      - ".github/workflows/integration-smoke-suite-order-kds.yml"
+
+jobs:
+  integration-smoke-suite:
+    if: >-
+      ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.DATABASE_URL != '' }}
+    name: 18 LIVE order→KDS suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      E2E_STAGING_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL || secrets.DATABASE_URL }}
+      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+      CHANNEL_SMOKE_OWNER_EMAIL: ${{ secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+      CHANNEL_SMOKE_CONNECTION_ID: ${{ secrets.CHANNEL_SMOKE_CONNECTION_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Policy cert
+        run: npm run test:ci -- integration-smoke-suite-order-kds:cert
+
+      - name: Integration smoke suite (18 LIVE order→KDS)
+        run: npm run smoke -- integration-suite-order-kds -- --write
+
+      - name: Upload suite summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-smoke-suite-order-kds-${{ github.run_id }}
+          path: artifacts/integration-smoke-suite-order-kds-summary.json
+          retention-days: 30
+          if-no-files-found: warn

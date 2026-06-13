@@ -1,0 +1,27 @@
+# Market leader positioning integrity — blocks train without honest Series A.
+
+name: Market Leader Positioning Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/investor-narrative-onepager-summary.json"
+      - "artifacts/pilot-rollback-drill-summary.json"
+      - "artifacts/market-leader-positioning-integrity-baseline.json"
+      - "lib/commercial/market-leader-positioning-integrity-era32.ts"
+      - "scripts/ops/validate-market-leader-positioning-integrity.ts"
+
+jobs:
+  validate-market-leader-positioning-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Market leader positioning integrity (JSON)
+        run: npm run ops -- validate-market-leader-positioning-integrity -- --json

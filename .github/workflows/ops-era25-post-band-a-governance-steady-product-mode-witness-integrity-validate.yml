@@ -1,0 +1,26 @@
+# Era25 post-band-a-governance steady product mode witness integrity — blocks witness before honest Band A capstone.
+
+name: Era25 Post Band A Governance Steady Product Mode Witness Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-post-band-a-governance-steady-product-mode-witness-integrity-baseline.json"
+      - "lib/commercial/era25-post-band-a-governance-steady-product-mode-witness-integrity-era67.ts"
+      - "lib/commercial/era25-post-band-a-governance-steady-product-mode-witness-phases-era67.ts"
+      - "scripts/ops/validate-era25-post-band-a-governance-steady-product-mode-witness-integrity.ts"
+
+jobs:
+  validate-era25-post-band-a-governance-steady-product-mode-witness-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 post-band-a-governance steady product mode witness integrity (JSON)
+        run: npm run ops -- validate-era25-post-band-a-governance-steady-product-mode-witness-integrity -- --json

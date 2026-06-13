@@ -1,0 +1,35 @@
+name: Vault Readiness Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lib/ops/vault-readiness-report.ts"
+      - "scripts/check-vault-readiness.ts"
+      - "lib/commercial/p0-staging-proof-unblock-era17-policy.ts"
+      - "artifacts/vault-readiness-report.json"
+  pull_request:
+    paths:
+      - "lib/ops/vault-readiness-report.ts"
+      - "scripts/check-vault-readiness.ts"
+  workflow_dispatch:
+
+jobs:
+  vault-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Check vault readiness (honest — expects missing secrets in CI)
+        run: npm run check-vault-readiness -- --json || true
+      - name: Upload vault readiness report
+        uses: actions/upload-artifact@v4
+        with:
+          name: vault-readiness-report
+          path: artifacts/vault-readiness-report.json
+          if-no-files-found: warn

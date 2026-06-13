@@ -1,0 +1,26 @@
+# Commercial pilot path absolute end integrity — blocks Step 15 attestation without honest Post-terminus steady state.
+
+name: Commercial Pilot Path Absolute End Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/commercial-pilot-path-absolute-end-integrity-baseline.json"
+      - "artifacts/commercial-pilot-path-absolute-end-report.md"
+      - "lib/commercial/commercial-pilot-path-absolute-end-integrity-era39.ts"
+      - "scripts/ops/validate-commercial-pilot-path-absolute-end-integrity.ts"
+
+jobs:
+  validate-commercial-pilot-path-absolute-end-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Commercial pilot path absolute end integrity (JSON)
+        run: npm run ops -- validate-commercial-pilot-path-absolute-end-integrity -- --json

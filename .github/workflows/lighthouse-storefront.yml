@@ -1,0 +1,54 @@
+name: Lighthouse storefront
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Deployed base URL (e.g. https://staging.example.com)"
+        required: false
+        type: string
+      store_slug:
+        description: "Published storefront slug"
+        required: false
+        type: string
+  push:
+    branches: [main]
+    paths:
+      - "app/s/**"
+      - "components/storefront/**"
+      - "lib/storefront/**"
+      - "lighthouserc.cjs"
+      - ".github/workflows/lighthouse-storefront.yml"
+  workflow_run:
+    workflows: [Playwright storefront]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-storefront-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    if: ${{ github.event.inputs.base_url != '' || vars.PLAYWRIGHT_BASE_URL != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Lighthouse CI
+        run: npx @lhci/cli autorun
+        env:
+          LHCI_BASE_URL: ${{ github.event.inputs.base_url || vars.PLAYWRIGHT_BASE_URL }}
+          E2E_STORE_SLUG: ${{ github.event.inputs.store_slug || secrets.E2E_STORE_SLUG || vars.E2E_STOREFRONT_SLUG || 'demo' }}

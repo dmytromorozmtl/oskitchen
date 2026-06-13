@@ -8488,3 +8488,15 @@ Evidence: vitest prisma-config 4/4 PASS; package.json prisma field undefined; sc
 Result: DONE — Prisma CLI config centralized in prisma.config.ts
 Tracker: 15/80 (p1-15 done)
 Next: P1-16 consolidate npm scripts 1902→<200
+
+---
+Cycle: ultimate-v11-16
+Timestamp: 2026-06-13T18:59:00.000Z
+Task: P1-16 consolidate npm scripts 1902→<200
+Department: DevOps
+Action: Archived 1742 sprawl scripts to config/npm-scripts/archive-v1.json; 12 router prefixes (test:ci, ops, smoke, …); package.json 1907→179; migrated 249 CI workflow refs
+Files: lib/devops/npm-script-consolidation-policy.ts, scripts/{consolidate-npm-scripts,npm-script-router,audit-npm-script-surface,migrate-ci-workflow-script-refs}.ts, config/npm-scripts/archive-v1.json, package.json, .github/workflows/*
+Evidence: consolidate PASS afterTotal=179; vitest npm-script-consolidation 4/4 PASS; validate-ci-workflow-scripts exit 0
+Result: DONE — npm script surface <200 with archive router
+Tracker: 16/80 (p1-16 done)
+Next: P1-17 archive inactive workflows 121→40

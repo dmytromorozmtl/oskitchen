@@ -1,0 +1,26 @@
+# Tier 2 staging golden path integrity — blocks fake proof_passed in committed artifacts.
+
+name: Tier 2 Staging Golden Path Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/tier2-staging-golden-path-summary.json"
+      - "artifacts/tier2-staging-golden-path-integrity-baseline.json"
+      - "lib/commercial/tier2-staging-golden-path-integrity-era28.ts"
+      - "scripts/ops/validate-tier2-staging-golden-path-integrity.ts"
+
+jobs:
+  validate-tier2-staging-golden-path-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Tier 2 staging golden path integrity (JSON)
+        run: npm run ops -- validate-tier2-staging-golden-path-integrity -- --json
