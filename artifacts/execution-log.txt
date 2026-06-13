@@ -8452,3 +8452,15 @@ Evidence: scaffold PASS created=45 afterMissing=0; vitest dashboard-error-bounda
 Result: DONE — all dashboard routes have error.tsx with retry reset
 Tracker: 12/80 (p1-12 done)
 Next: P1-13 AI accuracy benchmarks — invoice OCR + co-pilot
+
+---
+Cycle: ultimate-v11-13
+Timestamp: 2026-06-13T18:48:00.000Z
+Task: P1-13 AI accuracy benchmarks — invoice OCR + co-pilot
+Department: AI/ML
+Action: Created unified P1-13 benchmark — 50 invoice PDF golden corpus (85% gate) + 20 co-pilot deterministic Q&A (90% keyword/guardrail gate); run script + CI test
+Files: lib/qa/ai-accuracy-benchmark-{policy,operations}.ts, lib/qa/copilot-accuracy-{corpus,scoring}.ts, scripts/run-ai-accuracy-benchmark.ts, tests/unit/ai-accuracy-benchmark.test.ts, artifacts/ai-accuracy-benchmark-summary.json
+Evidence: vitest ai-accuracy-benchmark 5/5 PASS; benchmark:ai-accuracy invoice 50/100% co-pilot 20/100%
+Result: DONE — 50 invoice PDF + 20 co-pilot questions regression harness
+Tracker: 13/80 (p1-13 done)
+Next: P1-14 cross-tenant E2E — IDOR detection

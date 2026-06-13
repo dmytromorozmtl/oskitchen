@@ -1907,7 +1907,9 @@
     "ops:validate-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity": "tsx scripts/ops/validate-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity.ts",
     "ops:sync-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-baseline": "tsx scripts/ops/sync-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-baseline.ts",
     "test:ci:era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69": "node ./node_modules/vitest/vitest.mjs run tests/unit/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69.test.ts tests/unit/validate-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity.test.ts tests/unit/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69-cert-live.test.ts tests/unit/launch-wizard-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-era69.test.ts tests/unit/owner-daily-briefing-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-era69.test.ts",
-    "test:ci:era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69-cert-live.test.ts"
+    "test:ci:era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69-cert-live.test.ts",
+    "test:ci:ai-accuracy-benchmark": "node ./node_modules/vitest/vitest.mjs run tests/unit/ai-accuracy-benchmark.test.ts",
+    "benchmark:ai-accuracy": "tsx scripts/run-ai-accuracy-benchmark.ts"
   },
   "dependencies": {
     "@alloc/quick-lru": "^5.2.0",
