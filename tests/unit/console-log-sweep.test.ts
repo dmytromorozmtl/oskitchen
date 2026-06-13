@@ -47,6 +47,7 @@ describe("console.log sweep (P1-38)", () => {
     expect(eslint).toContain("no-console");
 
     const workflow = readFileSync(join(ROOT, CONSOLE_LOG_SWEEP_CI_WORKFLOW), "utf8");
-    expect(workflow).toContain("audit:console-log-surface");
+    expect(workflow).toContain("console-log-surface");
+    expect(workflow).toContain("console-log-sweep-p3-71");
   });
 });

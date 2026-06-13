@@ -46,6 +46,9 @@ jobs:
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 
+      - name: Console.log sweep P3-71 audit
+        run: npm run audit:console-log-sweep-p3-71
+
       - name: Bundle chunk audit (top-5 code-split wiring)
         run: npm run audit -- bundle-chunks
 

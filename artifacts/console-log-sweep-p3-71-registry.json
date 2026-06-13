@@ -1,0 +1,12 @@
+{
+  "policyId": "console-log-sweep-p3-71-v1",
+  "department": "Backend",
+  "upstreamPolicyId": "console-log-sweep-p1-38-v1",
+  "runtimeDirs": ["app", "components", "actions", "services"],
+  "auditScripts": [
+    "audit:console-log-sweep-p3-71",
+    "check:console-log-sweep-p3-71",
+    "audit:console-log-surface",
+    "test:ci:console-log-sweep:cert"
+  ]
+}
