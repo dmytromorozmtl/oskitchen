@@ -8500,3 +8500,15 @@ Evidence: consolidate PASS afterTotal=179; vitest npm-script-consolidation 4/4 P
 Result: DONE — npm script surface <200 with archive router
 Tracker: 16/80 (p1-16 done)
 Next: P1-17 archive inactive workflows 121→40
+
+---
+Cycle: ultimate-v11-17
+Timestamp: 2026-06-13T19:01:00.000Z
+Task: P1-17 archive inactive GitHub workflows 121→40
+Department: DevOps
+Action: Archived 88 era25/ops theater workflows to .github/archive/workflows/inactive; 33 active pilot/engineering workflows remain
+Files: lib/devops/github-workflow-archive-policy.ts, scripts/{archive-inactive-github-workflows,audit-github-workflow-surface}.ts, tests/unit/github-workflow-archive.test.ts, .github/archive/workflows/inactive/*
+Evidence: archive PASS active=33 archived=88; vitest github-workflow-archive 4/4 PASS; validate-ci-workflow-scripts exit 0
+Result: DONE — GitHub Actions surface 121→33 active (≤40)
+Tracker: 17/80 (p1-17 done)
+Next: P1-18 rate-limit regression — mutation routes

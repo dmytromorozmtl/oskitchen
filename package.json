@@ -184,7 +184,8 @@
     "validate": "tsx scripts/npm-script-router.ts validate",
     "cert": "tsx scripts/npm-script-router.ts cert",
     "start": "node ./node_modules/next/dist/bin/next start",
-    "check:npm-script-surface": "tsx scripts/audit-npm-script-surface.ts --write"
+    "check:npm-script-surface": "tsx scripts/audit-npm-script-surface.ts --write",
+    "check:github-workflow-surface": "tsx scripts/audit-github-workflow-surface.ts --write"
   },
   "dependencies": {
     "@alloc/quick-lru": "^5.2.0",
