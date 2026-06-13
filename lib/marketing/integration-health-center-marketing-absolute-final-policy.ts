@@ -1,9 +1,15 @@
 /**
- * Absolute Final Task 80 — Integration Health Center standalone marketing page.
+ * Absolute Final Task 80 + Blueprint P1-24 — Integration Health Center sales page.
  *
  * @see app/integration-health-center/page.tsx
  * @see app/product/integration-health-center/page.tsx
  */
+
+export const INTEGRATION_HEALTH_SALES_P1_24_POLICY_ID =
+  "integration-health-sales-p1-24-v1" as const;
+
+export const INTEGRATION_HEALTH_CENTER_SALES_CHECK_NPM_SCRIPT =
+  "check:integration-health-center-sales" as const;
 
 export const INTEGRATION_HEALTH_CENTER_MARKETING_ABSOLUTE_FINAL_POLICY_ID =
   "integration-health-center-marketing-absolute-final-v1" as const;
@@ -33,8 +39,12 @@ export const INTEGRATION_HEALTH_CENTER_MARKETING_SALES_DOC =
 export const INTEGRATION_HEALTH_CENTER_MARKETING_REQUIRED_SECTIONS = [
   'data-testid="integration-health-center-marketing-landing"',
   "IntegrationHealthCenterMarketingLanding",
+  "IntegrationHealthDoordashFailureSection",
   "Honest limitations",
 ] as const;
+
+export const INTEGRATION_HEALTH_CENTER_MARKETING_SALES_HOOK =
+  "See exactly why your DoorDash integration failed" as const;
 
 export const INTEGRATION_HEALTH_CENTER_MARKETING_HONESTY_MARKERS = [
   "SKIPPED",
@@ -48,6 +58,8 @@ export const INTEGRATION_HEALTH_CENTER_MARKETING_WIRING_PATHS = [
   INTEGRATION_HEALTH_CENTER_MARKETING_PAGE_PATH,
   INTEGRATION_HEALTH_CENTER_MARKETING_COMPONENT_PATH,
   INTEGRATION_HEALTH_CENTER_MARKETING_CONTENT_PATH,
+  "lib/marketing/integration-health-sales-p1-24-content.ts",
+  "components/marketing/integration-health-doordash-failure-section.tsx",
   INTEGRATION_HEALTH_CENTER_MARKETING_MOAT_COMPONENT,
   "app/product/integration-health-center/page.tsx",
   INTEGRATION_HEALTH_CENTER_MARKETING_SALES_DOC,

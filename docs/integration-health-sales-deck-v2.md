@@ -21,6 +21,8 @@
 
 **Headline for June calls:** *"We don't just score the integration — we assign the recovery path and track whether auto-steps worked."*
 
+**P1-24 sales hook (public landing):** *"See exactly why your DoorDash integration failed"* — live at [`/integration-health-center`](/integration-health-center) with illustrative failure codes (AUTH_DEGRADED, WEBHOOK_SIGNATURE_MISMATCH, STALE_CATALOG_SYNC, PARTNER_CREDS_MISSING).
+
 ---
 
 ## Slide 1 — One-line pitch

@@ -5,12 +5,17 @@ import {
   INTEGRATION_HEALTH_CENTER_PRODUCT_FEATURES,
 } from "@/lib/integrations/integration-health-center-product-content";
 
+import {
+  INTEGRATION_HEALTH_CENTER_SALES_HOOK,
+  INTEGRATION_HEALTH_CENTER_SALES_HOOK_SUBTITLE,
+} from "@/lib/marketing/integration-health-sales-p1-24-content";
+
 export const INTEGRATION_HEALTH_CENTER_MARKETING_PATH = "/integration-health-center" as const;
 
 export const INTEGRATION_HEALTH_CENTER_MARKETING_META = {
-  title: "Integration Health Center — Honest Channel Monitoring | OS Kitchen",
+  title: "See Why Your DoorDash Integration Failed — Integration Health Center | OS Kitchen",
   description:
-    "Integration Health Center shows what is actually connected: health scores, predictive alerts, recovery playbooks, and SKIPPED labels — not fake green badges. 14-day free trial.",
+    "See exactly why your DoorDash integration failed — auth errors, webhook signatures, stale menu sync, and SKIPPED labels with recovery playbooks. Honest integration monitoring. 14-day free trial.",
   keywords: [
     "restaurant integration monitoring",
     "integration health dashboard",
@@ -24,11 +29,10 @@ export const INTEGRATION_HEALTH_CENTER_MARKETING_META = {
 export const INTEGRATION_HEALTH_CENTER_MARKETING_BADGE =
   "Main differentiator — honest integration ops" as const;
 
-export const INTEGRATION_HEALTH_CENTER_MARKETING_H1 =
-  "Integration Health Center — Know What's Connected Before Rush Hour" as const;
+export const INTEGRATION_HEALTH_CENTER_MARKETING_H1 = INTEGRATION_HEALTH_CENTER_SALES_HOOK;
 
 export const INTEGRATION_HEALTH_CENTER_MARKETING_SUBTITLE =
-  "Toast and Square assume marketplaces are live. OS Kitchen proves connection state — health scores, webhook alerts, recovery playbooks, and SKIPPED labels instead of fake green badges." as const;
+  INTEGRATION_HEALTH_CENTER_SALES_HOOK_SUBTITLE;
 
 export const INTEGRATION_HEALTH_CENTER_MARKETING_PAIN_POINTS = [
   {

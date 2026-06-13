@@ -8584,3 +8584,15 @@ Evidence: vitest icp-landing-pages 5/5 PASS; audit:icp-landing-pages PASS (pilot
 Result: DONE — ICP landing pages with pilot highlights on meal prep + ghost kitchen
 Tracker: 23/80 (p1-23 done)
 Next: P1-24 Integration Health Center sales page
+
+---
+Cycle: ultimate-v11-24
+Timestamp: 2026-06-13T21:35:00.000Z
+Task: P1-24 Integration Health Center sales page — "See exactly why your DoorDash integration failed"
+Department: Marketing
+Action: Added DoorDash failure diagnostic section to /integration-health-center; updated hero H1 + SEO to P1-24 sales hook; wired check:integration-health-center-sales + CI cert scripts
+Files: lib/marketing/integration-health-sales-p1-24-content.ts, components/marketing/integration-health-doordash-failure-section.tsx, components/marketing/integration-health-center-marketing-landing.tsx, lib/marketing/integration-health-center-marketing-{content,absolute-final-policy,audit}.ts, tests/unit/integration-health-center-marketing-absolute-final.test.ts, docs/integration-health-sales-deck-v2.md, package.json
+Evidence: vitest integration-health-center-marketing 5/5 PASS; wiring audit PASS (DoorDash sales hook + failure section)
+Result: DONE — Integration Health Center sales page with DoorDash failure diagnostic
+Tracker: 24/80 (p1-24 done)
+Next: P1-25 design partner outreach — 20 Montreal/Canada operators

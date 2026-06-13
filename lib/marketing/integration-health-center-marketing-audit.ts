@@ -10,6 +10,7 @@ import {
   INTEGRATION_HEALTH_CENTER_MARKETING_ROUTE,
   INTEGRATION_HEALTH_CENTER_MARKETING_REQUIRED_SECTIONS,
   INTEGRATION_HEALTH_CENTER_MARKETING_SALES_DOC,
+  INTEGRATION_HEALTH_CENTER_MARKETING_SALES_HOOK,
   INTEGRATION_HEALTH_CENTER_MARKETING_WIRING_PATHS,
   INTEGRATION_HEALTH_CENTER_PRODUCT_ROUTE,
 } from "@/lib/marketing/integration-health-center-marketing-absolute-final-policy";
@@ -50,6 +51,7 @@ export function auditIntegrationHealthCenterMarketingWiring(
     join(root, "app/product/integration-health-center/page.tsx"),
     "utf8",
   );
+  const salesDoc = readFileSync(join(root, INTEGRATION_HEALTH_CENTER_MARKETING_SALES_DOC), "utf8");
 
   for (const section of INTEGRATION_HEALTH_CENTER_MARKETING_REQUIRED_SECTIONS) {
     if (!componentSource.includes(section) && !pageSource.includes(section)) {
@@ -67,6 +69,17 @@ export function auditIntegrationHealthCenterMarketingWiring(
     failures.push("content missing marketing route constant");
   }
 
+  if (
+    !contentSource.includes(INTEGRATION_HEALTH_CENTER_MARKETING_SALES_HOOK) &&
+    !componentSource.includes(INTEGRATION_HEALTH_CENTER_MARKETING_SALES_HOOK)
+  ) {
+    failures.push("missing P1-24 DoorDash sales hook in content or landing");
+  }
+
+  if (!salesDoc.includes(INTEGRATION_HEALTH_CENTER_MARKETING_SALES_HOOK)) {
+    failures.push("sales deck missing DoorDash sales hook");
+  }
+
   if (!moatSource.includes(INTEGRATION_HEALTH_CENTER_MARKETING_ROUTE)) {
     failures.push("home moat component missing link to marketing page");
   }
@@ -75,7 +88,6 @@ export function auditIntegrationHealthCenterMarketingWiring(
     failures.push("product page missing cross-link to marketing page");
   }
 
-  const salesDoc = readFileSync(join(root, INTEGRATION_HEALTH_CENTER_MARKETING_SALES_DOC), "utf8");
   if (
     !salesDoc.includes(INTEGRATION_HEALTH_CENTER_MARKETING_ROUTE) &&
     !salesDoc.includes(INTEGRATION_HEALTH_CENTER_PRODUCT_ROUTE)
