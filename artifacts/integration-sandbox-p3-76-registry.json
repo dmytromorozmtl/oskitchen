@@ -1,0 +1,12 @@
+{
+  "policyId": "integration-sandbox-p3-76-v1",
+  "department": "Backend",
+  "upstreamPolicyId": "integration-sandbox-p1-33-v1",
+  "liveSurfaces": 18,
+  "auditScripts": [
+    "audit:integration-sandbox-p3-76",
+    "check:integration-sandbox-p3-76",
+    "check:integration-sandbox",
+    "test:ci:integration-sandbox-p3-76:cert"
+  ]
+}

@@ -52,6 +52,9 @@ jobs:
       - name: Demo tenant seed P3-75 audit
         run: npm run audit:demo-tenant-seed-p3-75
 
+      - name: Integration sandbox P3-76 audit
+        run: npm run audit:integration-sandbox-p3-76
+
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 

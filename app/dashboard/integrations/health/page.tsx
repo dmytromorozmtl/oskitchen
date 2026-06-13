@@ -19,6 +19,7 @@ import { CapabilityBadge } from "@/components/capabilities/capability-badge";
 import { BetaIntegrationEnvReadinessPanel } from "@/components/integrations/beta-integration-env-readiness-panel";
 import { LiveIntegrationDodPanel } from "@/components/integrations/live-integration-dod-panel";
 import { IntegrationForceSyncPanel } from "@/components/integrations/integration-force-sync-panel";
+import { IntegrationSandboxModePanel } from "@/components/integrations/integration-sandbox-mode-panel";
 import { WebhookReplayHealthPanel } from "@/components/integrations/webhook-replay-health-panel";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
@@ -27,6 +28,7 @@ import {
 } from "@/lib/scope/cached-workspace-resource-scope";
 import { describeIntegrationConnectionHealth } from "@/lib/integrations/integration-connection-health";
 import { buildWebhookQueueFocusSnapshot } from "@/lib/integrations/webhook-queue-focus-era18";
+import { buildIntegrationSandboxModeSnapshot } from "@/lib/integrations/integration-sandbox-mode-snapshot";
 import { prisma } from "@/lib/prisma";
 
 export default async function IntegrationHealthPage() {
@@ -63,6 +65,7 @@ export default async function IntegrationHealthPage() {
     invalidSignatureCount,
     processingErrorCount,
   });
+  const sandboxSnapshot = buildIntegrationSandboxModeSnapshot();
 
   return (
     <PageShell narrow className="space-y-8">
@@ -81,6 +84,8 @@ export default async function IntegrationHealthPage() {
       <IntegrationForceSyncPanel />
 
       <BetaIntegrationEnvReadinessPanel />
+
+      <IntegrationSandboxModePanel snapshot={sandboxSnapshot} />
 
       <LiveIntegrationDodPanel />
 
