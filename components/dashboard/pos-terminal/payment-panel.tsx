@@ -98,9 +98,10 @@ export function PaymentPanel(props: PosTerminalPaymentPanelProps) {
               placeholder="e.g. 100"
               className={cn("rounded-xl", posTouchInputClass)}
               disabled={!props.selectedCustomer}
+              data-testid="pos-loyalty-redeem-input"
             />
             {props.selectedCustomer && props.loyaltyBalance != null ? (
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-xs text-muted-foreground" data-testid="pos-loyalty-balance">
                 {props.loyaltyBalance} points available
               </p>
             ) : null}

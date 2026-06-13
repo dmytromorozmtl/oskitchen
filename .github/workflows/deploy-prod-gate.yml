@@ -61,6 +61,9 @@ jobs:
       - name: POS checkout full scenario E2E audit
         run: npm run audit -- pos-checkout-e2e
 
+      - name: Loyalty earn/redeem E2E audit
+        run: npm run audit -- loyalty-earn-redeem-e2e
+
       - name: KDS bump → expo E2E audit
         run: npm run audit -- kds-bump-expo-e2e
 

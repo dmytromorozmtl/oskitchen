@@ -8668,3 +8668,15 @@ Evidence: vitest pricing-page-p1-30 5/5 PASS; audit:pricing-page PASS (LOI-DP-00
 Result: DONE — public Design Partner pilot SKU on pricing page
 Tracker: 30/80 (p1-30 done)
 Next: P2-31 loyalty earn/redeem E2E
+
+---
+Cycle: ultimate-v11-31
+Timestamp: 2026-06-14T01:00:00.000Z
+Task: P2-31 loyalty earn/redeem E2E — earn points → redeem at checkout → balance updated
+Department: QA
+Action: Added Playwright loyalty earn/redeem E2E — POS customer attach, earn on first sale, redeem 100 pts on second, DB balance assert; pos-loyalty-redeem-input + pos-loyalty-balance test ids; P2-31 policy/audit; wired audit:loyalty-earn-redeem-e2e + deploy gate
+Files: e2e/loyalty-earn-redeem-e2e.spec.ts, e2e/helpers/loyalty-earn-redeem-e2e-{flow,ready}.ts, lib/loyalty/loyalty-earn-redeem-e2e-{policy,audit}.ts, components/dashboard/pos-terminal/payment-panel.tsx, scripts/audit-loyalty-earn-redeem-e2e.ts, tests/unit/loyalty-earn-redeem-e2e.test.ts, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml, package.json
+Evidence: vitest loyalty-earn-redeem-e2e 6/6 PASS; audit:loyalty-earn-redeem-e2e PASS
+Result: DONE — loyalty earn/redeem E2E on POS checkout with balance verification
+Tracker: 31/80 (p2-31 done)
+Next: P2-32 QR scan→storefront→KDS E2E
