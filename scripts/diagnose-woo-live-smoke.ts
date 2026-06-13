@@ -6,9 +6,10 @@ import { IntegrationProvider, PrismaClient } from "@prisma/client";
 
 import { testConnection } from "@/services/integrations/woocommerce";
 
+import { logger } from "@/lib/logger";
+
 import { loadSmokeEnv } from "./lib/load-smoke-env";
 import {
-import { logger } from "@/lib/logger";
   readWooCommerceLiveSmokeEnv,
   listMissingWooCommerceLiveSmokeEnvVars,
   wooStoreHostLabel,
