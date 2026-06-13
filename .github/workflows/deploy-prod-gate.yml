@@ -208,6 +208,9 @@ jobs:
       - name: Product Hunt launch prep P3-65 audit
         run: npm run audit -- product-hunt-launch-prep-p3-65
 
+      - name: Email nurture sequence P3-66 audit
+        run: npm run audit -- email-nurture-sequence-p3-66
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 

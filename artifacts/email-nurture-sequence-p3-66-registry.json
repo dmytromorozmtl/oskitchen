@@ -1,0 +1,12 @@
+{
+  "policyId": "email-nurture-sequence-p3-66-v1",
+  "department": "Marketing",
+  "upstreamPolicyId": "email-nurture-5-sequence-mkt19-v1",
+  "playbookDoc": "docs/email-nurture-5-sequence.md",
+  "emailCount": 5,
+  "auditScripts": [
+    "audit:email-nurture-sequence-p3-66",
+    "check:email-nurture-sequence-p3-66",
+    "test:ci:email-nurture-sequence:cert"
+  ]
+}
