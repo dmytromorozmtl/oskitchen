@@ -35,7 +35,7 @@ Canonical machine-readable list: `lib/marketing/design-partner-outreach-content.
 | ICP segment (meal prep, ghost kitchen, commissary, ≤5 locations in pilot scope) | **Y** |
 | Owner/ops lead available for weekly 30–45 min feedback | **Y** |
 | Accepts honest **BETA** / **SKIPPED** integration labels | **Y** |
-| Completed forbidden claims training (when P1-26 ships) | **Y** |
+| Completed forbidden claims training (P1-26 cheat-sheet + quiz ≥8/10) | **Y** |
 | LOI template reviewed with operator before production traffic | **Y** |
 
 Use [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) after warm intro or inbound `/book-demo` — not unsolicited bulk email.

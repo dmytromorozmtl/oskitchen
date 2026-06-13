@@ -8608,3 +8608,15 @@ Evidence: vitest design-partner-outreach 5/5 PASS; audit:design-partner-outreach
 Result: DONE — design partner outreach list for Montreal + Canada
 Tracker: 25/80 (p1-25 done)
 Next: P1-26 forbidden claims training — team cheat-sheet
+
+---
+Cycle: ultimate-v11-26
+Timestamp: 2026-06-13T22:35:00.000Z
+Task: P1-26 forbidden claims training — team cheat-sheet SAFE / CAVEAT / не говорить
+Department: Marketing
+Action: Added forbidden-claims-team-cheat-sheet.md (20 rows); cheat-sheet content module; extended training audit + quiz page links; wired audit:forbidden-claims-training + check:forbidden-claims-training
+Files: docs/forbidden-claims-team-cheat-sheet.md, lib/marketing/forbidden-claims-cheat-sheet-content.ts, lib/marketing/forbidden-claims-training-{policy,audit}.ts, docs/forbidden-claims-training.md, marketing/forbidden-claims-training.md, app/trust/forbidden-claims-training/page.tsx, tests/unit/forbidden-claims-training.test.ts, docs/design-partner-outreach.md, package.json
+Evidence: vitest forbidden-claims-training 6/6 PASS; audit:forbidden-claims-training PASS (cheat-sheet SAFE/CAVEAT/NEVER wired)
+Result: DONE — forbidden claims team cheat-sheet for sales demos
+Tracker: 26/80 (p1-26 done)
+Next: P1-27 competitor comparison pages — Toast, Square, Lightspeed

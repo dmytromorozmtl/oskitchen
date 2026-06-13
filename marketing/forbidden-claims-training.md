@@ -2,7 +2,7 @@
 
 **Audience:** Sales, solutions, customer success, founders doing demos  
 **Policy:** `era17-pilot-forbidden-claims-enforcement-v1`  
-**Canonical training (quiz + certification):** [`docs/forbidden-claims-training.md`](../docs/forbidden-claims-training.md) · **Interactive:** [`/trust/forbidden-claims-training`](/trust/forbidden-claims-training)  
+**Canonical training (quiz + certification):** [`docs/forbidden-claims-training.md`](../docs/forbidden-claims-training.md) · **Cheat-sheet:** [`docs/forbidden-claims-team-cheat-sheet.md`](../docs/forbidden-claims-team-cheat-sheet.md) · **Interactive:** [`/trust/forbidden-claims-training`](/trust/forbidden-claims-training)  
 **Claims registry:** [`config/marketing/claims-registry.json`](../config/marketing/claims-registry.json)
 
 > **Note:** This file is the marketing-scan stub. Full quiz, answer key, and certification record live in **`docs/forbidden-claims-training.md`**.

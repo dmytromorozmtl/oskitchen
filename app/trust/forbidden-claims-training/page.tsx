@@ -51,6 +51,10 @@ export default function ForbiddenClaimsTrainingPage() {
             <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
               docs/forbidden-claims-training.md
             </code>
+            {" · "}
+            <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
+              docs/forbidden-claims-team-cheat-sheet.md
+            </code>
           </p>
         </div>
 

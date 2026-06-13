@@ -1,7 +1,8 @@
 # Forbidden claims training — Sales & GTM
 
 **Interactive quiz & certification:** [`/trust/forbidden-claims-training`](/trust/forbidden-claims-training) — pass ≥8/10 before customer demos.  
-**Headline:** Forbidden claims training — quiz & certification (`forbidden-claims-training-p1-84-v1`)
+**Team cheat-sheet (print before demos):** [`forbidden-claims-team-cheat-sheet.md`](./forbidden-claims-team-cheat-sheet.md) — SAFE · CAVEAT · **не говорить**  
+**Headline:** Forbidden claims training — quiz & certification (`forbidden-claims-training-p1-84-v1` + `forbidden-claims-cheat-sheet-p1-26-v1`)
 
 **Version:** 1.0 · **June 2026  
 **Audience:** Sales, solutions engineering, customer success, founders on demo calls  

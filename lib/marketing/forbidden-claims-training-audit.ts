@@ -2,6 +2,9 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import {
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_DOC,
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_P1_26_POLICY_ID,
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_CONTENT_PATH,
   FORBIDDEN_CLAIMS_TRAINING_CERTIFICATION_TEST_ID,
   FORBIDDEN_CLAIMS_TRAINING_DOC,
   FORBIDDEN_CLAIMS_TRAINING_HEADLINE,
@@ -15,11 +18,19 @@ import {
   FORBIDDEN_CLAIMS_TRAINING_ROUTE,
   FORBIDDEN_CLAIMS_TRAINING_WIRING_PATHS,
 } from "@/lib/marketing/forbidden-claims-training-policy";
+import {
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_COLUMN_LABELS,
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_ENTRIES,
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_HEADLINE,
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_MIN_ENTRIES,
+} from "@/lib/marketing/forbidden-claims-cheat-sheet-content";
 
 export type ForbiddenClaimsTrainingAuditSummary = {
   policyId: typeof FORBIDDEN_CLAIMS_TRAINING_POLICY_ID;
+  cheatSheetPolicyId: typeof FORBIDDEN_CLAIMS_CHEAT_SHEET_P1_26_POLICY_ID;
   wiringComplete: boolean;
   docWired: boolean;
+  cheatSheetWired: boolean;
   quizComponentWired: boolean;
   pageWired: boolean;
   questionCountCorrect: boolean;
@@ -49,7 +60,27 @@ export function auditForbiddenClaimsTraining(
       source.includes(FORBIDDEN_CLAIMS_TRAINING_HEADLINE) &&
       source.includes(FORBIDDEN_CLAIMS_TRAINING_ROUTE) &&
       source.includes("Certification quiz") &&
-      source.includes(String(FORBIDDEN_CLAIMS_TRAINING_PASS_THRESHOLD));
+      source.includes(String(FORBIDDEN_CLAIMS_TRAINING_PASS_THRESHOLD)) &&
+      (source.includes(FORBIDDEN_CLAIMS_CHEAT_SHEET_DOC) ||
+        source.includes("forbidden-claims-team-cheat-sheet"));
+  }
+
+  let cheatSheetWired = false;
+  if (existsSync(join(root, FORBIDDEN_CLAIMS_CHEAT_SHEET_DOC))) {
+    const source = readFileSync(join(root, FORBIDDEN_CLAIMS_CHEAT_SHEET_DOC), "utf8");
+    const contentSource = existsSync(join(root, FORBIDDEN_CLAIMS_CHEAT_SHEET_CONTENT_PATH))
+      ? readFileSync(join(root, FORBIDDEN_CLAIMS_CHEAT_SHEET_CONTENT_PATH), "utf8")
+      : "";
+    cheatSheetWired =
+      source.includes(FORBIDDEN_CLAIMS_CHEAT_SHEET_HEADLINE) &&
+      source.includes(FORBIDDEN_CLAIMS_CHEAT_SHEET_P1_26_POLICY_ID) &&
+      FORBIDDEN_CLAIMS_CHEAT_SHEET_COLUMN_LABELS.every((label) => source.includes(label)) &&
+      source.includes("не говорить") &&
+      source.includes("## SAFE") &&
+      source.includes("## CAVEAT") &&
+      source.includes("## NEVER") &&
+      contentSource.includes("FORBIDDEN_CLAIMS_CHEAT_SHEET_ENTRIES") &&
+      FORBIDDEN_CLAIMS_CHEAT_SHEET_ENTRIES.length >= FORBIDDEN_CLAIMS_CHEAT_SHEET_MIN_ENTRIES;
   }
 
   if (existsSync(join(root, FORBIDDEN_CLAIMS_TRAINING_QUIZ_COMPONENT))) {
@@ -92,6 +123,7 @@ export function auditForbiddenClaimsTraining(
   const passed =
     wiringComplete &&
     docWired &&
+    cheatSheetWired &&
     quizComponentWired &&
     pageWired &&
     questionCountCorrect &&
@@ -101,8 +133,10 @@ export function auditForbiddenClaimsTraining(
 
   return {
     policyId: FORBIDDEN_CLAIMS_TRAINING_POLICY_ID,
+    cheatSheetPolicyId: FORBIDDEN_CLAIMS_CHEAT_SHEET_P1_26_POLICY_ID,
     wiringComplete,
     docWired,
+    cheatSheetWired,
     quizComponentWired,
     pageWired,
     questionCountCorrect,
@@ -118,6 +152,7 @@ export function formatForbiddenClaimsTrainingAuditLines(
 ): string[] {
   return [
     `Forbidden claims training audit (${summary.policyId})`,
+    `Cheat sheet (${summary.cheatSheetPolicyId}): ${summary.cheatSheetWired ? "yes" : "no"}`,
     `Wiring paths: ${summary.wiringComplete ? "yes" : "no"}`,
     `Doc (${FORBIDDEN_CLAIMS_TRAINING_DOC}): ${summary.docWired ? "yes" : "no"}`,
     `Quiz (${FORBIDDEN_CLAIMS_TRAINING_QUIZ_TEST_ID}): ${summary.quizComponentWired ? "yes" : "no"}`,

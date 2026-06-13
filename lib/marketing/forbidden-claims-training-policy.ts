@@ -1,9 +1,22 @@
 /**
- * Blueprint P1-84 — Forbidden claims training (quiz + certification).
+ * Blueprint P1-84 + P1-26 — Forbidden claims training (quiz + team cheat-sheet).
  *
  * @see docs/forbidden-claims-training.md
+ * @see docs/forbidden-claims-team-cheat-sheet.md
  * @see app/trust/forbidden-claims-training/page.tsx
  */
+
+export const FORBIDDEN_CLAIMS_CHEAT_SHEET_P1_26_POLICY_ID =
+  "forbidden-claims-cheat-sheet-p1-26-v1" as const;
+
+export const FORBIDDEN_CLAIMS_CHEAT_SHEET_DOC =
+  "docs/forbidden-claims-team-cheat-sheet.md" as const;
+
+export const FORBIDDEN_CLAIMS_CHEAT_SHEET_CONTENT_PATH =
+  "lib/marketing/forbidden-claims-cheat-sheet-content.ts" as const;
+
+export const FORBIDDEN_CLAIMS_TRAINING_CHECK_NPM_SCRIPT =
+  "check:forbidden-claims-training" as const;
 
 export const FORBIDDEN_CLAIMS_TRAINING_POLICY_ID =
   "forbidden-claims-training-p1-84-v1" as const;
@@ -59,7 +72,9 @@ export const FORBIDDEN_CLAIMS_TRAINING_CI_WORKFLOW =
 
 export const FORBIDDEN_CLAIMS_TRAINING_WIRING_PATHS = [
   FORBIDDEN_CLAIMS_TRAINING_DOC,
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_DOC,
   FORBIDDEN_CLAIMS_TRAINING_CONTENT_PATH,
+  FORBIDDEN_CLAIMS_CHEAT_SHEET_CONTENT_PATH,
   FORBIDDEN_CLAIMS_TRAINING_QUIZ_COMPONENT,
   FORBIDDEN_CLAIMS_TRAINING_PAGE,
   "lib/marketing/forbidden-claims-training-policy.ts",
