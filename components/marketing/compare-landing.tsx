@@ -35,7 +35,7 @@ export function CompareLanding({ content }: Props) {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" data-testid={`compare-landing-${content.slug}`}>
       <CompareViewTracker slug={content.slug} />
       <BreadcrumbSchema items={breadcrumbSchemaItems} />
       <FAQSchema
@@ -76,7 +76,7 @@ export function CompareLanding({ content }: Props) {
           <SquarePositioningSection variant="compact" className="border-t-0 py-12" />
         ) : null}
 
-        {content.slug === 'kitchenos-vs-lightspeed' ? (
+        {content.slug === 'lightspeed' ? (
           <LightspeedPositioningSection variant="compact" className="border-t-0 py-12" />
         ) : null}
 

@@ -8620,3 +8620,15 @@ Evidence: vitest forbidden-claims-training 6/6 PASS; audit:forbidden-claims-trai
 Result: DONE — forbidden claims team cheat-sheet for sales demos
 Tracker: 26/80 (p1-26 done)
 Next: P1-27 competitor comparison pages — Toast, Square, Lightspeed
+
+---
+Cycle: ultimate-v11-27
+Timestamp: 2026-06-13T23:05:00.000Z
+Task: P1-27 competitor comparison pages — /compare/toast, /compare/square, /compare/lightspeed (honest)
+Department: Marketing
+Action: Canonicalized /compare/lightspeed (alias kitchenos-vs-lightspeed); strengthened trademark disclaimers on Toast/Square/Lightspeed; P1-27 audit + compare landing test ids; wired audit:competitor-comparison-pages + check
+Files: lib/marketing/compare-content.ts, lib/marketing/competitor-comparison-pages-p1-27-{policy,audit}.ts, components/marketing/compare-landing.tsx, app/compare/[slug]/page.tsx, lib/marketing/lightspeed-positioning-{policy,audit}.ts, docs/competitor-comparison-pages-p1-27.md, tests/unit/competitor-comparison-pages-p1-27.test.ts, package.json
+Evidence: vitest competitor-comparison-pages-p1-27 5/5 PASS; audit:competitor-comparison-pages PASS
+Result: DONE — honest competitor comparison pages for Toast, Square, Lightspeed
+Tracker: 27/80 (p1-27 done)
+Next: P1-28 SEO blog articles — 6 articles

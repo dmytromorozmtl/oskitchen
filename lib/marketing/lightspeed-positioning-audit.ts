@@ -64,7 +64,7 @@ export function auditLightspeedPositioning(
     const source = readFileSync(join(root, LIGHTSPEED_POSITIONING_COMPARE_LANDING), "utf8");
     compareLandingWired =
       source.includes("LightspeedPositioningSection") &&
-      source.includes("kitchenos-vs-lightspeed");
+      source.includes("'lightspeed'");
   }
 
   if (existsSync(join(root, LIGHTSPEED_POSITIONING_PRICING_PAGE))) {

@@ -54,7 +54,7 @@ export const COMPETITOR_BATTLE_CARDS_P1_85_ENTRIES: readonly CompetitorBattleCar
     icpFit: "1–3 location operators optimizing kitchen execution — not 20+ site enterprise RFP.",
     talkTrack:
       "Lightspeed has proven multi-site deployments. We match software ambition but verify LIVE integrations and customer proof before claiming parity.",
-    comparePath: "/compare/kitchenos-vs-lightspeed",
+    comparePath: "/compare/lightspeed",
   },
   {
     slug: "poster",

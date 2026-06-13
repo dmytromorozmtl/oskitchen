@@ -17,7 +17,7 @@ export type ComparePageSlug =
   | 'restaurant365'
   | 'touchbistro'
   | 'olo'
-  | 'kitchenos-vs-lightspeed'
+  | 'lightspeed'
   | 'kitchenos-vs-7shifts'
   | 'kitchenos-vs-meez';
 
@@ -200,7 +200,7 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Multi-brand / ghost kitchen', kitchenos: '✅ Command center', competitorA: 'Limited', competitorB: '❌' },
       ],
     },
-    disclaimer: 'Toast is a strong fit for full-service restaurants that want bundled hardware and payments. OS Kitchen fits hybrid operators who prioritize flexible commerce + kitchen execution.',
+    disclaimer: 'Toast® is a trademark of Toast, Inc. OS Kitchen is not affiliated with or endorsed by Toast. Toast is a strong fit for full-service restaurants that want bundled hardware and payments. OS Kitchen fits hybrid operators who prioritize flexible commerce + kitchen execution.',
     whenToChoose: [
       { title: 'Choose Toast when', body: 'You need certified hardware, local field support, and a payments-first rollout with minimal engineering.' },
       { title: 'Choose OS Kitchen when', body: 'You run meal prep, ghost kitchen, or hybrid models and need production + storefront + POS on one tenant graph.' },
@@ -234,7 +234,7 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Inventory costing', kitchenos: '✅ AVT + theft', competitorA: 'Basic', competitorB: '❌' },
       ],
     },
-    disclaimer: 'Square remains excellent for single-location cafés that primarily need payments. OS Kitchen targets operators with recurring production load.',
+    disclaimer: 'Square® is a trademark of Block, Inc. OS Kitchen is not affiliated with or endorsed by Square. Square remains excellent for single-location cafés that primarily need payments. OS Kitchen targets operators with recurring production load.',
     whenToChoose: [
       { title: 'Choose Square when', body: 'You need the simplest counter POS and will add apps as you grow.' },
       { title: 'Choose OS Kitchen when', body: 'Orders drive production, packing, or delivery — you need one system of record.' },
@@ -441,15 +441,16 @@ export const COMPARE_PAGES: ComparePageContent[] = [
     primaryCta: { label: 'Compare capabilities', href: '/capabilities?utm_source=compare&utm_medium=organic&utm_campaign=olo' },
   },
   {
-    slug: 'kitchenos-vs-lightspeed',
-    path: '/compare/kitchenos-vs-lightspeed',
+    slug: 'lightspeed',
+    path: '/compare/lightspeed',
     metaTitle: 'OS Kitchen vs Lightspeed — Restaurant POS Comparison 2026',
     metaDescription:
       'Lightspeed vs OS Kitchen: dining-room POS vs full kitchen ops — production boards, meal prep, storefront, and multi-brand ghost kitchens.',
     eyebrow: 'OS Kitchen vs Lightspeed',
     headline: 'Lightspeed for the floor — OS Kitchen for the whole kitchen',
     subheadline: `${LIGHTSPEED_POSITIONING_PRIMARY_LINE} Lightspeed wins on dining-room POS. OS Kitchen unifies production, KDS, storefront, and multi-channel fulfillment for operators who live in the back of house.`,
-    methodology: 'Feature matrix from public docs; verify pricing with vendors.',
+    methodology:
+      'Feature matrix from public docs; verify pricing with vendors. Lightspeed® is not affiliated with OS Kitchen.',
     comparisonTag: 'Hospitality POS vs ops platform',
     comparison: {
       title: 'Lightspeed vs OS Kitchen',
@@ -460,10 +461,12 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Production / batch planning', kitchenos: '✅ Native', competitorA: '❌', competitorB: 'Spreadsheets' },
         { feature: 'Meal prep preorders', kitchenos: '✅', competitorA: 'Add-ons', competitorB: '❌' },
         { feature: 'Ghost kitchen multi-brand', kitchenos: '✅', competitorA: 'Limited', competitorB: '❌' },
+        { feature: 'Integration Health honesty', kitchenos: '✅ PASS/SKIPPED/FAILED', competitorA: 'Varies', competitorB: '❌' },
         { feature: 'Recipe costing depth', kitchenos: '✅ Costing module', competitorA: 'Basic', competitorB: 'Manual' },
       ],
     },
-    disclaimer: 'Lightspeed is a strong choice for traditional dining rooms. OS Kitchen fits when production complexity and owned preorder drive margin.',
+    disclaimer:
+      'Lightspeed® is a trademark of its respective owner. OS Kitchen is not affiliated with or endorsed by Lightspeed. Matrix is directional — confirm current plans before purchase.',
     whenToChoose: [
       { title: 'Choose Lightspeed when', body: 'Front-of-house speed and payments are the primary bottleneck.' },
       { title: 'Choose OS Kitchen when', body: 'Weekly menus, commissary production, or multi-channel fulfillment dominate your week.' },
@@ -551,8 +554,19 @@ export const COMPARE_PAGES: ComparePageContent[] = [
 
 export const COMPARE_SLUGS = COMPARE_PAGES.map((p) => p.slug);
 
+/** Legacy compare URLs → canonical slug (P1-27). */
+export const COMPARE_SLUG_ALIASES: Record<string, ComparePageSlug> = {
+  'kitchenos-vs-lightspeed': 'lightspeed',
+};
+
+export const COMPARE_STATIC_PARAMS = [
+  ...COMPARE_SLUGS,
+  ...Object.keys(COMPARE_SLUG_ALIASES),
+] as const;
+
 export function comparePageBySlug(slug: string): ComparePageContent | undefined {
-  return COMPARE_PAGES.find((p) => p.slug === slug);
+  const resolved = COMPARE_SLUG_ALIASES[slug] ?? slug;
+  return COMPARE_PAGES.find((p) => p.slug === resolved);
 }
 
 export const COMPARE_HUB_COPY = {

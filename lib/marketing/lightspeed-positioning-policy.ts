@@ -14,8 +14,7 @@ export const LIGHTSPEED_POSITIONING_PRIMARY_LINE =
 
 export const LIGHTSPEED_POSITIONING_DOC = "docs/lightspeed-positioning.md" as const;
 
-export const LIGHTSPEED_POSITIONING_COMPARE_PATH =
-  "/compare/kitchenos-vs-lightspeed" as const;
+export const LIGHTSPEED_POSITIONING_COMPARE_PATH = "/compare/lightspeed" as const;
 
 export const LIGHTSPEED_POSITIONING_CONTENT_PATH =
   "lib/marketing/lightspeed-positioning-content.ts" as const;

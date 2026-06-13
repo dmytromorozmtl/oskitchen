@@ -36,7 +36,7 @@ Lightspeed® is **not affiliated** with OS Kitchen. **Verify** current Lightspee
 
 ## Wired surfaces
 
-- `/compare/kitchenos-vs-lightspeed` — compare landing + positioning section
+- `/compare/lightspeed` — compare landing + positioning section (legacy alias: `/compare/kitchenos-vs-lightspeed`)
 - `/pricing` — Lightspeed positioning section
 - `lib/marketing/compare-content.ts` — lightspeed slug subheadline
 
