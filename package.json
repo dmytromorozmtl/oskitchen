@@ -110,6 +110,8 @@
     "check:seo-blog-articles": "node ./node_modules/vitest/vitest.mjs run tests/unit/seo-blog-articles-p1-28.test.ts",
     "audit:demo-page": "tsx scripts/audit-demo-page-p1-29.ts",
     "check:demo-page": "node ./node_modules/vitest/vitest.mjs run tests/unit/demo-page-p1-29.test.ts",
+    "audit:pricing-page": "tsx scripts/audit-pricing-page-p1-30.ts",
+    "check:pricing-page": "node ./node_modules/vitest/vitest.mjs run tests/unit/pricing-page-p1-30.test.ts",
     "test:e2e:kds-keyboard": "playwright test e2e/auth.setup.ts e2e/kds-keyboard-navigation.spec.ts --project=setup --project=chromium-authed",
     "test:e2e:today-keyboard": "playwright test e2e/auth.setup.ts e2e/today-keyboard-navigation.spec.ts --project=setup --project=chromium-authed",
     "predeploy:verify": "bash scripts/predeploy-verify.sh",

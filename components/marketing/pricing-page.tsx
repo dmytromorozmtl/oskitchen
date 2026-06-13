@@ -6,6 +6,7 @@ import Link from "next/link";
 import { RoiCalculator } from "@/components/marketing/roi-calculator";
 import { CompareFaqSection } from "@/components/marketing/compare-faq-section";
 import { CommissionComparisonCalculator } from "@/components/marketing/commission-comparison-calculator";
+import { DesignPartnerPricingTier } from "@/components/marketing/design-partner-pricing-tier";
 import { PricingCompetitorBenchmark } from "@/components/marketing/pricing-competitor-benchmark";
 import { ToastPositioningSection } from "@/components/marketing/toast-positioning-section";
 import { SquarePositioningSection } from "@/components/marketing/square-positioning-section";
@@ -168,6 +169,8 @@ export function PricingPage() {
             </Card>
           ))}
         </div>
+
+        <DesignPartnerPricingTier />
 
         <div className="mt-8 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-950 dark:text-amber-100">
           Delivery marketplace adapters (Uber Eats, DoorDash, Grubhub) require partner approval and your

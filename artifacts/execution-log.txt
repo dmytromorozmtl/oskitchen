@@ -8656,3 +8656,15 @@ Evidence: vitest demo-page-p1-29 6/6 PASS; audit:demo-page PASS (6 channels, 5 s
 Result: DONE — interactive sandbox workspace with Integration Health on /demo
 Tracker: 29/80 (p1-29 done)
 Next: P1-30 pricing page — public Design Partner tier
+
+---
+Cycle: ultimate-v11-30
+Timestamp: 2026-06-14T00:30:00.000Z
+Task: P1-30 pricing page — public Design Partner tier (LOI-DP-001)
+Department: Marketing
+Action: Added DesignPartnerPricingTier on /pricing — $0 platform / 3-month LOI, ICP tags, honest non-binding disclaimer; FAQ entry; P1-30 policy/audit; wired audit:pricing-page + check:pricing-page
+Files: components/marketing/design-partner-pricing-tier.tsx, lib/marketing/pricing-page-p1-30-{policy,content,audit}.ts, components/marketing/pricing-page.tsx, app/pricing/page.tsx, lib/marketing/pricing-faq.ts, docs/pricing-page-p1-30.md, scripts/audit-pricing-page-p1-30.ts, tests/unit/pricing-page-p1-30.test.ts, package.json
+Evidence: vitest pricing-page-p1-30 5/5 PASS; audit:pricing-page PASS (LOI-DP-001, pricing-design-partner-tier)
+Result: DONE — public Design Partner pilot SKU on pricing page
+Tracker: 30/80 (p1-30 done)
+Next: P2-31 loyalty earn/redeem E2E
