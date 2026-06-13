@@ -104,7 +104,7 @@ export default async function TodayOperationsPage({
   ]);
   let aiBriefing = null;
   let aiBriefingError: unknown = null;
-  if (showPilotOwnerBriefing && workspaceId) {
+  if (wantsOwnerBriefing && workspaceId) {
     const briefingLoad = await loadAiFeaturePage(() => generateDailyBriefing(workspaceId));
     if (briefingLoad.ok) {
       aiBriefing = briefingLoad.data;

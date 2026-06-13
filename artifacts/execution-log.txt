@@ -8752,3 +8752,15 @@ Evidence: vitest hardware-compatibility-roadmap-p2-37 5/5 PASS; audit:hardware-c
 Result: DONE — Toast parity hardware roadmap for USB/BT printers and iPad mounts
 Tracker: 37/80 (p2-37 done)
 Next: P2-38 predictive daily briefing
+
+---
+Cycle: ultimate-v11-38
+Timestamp: 2026-06-14T04:30:00.000Z
+Task: P2-38 Predictive daily briefing — forecasts for today, all channels (Toast IQ parity)
+Department: AI
+Action: Added all-channel today forecast builder (10 analytics channels); extended DailyBriefing with channelForecasts; Today by channel panel on AiBriefingPanel; owner-visible on /dashboard/today; P2-38 policy/audit/doc; wired audit:predictive-daily-briefing-p2-38 + deploy gate
+Files: lib/ai/predictive-daily-briefing-{channel-forecast,p2-38-policy,p2-38-audit}.ts, lib/ai/restaurant-brain-types.ts, services/ai/ai-restaurant-brain.ts, components/dashboard/ai-briefing-panel.tsx, app/dashboard/today/page.tsx, docs/predictive-daily-briefing-p2-38.md, scripts/audit-predictive-daily-briefing-p2-38.ts, tests/unit/predictive-daily-briefing-p2-38.test.ts, package.json, config/npm-scripts/archive-v1.json, .github/workflows/deploy-prod-gate.yml
+Evidence: vitest predictive-daily-briefing-p2-38 5/5 PASS; audit:predictive-daily-briefing-p2-38 PASS
+Result: DONE — predictive daily briefing with all-channel today forecasts on Today
+Tracker: 38/80 (p2-38 done)
+Next: P2-39 certified devices iPad models

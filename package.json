@@ -29,6 +29,8 @@
     "run:sentry-alert-firing-p2-36": "tsx scripts/run-sentry-alert-firing-p2-36.ts",
     "audit:hardware-compatibility-roadmap-p2-37": "tsx scripts/audit-hardware-compatibility-roadmap-p2-37.ts",
     "check:hardware-compatibility-roadmap-p2-37": "node ./node_modules/vitest/vitest.mjs run tests/unit/hardware-compatibility-roadmap-p2-37.test.ts",
+    "audit:predictive-daily-briefing-p2-38": "tsx scripts/audit-predictive-daily-briefing-p2-38.ts",
+    "check:predictive-daily-briefing-p2-38": "node ./node_modules/vitest/vitest.mjs run tests/unit/predictive-daily-briefing-p2-38.test.ts",
     "test:e2e:scim-provision-ui-e2e": "playwright test e2e/auth.setup.ts e2e/scim-provision-ui-e2e.spec.ts --project=setup --project=chromium-authed",
     "benchmark:bank-import-reconciliation": "tsx scripts/run-bank-import-reconciliation-benchmark.ts",
     "benchmark:cross-tenant-isolation-e2e": "tsx scripts/run-cross-tenant-isolation-e2e-benchmark.ts",

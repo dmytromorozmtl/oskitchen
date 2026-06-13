@@ -124,6 +124,9 @@ jobs:
       - name: Hardware compatibility roadmap P2-37 audit
         run: npm run audit -- hardware-compatibility-roadmap-p2-37
 
+      - name: Predictive daily briefing P2-38 audit
+        run: npm run audit -- predictive-daily-briefing-p2-38
+
       - name: Nav audit preview labels
         run: npm run audit -- nav-audit-preview-labels
 
