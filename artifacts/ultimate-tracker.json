@@ -1,7 +1,7 @@
 {
   "p0-1-authed-rsc-probe": "done",
   "p0-2-woocommerce-live-smoke": "done",
-  "p0-3-shopify-live-smoke": "pending",
+  "p0-3-shopify-live-smoke": "done",
   "p0-4-remove-deploy-skip-vitest": "pending",
   "p0-5-blueprint-sentry-done": "pending",
   "p0-6-cross-tenant-e2e": "pending",

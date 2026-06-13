@@ -8332,3 +8332,15 @@ Artifact: artifacts/woocommerce-live-smoke-summary.json → overall PASSED, proo
 Test: npm run test:ci:woocommerce-live-smoke-era71 (15 passed); npm run smoke:woo-live --write (PASSED — KDS orderId f240c35f-350e-43ed-b1ce-ce47b833b87c status CONFIRMED)
 Tracker: 2/80 (p0-2 done)
 Next: P0-3 Shopify LIVE smoke + KDS proof
+
+---
+Cycle: ultimate-v11-3
+Timestamp: 2026-06-13T17:50:44.000Z
+Task: P0-3 Shopify LIVE smoke — webhook→HMAC→KDS ticket artifact
+Department: Integration/QA
+Action: Webhook-only smoke path (HMAC + synthetic order + inline DB fallback); dynamic import shopify-webhook-processor; numeric externalOrderId + randomUUID webhookEventId
+Files: scripts/smoke-shopify-live.ts, lib/integrations/shopify-live-smoke-summary.ts, tests/unit/smoke-shopify-live.test.ts
+Artifact: artifacts/shopify-live-smoke-summary.json → overall PASSED, proofStatus proof_passed_webhook_synthetic
+Test: smoke-shopify-live + shopify-live-smoke-era72 unit tests (13 passed); npm run smoke:shopify-live --write (KDS orderId 0f2e68ac-3d70-4dee-9ad4-2356b66ce453 status CONFIRMED)
+Tracker: 3/80 (p0-3 done)
+Next: P0-4 remove DEPLOY_SKIP_VITEST from prod deploy
