@@ -1,7 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
-Cycle: gap-closure-15
+Cycle: gap-closure-16
+Timestamp: 2026-06-14T13:00:00.000Z
+Task: P1-16 — Remove DEPLOY_SKIP_VITEST from deploy scripts
+Category: DevOps
+Result: OK — DEPLOY_SKIP_VITEST absent from all audited deploy scripts; deploy-prebuilt-prod.sh requires vitest.mjs run before prod build; deploy-prod-gate.yml grep gate
+Evidence: npm run check:deploy-skip-vitest-p1-16 (5 passed)
+
+---
 Timestamp: 2026-06-14T12:45:00.000Z
 Task: P0-15 — Cross-tenant data leak E2E (2 workspaces, User A→User B→403)
 Category: QA/Security

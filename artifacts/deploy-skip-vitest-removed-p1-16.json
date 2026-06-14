@@ -1,0 +1,16 @@
+{
+  "policyId": "p1-16-deploy-skip-vitest-removed-v1",
+  "forbiddenToken": "DEPLOY_SKIP_VITEST",
+  "primaryDeployScript": "scripts/deploy-prebuilt-prod.sh",
+  "vitestGatePattern": "vitest.mjs run",
+  "auditedScripts": [
+    "scripts/deploy-prebuilt-prod.sh",
+    "scripts/predeploy-verify.sh",
+    "scripts/final-storefront-deploy.sh",
+    "scripts/workspace-prod-deploy.sh",
+    "scripts/storefront-post-deploy.sh"
+  ],
+  "checkScript": "check:deploy-skip-vitest-p1-16",
+  "status": "REMOVED",
+  "recordedAt": "2026-06-14T13:00:00.000Z"
+}

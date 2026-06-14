@@ -122,6 +122,9 @@ jobs:
       - name: Cross-tenant data leak E2E policy (P0-15)
         run: npm run check:cross-tenant-data-leak-e2e-p0-15
 
+      - name: Deploy skip vitest removed (P1-16)
+        run: npm run check:deploy-skip-vitest-p1-16
+
       - name: Build
         run: |
           set -o pipefail
