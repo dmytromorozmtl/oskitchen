@@ -13,5 +13,5 @@
   "p0-12-authed-rsc-probe": "done",
   "p0-13-woocommerce-webhook-kds-e2e": "done",
   "p0-14-shopify-webhook-kds-e2e": "done",
-  "p0-15-cross-tenant-data-leak-e2e": "pending"
+  "p0-15-cross-tenant-data-leak-e2e": "done"
 }

@@ -8,8 +8,9 @@ import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id"
 import { skipCrossTenantStagingIfNotReady } from "./helpers/cross-tenant-staging-ready";
 
 /**
- * P1-14 — Cross-tenant E2E IDOR: 2 workspaces, all key API routes (403/404).
+ * P0-15 / P1-14 — Cross-tenant data leak E2E: 2 workspaces, User A → User B → 403/404.
  *
+ * @see lib/security/cross-tenant-data-leak-e2e-p0-15-policy.ts
  * @see lib/qa/cross-tenant-e2e-policy.ts
  * @see lib/qa/cross-tenant-e2e-contract.ts
  */
@@ -131,7 +132,7 @@ const PUBLIC_API_ROUTES = [
   "locations",
 ] as const;
 
-test.describe("cross-tenant E2E IDOR (P1-14 — 2 workspaces, key API routes)", () => {
+test.describe("cross-tenant data leak E2E (P0-15 — 2 workspaces, User A → User B → 403/404)", () => {
   test.beforeEach(({ }, testInfo) => {
     test.skip(!hasDb, "DATABASE_URL required");
     test.skip(

@@ -119,6 +119,9 @@ jobs:
       - name: Shopify webhook→KDS E2E policy (P0-14)
         run: npm run check:shopify-webhook-kds-e2e-p0-14
 
+      - name: Cross-tenant data leak E2E policy (P0-15)
+        run: npm run check:cross-tenant-data-leak-e2e-p0-15
+
       - name: Build
         run: |
           set -o pipefail

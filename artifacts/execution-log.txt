@@ -1,7 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
-Cycle: gap-closure-14
+Cycle: gap-closure-15
+Timestamp: 2026-06-14T12:45:00.000Z
+Task: P0-15 — Cross-tenant data leak E2E (2 workspaces, User A→User B→403)
+Category: QA/Security
+Result: OK — e2e/cross-tenant-e2e.spec.ts seeds tenant B, asserts 403/404 + no PII leak; 14 contract scenarios pass; artifacts/cross-tenant-data-leak-e2e.json
+Evidence: npm run check:cross-tenant-data-leak-e2e-p0-15 (8 passed)
+
+---
 Timestamp: 2026-06-14T12:30:00.000Z
 Task: P0-14 — Shopify webhook→KDS E2E
 Category: QA

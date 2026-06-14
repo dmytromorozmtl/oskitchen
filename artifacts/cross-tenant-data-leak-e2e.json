@@ -1,0 +1,18 @@
+{
+  "policyId": "p0-15-cross-tenant-data-leak-e2e-v1",
+  "extendsPolicyId": "cross-tenant-e2e-p1-14-v1",
+  "workspaceCount": 2,
+  "acceptedDenialStatuses": [403, 404],
+  "requiredE2eScenarios": [
+    "tenant_a_dashboard_foreign_order_not_found",
+    "tenant_a_marketplace_invoice_foreign_po_403_or_404",
+    "tenant_a_audit_export_foreign_workspace_no_leak",
+    "tenant_a_public_api_foreign_workspace_403_or_empty"
+  ],
+  "e2eSpec": "e2e/cross-tenant-e2e.spec.ts",
+  "contractArtifact": "artifacts/cross-tenant-e2e-summary.json",
+  "checkScript": "check:cross-tenant-data-leak-e2e-p0-15",
+  "e2eScript": "test:e2e:cross-tenant-data-leak-e2e",
+  "status": "WIRED",
+  "recordedAt": "2026-06-14T12:45:00.000Z"
+}
