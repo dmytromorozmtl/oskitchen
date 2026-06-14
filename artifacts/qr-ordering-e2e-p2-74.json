@@ -1,0 +1,31 @@
+{
+  "policyId": "qr-ordering-e2e-p2-74-v1",
+  "status": "LIVE",
+  "fullChain": [
+    "qr_scan",
+    "storefront_checkout",
+    "webhook_event",
+    "kitchen_task",
+    "kds_ticket"
+  ],
+  "panelTestIds": {
+    "panel": "qr-ordering-e2e-panel",
+    "scanChannel": "qr-ordering-e2e-scan-channel",
+    "kdsChannel": "qr-ordering-e2e-kds-channel"
+  },
+  "guestTestIds": {
+    "page": "qr-ordering-page",
+    "placeOrder": "qr-place-order",
+    "confirmation": "qr-order-confirmation"
+  },
+  "liveRoutes": ["/dashboard/qr-codes", "/q/{slug}/{table}"],
+  "upstreamPolicies": [
+    "qr-scan-storefront-kds-e2e-p1-37-v1",
+    "qr-scan-storefront-kds-e2e-p2-32-v1"
+  ],
+  "scenarioCount": 6,
+  "ciGate": true,
+  "checkScript": "check:qr-ordering-e2e-p2-74",
+  "e2eSpec": "e2e/qr-scan-storefront-kds-e2e.spec.ts",
+  "verifiedAt": "2026-06-16T09:00:00.000Z"
+}

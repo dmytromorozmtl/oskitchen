@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { QrCodesDashboard } from "@/components/qr/qr-codes-dashboard";
+import { QrOrderingE2EPanel } from "@/components/qr/qr-ordering-e2e-panel";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
@@ -37,10 +38,12 @@ export default async function QrCodesPage() {
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">Table QR codes</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Generate QR codes guests scan to order from their phone. Orders land on the kitchen display
-          with a blue table badge — no app download.
+          Generate QR codes guests scan to order from their phone. Full E2E scan to KDS — orders
+          land on the kitchen display with a blue table badge. No app download.
         </p>
       </div>
+
+      <QrOrderingE2EPanel />
 
       <QrCodesDashboard
         initialStoreSlug={storefront?.storeSlug ?? null}

@@ -296,6 +296,9 @@ jobs:
       - name: Loyalty program earn/redeem LIVE (P2-73)
         run: npm run check:loyalty-program-live-p2-73
 
+      - name: QR ordering E2E — scan to KDS (P2-74)
+        run: npm run check:qr-ordering-e2e-p2-74
+
       - name: Build
         run: |
           set -o pipefail

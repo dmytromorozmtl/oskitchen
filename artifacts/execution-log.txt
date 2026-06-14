@@ -9846,3 +9846,10 @@ Task: P2-73 — Loyalty program earn/redeem LIVE (full E2E POS + storefront appl
 Category: Loyalty
 Result: OK — loyalty-program-live-p2-73-v1 policy; 6-scenario flow benchmark; LoyaltyProgramLivePanel on /dashboard/customers/loyalty; POS + storefront checkout wiring verified; CI gate check:loyalty-program-live-p2-73
 Evidence: artifacts/loyalty-program-live-p2-73.json, npm run check:loyalty-program-live-p2-73
+
+Cycle: 74
+Timestamp: 2026-06-16T09:00:00.000Z
+Task: P2-74 — QR ordering E2E — scan to KDS
+Category: QR
+Result: OK — qr-ordering-e2e-p2-74-v1 policy; 6-scenario flow benchmark; QrOrderingE2EPanel on /dashboard/qr-codes; scan→checkout→webhook→KitchenTask→KDS wiring verified; CI gate check:qr-ordering-e2e-p2-74
+Evidence: artifacts/qr-ordering-e2e-p2-74.json, npm run check:qr-ordering-e2e-p2-74
