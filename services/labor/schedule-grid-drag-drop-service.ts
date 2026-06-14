@@ -8,6 +8,7 @@ import {
 } from "@/lib/labor/schedule-grid-drag-drop-policy";
 import { getWeeklySchedule } from "@/services/labor/schedule-service";
 import { prisma } from "@/lib/prisma";
+import { staffMemberListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 
 export type ScheduleGridDragDropModel = {
   policyId: typeof SCHEDULE_GRID_DRAG_DROP_POLICY_ID;
@@ -40,7 +41,7 @@ export async function loadScheduleGridDragDropModel(
   const [shifts, staff] = await Promise.all([
     getWeeklySchedule(userId, weekStart),
     prisma.staffMember.findMany({
-      where: { userId, status: "ACTIVE" },
+      where: { AND: [await staffMemberListWhereForOwner(userId), { status: "ACTIVE" }] },
       select: { id: true, name: true },
       orderBy: { name: "asc" },
     }),

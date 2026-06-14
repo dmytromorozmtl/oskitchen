@@ -1,0 +1,40 @@
+import { prisma } from "@/lib/prisma";
+import { logger } from "@/lib/logger";
+import {
+  compositionalAnchorL5FromL4Stack,
+  isHypergraphL5CompositionalAnchorEnabled,
+} from "@/lib/compliance/hypergraph-l5-compositional-anchor";
+import { metaAnchorL4FromL3Stack } from "@/lib/compliance/hypergraph-l4-meta-anchor";
+import { recursiveAnchorL3FromEvolution } from "@/lib/compliance/hypergraph-l3-recursive-anchor";
+import { evolveHypergraphFromVerifiedDag } from "@/lib/compliance/hypergraph-evolution";
+import { rollupHypergraphFromRecursive } from "@/lib/compliance/hypergraph-zk-dna-rollup";
+import { applyThemeExperimentPoll, coalesceThemeExperimentJson, toInputJsonValue, type ThemeExperimentJson } from "@/lib/prisma/json";
+
+export async function runHypergraphL5CompositionalAnchorCycle(): Promise<{ anchored: number }> {
+  if (!isHypergraphL5CompositionalAnchorEnabled()) return { anchored: 0 };
+
+  const storefronts = await prisma.storefrontSettings.findMany({
+    where: { enabled: true },
+    select: { id: true, themeExperimentJson: true },
+    take: 100,
+  });
+
+  let anchored = 0;
+  for (const sf of storefronts) {
+    let json = coalesceThemeExperimentJson(sf.themeExperimentJson);
+    json = applyThemeExperimentPoll(json, rollupHypergraphFromRecursive);
+    json = applyThemeExperimentPoll(json, evolveHypergraphFromVerifiedDag);
+    json = applyThemeExperimentPoll(json, recursiveAnchorL3FromEvolution);
+    json = applyThemeExperimentPoll(json, metaAnchorL4FromL3Stack);
+    const { json: l5Json, anchor } = compositionalAnchorL5FromL4Stack(json);
+    if (!anchor) continue;
+    await prisma.storefrontSettings.update({
+      where: { id: sf.id },
+      data: { themeExperimentJson: l5Json as object },
+    });
+    anchored++;
+  }
+
+  logger.info("hypergraph_l5_compositional_anchor_cycle", { anchored });
+  return { anchored };
+}

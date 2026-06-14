@@ -16,6 +16,7 @@ import {
   type ProductionViewSnapshot,
   type ProductionViewWorkItemInput,
 } from "@/lib/kitchen/kds-production-view";
+import { productionStationListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { productionWorkItemListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { loadKdsStationRoutingRules } from "@/lib/kitchen/kds-station-routing-rules-storage";
 
@@ -24,8 +25,9 @@ function toIso(value: Date | null): string | null {
 }
 
 export async function loadKdsStationRegistry(userId: string): Promise<KdsStationDefinition[]> {
+  const stationScope = await productionStationListWhereForOwner(userId);
   const rows = await prisma.productionStation.findMany({
-    where: { userId, active: true },
+    where: { AND: [stationScope, { active: true }] },
     select: { name: true, type: true, sortOrder: true },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     take: 50,

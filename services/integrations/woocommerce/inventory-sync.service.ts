@@ -3,6 +3,10 @@ import { IntegrationProvider } from "@prisma/client";
 import { getWooCommerceCredentials } from "@/lib/integrations/decrypt-connection";
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
 import { prisma } from "@/lib/prisma";
+import {
+  storefrontInventoryItemListWhereForOwner,
+  storefrontSettingsListWhereForOwner,
+} from "@/lib/scope/workspace-resource-scope";
 import { pushWooInventoryLevel } from "@/services/integrations/shopify-inventory";
 
 export type WooCommerceInventorySyncResult = {
@@ -18,8 +22,9 @@ export type WooCommerceInboundInventorySyncResult = {
 };
 
 async function kitchenQuantityForProduct(userId: string, productId: string): Promise<number> {
+  const inventoryScope = await storefrontInventoryItemListWhereForOwner(userId);
   const item = await prisma.storefrontInventoryItem.findFirst({
-    where: { productId, userId },
+    where: { AND: [inventoryScope, { productId }] },
     select: { quantity: true },
     orderBy: { updatedAt: "desc" },
   });
@@ -32,8 +37,9 @@ async function kitchenQuantityForProduct(userId: string, productId: string): Pro
 }
 
 async function setKitchenQuantity(userId: string, productId: string, quantity: number): Promise<void> {
+  const storefrontScope = await storefrontSettingsListWhereForOwner(userId);
   const storefront = await prisma.storefrontSettings.findFirst({
-    where: { userId },
+    where: storefrontScope,
     select: { id: true },
     orderBy: { updatedAt: "desc" },
   });

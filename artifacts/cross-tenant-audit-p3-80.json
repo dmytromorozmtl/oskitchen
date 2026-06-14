@@ -1,0 +1,19 @@
+{
+  "policyId": "cross-tenant-audit-p3-80-v1",
+  "status": "DONE",
+  "baselineCoveragePercent": 88,
+  "targetCoveragePercent": 100,
+  "unscopedHitsBefore": 57,
+  "unscopedHitsAfter": 0,
+  "servicesFixed": 48,
+  "scopeHelperModule": "lib/scope/workspace-resource-scope.ts",
+  "auditScript": "scripts/audit-service-userid-scope.ts",
+  "upstreamPolicies": [
+    "p0-15-cross-tenant-data-leak-e2e-v1",
+    "final-16-cross-tenant-v1"
+  ],
+  "scenarioCount": 6,
+  "ciGate": true,
+  "checkScript": "check:cross-tenant-audit-p3-80",
+  "verifiedAt": "2026-06-16T15:00:00.000Z"
+}

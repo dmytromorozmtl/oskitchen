@@ -8,7 +8,7 @@ import {
   ONBOARDING_TTV_P2_40_POLICY_ID,
 } from "@/lib/onboarding/onboarding-ttv-p2-40-policy";
 import { prisma } from "@/lib/prisma";
-import { orderListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { lifecycleEventListWhereForOwner, orderListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 
 export type OnboardingTtvPayload = {
   policyId: typeof ONBOARDING_TTV_P2_40_POLICY_ID;
@@ -30,7 +30,12 @@ export async function loadOnboardingTtvMeasurement(
       select: { createdAt: true },
     }),
     prisma.lifecycleEvent.findFirst({
-      where: { userId, eventName: ONBOARDING_TTV_P2_40_LIFECYCLE_EVENT },
+      where: {
+        AND: [
+          await lifecycleEventListWhereForOwner(userId),
+          { eventName: ONBOARDING_TTV_P2_40_LIFECYCLE_EVENT },
+        ],
+      },
       select: { metadata: true },
     }),
   ]);

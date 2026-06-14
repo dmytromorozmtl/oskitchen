@@ -3,7 +3,7 @@ import {
   MULTI_CURRENCY_POLICY_ID,
   type MultiCurrencyNetworkAssessment,
 } from "@/lib/finance/multi-currency-policy";
-import { locationListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { locationListWhereForOwner, storefrontSettingsListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
 export type MultiCurrencySettingsModel = {
@@ -25,7 +25,7 @@ export async function loadMultiCurrencySettingsModel(
       orderBy: { sortOrder: "asc" },
     }),
     prisma.storefrontSettings.findMany({
-      where: { userId },
+      where: await storefrontSettingsListWhereForOwner(userId),
       select: { id: true, storeSlug: true, currency: true },
       orderBy: { storeSlug: "asc" },
     }),

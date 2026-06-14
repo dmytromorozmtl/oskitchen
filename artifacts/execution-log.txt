@@ -9888,3 +9888,10 @@ Task: P3-79 — Segment-level not-found.tsx (dashboard/, vendor/, s/*)
 Category: Frontend
 Result: OK — segment-not-found-p3-79-v1; 3 segment not-found pages with contextual CTAs + data-testid; root fallback app/not-found.tsx; P1-33 upstream aligned; CI gate check:segment-not-found-p3-79
 Evidence: artifacts/segment-not-found-p3-79.json, npm run check:segment-not-found-p3-79
+
+Cycle: 80
+Timestamp: 2026-06-16T15:00:00.000Z
+Task: P3-80 — Cross-tenant audit 88%→100% service workspaceId coverage
+Category: Security
+Result: OK — cross-tenant-audit-p3-80-v1; 57→0 unscoped userId where hits in services/; owner scope helpers applied across 48 service files; CI gate check:cross-tenant-audit-p3-80
+Evidence: artifacts/cross-tenant-audit-p3-80.json, npm run check:cross-tenant-audit-p3-80

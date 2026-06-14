@@ -314,6 +314,9 @@ jobs:
       - name: Segment-level not-found (P3-79)
         run: npm run check:segment-not-found-p3-79
 
+      - name: Cross-tenant service scope audit (P3-80)
+        run: npm run check:cross-tenant-audit-p3-80
+
       - name: Build
         run: |
           set -o pipefail
