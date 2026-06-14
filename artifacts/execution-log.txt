@@ -9874,3 +9874,10 @@ Task: P3-77 — Archive GitHub workflows 121→40
 Category: DevOps
 Result: OK — archive-workflows-p3-77-v1; 34 canonical active workflows (≤40); 88 era theater archived in .github/archive/workflows/inactive; migration-health-prod-drift.yml added to allowlist; CI gate check:archive-workflows-p3-77
 Evidence: artifacts/archive-workflows-p3-77.json, npm run check:archive-workflows-p3-77
+
+Cycle: 78
+Timestamp: 2026-06-16T13:00:00.000Z
+Task: P3-78 — OpenTelemetry bundle analysis
+Category: Backend
+Result: OK — otel-bundle-p3-78-v1; @next/bundle-analyzer wired (ANALYZE=true); serverExternalPackages externalizes 6 OTel packages; lazy-load chain instrumentation→init→trace→span; CI gate check:otel-bundle-p3-78
+Evidence: artifacts/otel-bundle-p3-78.json, npm run check:otel-bundle-p3-78

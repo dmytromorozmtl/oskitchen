@@ -308,6 +308,9 @@ jobs:
       - name: Archive GitHub workflows (P3-77)
         run: npm run check:archive-workflows-p3-77
 
+      - name: OpenTelemetry bundle analysis (P3-78)
+        run: npm run check:otel-bundle-p3-78
+
       - name: Build
         run: |
           set -o pipefail
