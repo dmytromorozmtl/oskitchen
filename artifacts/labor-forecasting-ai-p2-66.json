@@ -1,0 +1,12 @@
+{
+  "policyId": "labor-forecasting-ai-p2-66-v1",
+  "scenarioCount": 12,
+  "capabilityCoveragePct": 100,
+  "thresholdPct": 100,
+  "sevenShiftsParityNote": "Deep scheduling AI from order-demand signals — headcount, labor %, and shift drafts comparable to 7shifts forecasting, without claiming certified parity.",
+  "route": "/dashboard/staff/ai-scheduling",
+  "panelTestId": "labor-forecast-panel",
+  "ciGate": true,
+  "checkScript": "check:labor-forecasting-ai-p2-66",
+  "verifiedAt": "2026-06-16T11:00:00.000Z"
+}

@@ -272,6 +272,9 @@ jobs:
       - name: Floor plan editor — Lightspeed parity (P2-65)
         run: npm run check:floor-plan-editor-p2-65
 
+      - name: Labor forecasting AI — 7shifts parity (P2-66)
+        run: npm run check:labor-forecasting-ai-p2-66
+
       - name: Build
         run: |
           set -o pipefail

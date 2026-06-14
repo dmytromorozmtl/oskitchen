@@ -38,9 +38,10 @@ export default async function AiSchedulingPage({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">AI scheduling</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Labor forecasting AI</h1>
           <p className="text-sm text-muted-foreground">
-            Demand-based staffing predictions and one-click draft schedules.
+            7shifts parity — deep scheduling from order demand, labor % targets, and draft shift
+            suggestions.
           </p>
         </div>
         <div className="flex gap-2 text-sm">
