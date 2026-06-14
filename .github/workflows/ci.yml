@@ -362,6 +362,9 @@ jobs:
       - name: Native iOS app deferral (P3-95)
         run: npm run check:native-ios-app-deferral-p3-95
 
+      - name: Hardware ecosystem deferral (P3-96)
+        run: npm run check:hardware-ecosystem-deferral-p3-96
+
       - name: Build
         run: |
           set -o pipefail

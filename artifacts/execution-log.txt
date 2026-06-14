@@ -10000,3 +10000,10 @@ Task: P3-95 — Native iOS app → defer
 Category: Mobile
 Result: OK — native-ios-app-deferral-p3-95-v1; no staff App Store iOS app; browser dashboard/POS/KDS on iPad/iPhone; 4 alternatives (mobile dashboard, browser POS, browser KDS, Add to Home Screen); /roadmap native-ios-app Out of scope + PRODUCT_ROADMAP NOT_AVAILABLE; banned iOS tease phrases gated; artifact native-ios-app-deferral-p3-95.json; CI gate check:native-ios-app-deferral-p3-95
 Evidence: artifacts/native-ios-app-deferral-p3-95.json, npm run check:native-ios-app-deferral-p3-95
+
+Cycle: 96
+Timestamp: 2026-06-17T07:00:00.000Z
+Task: P3-96 — Hardware ecosystem → defer
+Category: Hardware
+Result: OK — hardware-ecosystem-deferral-p3-96-v1; no proprietary hardware bundles or certified OS Kitchen devices; 4 alternatives (BYOD browser POS, browser print, browser KDS, /trust); /roadmap hardware-ecosystem Out of scope + PRODUCT_ROADMAP NOT_AVAILABLE; banned ecosystem tease phrases gated; complements P1-25; artifact hardware-ecosystem-deferral-p3-96.json; CI gate check:hardware-ecosystem-deferral-p3-96
+Evidence: artifacts/hardware-ecosystem-deferral-p3-96.json, npm run check:hardware-ecosystem-deferral-p3-96

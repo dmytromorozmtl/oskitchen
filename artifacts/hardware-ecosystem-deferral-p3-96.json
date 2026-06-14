@@ -1,0 +1,10 @@
+{
+  "version": "hardware-ecosystem-deferral-v1",
+  "policyId": "hardware-ecosystem-deferral-p3-96-v1",
+  "status": "DEFERRED_NO_CALENDAR_DATE",
+  "roadmapItemId": "hardware-ecosystem",
+  "alternativeCount": 4,
+  "checkScript": "check:hardware-ecosystem-deferral-p3-96",
+  "ciGate": true,
+  "verifiedAt": "2026-06-17T07:00:00.000Z"
+}

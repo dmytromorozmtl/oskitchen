@@ -243,6 +243,14 @@ export const PUBLIC_ROADMAP_OUT_OF_SCOPE: PublicRoadmapItem[] = [
     status: 'deferred',
     confidence: 'conditional',
   },
+  {
+    id: 'hardware-ecosystem',
+    title: 'Proprietary hardware ecosystem',
+    description:
+      'hardware ecosystem deferred — browser POS on BYOD, browser print to Epson/Star, third-party devices; no proprietary hardware bundle from us.',
+    status: 'deferred',
+    confidence: 'conditional',
+  },
 ];
 
 export const PUBLIC_ROADMAP_HONESTY_DISCLAIMER =

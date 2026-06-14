@@ -240,6 +240,7 @@
     "check:field-sales-deferral-p3-93": "node ./node_modules/vitest/vitest.mjs run tests/unit/field-sales-deferral-p3-93.test.ts",
     "check:native-payment-terminal-deferral-p3-94": "node ./node_modules/vitest/vitest.mjs run tests/unit/native-payment-terminal-deferral-p3-94.test.ts",
     "check:native-ios-app-deferral-p3-95": "node ./node_modules/vitest/vitest.mjs run tests/unit/native-ios-app-deferral-p3-95.test.ts",
+    "check:hardware-ecosystem-deferral-p3-96": "node ./node_modules/vitest/vitest.mjs run tests/unit/hardware-ecosystem-deferral-p3-96.test.ts",
     "test:e2e:maintenance-mode-panel-perf-budget": "playwright test e2e/maintenance-mode-panel-perf-budget.spec.ts --project=chromium",
     "test:e2e:preview-route-redirect-regression": "playwright test e2e/preview-route-redirect-regression.spec.ts --project=chromium",
     "test:e2e:enterprise-sso-saml-e2e": "playwright test e2e/auth.setup.ts e2e/enterprise-sso-saml-e2e.spec.ts --project=setup --project=chromium-authed",
