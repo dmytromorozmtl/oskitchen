@@ -227,6 +227,7 @@
     "check:cross-tenant-audit-p3-80": "node ./node_modules/vitest/vitest.mjs run tests/unit/cross-tenant-audit-p3-80.test.ts",
     "check:pen-test-scheduling-p3-81": "node ./node_modules/vitest/vitest.mjs run tests/unit/pen-test-scheduling-p3-81.test.ts",
     "check:offline-pos-pci-full-p3-82": "node ./node_modules/vitest/vitest.mjs run tests/unit/offline-pos-pci-full-p3-82.test.ts",
+    "check:shopify-partner-marketplace-p3-83": "node ./node_modules/vitest/vitest.mjs run tests/unit/shopify-partner-marketplace-p3-83.test.ts",
     "test:e2e:maintenance-mode-panel-perf-budget": "playwright test e2e/maintenance-mode-panel-perf-budget.spec.ts --project=chromium",
     "test:e2e:preview-route-redirect-regression": "playwright test e2e/preview-route-redirect-regression.spec.ts --project=chromium",
     "test:e2e:enterprise-sso-saml-e2e": "playwright test e2e/auth.setup.ts e2e/enterprise-sso-saml-e2e.spec.ts --project=setup --project=chromium-authed",

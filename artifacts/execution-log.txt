@@ -9909,3 +9909,10 @@ Task: P3-82 — Offline POS PCI full review — AES-GCM QSA sign-off
 Category: Security
 Result: OK — offline-pos-pci-full-p3-82-v1; AES-GCM path verified (32-byte key, 12-byte IV, aes-gcm-v1); engineering sign-off passed, external QSA pending (intro 2026-06-24); upstream P2-44 + P1-35 gates linked; artifact offline-pos-pci-full-p3-82.json; CI gate check:offline-pos-pci-full-p3-82
 Evidence: artifacts/offline-pos-pci-full-p3-82.json, npm run check:offline-pos-pci-full-p3-82
+
+Cycle: 83
+Timestamp: 2026-06-16T18:00:00.000Z
+Task: P3-83 — Shopify Partner App Marketplace listing
+Category: Marketing
+Result: OK — shopify-partner-marketplace-p3-83-v1; listing copy + 6 asset specs + 7-phase submission checklist; upstream P0-3/P0-11/P0-14 LIVE proofs linked; status PREP_READY_NOT_LISTED (honest — not yet listed); artifact shopify-partner-marketplace-p3-83.json; CI gate check:shopify-partner-marketplace-p3-83
+Evidence: artifacts/shopify-partner-marketplace-p3-83.json, npm run check:shopify-partner-marketplace-p3-83

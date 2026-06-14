@@ -1,0 +1,40 @@
+{
+  "version": "shopify-partner-marketplace-v1",
+  "policyId": "shopify-partner-marketplace-p3-83-v1",
+  "status": "PREP_READY_NOT_LISTED",
+  "appName": "OS Kitchen Fulfillment Sync",
+  "listingStatus": "not yet listed",
+  "shopifyEndorsementClaimed": false,
+  "readinessDoc": "docs/SHOPIFY_APP_MARKETPLACE_READINESS.md",
+  "listingCopyDoc": "docs/SHOPIFY_LISTING_COPY.md",
+  "archiveDir": "artifacts/shopify-partner-marketplace",
+  "copyArtifacts": [
+    "artifacts/shopify-partner-marketplace/listing-draft.md",
+    "artifacts/shopify-partner-marketplace/submission-checklist.md"
+  ],
+  "requiredAssetCount": 6,
+  "checklistItemCount": 7,
+  "upstreamProofs": [
+    "artifacts/shopify-webhook-kds-live-smoke.json",
+    "artifacts/shopify-inventory-sync-proof.json",
+    "docs/shopify-webhook-kds-e2e-p0-14.md"
+  ],
+  "requiredWebhooks": [
+    "orders/create",
+    "orders/updated",
+    "products/update",
+    "app/uninstalled",
+    "customers/data_request",
+    "customers/redact",
+    "shop/redact"
+  ],
+  "requiredScopes": [
+    "read_orders",
+    "write_orders",
+    "read_products",
+    "read_customers"
+  ],
+  "checkScript": "check:shopify-partner-marketplace-p3-83",
+  "ciGate": true,
+  "verifiedAt": "2026-06-16T18:00:00.000Z"
+}

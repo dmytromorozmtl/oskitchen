@@ -323,6 +323,9 @@ jobs:
       - name: Offline POS PCI full review (P3-82)
         run: npm run check:offline-pos-pci-full-p3-82
 
+      - name: Shopify Partner marketplace listing (P3-83)
+        run: npm run check:shopify-partner-marketplace-p3-83
+
       - name: Build
         run: |
           set -o pipefail
