@@ -1,0 +1,16 @@
+{
+  "version": "product-hunt-launch-prep-v2",
+  "policyId": "product-hunt-launch-prep-p2-60-v1",
+  "status": "PREP_ONLY",
+  "upstreamPolicyId": "product-hunt-launch-prep-p3-65-v1",
+  "playbookDoc": "docs/product-hunt-launch-prep.md",
+  "deferDoc": "docs/product-hunt-launch-defer.md",
+  "archiveDir": "artifacts/product-hunt-launch",
+  "copyArtifacts": [
+    "artifacts/product-hunt-launch/listing-draft.md",
+    "artifacts/product-hunt-launch/listing-maker-comment.md"
+  ],
+  "requiredAssetCount": 7,
+  "checklistItemCount": 7,
+  "verifiedAt": "2026-06-16T05:00:00.000Z"
+}

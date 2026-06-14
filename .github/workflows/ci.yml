@@ -254,6 +254,9 @@ jobs:
       - name: LinkedIn content plan — 3 posts/week founder-led (P2-59)
         run: npm run check:linkedin-content-plan-p2-59
 
+      - name: Product Hunt launch prep — assets, copy, checklist (P2-60)
+        run: npm run check:product-hunt-launch-prep-p2-60
+
       - name: Build
         run: |
           set -o pipefail

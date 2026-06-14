@@ -1,6 +1,6 @@
 # Product Hunt launch prep — OS Kitchen
 
-**Policy:** `product-hunt-launch-prep-absolute-final-v1` · **Blueprint P3-65:** [`product-hunt-launch-prep-p3-65.md`](./product-hunt-launch-prep-p3-65.md)  
+**Policy:** `product-hunt-launch-prep-absolute-final-v1` · **Gap P2-60:** [`product-hunt-launch-prep-p2-60.md`](./product-hunt-launch-prep-p2-60.md) · **Blueprint P3-65:** [`product-hunt-launch-prep-p3-65.md`](./product-hunt-launch-prep-p3-65.md)  
 **Task:** Absolute Final #85  
 **Date:** 2026-06-06  
 **Status:** **PREP ONLY** — do not submit until [`product-hunt-launch-defer.md`](./product-hunt-launch-defer.md) gates **LG1–LG8** pass  
