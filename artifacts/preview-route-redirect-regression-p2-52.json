@@ -1,0 +1,22 @@
+{
+  "version": "preview-route-redirect-regression-v1",
+  "policyId": "preview-route-redirect-regression-p2-52-v1",
+  "routes": [
+    "/dashboard/ai/co-pilot",
+    "/dashboard/enterprise/multi-location",
+    "/dashboard/quick-start"
+  ],
+  "flowSteps": [
+    "blocked_route",
+    "preview_redirect",
+    "redirect_param",
+    "login_return_path"
+  ],
+  "redirectPath": "/dashboard/today",
+  "previewParam": "blocked",
+  "unitTest": "tests/unit/preview-route-redirect-regression-p2-52.test.ts",
+  "e2eSpec": "e2e/preview-route-redirect-regression.spec.ts",
+  "guardModule": "lib/navigation/preview-route-guard.ts",
+  "loginReturnModule": "lib/auth/dashboard-login-return-path.ts",
+  "verifiedAt": "2026-06-15T23:00:00.000Z"
+}

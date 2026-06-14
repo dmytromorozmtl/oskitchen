@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-52
+Timestamp: 2026-06-15T23:00:00.000Z
+Task: P2-52 — Preview route redirect regression (/ai/co-pilot, /enterprise/multi-location, /quick-start)
+Category: QA
+Result: OK — regression flow for 3 canonical routes; preview=blocked redirect preserves ?redirect=; check:preview-route-redirect-regression-p2-52 CI gate
+Evidence: artifacts/preview-route-redirect-regression-p2-52.json; docs/preview-route-redirect-regression-p2-52.md
+
+---
 Cycle: gap-closure-51
 Timestamp: 2026-06-15T22:00:00.000Z
 Task: P2-51 — Enterprise SSO SAML E2E (Okta→redirect→assertion→dashboard)

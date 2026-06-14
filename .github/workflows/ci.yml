@@ -230,6 +230,9 @@ jobs:
       - name: Enterprise SSO SAML E2E — Okta redirect assertion dashboard (P2-51)
         run: npm run check:enterprise-sso-saml-e2e-p2-51
 
+      - name: Preview route redirect regression — deep link preserved (P2-52)
+        run: npm run check:preview-route-redirect-regression-p2-52
+
       - name: Build
         run: |
           set -o pipefail
