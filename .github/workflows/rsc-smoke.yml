@@ -37,4 +37,4 @@ jobs:
         run: npm ci
 
       - name: Authed dashboard RSC probe (46 routes)
-        run: npm run smoke:rsc-authed-dashboard
+        run: npm run smoke -- rsc-authed-dashboard

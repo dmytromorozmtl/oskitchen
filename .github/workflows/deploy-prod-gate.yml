@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Dependency audit (high severity gate)
-        run: npm run audit:dependencies:high
+        run: npm run audit -- dependencies:high
 
       - name: Prisma generate
         run: npx prisma generate
@@ -41,43 +41,43 @@ jobs:
         run: npm run check:migration-health
 
       - name: Migration health P3-77 audit
-        run: npm run audit:migration-health-p3-77
+        run: npm run audit -- migration-health-p3-77
 
       - name: Prisma index audit (401 models, tenant-scope coverage)
         run: npm run check:prisma-indexes
 
       - name: Prisma index audit P3-73 (hot-path FK wave 2)
-        run: npm run audit:prisma-index-audit-p3-73
+        run: npm run audit -- prisma-index-audit-p3-73
 
       - name: Webhook replay UI P3-74 audit
-        run: npm run audit:webhook-replay-ui-p3-74
+        run: npm run audit -- webhook-replay-ui-p3-74
 
       - name: Demo tenant seed P3-75 audit
-        run: npm run audit:demo-tenant-seed-p3-75
+        run: npm run audit -- demo-tenant-seed-p3-75
 
       - name: Integration sandbox P3-76 audit
-        run: npm run audit:integration-sandbox-p3-76
+        run: npm run audit -- integration-sandbox-p3-76
 
       - name: Idempotency keys P3-78 audit
-        run: npm run audit:idempotency-keys-p3-78
+        run: npm run audit -- idempotency-keys-p3-78
 
       - name: Money actions audit P3-79 audit
-        run: npm run audit:money-actions-audit-p3-79
+        run: npm run audit -- money-actions-audit-p3-79
 
       - name: Hardware compatibility center P3-80 audit
-        run: npm run audit:hardware-compatibility-center-p3-80
+        run: npm run audit -- hardware-compatibility-center-p3-80
 
       - name: Console.log surface audit (Tier A/B + top-50)
         run: npm run audit -- console-log-surface -- --write
 
       - name: Console.log sweep P3-71 audit
-        run: npm run audit:console-log-sweep-p3-71
+        run: npm run audit -- console-log-sweep-p3-71
 
       - name: Bundle chunk audit (top-5 code-split wiring)
         run: npm run audit -- bundle-chunks
 
       - name: Bundle analysis optimization P3-72 audit
-        run: npm run audit:bundle-analysis-p3-72
+        run: npm run audit -- bundle-analysis-p3-72
 
       - name: Preview route guard audit (≥280 hidden routes)
         run: npm run audit -- preview-routes-hidden

@@ -9860,3 +9860,10 @@ Task: P2-75 — Developer API rate limits + OpenAPI spec + sandbox
 Category: API
 Result: OK — developer-api-rate-limits-p2-75-v1 policy; per-key burst (600 prod / 120 sandbox); OpenAPI at /api/openapi.json; kos_test_ sandbox keys; DeveloperApiRateLimitsPanel on /dashboard/developer/docs; CI gate check:developer-api-rate-limits-p2-75
 Evidence: artifacts/developer-api-rate-limits-p2-75.json, npm run check:developer-api-rate-limits-p2-75
+
+Cycle: 76
+Timestamp: 2026-06-16T11:00:00.000Z
+Task: P3-76 — Archive era npm scripts 1902→<500
+Category: DevOps
+Result: OK — archive-era-scripts-p3-76-v1; consolidated 536→336 active scripts; 1974 archived (795 era); router prefixes wired; CI/workflows migrated to npm run audit -- / validate -- / smoke -- syntax; CI gate check:archive-era-scripts-p3-76
+Evidence: artifacts/archive-era-scripts-p3-76.json, npm run check:archive-era-scripts-p3-76

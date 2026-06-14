@@ -1,11 +1,12 @@
 /**
- * Consolidate npm scripts: archive sprawl prefixes, keep essentials + routers (<200).
+ * Consolidate npm scripts: archive sprawl prefixes, keep essentials + routers.
  *
  * Usage:
  *   tsx scripts/consolidate-npm-scripts.ts
  *   tsx scripts/consolidate-npm-scripts.ts --write
+ *   tsx scripts/consolidate-npm-scripts.ts --write --max-scripts=500
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 import {
@@ -34,23 +35,39 @@ function buildRouterEntries(): Record<string, string> {
   return entries;
 }
 
+function parseMaxScriptsArg(): number {
+  const arg = process.argv.find((item) => item.startsWith("--max-scripts="));
+  if (!arg) return NPM_SCRIPT_CONSOLIDATION_MAX_SCRIPTS;
+  const parsed = Number(arg.split("=")[1]);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : NPM_SCRIPT_CONSOLIDATION_MAX_SCRIPTS;
+}
+
+function loadExistingArchive(): Record<string, string> {
+  const archivePath = join(ROOT, NPM_SCRIPT_ARCHIVE_PATH);
+  if (!existsSync(archivePath)) return {};
+  const parsed = JSON.parse(readFileSync(archivePath, "utf8")) as { scripts?: Record<string, string> };
+  return parsed.scripts ?? {};
+}
+
 function main(): void {
   const write = process.argv.includes("--write");
+  const maxScripts = parseMaxScriptsArg();
   const pkg = JSON.parse(readFileSync(packageJsonPath, "utf8")) as PackageJson;
   const allScripts = pkg.scripts ?? {};
 
-  const archive: Record<string, string> = {};
+  const newlyArchived: Record<string, string> = {};
   const essential: Record<string, string> = {};
   const routers = buildRouterEntries();
 
   for (const [name, command] of Object.entries(allScripts)) {
     if (findRouterPrefixForScript(name)) {
-      archive[name] = command;
+      newlyArchived[name] = command;
     } else {
       essential[name] = command;
     }
   }
 
+  const mergedArchive = { ...loadExistingArchive(), ...newlyArchived };
   const nextScripts = { ...essential, ...routers };
   const nextCount = Object.keys(nextScripts).length;
 
@@ -59,11 +76,12 @@ function main(): void {
     generatedAt: new Date().toISOString(),
     beforeTotal: Object.keys(allScripts).length,
     afterTotal: nextCount,
-    archivedTotal: Object.keys(archive).length,
+    newlyArchivedTotal: Object.keys(newlyArchived).length,
+    archivedTotal: Object.keys(mergedArchive).length,
     essentialTotal: Object.keys(essential).length,
     routerTotal: Object.keys(routers).length,
-    maxScripts: NPM_SCRIPT_CONSOLIDATION_MAX_SCRIPTS,
-    passed: nextCount < NPM_SCRIPT_CONSOLIDATION_MAX_SCRIPTS,
+    maxScripts,
+    passed: nextCount < maxScripts,
   };
 
   console.log(JSON.stringify(summary, null, 2));
@@ -77,7 +95,7 @@ function main(): void {
   mkdirSync(dirname(join(ROOT, NPM_SCRIPT_ARCHIVE_PATH)), { recursive: true });
   writeFileSync(
     join(ROOT, NPM_SCRIPT_ARCHIVE_PATH),
-    `${JSON.stringify({ version: 1, scripts: archive }, null, 2)}\n`,
+    `${JSON.stringify({ version: 1, scripts: mergedArchive }, null, 2)}\n`,
     "utf8",
   );
   writeFileSync(

@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Dependency audit (high severity gate)
-        run: npm run audit:dependencies:high
+        run: npm run audit -- dependencies:high
 
       - name: Prisma generate
         run: npx prisma generate
@@ -51,10 +51,10 @@ jobs:
         run: npx prisma validate
 
       - name: Validate production cron manifest
-        run: npm run validate:production-crons
+        run: npm run validate -- production-crons
 
       - name: Validate cron route inventory
-        run: npm run validate:cron-inventory
+        run: npm run validate -- cron-inventory
 
       - name: Validate API route registry
         run: npm run validate -- api-route-registry
@@ -108,7 +108,7 @@ jobs:
         run: npm run gate:forbidden-claims
 
       - name: Forbidden claims enforcement auto-test
-        run: npm run test:ci:forbidden-claims-enforcement
+        run: npm run test:ci -- forbidden-claims-enforcement
 
       - name: Authed RSC probe policy (P0-12 — 46 dashboard routes)
         run: npm run check:authed-rsc-probe-p0-12
@@ -301,6 +301,9 @@ jobs:
 
       - name: Developer API rate limits + docs (P2-75)
         run: npm run check:developer-api-rate-limits-p2-75
+
+      - name: Archive era npm scripts (P3-76)
+        run: npm run check:archive-era-scripts-p3-76
 
       - name: Build
         run: |
@@ -790,4 +793,4 @@ jobs:
         run: npm ci
 
       - name: Authed dashboard RSC probe (46 routes, document + RSC)
-        run: npm run smoke:rsc-authed-dashboard
+        run: npm run smoke -- rsc-authed-dashboard

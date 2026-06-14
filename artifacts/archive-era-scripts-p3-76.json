@@ -1,0 +1,31 @@
+{
+  "policyId": "archive-era-scripts-p3-76-v1",
+  "status": "DONE",
+  "baselineScriptCount": 1902,
+  "beforeActive": 536,
+  "afterActive": 336,
+  "maxActiveScripts": 500,
+  "archivedTotal": 1974,
+  "eraInArchive": 795,
+  "eraInActive": 0,
+  "newlyArchivedThisCycle": 212,
+  "routerPrefixes": [
+    "test:ci",
+    "ops",
+    "smoke",
+    "audit",
+    "workspace",
+    "storefront",
+    "beta",
+    "staging",
+    "pilot",
+    "verify",
+    "validate",
+    "cert"
+  ],
+  "archivePath": "config/npm-scripts/archive-v1.json",
+  "consolidateScript": "scripts/consolidate-npm-scripts.ts",
+  "ciGate": true,
+  "checkScript": "check:archive-era-scripts-p3-76",
+  "verifiedAt": "2026-06-16T11:00:00.000Z"
+}

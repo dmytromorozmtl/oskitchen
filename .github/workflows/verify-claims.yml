@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Forbidden claims enforcement unit test
-        run: npm run test:ci:forbidden-claims-enforcement
+        run: npm run test:ci -- forbidden-claims-enforcement
 
       - name: Write verify-claims artifact
         if: always()
