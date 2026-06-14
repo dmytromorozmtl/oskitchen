@@ -95,6 +95,7 @@ OS Kitchen enters **paid pilot** with a **production-grade core** (orders → pr
 | **Native iOS app** | NOT_AVAILABLE | deferred — browser POS/KDS on iPad/iPhone; no staff App Store app in 2026 |
 | **Hardware ecosystem** | NOT_AVAILABLE | deferred — no proprietary terminals or certified device bundles; BYOD + browser print |
 | **Dispatch network** | NOT_AVAILABLE | deferred — no owned driver fleet; BETA routes + third-party courier integrations |
+| **Native mobile app** | NOT_AVAILABLE | Deferred until **$1M ARR** — mobile browser + PWA; no iOS/Android store apps |
 
 ---
 

@@ -368,6 +368,9 @@ jobs:
       - name: Dispatch network deferral (P3-97)
         run: npm run check:dispatch-network-deferral-p3-97
 
+      - name: Native mobile app deferral (P3-98)
+        run: npm run check:native-mobile-app-deferral-p3-98
+
       - name: Build
         run: |
           set -o pipefail

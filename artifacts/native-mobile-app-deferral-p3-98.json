@@ -1,0 +1,12 @@
+{
+  "version": "native-mobile-app-deferral-v1",
+  "policyId": "native-mobile-app-deferral-p3-98-v1",
+  "status": "DEFERRED_UNTIL_1M_ARR",
+  "arrThresholdUsd": 1000000,
+  "currentArrJune2026": 0,
+  "roadmapItemId": "native-mobile-app",
+  "alternativeCount": 4,
+  "checkScript": "check:native-mobile-app-deferral-p3-98",
+  "ciGate": true,
+  "verifiedAt": "2026-06-17T09:00:00.000Z"
+}

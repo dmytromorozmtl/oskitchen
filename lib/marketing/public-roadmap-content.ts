@@ -259,6 +259,14 @@ export const PUBLIC_ROADMAP_OUT_OF_SCOPE: PublicRoadmapItem[] = [
     status: 'deferred',
     confidence: 'conditional',
   },
+  {
+    id: 'native-mobile-app',
+    title: 'Native mobile app (iOS + Android)',
+    description:
+      'native mobile app deferred until $1M ARR — mobile browser dashboard, responsive web, and PWA today; 0 ARR as of June 2026.',
+    status: 'deferred',
+    confidence: 'conditional',
+  },
 ];
 
 export const PUBLIC_ROADMAP_HONESTY_DISCLAIMER =

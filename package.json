@@ -242,6 +242,7 @@
     "check:native-ios-app-deferral-p3-95": "node ./node_modules/vitest/vitest.mjs run tests/unit/native-ios-app-deferral-p3-95.test.ts",
     "check:hardware-ecosystem-deferral-p3-96": "node ./node_modules/vitest/vitest.mjs run tests/unit/hardware-ecosystem-deferral-p3-96.test.ts",
     "check:dispatch-network-deferral-p3-97": "node ./node_modules/vitest/vitest.mjs run tests/unit/dispatch-network-deferral-p3-97.test.ts",
+    "check:native-mobile-app-deferral-p3-98": "node ./node_modules/vitest/vitest.mjs run tests/unit/native-mobile-app-deferral-p3-98.test.ts",
     "test:e2e:maintenance-mode-panel-perf-budget": "playwright test e2e/maintenance-mode-panel-perf-budget.spec.ts --project=chromium",
     "test:e2e:preview-route-redirect-regression": "playwright test e2e/preview-route-redirect-regression.spec.ts --project=chromium",
     "test:e2e:enterprise-sso-saml-e2e": "playwright test e2e/auth.setup.ts e2e/enterprise-sso-saml-e2e.spec.ts --project=setup --project=chromium-authed",
