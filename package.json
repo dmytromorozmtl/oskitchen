@@ -254,6 +254,7 @@
     "check:integration-health-center-sales": "node ./node_modules/vitest/vitest.mjs run tests/unit/integration-health-center-marketing-absolute-final.test.ts",
     "audit:design-partner-outreach": "tsx scripts/audit-design-partner-outreach.ts",
     "check:design-partner-outreach": "node ./node_modules/vitest/vitest.mjs run tests/unit/design-partner-outreach.test.ts",
+    "check:design-partner-outreach-p0-7": "node ./node_modules/vitest/vitest.mjs run tests/unit/design-partner-outreach-p0-7.test.ts",
     "audit:forbidden-claims-training": "tsx scripts/audit-forbidden-claims-training.ts",
     "check:forbidden-claims-training": "node ./node_modules/vitest/vitest.mjs run tests/unit/forbidden-claims-training.test.ts",
     "audit:competitor-comparison-pages": "tsx scripts/audit-competitor-comparison-pages-p1-27.ts",

@@ -5,7 +5,7 @@
   "p0-4-delete-stale-webhook-route": "done",
   "p0-5-preview-blocked-redirect": "done",
   "p0-6-forbidden-claims-ci-gate": "done",
-  "p0-7-design-partner-outreach": "pending",
+  "p0-7-design-partner-outreach": "done",
   "p0-8-pricing-pilot-sku": "pending",
   "p0-9-transparent-pricing-tiers": "pending",
   "p0-10-woocommerce-inventory-sync": "pending",

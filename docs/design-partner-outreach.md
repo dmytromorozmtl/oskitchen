@@ -4,7 +4,9 @@
 **Updated:** 2026-06-13  
 **Owner:** Founder + Sales  
 **Status:** internal research list — **not contacted** unless CRM status changes  
-**Related:** [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) · [`loi-design-partner-template.md`](./loi-design-partner-template.md) · [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md)
+**Related:** [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) · [`design-partner-outreach-meal-prep-p0-7.md`](./design-partner-outreach-meal-prep-p0-7.md) · [`loi-design-partner-template.md`](./loi-design-partner-template.md) · [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md)
+
+**P0-7 meal prep cohort:** [`design-partner-outreach-meal-prep-p0-7.md`](./design-partner-outreach-meal-prep-p0-7.md) — **10 operators** with personalized founder outreach (`p0-7-design-partner-meal-prep-outreach-v1`).
 
 ---
 
