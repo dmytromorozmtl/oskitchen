@@ -113,6 +113,9 @@ jobs:
       - name: Authed RSC probe policy (P0-12 — 46 dashboard routes)
         run: npm run check:authed-rsc-probe-p0-12
 
+      - name: WooCommerce webhook→KDS E2E policy (P0-13)
+        run: npm run check:woocommerce-webhook-kds-e2e-p0-13
+
       - name: Build
         run: |
           set -o pipefail
