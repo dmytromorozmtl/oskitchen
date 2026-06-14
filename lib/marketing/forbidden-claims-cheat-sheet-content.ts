@@ -105,6 +105,16 @@ export const FORBIDDEN_CLAIMS_CHEAT_SHEET_ENTRIES: ForbiddenClaimsCheatSheetEntr
     neverSay: "Production-ready offline card payments / works like Square offline",
   },
   {
+    id: "hardware-roadmap-deferred",
+    category: "Hardware",
+    topic: "Native terminals & hardware ecosystem",
+    verdict: "NEVER",
+    sayThis:
+      "Browser-first POS on BYOD tablets — optional Stripe Terminal (BETA). Native proprietary hardware ecosystem is deferred.",
+    neverSay:
+      "Native terminals launch next quarter / proprietary hardware program shipping soon / Toast Go equivalent on the way",
+  },
+  {
     id: "unified-inventory",
     category: "Inventory",
     topic: "Cross-channel inventory",

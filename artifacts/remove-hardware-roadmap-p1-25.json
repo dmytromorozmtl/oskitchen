@@ -1,0 +1,25 @@
+{
+  "policyId": "remove-hardware-roadmap-p1-25-v1",
+  "bannedPhrases": [
+    "hardware coming soon",
+    "Hardware coming soon",
+    "native terminal coming soon",
+    "proprietary hardware coming soon",
+    "hardware bundle coming soon",
+    "packing labels roadmap",
+    "hardware roadmap promises",
+    "Toast Go equivalent coming soon",
+    "certified hardware coming soon"
+  ],
+  "scanPaths": [
+    "lib/marketing",
+    "components/marketing",
+    "docs/no-hardware-lock-in-positioning.md",
+    "docs/hardware-bundle-story.md",
+    "docs/software-first-pos-positioning.md"
+  ],
+  "deferralLine": "Native payment terminals and proprietary hardware ecosystem are deferred — use browser POS and optional Stripe Terminal (BETA) today.",
+  "ciGate": true,
+  "checkScript": "check:remove-hardware-roadmap-p1-25",
+  "verifiedAt": "2026-06-14T20:00:00.000Z"
+}

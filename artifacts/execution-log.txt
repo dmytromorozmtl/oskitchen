@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-25
+Timestamp: 2026-06-14T20:00:00.000Z
+Task: P1-25 — Remove hardware roadmap from marketing (no "hardware coming soon")
+Category: Marketing
+Result: OK — banned phrase CI gate; cleaned no-hardware-lock-in + hardware-bundle-story + solution-segment-meta; forbidden-claims cheat sheet hardware deferral entry; governance forbidden phrases extended
+Evidence: npm run check:remove-hardware-roadmap-p1-25 (7 passed)
+
+---
 Cycle: gap-closure-24
 Timestamp: 2026-06-14T19:00:00.000Z
 Task: P1-24 — ICP landing pages — meal prep + ghost kitchen pain-first rewrite

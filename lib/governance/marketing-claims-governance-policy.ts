@@ -70,6 +70,9 @@ export const MARKETING_CLAIMS_FORBIDDEN_PHRASES = [
   "guaranteed loan approval",
   "kitchenos capital",
   "pre-approved loan offer",
+  "hardware coming soon",
+  "native terminal coming soon",
+  "proprietary hardware coming soon",
 ] as const;
 
 export const MARKETING_CLAIMS_CI_SCRIPTS = [
