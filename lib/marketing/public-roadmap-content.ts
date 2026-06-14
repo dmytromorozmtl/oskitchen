@@ -251,6 +251,14 @@ export const PUBLIC_ROADMAP_OUT_OF_SCOPE: PublicRoadmapItem[] = [
     status: 'deferred',
     confidence: 'conditional',
   },
+  {
+    id: 'dispatch-network',
+    title: 'Proprietary dispatch / driver network',
+    description:
+      'dispatch network deferred — BETA route tools and third-party integrations; no owned driver fleet or nationwide courier network.',
+    status: 'deferred',
+    confidence: 'conditional',
+  },
 ];
 
 export const PUBLIC_ROADMAP_HONESTY_DISCLAIMER =

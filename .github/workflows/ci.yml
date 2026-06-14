@@ -365,6 +365,9 @@ jobs:
       - name: Hardware ecosystem deferral (P3-96)
         run: npm run check:hardware-ecosystem-deferral-p3-96
 
+      - name: Dispatch network deferral (P3-97)
+        run: npm run check:dispatch-network-deferral-p3-97
+
       - name: Build
         run: |
           set -o pipefail
