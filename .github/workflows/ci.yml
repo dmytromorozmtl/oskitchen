@@ -332,6 +332,9 @@ jobs:
       - name: KB SEO FAQ schema (P3-85)
         run: npm run check:kb-seo-faq-schema-p3-85
 
+      - name: Advisory board page (P3-86)
+        run: npm run check:advisory-board-page-p3-86
+
       - name: Build
         run: |
           set -o pipefail

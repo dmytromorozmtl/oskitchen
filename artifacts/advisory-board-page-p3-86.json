@@ -1,0 +1,13 @@
+{
+  "version": "advisory-board-page-v1",
+  "policyId": "advisory-board-page-p3-86-v1",
+  "route": "/advisory-board",
+  "pageMode": "recruiting_application_only",
+  "publishedMemberCount": 0,
+  "fabricatedMembersRemoved": true,
+  "applicationForm": true,
+  "playbookDoc": "docs/CUSTOMER_ADVISORY_BOARD.md",
+  "checkScript": "check:advisory-board-page-p3-86",
+  "ciGate": true,
+  "verifiedAt": "2026-06-16T21:00:00.000Z"
+}
