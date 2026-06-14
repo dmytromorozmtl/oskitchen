@@ -1,0 +1,16 @@
+{
+  "policyId": "gift-cards-regression-p2-70-v1",
+  "scenarioCount": 8,
+  "passPct": 100,
+  "passedCount": 8,
+  "flowSteps": [
+    "issue",
+    "balance_check",
+    "redeem_partial",
+    "balance_after_partial",
+    "redeem_remaining"
+  ],
+  "ciGate": true,
+  "checkScript": "check:gift-cards-regression-p2-70",
+  "verifiedAt": "2026-06-16T15:00:00.000Z"
+}

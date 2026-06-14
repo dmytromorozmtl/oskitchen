@@ -284,6 +284,9 @@ jobs:
       - name: AI co-pilot accuracy benchmarks (P2-69)
         run: npm run check:copilot-accuracy-benchmark-p2-69
 
+      - name: Gift cards issue/redeem regression (P2-70)
+        run: npm run check:gift-cards-regression-p2-70
+
       - name: Build
         run: |
           set -o pipefail
