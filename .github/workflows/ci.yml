@@ -350,6 +350,9 @@ jobs:
       - name: Native budgeting module (P3-91)
         run: npm run check:native-budgeting-p3-91
 
+      - name: Consumer app deferral (P3-92)
+        run: npm run check:consumer-app-deferral-p3-92
+
       - name: Build
         run: |
           set -o pipefail

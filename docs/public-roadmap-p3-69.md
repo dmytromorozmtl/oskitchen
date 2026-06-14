@@ -35,6 +35,8 @@ Deploy gate: `.github/workflows/deploy-prod-gate.yml`
 
 **P3-88 extension:** [`docs/public-roadmap-honest-dates-p3-88.md`](./public-roadmap-honest-dates-p3-88.md) — confidence badges, no undated hardware in quarter sections.
 
+**P3-92 extension:** [`docs/consumer-app-deferral-p3-92.md`](./consumer-app-deferral-p3-92.md) — consumer app deferred until 500+ operators.
+
 ---
 
 ## Status

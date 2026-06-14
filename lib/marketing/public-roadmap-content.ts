@@ -219,6 +219,14 @@ export const PUBLIC_ROADMAP_OUT_OF_SCOPE: PublicRoadmapItem[] = [
     status: 'deferred',
     confidence: 'conditional',
   },
+  {
+    id: 'consumer-app',
+    title: 'Native consumer app (App Store / Play Store)',
+    description:
+      'Deferred until 500+ paying operators — branded storefront PWA and mobile web checkout today; 0 customers as of June 2026.',
+    status: 'deferred',
+    confidence: 'conditional',
+  },
 ];
 
 export const PUBLIC_ROADMAP_HONESTY_DISCLAIMER =

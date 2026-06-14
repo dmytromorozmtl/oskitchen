@@ -9972,3 +9972,10 @@ Task: P3-91 — Native budgeting module budget vs actual (R365 parity)
 Category: Finance
 Result: OK — native-budgeting-p3-91-v1; /dashboard/finance/budget page with operator-editable category targets; 9 R365-style categories; settings in finance.nativeBudget; PnL statement uses pnlLineBudgetAmount; artifact native-budgeting-p3-91.json; CI gate check:native-budgeting-p3-91
 Evidence: artifacts/native-budgeting-p3-91.json, npm run check:native-budgeting-p3-91
+
+Cycle: 92
+Timestamp: 2026-06-17T03:00:00.000Z
+Task: P3-92 — Consumer app defer until 500+ customers
+Category: Marketing
+Result: OK — consumer-app-deferral-p3-92-v1; native App Store/Play Store consumer app deferred until 500+ paying operators; added to /roadmap Out of scope + PRODUCT_ROADMAP_2026; 4 alternatives (storefront PWA, mobile web, QR, loyalty); banned tease phrases gated; artifact consumer-app-deferral-p3-92.json; CI gate check:consumer-app-deferral-p3-92
+Evidence: artifacts/consumer-app-deferral-p3-92.json, npm run check:consumer-app-deferral-p3-92
