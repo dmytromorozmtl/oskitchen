@@ -386,7 +386,7 @@ export const COMPARE_PAGES: ComparePageContent[] = [
       { title: 'Choose R365 when', body: 'You need deep GL, enterprise AP, and SOC2 vendor maturity at 20+ locations.' },
       { title: 'Choose OS Kitchen when', body: 'You need unified kitchen ops and commerce now, with honest upgrade path as you scale.' },
     ],
-    faqs: [{ q: 'SOC2?', a: 'OS Kitchen SOC2 Type I targeted Q4 — see trust page. R365 carries enterprise compliance today.' }],
+    faqs: [{ q: 'SOC2?', a: 'SOC 2 in progress — Type I target Q4 2026 (not certified). See trust page. R365 carries enterprise compliance today.' }],
     primaryCta: { label: 'See pricing', href: '/pricing?utm_source=compare&utm_medium=organic&utm_campaign=r365' },
   },
   {

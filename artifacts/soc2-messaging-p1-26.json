@@ -1,0 +1,26 @@
+{
+  "policyId": "soc2-messaging-p1-26-v1",
+  "approvedLine": "SOC 2 in progress — Type I target Q4 2026 (not certified)",
+  "bannedPhrases": [
+    "SOC 2 compliant",
+    "SOC2 compliant",
+    "SOC 2 certified",
+    "SOC2 certified",
+    "SOC 2 ready",
+    "SOC2 ready",
+    "SOC 2 Type II certified",
+    "SOC2 Type II certified"
+  ],
+  "scanPaths": [
+    "lib/marketing",
+    "components/marketing",
+    "app/trust",
+    "docs/TRUST_CENTER_COPY.md",
+    "docs/security-one-pager-sales.md",
+    "docs/SOC2_ROADMAP_Q4.md"
+  ],
+  "roadmapDoc": "docs/SOC2_ROADMAP_Q4.md",
+  "ciGate": true,
+  "checkScript": "check:soc2-messaging-p1-26",
+  "verifiedAt": "2026-06-14T21:00:00.000Z"
+}

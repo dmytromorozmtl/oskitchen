@@ -32,7 +32,7 @@ OS Kitchen has deep product surface area. It is easy to over-promise features th
 | Claim | Why forbidden | Safe alternative |
 |-------|---------------|------------------|
 | Enterprise SSO live for all tenants | Pilot SSO only; tenant-scoped | "SSO pilot foundation for qualified workspace after staging proof" |
-| SOC 2 certified / SCIM production | Not shipped | "Security review in progress — ask for current posture doc" |
+| Formal SOC 2 attestation / SCIM production | Not shipped | "SOC 2 in progress — Type I target Q4 2026 (not certified)" |
 | Unified inventory across POS + storefront | Locked policy — POS checkout only | "POS inventory impact path; storefront ledger separate" |
 | Unified loyalty / gift cards across channels | Dual-ledger policy | "Channel-specific ledgers until unified era ships" |
 | DoorDash / Uber Eats marketplace LIVE | Integrations preview / gated | "Channel roadmap — show Integration Health honesty rows" |

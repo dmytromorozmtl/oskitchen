@@ -109,7 +109,7 @@ Before answering enterprise security questionnaires:
 
 | Buyer ask | Safe response |
 |-----------|---------------|
-| "Are you SOC 2 certified?" | **No.** Roadmap targets Type I prep Q4 2026, Type II H2 2027 — subject to budget and auditor. |
+| "Do you hold a SOC 2 report?" | **No.** SOC 2 in progress — Type I target Q4 2026 (not certified). Type II H2 2027 subject to budget and auditor. |
 | "SOC 2 in progress?" | **Internal roadmap only** — not a customer attestation until CPA report issued. |
 | "What controls do you have today?" | RBAC, audit logs, tenant isolation, incident process — see procurement pack. |
 | "When will you be certified?" | Indicative H2 2027 Type II — **not a commitment** until observation period starts. |

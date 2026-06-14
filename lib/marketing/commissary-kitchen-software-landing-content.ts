@@ -177,7 +177,7 @@ export const COMMISSARY_KITCHEN_SOFTWARE_LIMITATIONS = [
   'B2B HoReCa marketplace is BETA — not a live national supplier network; vendor seeding required in pilot.',
   'Full ERP/MRP and automated tenant rent accounting are not in v1 pilot scope.',
   'Marketplace delivery live ops (DoorDash/Uber) are SKIPPED — partner-gated.',
-  'Multi-tenant SOC2 attestation is roadmap-only — see SOC2 roadmap doc.',
+  'SOC 2 in progress — Type I target Q4 2026 (not certified); see SOC2 roadmap doc.',
   'Tenant P&L snapshots are operational views — not audited financial statements.',
 ] as const;
 

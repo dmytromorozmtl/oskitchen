@@ -22,7 +22,7 @@ One-page honesty sheet for security conversations — **not** a SOC 2 attestatio
 
 | Topic | Honest status |
 |-------|---------------|
-| **SOC 2 Type II** | Roadmap — **not certified**. Never say "SOC 2 compliant" |
+| **SOC 2 Type I** | In progress — **Q4 2026 target, not certified**. Say: "SOC 2 in progress — Type I target Q4 2026 (not certified)" |
 | **HIPAA** | **Not certified** for healthcare meal programs without BAA review |
 | **PCI DSS** | Stripe is PCI scope — OS Kitchen is not a PCI merchant of record |
 | **Pen test report** | Not published — schedule before enterprise procurement |
@@ -45,6 +45,6 @@ AI modules assist with drafts (invoice capture, purchasing suggestions, briefing
 
 ## Verify before external send
 
-- No "SOC 2 certified" or "bank-grade security" without audit proof
+- No formal SOC 2 attestation claims or "bank-grade security" without audit proof
 - No "HIPAA compliant" for meal programs serving regulated healthcare
 - Always link `/trust` for public maturity labels

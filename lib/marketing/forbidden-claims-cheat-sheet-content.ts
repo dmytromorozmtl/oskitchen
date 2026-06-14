@@ -141,9 +141,10 @@ export const FORBIDDEN_CLAIMS_CHEAT_SHEET_ENTRIES: ForbiddenClaimsCheatSheetEntr
     id: "soc2-scim",
     category: "Compliance",
     topic: "SOC 2 / SCIM / SSO",
-    verdict: "NEVER",
-    sayThis: "Security posture doc and compliance roadmap — not certified today.",
-    neverSay: "SOC 2 Type II certified / enterprise SSO included / SCIM production-ready",
+    verdict: "CAVEAT",
+    sayThis:
+      "SOC 2 in progress — Type I target Q4 2026 (not certified). SSO/SCIM roadmap unless enabled in writing.",
+    neverSay: "Type II SOC 2 attestation claims / enterprise SSO included / SCIM production-ready",
   },
   {
     id: "marketplace-beta",

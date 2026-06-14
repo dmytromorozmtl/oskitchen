@@ -152,6 +152,9 @@ jobs:
       - name: Remove hardware roadmap from marketing (P1-25)
         run: npm run check:remove-hardware-roadmap-p1-25
 
+      - name: SOC 2 messaging — in progress not certified (P1-26)
+        run: npm run check:soc2-messaging-p1-26
+
       - name: Build
         run: |
           set -o pipefail

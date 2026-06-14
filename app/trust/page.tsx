@@ -87,9 +87,9 @@ export default function TrustPage() {
               "AI/copilot experiences should be treated as assistance, not authoritative legal, tax, nutrition, or operational decisions.",
           },
           {
-            title: "Compliance roadmap",
+            title: "SOC 2 roadmap",
             description:
-              "Formal compliance certifications are future roadmap items, not current claims.",
+              "SOC 2 in progress — Type I target Q4 2026 (not certified). See SOC2 roadmap doc for controls timeline.",
           },
           {
             title: "Platform / admin access",
@@ -104,9 +104,10 @@ export default function TrustPage() {
         ]}
       />
       <Disclaimer>
-        OS Kitchen does not currently claim SOC 2, HIPAA, PCI compliance, GDPR compliance, or food
-        labeling compliance. Full enterprise SSO/SCIM is roadmap unless explicitly enabled for your
-        tenant in writing. SKIPPED integration states are honest — not production LIVE claims.
+        OS Kitchen SOC 2 Type I is in progress (Q4 2026 target, not certified). We do not claim HIPAA,
+        PCI compliance, GDPR compliance, or food labeling compliance. Full enterprise SSO/SCIM is
+        roadmap unless explicitly enabled for your tenant in writing. SKIPPED integration states are
+        honest — not production LIVE claims.
       </Disclaimer>
       <p className="mx-auto max-w-3xl px-4 pb-8 text-center text-sm text-muted-foreground">
         <Link href="/trust/status" className="underline">
