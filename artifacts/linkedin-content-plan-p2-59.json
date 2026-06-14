@@ -1,0 +1,11 @@
+{
+  "version": "linkedin-content-plan-v2",
+  "policyId": "linkedin-content-plan-p2-59-v1",
+  "postsPerWeek": 3,
+  "channel": "founder-led",
+  "weekdaySlots": ["monday", "wednesday", "friday"],
+  "founderName": "Dmytro",
+  "utmSource": "linkedin",
+  "utmMedium": "organic",
+  "verifiedAt": "2026-06-16T04:00:00.000Z"
+}

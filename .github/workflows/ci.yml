@@ -251,6 +251,9 @@ jobs:
       - name: Design partner email sequence — 5-step founder outreach (P2-58)
         run: npm run check:design-partner-email-sequence-p2-58
 
+      - name: LinkedIn content plan — 3 posts/week founder-led (P2-59)
+        run: npm run check:linkedin-content-plan-p2-59
+
       - name: Build
         run: |
           set -o pipefail
