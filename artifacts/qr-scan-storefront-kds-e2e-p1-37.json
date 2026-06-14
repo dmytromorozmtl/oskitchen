@@ -1,0 +1,20 @@
+{
+  "policyId": "qr-scan-storefront-kds-e2e-p1-37-v1",
+  "chain": ["qr", "checkout", "webhook_event", "kitchen_task"],
+  "flowSteps": [
+    "scan_qr_entry",
+    "storefront_menu",
+    "storefront_checkout",
+    "webhook_event_persisted",
+    "kitchen_task_linked",
+    "verify_kds"
+  ],
+  "webhookEventType": "order.created",
+  "webhookModel": "OutboundWebhookDelivery",
+  "kitchenTaskSource": "STORE_FRONT",
+  "e2eSpec": "e2e/qr-scan-storefront-kds-e2e.spec.ts",
+  "ciGate": true,
+  "checkScript": "check:qr-scan-storefront-kds-e2e-p1-37",
+  "liveGateEnv": "E2E_QR_SCAN_STOREFRONT_KDS=true",
+  "verifiedAt": "2026-06-15T08:00:00.000Z"
+}

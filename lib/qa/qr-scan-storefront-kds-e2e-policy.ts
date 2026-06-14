@@ -46,6 +46,8 @@ export const QR_SCAN_STOREFRONT_KDS_FLOW_STEPS = [
   "scan_qr_entry",
   "storefront_menu",
   "storefront_checkout",
+  "webhook_event_persisted",
+  "kitchen_task_linked",
   "verify_kds",
 ] as const;
 

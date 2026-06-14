@@ -25,9 +25,9 @@ import {
 const ROOT = process.cwd();
 
 describe("QR scan→storefront→KDS E2E (P2-32)", () => {
-  it("locks policy id and four-step flow", () => {
+  it("locks policy id and six-step flow with webhook and KitchenTask", () => {
     expect(QR_SCAN_STOREFRONT_KDS_E2E_POLICY_ID).toBe("qr-scan-storefront-kds-e2e-p2-32-v1");
-    expect(QR_SCAN_STOREFRONT_KDS_FLOW_STEPS).toHaveLength(4);
+    expect(QR_SCAN_STOREFRONT_KDS_FLOW_STEPS).toHaveLength(6);
     expect(qrScanEntryPath("hello", "5")).toBe("/q/hello/5");
     expect(storefrontMenuPath("hello")).toBe("/s/hello/menu");
   });
@@ -39,6 +39,8 @@ describe("QR scan→storefront→KDS E2E (P2-32)", () => {
     expect(summary.readyHelperPresent).toBe(true);
     expect(summary.scanEntryWired).toBe(true);
     expect(summary.storefrontCheckoutWired).toBe(true);
+    expect(summary.webhookEventWired).toBe(true);
+    expect(summary.kitchenTaskWired).toBe(true);
     expect(summary.kdsAssertWired).toBe(true);
     expect(summary.passed).toBe(true);
   });

@@ -34,12 +34,14 @@ import {
  */
 
 test.describe("qr scan storefront kds e2e policy", () => {
-  test("exports four-step scan menu checkout kds flow", () => {
+  test("exports six-step scan menu checkout webhook kitchen kds flow", () => {
     expect(QR_SCAN_STOREFRONT_KDS_E2E_POLICY_ID).toBe("qr-scan-storefront-kds-e2e-p2-32-v1");
     expect(QR_SCAN_STOREFRONT_KDS_FLOW_STEPS).toEqual([
       "scan_qr_entry",
       "storefront_menu",
       "storefront_checkout",
+      "webhook_event_persisted",
+      "kitchen_task_linked",
       "verify_kds",
     ]);
     const slug = "demo-store";
@@ -107,7 +109,7 @@ test.describe("qr scan storefront kds ticket (chromium-authed)", () => {
 
     try {
       const { orderId, steps } = await runQrScanStorefrontKdsGuestFlow(guestPage, request);
-      expect(steps).toEqual(FLOW_STEPS.slice(0, 3));
+      expect(steps).toEqual(FLOW_STEPS.slice(0, 5));
       await assertQrScanStorefrontOrderOnKds(page, orderId);
     } finally {
       await guestContext.close();

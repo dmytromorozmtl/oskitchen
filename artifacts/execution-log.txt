@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-37
+Timestamp: 2026-06-15T08:00:00.000Z
+Task: P1-37 — QR scan→storefront→KDS E2E (QR→checkout→WebhookEvent→KitchenTask)
+Category: QA
+Result: OK — six-step flow with webhook_event_persisted + kitchen_task_linked; chain service + smoke helpers; P1-37 CI gate
+Evidence: check:qr-scan-storefront-kds-e2e-p1-37; artifacts/qr-scan-storefront-kds-e2e-p1-37.json; e2e/qr-scan-storefront-kds-e2e.spec.ts
+
+---
 Cycle: gap-closure-36
 Timestamp: 2026-06-15T07:00:00.000Z
 Task: P1-36 — Loyalty earn→redeem E2E (order→points→CRM→apply next order)

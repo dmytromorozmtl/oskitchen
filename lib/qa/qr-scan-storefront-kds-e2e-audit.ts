@@ -16,6 +16,8 @@ export type QrScanStorefrontKdsE2EAuditSummary = {
   readyHelperPresent: boolean;
   scanEntryWired: boolean;
   storefrontCheckoutWired: boolean;
+  webhookEventWired: boolean;
+  kitchenTaskWired: boolean;
   kdsAssertWired: boolean;
   flowStepCount: number;
   passed: boolean;
@@ -34,6 +36,8 @@ export function auditQrScanStorefrontKdsE2E(
 
   let scanEntryWired = false;
   let storefrontCheckoutWired = false;
+  let webhookEventWired = false;
+  let kitchenTaskWired = false;
   let kdsAssertWired = false;
 
   if (flowHelperPresent) {
@@ -44,6 +48,12 @@ export function auditQrScanStorefrontKdsE2E(
     storefrontCheckoutWired =
       source.includes("completeStorefrontPayLaterCheckout") &&
       source.includes("storefrontMenuPath");
+    webhookEventWired =
+      source.includes("webhook_event_persisted") &&
+      source.includes("runQrScanStorefrontKdsE2EChain");
+    kitchenTaskWired =
+      source.includes("kitchen_task_linked") &&
+      source.includes("runQrScanStorefrontKdsE2EChain");
     kdsAssertWired = source.includes("assertStorefrontOrderOnKds");
   }
 
@@ -57,9 +67,11 @@ export function auditQrScanStorefrontKdsE2E(
     readyHelperPresent &&
     scanEntryWired &&
     storefrontCheckoutWired &&
+    webhookEventWired &&
+    kitchenTaskWired &&
     kdsAssertWired &&
     specReferencesPolicy &&
-    QR_SCAN_STOREFRONT_KDS_FLOW_STEPS.length === 4;
+    QR_SCAN_STOREFRONT_KDS_FLOW_STEPS.length === 6;
 
   return {
     policyId: QR_SCAN_STOREFRONT_KDS_E2E_POLICY_ID,
@@ -68,6 +80,8 @@ export function auditQrScanStorefrontKdsE2E(
     readyHelperPresent,
     scanEntryWired,
     storefrontCheckoutWired,
+    webhookEventWired,
+    kitchenTaskWired,
     kdsAssertWired,
     flowStepCount: QR_SCAN_STOREFRONT_KDS_FLOW_STEPS.length,
     passed,
@@ -84,8 +98,10 @@ export function formatQrScanStorefrontKdsE2EAuditLines(
     `Ready helper: ${summary.readyHelperPresent ? "yes" : "no"}`,
     `Scan entry wired: ${summary.scanEntryWired ? "yes" : "no"}`,
     `Storefront checkout wired: ${summary.storefrontCheckoutWired ? "yes" : "no"}`,
+    `Webhook event wired: ${summary.webhookEventWired ? "yes" : "no"}`,
+    `KitchenTask wired: ${summary.kitchenTaskWired ? "yes" : "no"}`,
     `KDS assert wired: ${summary.kdsAssertWired ? "yes" : "no"}`,
-    `Flow steps (${summary.flowStepCount}): ${summary.flowStepCount === 4 ? "yes" : "no"}`,
+    `Flow steps (${summary.flowStepCount}): ${summary.flowStepCount === 6 ? "yes" : "no"}`,
     `Passed: ${summary.passed ? "YES" : "NO"}`,
   ];
 }

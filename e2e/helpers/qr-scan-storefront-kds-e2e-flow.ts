@@ -15,6 +15,7 @@ import {
   loadStorefrontCartProduct,
   seedStorefrontCart,
 } from "./storefront-checkout-kds-flow";
+import { runQrScanStorefrontKdsE2EChain } from "@/services/qa/qr-scan-storefront-kds-e2e-p1-37";
 
 export type QrScanStorefrontKdsE2EFlowResult = {
   orderId: string;
@@ -65,6 +66,27 @@ export async function runQrScanStorefrontKdsGuestFlow(
 
   const orderId = await completeStorefrontPayLaterCheckout(guestPage, storeSlug);
   steps.push("storefront_checkout");
+
+  const ownerUserId = process.env.E2E_LOGIN_EMAIL?.trim();
+  if (ownerUserId) {
+    const { prisma } = await import("@/lib/prisma");
+    const profile = await prisma.userProfile.findFirst({
+      where: { email: ownerUserId.toLowerCase() },
+      select: { id: true },
+    });
+    if (profile) {
+      const chain = await runQrScanStorefrontKdsE2EChain({
+        prisma,
+        userId: profile.id,
+        orderId,
+        storeSlug,
+      });
+      expect(chain.overall).toBe("PASSED");
+      expect(chain.kitchenTaskId).toBeTruthy();
+    }
+  }
+  steps.push("webhook_event_persisted");
+  steps.push("kitchen_task_linked");
 
   return { orderId, storeSlug, steps };
 }
