@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import {
   INVOICE_SCANNER_NOTES_MARKER,
   type CreateDraftPurchaseOrderFromInvoiceResult,
+  type CreateSupplierDocumentFromReceiptResult,
   type CreateSupplyFromInvoiceResult,
   type InvoiceScanHistoryEntry,
   type ScannedInvoice,
@@ -21,6 +22,7 @@ export {
   INVOICE_SCANNER_NOTES_MARKER,
   confidenceBadgeVariant,
   type CreateDraftPurchaseOrderFromInvoiceResult,
+  type CreateSupplierDocumentFromReceiptResult,
   type CreateSupplyFromInvoiceResult,
   type InvoiceScanHistoryEntry,
   type ScannedInvoice,
@@ -417,6 +419,83 @@ export async function createDraftPurchaseOrderFromInvoice(
     supplierInvoiceId: supplierInvoice.id,
     lineCount: resolvedLines.length,
     status: "DRAFT",
+  };
+}
+
+/** Paper receipt → PENDING supplier invoice document (Poster POS parity — no PO required). */
+export async function createSupplierDocumentFromReceipt(
+  userId: string,
+  workspaceId: string | null,
+  invoice: ScannedInvoice,
+  options?: {
+    performedById?: string;
+    imageUrl?: string;
+  },
+): Promise<CreateSupplierDocumentFromReceiptResult> {
+  const performedById = options?.performedById ?? userId;
+  const supplierId = await resolveSupplierId(userId, workspaceId, invoice.supplier);
+
+  const resolvedLines: Array<ScannedInvoiceLineItem & { ingredientId: string }> = [];
+  for (const line of invoice.lineItems) {
+    if (line.quantity <= 0) continue;
+    const ingredientId = await findOrCreateIngredient(userId, workspaceId, line);
+    resolvedLines.push({ ...line, ingredientId });
+  }
+
+  if (resolvedLines.length === 0) {
+    throw new Error("No valid line items for supplier document.");
+  }
+
+  const subtotal = resolvedLines.reduce((sum, line) => sum + line.total, 0);
+
+  const supplierInvoice = await prisma.supplierInvoice.create({
+    data: {
+      userId,
+      workspaceId,
+      supplierId,
+      invoiceNumber: invoice.invoiceNumber || `RECEIPT-${Date.now()}`,
+      invoiceDate: invoice.date ? new Date(invoice.date) : new Date(),
+      dueDate: invoice.dueDate ? new Date(invoice.dueDate) : null,
+      totalAmount: invoice.total || subtotal + invoice.tax,
+      taxAmount: invoice.tax,
+      status: "PENDING",
+      pdfUrl: options?.imageUrl ?? invoice.imageUrl ?? null,
+      notes: `${INVOICE_SCANNER_NOTES_MARKER}. Paper receipt → supplier document (Poster POS parity). Confidence: ${Math.round(invoice.confidence * 100)}%.`,
+      lineItems: {
+        create: resolvedLines.map((line) => ({
+          description: line.name,
+          quantity: line.quantity,
+          unitPrice: line.unitPrice,
+          totalPrice: line.total,
+          ingredientId: line.ingredientId,
+        })),
+      },
+    },
+  });
+
+  void auditLog({
+    action: "inventory.photo_invoice_supplier_document_created",
+    category: "INVENTORY",
+    source: "AI_COPILOT",
+    actor: { userId: performedById },
+    workspaceId,
+    entity: {
+      type: "SupplierInvoice",
+      id: supplierInvoice.id,
+      label: supplierInvoice.invoiceNumber,
+    },
+    metadata: {
+      lineCount: resolvedLines.length,
+      confidence: invoice.confidence,
+      status: "PENDING",
+      imageUrl: options?.imageUrl ?? invoice.imageUrl ?? null,
+    },
+  });
+
+  return {
+    supplierInvoiceId: supplierInvoice.id,
+    lineCount: resolvedLines.length,
+    status: "PENDING",
   };
 }
 

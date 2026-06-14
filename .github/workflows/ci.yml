@@ -278,6 +278,9 @@ jobs:
       - name: Vendor price change alerts — MarginEdge parity (P2-67)
         run: npm run check:vendor-price-change-alerts-p2-67
 
+      - name: Photo invoice AI — Poster POS parity (P2-68)
+        run: npm run check:photo-invoice-ai-p2-68
+
       - name: Build
         run: |
           set -o pipefail

@@ -1,0 +1,13 @@
+{
+  "policyId": "photo-invoice-ai-p2-68-v1",
+  "scenarioCount": 12,
+  "capabilityCoveragePct": 100,
+  "thresholdPct": 100,
+  "supplierDocumentStatus": "PENDING",
+  "posterPosParityNote": "Paper receipt photo → AI line items → PENDING supplier invoice document — comparable to Poster POS receipt capture, without claiming certified parity.",
+  "route": "/dashboard/inventory/photo-invoice",
+  "panelTestId": "photo-invoice-supplier-document-panel",
+  "ciGate": true,
+  "checkScript": "check:photo-invoice-ai-p2-68",
+  "verifiedAt": "2026-06-16T13:00:00.000Z"
+}

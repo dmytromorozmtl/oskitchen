@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 import {
   confirmInvoiceScanDraftPoAction,
+  confirmPhotoInvoiceSupplierDocumentAction,
   scanInvoiceAction,
 } from "@/actions/inventory/invoice-scanner";
 import { Badge } from "@/components/ui/badge";
@@ -388,6 +389,28 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
     });
   }
 
+  function confirmSupplierDocument() {
+    if (!draft) return;
+    startTransition(async () => {
+      const result = await invokeServerAction(() =>
+        confirmPhotoInvoiceSupplierDocumentAction(draft),
+      );
+      const err = getActionError(result);
+      if (err) {
+        toast.error(err);
+        return;
+      }
+      if (isActionSuccess(result)) {
+        toast.success(
+          `Supplier document created — ${result.data.lineCount} line(s). Review in Accounting.`,
+        );
+        setDraft(null);
+        setPreviewUrl(null);
+        window.location.reload();
+      }
+    });
+  }
+
   function confirmDraftPo() {
     if (!draft) return;
     startTransition(async () => {
@@ -456,9 +479,8 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium">AI-assisted invoice scanning</CardTitle>
           <CardDescription>
-            {aiConfigured
-              ? "Photograph a supplier invoice to auto-fill a supply receipt. Please verify all fields before confirming."
-              : "Set OPENAI_API_KEY on the server to enable vision scanning."}
+            Poster POS parity — photograph a paper receipt to create a PENDING supplier document or
+            draft PO. {aiConfigured ? "Please verify all fields before confirming." : "Set OPENAI_API_KEY on the server to enable vision scanning."}
           </CardDescription>
         </CardHeader>
         {draft ? (
@@ -475,6 +497,7 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
           <button
             type="button"
             data-testid="invoice-scan-camera-btn"
+            aria-label="Take photo of paper receipt"
             onClick={() => setCameraOpen(true)}
             disabled={scanning}
             className={cn(
@@ -494,6 +517,17 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
                 <span className="text-sm text-muted-foreground">Thumb-friendly · opens camera viewfinder</span>
               </>
             )}
+          </button>
+
+          <button
+            type="button"
+            data-testid="photo-invoice-receipt-camera-btn"
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden
+            onClick={() => setCameraOpen(true)}
+          >
+            Receipt camera
           </button>
 
           <button
@@ -521,6 +555,7 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
           />
         </div>
       ) : (
+        <div data-testid="photo-invoice-supplier-document-panel">
         <div className="space-y-4 pb-28" data-testid="invoice-scan-review-panel">
           {previewUrl ? (
             <div className="overflow-hidden rounded-xl border">
@@ -620,6 +655,21 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
               </Button>
               <Button
                 type="button"
+                data-testid="photo-invoice-supplier-doc-btn"
+                variant="secondary"
+                className="h-12 flex-1 text-base"
+                onClick={confirmSupplierDocument}
+                disabled={pending || draft.lineItems.length === 0}
+              >
+                {pending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Check className="mr-2 h-4 w-4" />
+                )}
+                Create supplier document
+              </Button>
+              <Button
+                type="button"
                 data-testid="invoice-scan-confirm-btn"
                 className="h-12 flex-1 text-base"
                 onClick={confirmDraftPo}
@@ -634,6 +684,7 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
               </Button>
             </div>
           </div>
+        </div>
         </div>
       )}
 

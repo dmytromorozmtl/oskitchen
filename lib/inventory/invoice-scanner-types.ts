@@ -55,6 +55,12 @@ export type CreateDraftPurchaseOrderFromInvoiceResult = {
   status: "DRAFT";
 };
 
+export type CreateSupplierDocumentFromReceiptResult = {
+  supplierInvoiceId: string;
+  lineCount: number;
+  status: "PENDING";
+};
+
 export function confidenceBadgeVariant(
   confidence: number,
 ): "default" | "secondary" | "destructive" {

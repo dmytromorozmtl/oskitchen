@@ -11,6 +11,7 @@ import { uploadKitchenAsset } from "@/lib/storage";
 import { logUploadDenied, logUploadSucceeded } from "@/services/audit/upload-audit";
 import {
   createDraftPurchaseOrderFromInvoice,
+  createSupplierDocumentFromReceipt,
   createSupplyFromInvoice,
   scanInvoice,
   type ScannedInvoice,
@@ -109,6 +110,29 @@ export async function confirmInvoiceScanDraftPoAction(invoice: ScannedInvoice) {
     return ok(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Could not create draft PO.";
+    return fail(message);
+  }
+}
+
+export async function confirmPhotoInvoiceSupplierDocumentAction(invoice: ScannedInvoice) {
+  const access = await requireMutationPermission("production.manage");
+  if (!access.ok) return fail(access.error);
+
+  const { dataUserId, sessionUser, workspaceId } = await requireTenantActor();
+
+  try {
+    const result = await createSupplierDocumentFromReceipt(dataUserId, workspaceId, invoice, {
+      performedById: sessionUser.id,
+      imageUrl: invoice.imageUrl,
+    });
+
+    revalidatePath("/dashboard/inventory/photo-invoice");
+    revalidatePath("/dashboard/inventory/invoice-scanner");
+    revalidatePath("/dashboard/accounting/invoices");
+
+    return ok(result);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Could not create supplier document.";
     return fail(message);
   }
 }
