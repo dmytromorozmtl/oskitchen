@@ -1,6 +1,8 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { buildInternalPathWithSearch } from "@/lib/auth/dashboard-login-return-path";
+import { safeInternalNextPath } from "@/lib/auth/safe-redirect";
 import {
   getNavMaturityExposure,
   type NavMaturityExposure,
@@ -31,9 +33,17 @@ export function hasPreviewRouteBypass(request: NextRequest): boolean {
 }
 
 export function previewRouteRedirectUrl(request: NextRequest): URL {
+  const blockedPath = buildInternalPathWithSearch(request);
   const url = request.nextUrl.clone();
   url.pathname = PREVIEW_ROUTE_GUARD_REDIRECT_PATH;
+  url.search = "";
   url.searchParams.set("preview", "blocked");
+  if (request.nextUrl.pathname !== PREVIEW_ROUTE_GUARD_REDIRECT_PATH) {
+    url.searchParams.set(
+      "redirect",
+      safeInternalNextPath(blockedPath, PREVIEW_ROUTE_GUARD_REDIRECT_PATH),
+    );
+  }
   return url;
 }
 

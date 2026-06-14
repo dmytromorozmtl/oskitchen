@@ -9272,6 +9272,14 @@ Next: FINAL — docs/ultimate-complete.md
 ---
 ---
 ---
+---
+Cycle: gap-closure-5
+Timestamp: 2026-06-14T11:11:00.000Z
+Task: P0-5 — Preserve deep link on preview=blocked redirect
+Category: Frontend
+Result: OK — previewRouteRedirectUrl now sets ?redirect=<blocked path>; dashboard login middleware honors embedded redirect through auth chain
+Evidence: tests/unit/preview-blocked-redirect.test.ts (4 passed) — /dashboard/copilot, /dashboard/quick-start?phase=2, enterprise/multi-location login chain
+
 Cycle: gap-closure-4
 Timestamp: 2026-06-14T11:12:00.000Z
 Task: P0-4 — Remove stale webhook route duplicate (app/api/webhooks/skip/orders/route 3.ts)
