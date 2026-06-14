@@ -82,6 +82,12 @@ export default async function QuoteDetailPage({
         </Badge>
       </div>
 
+      <div className="flex flex-wrap gap-2 print:hidden">
+        <Button variant="outline" size="sm" asChild>
+          <Link href={`/dashboard/catering-quotes/${quote.id}/beo`}>Banquet Event Order (BEO) →</Link>
+        </Button>
+      </div>
+
       {/* Overview KPIs */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Card><CardHeader className="pb-2"><CardDescription>Total</CardDescription><CardTitle className="text-2xl tabular-nums">{formatCurrency(totalNum)}</CardTitle></CardHeader></Card>

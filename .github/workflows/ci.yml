@@ -266,6 +266,9 @@ jobs:
       - name: Inventory AI photo count — MarketMan parity (P2-63)
         run: npm run check:inventory-ai-photo-count-p2-63
 
+      - name: Catering BEO format — Tripleseat parity (P2-64)
+        run: npm run check:catering-beo-format-p2-64
+
       - name: Build
         run: |
           set -o pipefail

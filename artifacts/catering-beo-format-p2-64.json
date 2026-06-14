@@ -1,0 +1,12 @@
+{
+  "policyId": "catering-beo-format-p2-64-v1",
+  "scenarioCount": 10,
+  "sectionCompletenessPct": 100,
+  "thresholdPct": 95,
+  "minTimelineEntries": 4,
+  "tripleseatParityNote": "Banquet Event Order — layout, menu, and service timeline from accepted catering quotes; comparable to Tripleseat BEO, without claiming certified parity.",
+  "routePattern": "/dashboard/catering-quotes/[quoteId]/beo",
+  "ciGate": true,
+  "checkScript": "check:catering-beo-format-p2-64",
+  "verifiedAt": "2026-06-16T09:00:00.000Z"
+}
