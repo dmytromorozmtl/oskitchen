@@ -1,0 +1,19 @@
+{
+  "policyId": "p0-14-shopify-webhook-kds-e2e-v1",
+  "extendsPolicyId": "p0-3-shopify-webhook-kds-live-smoke-v1",
+  "webhookTopic": "orders/create",
+  "smokeSku": "GOLDEN-SHOPIFY-1",
+  "requiredStepIds": [
+    "hmac_self_check",
+    "test_payload",
+    "webhook_event_persisted",
+    "kitchen_task_linked",
+    "kds_ticket_visible"
+  ],
+  "e2eSpec": "e2e/shopify-webhook-kds-e2e.spec.ts",
+  "checkScript": "check:shopify-webhook-kds-e2e-p0-14",
+  "e2eScript": "test:e2e:shopify-webhook-kds-e2e",
+  "kdsPath": "/dashboard/kitchen",
+  "status": "WIRED",
+  "recordedAt": "2026-06-14T12:30:00.000Z"
+}

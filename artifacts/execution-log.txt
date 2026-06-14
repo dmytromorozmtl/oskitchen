@@ -1,7 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
-Cycle: gap-closure-13
+Cycle: gap-closure-14
+Timestamp: 2026-06-14T12:30:00.000Z
+Task: P0-14 — Shopify webhook→KDS E2E
+Category: QA
+Result: OK — HMAC test payload→WebhookEvent→KitchenTask→KDS ticket; e2e/shopify-webhook-kds-e2e.spec.ts + services/integrations/shopify-webhook-kds-e2e-p0-14.ts; artifacts/shopify-webhook-kds-e2e.json
+Evidence: npm run check:shopify-webhook-kds-e2e-p0-14 (4 passed)
+
+---
 Timestamp: 2026-06-14T12:15:00.000Z
 Task: P0-13 — WooCommerce webhook→KDS E2E
 Category: QA

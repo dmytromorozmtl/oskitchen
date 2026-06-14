@@ -116,6 +116,9 @@ jobs:
       - name: WooCommerce webhook→KDS E2E policy (P0-13)
         run: npm run check:woocommerce-webhook-kds-e2e-p0-13
 
+      - name: Shopify webhook→KDS E2E policy (P0-14)
+        run: npm run check:shopify-webhook-kds-e2e-p0-14
+
       - name: Build
         run: |
           set -o pipefail
