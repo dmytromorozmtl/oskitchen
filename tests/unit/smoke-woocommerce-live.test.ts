@@ -105,19 +105,26 @@ describe("smoke-woocommerce-live", () => {
           status: "PASSED",
         },
         { id: "hmac_self_check", label: "HMAC signature self-check", status: "PASSED" },
+        { id: "webhook_event_persisted", label: "WebhookEvent row persisted", status: "PASSED" },
         { id: "staging_webhook_delivery", label: "Signed webhook POST to staging", status: "PASSED" },
         { id: "db_canonical_order", label: "ExternalOrder row in DATABASE_URL", status: "PASSED" },
         { id: "kds_kitchen_import", label: "Kitchen import (KDS ticket source)", status: "PASSED" },
+        { id: "kitchen_task_linked", label: "KitchenTask linked to imported order", status: "PASSED" },
         { id: "kds_ticket_visible", label: "KDS ticket row in kitchen orders", status: "PASSED" },
+        { id: "kds_bump_ready", label: "KDS bump (order READY)", status: "PASSED" },
         { id: "inventory_sync_wiring", label: "Inventory sync on order.created", status: "PASSED" },
       ],
       missingEnvVars: [],
       externalOrderId: "smoke-123",
+      webhookEventId: "evt-123",
+      kitchenTaskId: "task-123",
+      importedOrderId: "order-123",
     });
 
     expect(summary.overall).toBe("PASSED");
     expect(summary.proofStatus).toBe("proof_passed_webhook_synthetic");
-    expect(summary.honestyNote).toContain("Webhook-only PASS");
+    expect(summary.policyId).toBe("p0-2-woocommerce-webhook-kds-live-smoke-v1");
+    expect(summary.honestyNote).toContain("WebhookEvent");
   });
 
   it("builds synthetic order payload with unique external id", () => {

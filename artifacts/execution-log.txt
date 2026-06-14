@@ -9270,6 +9270,13 @@ Tracker: 80/80 (ALL TASKS COMPLETE)
 Next: FINAL — docs/ultimate-complete.md
 
 ---
+Cycle: gap-closure-2
+Timestamp: 2026-06-14T11:01:00.000Z
+Task: P0-2 — WooCommerce LIVE smoke webhook→KDS artifact
+Category: Integration
+Result: OK — full chain WebhookEvent→ExternalOrder→KitchenTask→KDS bump (READY); artifacts/woocommerce-webhook-kds-live-smoke.json overall PASSED
+Evidence: npm run test:ci:woocommerce-webhook-kds-p0-2 (9 passed), npm run smoke:woo-live (PASSED proof_passed_webhook_synthetic)
+
 Cycle: gap-closure-1
 Timestamp: 2026-06-14T10:56:00.000Z
 Task: P0-1 — Fix production crons — Vercel cron schedule verification

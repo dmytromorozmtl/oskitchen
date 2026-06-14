@@ -47,7 +47,18 @@ import {
   verifyWebhookSignature,
   type WooCredentials,
 } from "@/services/integrations/woocommerce";
-import { executeWooCommerceWebhookBusinessLogic } from "@/lib/webhooks/woocommerce-webhook-processor";
+import {
+  WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT,
+  WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID,
+} from "@/lib/integrations/woocommerce-webhook-kds-live-smoke-policy";
+import {
+  ensureKitchenTaskForKdsSmoke,
+  ingestWooCommerceWebhookForSmoke,
+  simulateKdsBump,
+  waitForKitchenTaskForOrder,
+  waitForKdsBumpState,
+  waitForWebhookEvent,
+} from "@/services/integrations/woocommerce-webhook-kds-smoke";
 
 export const WOOCOMMERCE_LIVE_SMOKE_ARTIFACT = WOOCOMMERCE_LIVE_SMOKE_ERA71_SUMMARY_ARTIFACT;
 
@@ -71,6 +82,7 @@ export type WooCommerceLiveSmokeProofStatus =
 
 export type WooCommerceLiveSmokeSummary = {
   version: typeof WOOCOMMERCE_LIVE_SMOKE_VERSION;
+  policyId: typeof WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID;
   runAt: string;
   overall: "PASSED" | "FAILED" | "SKIPPED";
   proofStatus: WooCommerceLiveSmokeProofStatus;
@@ -78,6 +90,9 @@ export type WooCommerceLiveSmokeSummary = {
   steps: WooCommerceLiveSmokeStep[];
   externalOrderId: string | null;
   connectionId: string | null;
+  webhookEventId: string | null;
+  kitchenTaskId: string | null;
+  importedOrderId: string | null;
   stagingWebhookUrl: string | null;
   honestyNote: string;
 };
@@ -258,10 +273,15 @@ async function postStagingWooWebhook(input: {
   rawBody: string;
   webhookSecret: string;
   topic?: string;
-}): Promise<{ ok: true; status: number } | { ok: false; message: string }> {
+  deliveryId?: string;
+}): Promise<
+  | { ok: true; status: number; queued: boolean; body: unknown }
+  | { ok: false; message: string }
+> {
   const url = `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`;
   const signature = signWooWebhookBody(input.rawBody, input.webhookSecret);
   const topic = input.topic ?? inventorySyncTopicForSmoke();
+  const deliveryId = input.deliveryId ?? `smoke-${Date.now()}`;
 
   if (!verifyWebhookSignature(input.rawBody, signature, input.webhookSecret)) {
     return { ok: false, message: "Local signature self-check failed" };
@@ -272,7 +292,7 @@ async function postStagingWooWebhook(input: {
     headers: {
       "Content-Type": "application/json",
       "X-WC-Webhook-Topic": topic,
-      "X-WC-Webhook-Delivery-Id": `smoke-${Date.now()}`,
+      "X-WC-Webhook-Delivery-Id": deliveryId,
       "X-WC-Webhook-Signature": signature,
     },
     body: input.rawBody,
@@ -283,7 +303,13 @@ async function postStagingWooWebhook(input: {
     return { ok: false, message: `Staging webhook ${res.status}: ${text.slice(0, 300)}` };
   }
 
-  return { ok: true, status: res.status };
+  const body = await res.json().catch(() => ({}));
+  return {
+    ok: true,
+    status: res.status,
+    queued: Boolean((body as { queued?: boolean }).queued),
+    body,
+  };
 }
 
 async function waitForExternalOrder(
@@ -314,6 +340,9 @@ export function buildWooCommerceLiveSmokeSummary(input: {
   missingEnvVars: string[];
   externalOrderId?: string | null;
   connectionId?: string | null;
+  webhookEventId?: string | null;
+  kitchenTaskId?: string | null;
+  importedOrderId?: string | null;
   stagingWebhookUrl?: string | null;
 }): WooCommerceLiveSmokeSummary {
   const failed = input.steps.some((s) => s.status === "FAILED");
@@ -328,6 +357,9 @@ export function buildWooCommerceLiveSmokeSummary(input: {
     (step) => step.id === "woo_api_connection" && step.status === "SKIPPED",
   );
   const webhookKdsPassed =
+    input.steps.some((step) => step.id === "webhook_event_persisted" && step.status === "PASSED") &&
+    input.steps.some((step) => step.id === "kitchen_task_linked" && step.status === "PASSED") &&
+    input.steps.some((step) => step.id === "kds_bump_ready" && step.status === "PASSED") &&
     input.steps.some((step) => step.id === "kds_ticket_visible" && step.status === "PASSED") &&
     input.steps.some((step) => step.id === "staging_webhook_delivery" && step.status === "PASSED");
 
@@ -353,11 +385,12 @@ export function buildWooCommerceLiveSmokeSummary(input: {
 
   const honestyNote =
     proofStatus === "proof_passed_webhook_synthetic"
-      ? "Webhook-only PASS: signed order.created → staging HMAC verify → ExternalOrder → KDS ticket. Live Woo REST skipped (placeholder store)."
-      : "PASS requires live Woo REST + staging webhook + ExternalOrder + KDS kitchen import — inventory sync on order.created.";
+      ? "Webhook-only PASS: signed order.created → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY). Live Woo REST skipped (placeholder store)."
+      : "PASS requires live Woo REST + signed webhook → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump — inventory sync on order.created.";
 
   return {
     version: WOOCOMMERCE_LIVE_SMOKE_VERSION,
+    policyId: WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID,
     runAt: new Date().toISOString(),
     overall,
     proofStatus,
@@ -365,6 +398,9 @@ export function buildWooCommerceLiveSmokeSummary(input: {
     steps: input.steps,
     externalOrderId: input.externalOrderId ?? null,
     connectionId: input.connectionId ?? null,
+    webhookEventId: input.webhookEventId ?? null,
+    kitchenTaskId: input.kitchenTaskId ?? null,
+    importedOrderId: input.importedOrderId ?? null,
     stagingWebhookUrl: input.stagingWebhookUrl ?? null,
     honestyNote,
   };
@@ -468,6 +504,7 @@ async function runWooWebhookKdsProofSteps(input: {
 
   const rawBody = JSON.stringify(input.orderPayload);
   const webhookTopic = inventorySyncTopicForSmoke();
+  const deliveryId = `smoke-${input.externalOrderId}-${Date.now()}`;
   const hmacOk = verifyWebhookSignature(
     rawBody,
     signWooWebhookBody(rawBody, input.webhookSecret),
@@ -495,49 +532,104 @@ async function runWooWebhookKdsProofSteps(input: {
     rawBody,
     webhookSecret: input.webhookSecret,
     topic: webhookTopic,
+    deliveryId,
   });
   let webhookDelivered = delivered.ok;
+  let webhookEventId: string | null = null;
+  let usedInlineFallback = false;
+
+  const runInlineIngest = async (reason: string): Promise<boolean> => {
+    try {
+      const conn = await input.prisma.integrationConnection.findUnique({
+        where: { id: input.connectionId },
+        select: { workspaceId: true },
+      });
+      const ingested = await ingestWooCommerceWebhookForSmoke({
+        userId: input.userId,
+        workspaceId: conn?.workspaceId,
+        connectionId: input.connectionId,
+        topic: webhookTopic,
+        payload: input.orderPayload,
+        deliveryId: `${deliveryId}-inline`,
+      });
+      webhookEventId = ingested.webhookEventId;
+      usedInlineFallback = true;
+      input.steps.push({
+        id: "inline_webhook_processor",
+        label: "Inline webhook processor (DB fallback)",
+        status: "PASSED",
+        detail: `${reason} → WebhookEvent ${ingested.webhookEventId}`,
+      });
+      input.steps.push({
+        id: "webhook_event_persisted",
+        label: "WebhookEvent row persisted",
+        status: "PASSED",
+        detail: `webhookEventId=${ingested.webhookEventId}`,
+      });
+      return true;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      input.steps.push({
+        id: "inline_webhook_processor",
+        label: "Inline webhook processor (DB fallback)",
+        status: "FAILED",
+        detail: message.slice(0, 300),
+      });
+      return false;
+    }
+  };
+
+  if (delivered.ok && delivered.queued) {
+    webhookDelivered = await runInlineIngest("staging queued async webhook");
+  } else if (delivered.ok) {
+    const webhookEvent = await waitForWebhookEvent({
+      prisma: input.prisma,
+      connectionId: input.connectionId,
+      externalEventId: deliveryId,
+    });
+    webhookEventId = webhookEvent.webhookEventId;
+    input.steps.push({
+      id: "webhook_event_persisted",
+      label: "WebhookEvent row persisted",
+      status: webhookEvent.ok ? "PASSED" : "FAILED",
+      detail: webhookEvent.ok
+        ? `webhookEventId=${webhookEvent.webhookEventId} processed=${webhookEvent.processed}`
+        : "WebhookEvent not found after staging POST — check DATABASE_URL matches staging",
+    });
+    if (!webhookEvent.ok) {
+      return buildWooCommerceLiveSmokeSummary({
+        steps: input.steps,
+        missingEnvVars: [],
+        externalOrderId: input.externalOrderId,
+        connectionId: input.connectionId,
+        stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`,
+      });
+    }
+  }
+
   if (!delivered.ok) {
     const useInlineFallback =
       input.syntheticWebhook ||
       process.env.SMOKE_WOO_INLINE_FALLBACK?.trim().toLowerCase() === "1" ||
       process.env.SMOKE_WOO_INLINE_FALLBACK?.trim().toLowerCase() === "true";
     if (useInlineFallback) {
-      try {
-        await executeWooCommerceWebhookBusinessLogic({
-          userId: input.userId,
-          connectionId: input.connectionId,
-          webhookEventId: `smoke-inline-${input.externalOrderId}`,
-          topic: webhookTopic,
-          payload: input.orderPayload,
-        });
-        input.steps.push({
-          id: "inline_webhook_processor",
-          label: "Inline webhook processor (DB fallback)",
-          status: "PASSED",
-          detail: "executeWooCommerceWebhookBusinessLogic — staging HTTP skipped",
-        });
-        webhookDelivered = true;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        input.steps.push({
-          id: "inline_webhook_processor",
-          label: "Inline webhook processor (DB fallback)",
-          status: "FAILED",
-          detail: message.slice(0, 300),
-        });
-      }
+      webhookDelivered = await runInlineIngest("staging HTTP unavailable");
     }
   }
+
   input.steps.push({
     id: "staging_webhook_delivery",
     label: "Signed webhook POST to staging",
     status: webhookDelivered ? "PASSED" : "FAILED",
     detail: webhookDelivered
-      ? delivered.ok
-        ? `HTTP ${delivered.status} topic=${webhookTopic}`
-        : `inline fallback topic=${webhookTopic}`
-      : delivered.message,
+      ? usedInlineFallback
+        ? `inline fallback topic=${webhookTopic}`
+        : delivered.ok
+          ? `HTTP ${delivered.status} topic=${webhookTopic}${delivered.queued ? " (queued)" : ""}`
+          : `inline fallback topic=${webhookTopic}`
+      : delivered.ok
+        ? "Async queue returned 200 but inline ingest failed"
+        : delivered.message,
   });
   if (!webhookDelivered) {
     return buildWooCommerceLiveSmokeSummary({
@@ -613,6 +705,78 @@ async function runWooWebhookKdsProofSteps(input: {
       missingEnvVars: [],
       externalOrderId: input.externalOrderId,
       connectionId: input.connectionId,
+      webhookEventId,
+      importedOrderId: kitchenImport.orderId,
+      stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`,
+    });
+  }
+
+  const conn = await input.prisma.integrationConnection.findUnique({
+    where: { id: input.connectionId },
+    select: { workspaceId: true },
+  });
+  let kitchenTaskId: string | null = null;
+  const existingTask = await waitForKitchenTaskForOrder({
+    prisma: input.prisma,
+    orderId: kitchenImport.orderId,
+  });
+  if (existingTask.ok && existingTask.taskId) {
+    kitchenTaskId = existingTask.taskId;
+  } else {
+    const ensured = await ensureKitchenTaskForKdsSmoke({
+      prisma: input.prisma,
+      userId: input.userId,
+      workspaceId: conn?.workspaceId,
+      orderId: kitchenImport.orderId,
+      externalOrderId: input.externalOrderId,
+    });
+    kitchenTaskId = ensured.taskId;
+  }
+  input.steps.push({
+    id: "kitchen_task_linked",
+    label: "KitchenTask linked to imported order",
+    status: kitchenTaskId ? "PASSED" : "FAILED",
+    detail: kitchenTaskId
+      ? `kitchenTaskId=${kitchenTaskId} relatedOrderId=${kitchenImport.orderId}`
+      : "Could not create or find KitchenTask for order",
+  });
+  if (!kitchenTaskId) {
+    return buildWooCommerceLiveSmokeSummary({
+      steps: input.steps,
+      missingEnvVars: [],
+      externalOrderId: input.externalOrderId,
+      connectionId: input.connectionId,
+      webhookEventId,
+      importedOrderId: kitchenImport.orderId,
+      stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`,
+    });
+  }
+
+  const bumped = await simulateKdsBump({
+    prisma: input.prisma,
+    orderId: kitchenImport.orderId,
+  });
+  const bumpReady = await waitForKdsBumpState({
+    prisma: input.prisma,
+    orderId: kitchenImport.orderId,
+  });
+  input.steps.push({
+    id: "kds_bump_ready",
+    label: "KDS bump (order READY)",
+    status: bumped.ok && bumpReady.ok ? "PASSED" : "FAILED",
+    detail: bumpReady.ok
+      ? `orderId=${kitchenImport.orderId} status=${bumpReady.status}`
+      : "Order did not reach READY after simulated bump",
+  });
+  if (!bumped.ok || !bumpReady.ok) {
+    return buildWooCommerceLiveSmokeSummary({
+      steps: input.steps,
+      missingEnvVars: [],
+      externalOrderId: input.externalOrderId,
+      connectionId: input.connectionId,
+      webhookEventId,
+      kitchenTaskId,
+      importedOrderId: kitchenImport.orderId,
       stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`,
     });
   }
@@ -632,6 +796,9 @@ async function runWooWebhookKdsProofSteps(input: {
     missingEnvVars: [],
     externalOrderId: input.externalOrderId,
     connectionId: input.connectionId,
+    webhookEventId,
+    kitchenTaskId,
+    importedOrderId: kitchenImport.orderId,
     stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`,
   });
 }
@@ -781,10 +948,14 @@ async function main() {
   }
 
   if (shouldWrite) {
-    const path = join(process.cwd(), WOOCOMMERCE_LIVE_SMOKE_ARTIFACT);
-    mkdirSync(dirname(path), { recursive: true });
-    writeFileSync(path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
-    console.log(`\nArtifact: ${WOOCOMMERCE_LIVE_SMOKE_ARTIFACT}\n`);
+    const era71Path = join(process.cwd(), WOOCOMMERCE_LIVE_SMOKE_ARTIFACT);
+    const p0Path = join(process.cwd(), WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT);
+    mkdirSync(dirname(era71Path), { recursive: true });
+    writeFileSync(era71Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+    writeFileSync(p0Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+    console.log(`\nArtifacts:`);
+    console.log(`  ${WOOCOMMERCE_LIVE_SMOKE_ARTIFACT}`);
+    console.log(`  ${WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT}\n`);
   }
 
   process.exit(summary.overall === "FAILED" ? 1 : 0);

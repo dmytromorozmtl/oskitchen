@@ -1,0 +1,95 @@
+{
+  "version": "era71-woocommerce-live-smoke-v1",
+  "policyId": "p0-2-woocommerce-webhook-kds-live-smoke-v1",
+  "runAt": "2026-06-14T11:02:10.753Z",
+  "overall": "PASSED",
+  "proofStatus": "proof_passed_webhook_synthetic",
+  "missingEnvVars": [],
+  "steps": [
+    {
+      "id": "env_validation",
+      "label": "Prerequisite env vars",
+      "status": "PASSED",
+      "detail": "Direct Woo or DB tenant path satisfied"
+    },
+    {
+      "id": "woo_api_connection",
+      "label": "WooCommerce REST connection",
+      "status": "SKIPPED",
+      "detail": "Store smoke-test.os-kitchen.com: fetch failed (getaddrinfo ENOTFOUND smoke-test.os-kitchen.com). Update the store URL in Dashboard → Integrations → WooCommerce (saved host is a placeholder)."
+    },
+    {
+      "id": "synthetic_order_payload",
+      "label": "Synthetic Woo order payload (webhook-only)",
+      "status": "PASSED",
+      "detail": "externalOrderId=smoke-1781434900797"
+    },
+    {
+      "id": "hmac_self_check",
+      "label": "HMAC signature self-check",
+      "status": "PASSED",
+      "detail": "sha256 HMAC matches webhook secret"
+    },
+    {
+      "id": "inline_webhook_processor",
+      "label": "Inline webhook processor (DB fallback)",
+      "status": "PASSED",
+      "detail": "staging queued async webhook → WebhookEvent 303cdd58-c0be-4538-8d13-f83bd2441d6a"
+    },
+    {
+      "id": "webhook_event_persisted",
+      "label": "WebhookEvent row persisted",
+      "status": "PASSED",
+      "detail": "webhookEventId=303cdd58-c0be-4538-8d13-f83bd2441d6a"
+    },
+    {
+      "id": "staging_webhook_delivery",
+      "label": "Signed webhook POST to staging",
+      "status": "PASSED",
+      "detail": "inline fallback topic=order.created"
+    },
+    {
+      "id": "db_canonical_order",
+      "label": "ExternalOrder row in DATABASE_URL",
+      "status": "PASSED",
+      "detail": "connectionId=7ff36f51-4c34-4ab7-b4ed-c6eb095bc4d3 externalOrderId=smoke-1781434900797"
+    },
+    {
+      "id": "kds_kitchen_import",
+      "label": "Kitchen import (KDS ticket source)",
+      "status": "PASSED",
+      "detail": "importedOrderId=945ed27a-abfc-4961-9e2a-80521b7907f5"
+    },
+    {
+      "id": "kds_ticket_visible",
+      "label": "KDS ticket row in kitchen orders",
+      "status": "PASSED",
+      "detail": "orderId=945ed27a-abfc-4961-9e2a-80521b7907f5 status=CONFIRMED"
+    },
+    {
+      "id": "kitchen_task_linked",
+      "label": "KitchenTask linked to imported order",
+      "status": "PASSED",
+      "detail": "kitchenTaskId=64eee252-c7fc-4410-bc34-3d6a1a1d7d43 relatedOrderId=945ed27a-abfc-4961-9e2a-80521b7907f5"
+    },
+    {
+      "id": "kds_bump_ready",
+      "label": "KDS bump (order READY)",
+      "status": "PASSED",
+      "detail": "orderId=945ed27a-abfc-4961-9e2a-80521b7907f5 status=READY"
+    },
+    {
+      "id": "inventory_sync_wiring",
+      "label": "Inventory sync on order.created",
+      "status": "PASSED",
+      "detail": "order.created topic triggers syncWooCommerceInventoryFromOrder"
+    }
+  ],
+  "externalOrderId": "smoke-1781434900797",
+  "connectionId": "7ff36f51-4c34-4ab7-b4ed-c6eb095bc4d3",
+  "webhookEventId": "303cdd58-c0be-4538-8d13-f83bd2441d6a",
+  "kitchenTaskId": "64eee252-c7fc-4410-bc34-3d6a1a1d7d43",
+  "importedOrderId": "945ed27a-abfc-4961-9e2a-80521b7907f5",
+  "stagingWebhookUrl": "https://os-kitchen.com/api/webhooks/woocommerce?cid=7ff36f51-4c34-4ab7-b4ed-c6eb095bc4d3",
+  "honestyNote": "Webhook-only PASS: signed order.created → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY). Live Woo REST skipped (placeholder store)."
+}
