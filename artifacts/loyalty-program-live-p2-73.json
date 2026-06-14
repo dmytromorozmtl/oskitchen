@@ -1,0 +1,29 @@
+{
+  "policyId": "loyalty-program-live-p2-73-v1",
+  "status": "LIVE",
+  "channels": ["pos", "storefront"],
+  "fullChain": ["order_earn", "crm_balance", "redeem_apply", "balance_updated"],
+  "panelTestIds": {
+    "panel": "loyalty-program-live-panel",
+    "posChannel": "loyalty-program-live-pos-channel",
+    "storefrontChannel": "loyalty-program-live-storefront-channel"
+  },
+  "posTestIds": {
+    "redeem": "pos-loyalty-redeem-input",
+    "balance": "pos-loyalty-balance"
+  },
+  "storefrontTestIds": {
+    "redeem": "storefront-loyalty-redeem",
+    "balance": "storefront-loyalty-balance"
+  },
+  "liveRoutes": ["/dashboard/customers/loyalty"],
+  "upstreamPolicies": [
+    "loyalty-earn-redeem-p2-62-v1",
+    "loyalty-earn-redeem-p2-41-v1",
+    "loyalty-earn-redeem-e2e-p1-36-v1"
+  ],
+  "scenarioCount": 6,
+  "ciGate": true,
+  "checkScript": "check:loyalty-program-live-p2-73",
+  "verifiedAt": "2026-06-16T08:00:00.000Z"
+}

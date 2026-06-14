@@ -9839,3 +9839,10 @@ Files: docs/ultimate-complete.md, artifacts/ultimate-complete-registry.json, art
 Evidence: Tracker 80/80 all done; P0–P3 scorecards; department + competitor parity matrix; verify commands for P3-77–80 cert audits
 Result: COMPLETE — ULTIMATE EXECUTION v11 closed — all departments, all competitors
 Tracker: 80/80 FINAL
+
+Cycle: 73
+Timestamp: 2026-06-16T08:00:00.000Z
+Task: P2-73 — Loyalty program earn/redeem LIVE (full E2E POS + storefront apply)
+Category: Loyalty
+Result: OK — loyalty-program-live-p2-73-v1 policy; 6-scenario flow benchmark; LoyaltyProgramLivePanel on /dashboard/customers/loyalty; POS + storefront checkout wiring verified; CI gate check:loyalty-program-live-p2-73
+Evidence: artifacts/loyalty-program-live-p2-73.json, npm run check:loyalty-program-live-p2-73

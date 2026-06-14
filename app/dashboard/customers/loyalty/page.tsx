@@ -2,6 +2,7 @@ import { LoyaltyRulesForm } from "@/components/customers/loyalty-rules-form";
 import { LoyaltyTransactionHistory } from "@/components/customers/loyalty-transaction-history";
 import { RestaurantLoyaltyConfigForm } from "@/components/customers/restaurant-loyalty-config-form";
 import { PolicyLockedHonestyBanner } from "@/components/dashboard/policy-locked-honesty-banner";
+import { LoyaltyProgramLivePanel } from "@/components/loyalty/loyalty-program-live-panel";
 import { requireLoyaltyPageAccess } from "@/lib/crm/rewards-page-access";
 import { restaurantLoyaltyFromSettingsCenter } from "@/lib/loyalty/restaurant-loyalty-settings";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -51,8 +52,8 @@ export default async function CustomerLoyaltyPage() {
         <div>
           <h1 className="text-2xl font-semibold">Loyalty program</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Kitchen-ledger loyalty for POS — per-item bonuses, visit rewards, and tier multipliers.
-            Storefront uses a separate ledger until unified rewards ship.
+            earn/redeem LIVE on POS and storefront — per-item bonuses, visit rewards, and tier
+            multipliers with CRM balance sync.
           </p>
         </div>
         <div className="flex flex-col gap-1 text-sm">
@@ -70,6 +71,8 @@ export default async function CustomerLoyaltyPage() {
           </a>
         </div>
       </div>
+
+      <LoyaltyProgramLivePanel />
 
       {access.canManage ? (
         <>

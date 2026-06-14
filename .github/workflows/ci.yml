@@ -293,6 +293,9 @@ jobs:
       - name: SCIM enterprise self-serve UI (P2-72)
         run: npm run check:scim-enterprise-self-serve-p2-72
 
+      - name: Loyalty program earn/redeem LIVE (P2-73)
+        run: npm run check:loyalty-program-live-p2-73
+
       - name: Build
         run: |
           set -o pipefail
