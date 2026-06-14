@@ -1,0 +1,20 @@
+{
+  "version": "case-study-template-pipeline-v1",
+  "policyId": "case-study-template-pipeline-p2-56-v1",
+  "publishReviewDaysAfterPilotStart": 30,
+  "stages": [
+    "pre_loi_template",
+    "loi_signed_internal_draft",
+    "pilot_active_w1",
+    "pilot_day_30_publish_review",
+    "published_post_gates"
+  ],
+  "templates": {
+    "preLoi": "docs/case-study-template-pre-pilot.md",
+    "loi": "docs/loi-design-partner-template.md",
+    "milestoneDraft": "docs/case-studies/_MILESTONE_TEMPLATE.md",
+    "publishGates": "docs/case-study-template.md",
+    "pipelineChecklist": "docs/case-studies/_LOI_TO_PUBLISH_PIPELINE.md"
+  },
+  "verifiedAt": "2026-06-16T01:00:00.000Z"
+}

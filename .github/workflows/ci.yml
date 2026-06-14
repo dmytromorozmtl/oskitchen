@@ -242,6 +242,9 @@ jobs:
       - name: SEO blog articles — 5 posts meal prep ghost kitchen POS (P2-55)
         run: npm run check:seo-blog-articles-p2-55
 
+      - name: Case study template pipeline — LOI to day-30 publish (P2-56)
+        run: npm run check:case-study-template-pipeline-p2-56
+
       - name: Build
         run: |
           set -o pipefail
