@@ -17,12 +17,21 @@ import { Breadcrumbs } from '@/components/seo/breadcrumbs';
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo/schema-org';
 import { PRODUCTION_APP_URL } from '@/lib/auth/public-site-url';
 import type { ComparePageContent } from '@/lib/marketing/compare-content';
+import {
+  HONEST_COMPETITOR_COMPARISON_P1_23_SLUGS,
+  HONEST_COMPETITOR_COMPARISON_P1_23_TEST_ID,
+} from '@/lib/marketing/honest-competitor-comparison-p1-23-policy';
+import { HONEST_COMPARE_P1_23_METHODOLOGY } from '@/lib/marketing/honest-competitor-comparison-p1-23-content';
 
 type Props = {
   content: ComparePageContent;
 };
 
 export function CompareLanding({ content }: Props) {
+  const isHonestCompare = (HONEST_COMPETITOR_COMPARISON_P1_23_SLUGS as readonly string[]).includes(
+    content.slug,
+  );
+
   const breadcrumbItems = [
     { name: 'Home', href: '/' },
     { name: 'Compare', href: '/compare' },
@@ -35,7 +44,11 @@ export function CompareLanding({ content }: Props) {
   ];
 
   return (
-    <div className="min-h-screen bg-background" data-testid={`compare-landing-${content.slug}`}>
+    <div
+      className="min-h-screen bg-background"
+      data-testid={`compare-landing-${content.slug}`}
+      {...(isHonestCompare ? { 'data-honest-compare': HONEST_COMPETITOR_COMPARISON_P1_23_TEST_ID } : {})}
+    >
       <CompareViewTracker slug={content.slug} />
       <BreadcrumbSchema items={breadcrumbSchemaItems} />
       <FAQSchema
@@ -52,6 +65,15 @@ export function CompareLanding({ content }: Props) {
           <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">{content.headline}</h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">{content.subheadline}</p>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">{content.methodology}</p>
+          {isHonestCompare ? (
+            <p
+              className="mt-4 max-w-3xl rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm text-muted-foreground"
+              data-testid={HONEST_COMPETITOR_COMPARISON_P1_23_TEST_ID}
+            >
+              {HONEST_COMPARE_P1_23_METHODOLOGY} Hardware terminals and payment readers are not compared
+              on this page.
+            </p>
+          ) : null}
           <div className="mt-8 flex flex-wrap gap-3">
             <MarketingButton href={content.primaryCta.href} size="lg">
               {content.primaryCta.label}

@@ -5,6 +5,13 @@ import { SQUARE_POSITIONING_PRIMARY_LINE } from '@/lib/marketing/square-position
 import { LIGHTSPEED_POSITIONING_PRIMARY_LINE } from '@/lib/marketing/lightspeed-positioning-policy';
 import { MARKETMAN_POSITIONING_PRIMARY_LINE } from '@/lib/marketing/marketman-positioning-policy';
 import { MARGINEDGE_POSITIONING_PRIMARY_LINE } from '@/lib/marketing/marginedge-positioning-policy';
+import {
+  HONEST_COMPARE_P1_23_DISCLAIMER_SUFFIX,
+  HONEST_COMPARE_P1_23_METHODOLOGY,
+  HONEST_COMPARE_TOAST_ROWS,
+  HONEST_COMPARE_SQUARE_ROWS,
+  HONEST_COMPARE_LIGHTSPEED_ROWS,
+} from '@/lib/marketing/honest-competitor-comparison-p1-23-content';
 
 export type ComparePageSlug =
   | 'restaurant-pos'
@@ -178,63 +185,69 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'toast',
     path: '/compare/toast',
-    metaTitle: 'OS Kitchen vs Toast — Restaurant POS Comparison 2026',
+    metaTitle: 'OS Kitchen vs Toast — Honest Restaurant Ops Comparison 2026',
     metaDescription:
-      'Compare OS Kitchen and Toast POS: hardware lock-in, kitchen display, table management, and total cost for US restaurants.',
+      'Compare OS Kitchen and Toast on LIVE kitchen ops: KDS, production board, storefront, and Integration Health — no hardware bundles on this page.',
     eyebrow: 'OS Kitchen vs Toast',
-    headline: 'Toast vs OS Kitchen — when hardware POS is not the whole story',
-    subheadline: `${TOAST_POSITIONING_PRIMARY_LINE} Toast wins on certified hardware and field support. OS Kitchen wins when you need production truth and multi-channel ops without device lock-in.`,
-    methodology:
-      'Feature matrix based on public positioning and OS Kitchen capability matrix. Verify Toast pricing and hardware bundles before purchase.',
-    comparisonTag: 'Feature matrix',
+    headline: 'Toast vs OS Kitchen — compare what runs your kitchen today',
+    subheadline: `${TOAST_POSITIONING_PRIMARY_LINE} This page compares LIVE software capabilities only — terminals and readers are a separate buying decision.`,
+    methodology: HONEST_COMPARE_P1_23_METHODOLOGY,
+    comparisonTag: 'LIVE capability matrix',
     comparison: {
-      title: 'Toast vs OS Kitchen',
+      title: 'Toast vs OS Kitchen — LIVE ops only',
       competitorALabel: 'Toast',
-      competitorBLabel: 'Add-on stack',
-      rows: [
-        { feature: 'Payment hardware ecosystem', kitchenos: '✅ Stripe Connect (BYO devices)', competitorA: '✅ Native terminals', competitorB: '❌ Fragmented' },
-        { feature: 'Table / QR ordering', kitchenos: '✅ Tables + QR generator', competitorA: '✅ Mature floor plans', competitorB: 'Limited' },
-        { feature: 'Kitchen display (KDS)', kitchenos: '✅ Native + production board', competitorA: '✅ Native KDS', competitorB: 'Add-on' },
-        { feature: 'Online storefront', kitchenos: '✅ Theme + page builder', competitorA: 'Add-ons', competitorB: 'Separate SaaS' },
-        { feature: 'Production / commissary', kitchenos: '✅ Board, packing, routes', competitorA: '❌', competitorB: '❌' },
-        { feature: 'Multi-brand / ghost kitchen', kitchenos: '✅ Command center', competitorA: 'Limited', competitorB: '❌' },
-      ],
+      competitorBLabel: 'Typical add-on stack',
+      rows: HONEST_COMPARE_TOAST_ROWS,
     },
-    disclaimer: 'Toast® is a trademark of Toast, Inc. OS Kitchen is not affiliated with or endorsed by Toast. Toast is a strong fit for full-service restaurants that want bundled hardware and payments. OS Kitchen fits hybrid operators who prioritize flexible commerce + kitchen execution.',
+    disclaimer:
+      'Toast® is a trademark of Toast, Inc. OS Kitchen is not affiliated with or endorsed by Toast. Toast is a strong fit for full-service restaurants with mature floor POS and partner marketplace depth. OS Kitchen fits hybrid operators who prioritize production truth and owned storefront on one tenant graph. ' +
+      HONEST_COMPARE_P1_23_DISCLAIMER_SUFFIX,
     whenToChoose: [
-      { title: 'Choose Toast when', body: 'You need certified hardware, local field support, and a payments-first rollout with minimal engineering.' },
-      { title: 'Choose OS Kitchen when', body: 'You run meal prep, ghost kitchen, or hybrid models and need production + storefront + POS on one tenant graph.' },
+      {
+        title: 'Choose Toast when',
+        body: 'You need mature floor POS, established partner marketplace, and field support for full-service dining — verify current Toast plans before purchase.',
+      },
+      {
+        title: 'Choose OS Kitchen when',
+        body: 'You run meal prep, ghost kitchen, or hybrid models and need LIVE production + storefront + KDS on one tenant graph with honest Integration Health labels.',
+      },
     ],
     faqs: [
-      { q: 'Can OS Kitchen replace Toast terminals?', a: 'OS Kitchen uses Stripe Connect — you bring compatible devices or counter checkout. No proprietary terminal lock-in.' },
-      { q: 'Does OS Kitchen support tips?', a: 'POS supports tip lines on checkout; structured tipping flows are on the roadmap.' },
+      {
+        q: 'Does this page compare payment terminals?',
+        a: 'No — hardware is out of scope here. Compare operational software fit first; evaluate Stripe Connect and card-present separately in onboarding.',
+      },
+      {
+        q: 'Does OS Kitchen support tips?',
+        a: 'POS supports tip lines on checkout; structured tipping flows are on the roadmap.',
+      },
+      {
+        q: 'What about delivery apps?',
+        a: 'DoorDash, Uber Eats, and Grubhub show SKIPPED until partner credentials and smoke proof are complete — see Integration Health Center.',
+      },
     ],
     primaryCta: { label: 'Compare in a demo', href: '/book-demo?utm_source=compare&utm_medium=organic&utm_campaign=toast' },
   },
   {
     slug: 'square',
     path: '/compare/square',
-    metaTitle: 'OS Kitchen vs Square for Restaurants — 2026 Comparison',
+    metaTitle: 'OS Kitchen vs Square — Honest Kitchen Ops Comparison 2026',
     metaDescription:
-      'Square vs OS Kitchen for restaurants and cafés: POS, online ordering, kitchen ops, and when to pick an operations OS over payments-first SMB software.',
+      'Square vs OS Kitchen for restaurants: LIVE KDS, production board, storefront, and Integration Health — operational software only, not Reader hardware.',
     eyebrow: 'OS Kitchen vs Square',
     headline: 'Square vs OS Kitchen — payments ubiquity vs kitchen execution',
-    subheadline: `${SQUARE_POSITIONING_PRIMARY_LINE} Square wins on fast SMB signup. OS Kitchen wins when orders drive production, packing, and multi-channel ops.`,
-    methodology: 'Directional comparison from public vendor positioning. Confirm Square plan limits and app marketplace fees.',
-    comparisonTag: 'Feature matrix',
+    subheadline: `${SQUARE_POSITIONING_PRIMARY_LINE} This matrix shows LIVE OS Kitchen capabilities only — Square wins on SMB signup and payments scale.`,
+    methodology: HONEST_COMPARE_P1_23_METHODOLOGY,
+    comparisonTag: 'LIVE capability matrix',
     comparison: {
-      title: 'Square vs OS Kitchen',
+      title: 'Square vs OS Kitchen — LIVE ops only',
       competitorALabel: 'Square',
       competitorBLabel: 'Spreadsheet ops',
-      rows: [
-        { feature: 'SMB signup friction', kitchenos: '✅ 14-day trial', competitorA: '✅ Very low friction', competitorB: '❌ Manual' },
-        { feature: 'App marketplace', kitchenos: '✅ 285 API routes', competitorA: '✅ Large ecosystem', competitorB: '❌' },
-        { feature: 'Production planning', kitchenos: '✅ Native board', competitorA: '❌ Via apps', competitorB: '❌' },
-        { feature: 'Meal prep / routes', kitchenos: '✅ Routes + subscriptions', competitorA: 'Limited', competitorB: '❌' },
-        { feature: 'Inventory costing', kitchenos: '✅ AVT + theft', competitorA: 'Basic', competitorB: '❌' },
-      ],
+      rows: HONEST_COMPARE_SQUARE_ROWS,
     },
-    disclaimer: 'Square® is a trademark of Block, Inc. OS Kitchen is not affiliated with or endorsed by Square. Square remains excellent for single-location cafés that primarily need payments. OS Kitchen targets operators with recurring production load.',
+    disclaimer:
+      'Square® is a trademark of Block, Inc. OS Kitchen is not affiliated with or endorsed by Square. Square remains excellent for single-location cafés that primarily need payments. OS Kitchen targets operators with recurring production load. ' +
+      HONEST_COMPARE_P1_23_DISCLAIMER_SUFFIX,
     whenToChoose: [
       { title: 'Choose Square when', body: 'You need the simplest counter POS and will add apps as you grow.' },
       { title: 'Choose OS Kitchen when', body: 'Orders drive production, packing, or delivery — you need one system of record.' },
@@ -443,38 +456,30 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'lightspeed',
     path: '/compare/lightspeed',
-    metaTitle: 'OS Kitchen vs Lightspeed — Restaurant POS Comparison 2026',
+    metaTitle: 'OS Kitchen vs Lightspeed — Honest Kitchen Ops Comparison 2026',
     metaDescription:
-      'Lightspeed vs OS Kitchen: dining-room POS vs full kitchen ops — production boards, meal prep, storefront, and multi-brand ghost kitchens.',
+      'Lightspeed vs OS Kitchen: LIVE KDS, production board, meal prep, and Integration Health — compare operational software, not device bundles.',
     eyebrow: 'OS Kitchen vs Lightspeed',
     headline: 'Lightspeed for the floor — OS Kitchen for the whole kitchen',
-    subheadline: `${LIGHTSPEED_POSITIONING_PRIMARY_LINE} Lightspeed wins on dining-room POS. OS Kitchen unifies production, KDS, storefront, and multi-channel fulfillment for operators who live in the back of house.`,
-    methodology:
-      'Feature matrix from public docs; verify pricing with vendors. Lightspeed® is not affiliated with OS Kitchen.',
-    comparisonTag: 'Hospitality POS vs ops platform',
+    subheadline: `${LIGHTSPEED_POSITIONING_PRIMARY_LINE} This page compares LIVE software capabilities — Lightspeed wins on dining-room POS maturity.`,
+    methodology: HONEST_COMPARE_P1_23_METHODOLOGY,
+    comparisonTag: 'LIVE capability matrix',
     comparison: {
-      title: 'Lightspeed vs OS Kitchen',
+      title: 'Lightspeed vs OS Kitchen — LIVE ops only',
       competitorALabel: 'Lightspeed',
       competitorBLabel: 'POS-only stack',
-      rows: [
-        { feature: 'Table / floor POS', kitchenos: '✅ Browser POS', competitorA: '✅ Strong', competitorB: 'Varies' },
-        { feature: 'Production / batch planning', kitchenos: '✅ Native', competitorA: '❌', competitorB: 'Spreadsheets' },
-        { feature: 'Meal prep preorders', kitchenos: '✅', competitorA: 'Add-ons', competitorB: '❌' },
-        { feature: 'Ghost kitchen multi-brand', kitchenos: '✅', competitorA: 'Limited', competitorB: '❌' },
-        { feature: 'Integration Health honesty', kitchenos: '✅ PASS/SKIPPED/FAILED', competitorA: 'Varies', competitorB: '❌' },
-        { feature: 'Recipe costing depth', kitchenos: '✅ Costing module', competitorA: 'Basic', competitorB: 'Manual' },
-      ],
+      rows: HONEST_COMPARE_LIGHTSPEED_ROWS,
     },
     disclaimer:
-      'Lightspeed® is a trademark of its respective owner. OS Kitchen is not affiliated with or endorsed by Lightspeed. Matrix is directional — confirm current plans before purchase.',
+      'Lightspeed® is a trademark of its respective owner. OS Kitchen is not affiliated with or endorsed by Lightspeed. Matrix is directional — confirm current plans before purchase. ' +
+      HONEST_COMPARE_P1_23_DISCLAIMER_SUFFIX,
     whenToChoose: [
       { title: 'Choose Lightspeed when', body: 'Front-of-house speed and payments are the primary bottleneck.' },
       { title: 'Choose OS Kitchen when', body: 'Weekly menus, commissary production, or multi-channel fulfillment dominate your week.' },
     ],
     faqs: [
       { q: 'Can OS Kitchen replace Lightspeed POS?', a: 'For many meal prep and ghost kitchen operators, yes. Full-service dining rooms may keep a floor POS and use OS Kitchen for production and digital channels.' },
-      { q: 'Does OS Kitchen support hardware?', a: 'Yes — BYOD tablets and printers; no proprietary terminal lock-in.' },
-      { q: 'How does pricing compare?', a: 'OS Kitchen Starter from $29/mo with trial; compare total cost including add-ons you need on either stack.' },
+      { q: 'How does pricing compare?', a: 'OS Kitchen Starter from $29/mo with trial; compare total software cost including add-ons you need on either stack.' },
     ],
     primaryCta: { label: 'Start free trial', href: '/signup?utm_source=compare&utm_medium=organic&utm_campaign=lightspeed' },
   },

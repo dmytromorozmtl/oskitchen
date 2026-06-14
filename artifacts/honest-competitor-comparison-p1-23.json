@@ -1,0 +1,21 @@
+{
+  "policyId": "honest-competitor-comparison-p1-23-v1",
+  "compareSlugs": ["toast", "square", "lightspeed"],
+  "comparePaths": ["/compare/toast", "/compare/square", "/compare/lightspeed"],
+  "contentModule": "lib/marketing/honest-competitor-comparison-p1-23-content.ts",
+  "hardwareBannedMarkers": [
+    "Payment hardware",
+    "hardware ecosystem",
+    "terminal lease",
+    "proprietary hardware",
+    "Toast Go",
+    "hardware lock-in",
+    "Proprietary hardware",
+    "BYO devices",
+    "Stripe M2"
+  ],
+  "kitchenOsCellRule": "LIVE | BETA | SKIPPED labels required",
+  "ciGate": true,
+  "checkScript": "check:honest-competitor-comparison-p1-23",
+  "verifiedAt": "2026-06-14T18:00:00.000Z"
+}

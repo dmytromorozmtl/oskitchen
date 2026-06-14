@@ -143,6 +143,9 @@ jobs:
       - name: Integration Health Center hero section (P1-22)
         run: npm run check:integration-health-center-hero-p1-22
 
+      - name: Honest competitor comparison pages (P1-23)
+        run: npm run check:honest-competitor-comparison-p1-23
+
       - name: Build
         run: |
           set -o pipefail
