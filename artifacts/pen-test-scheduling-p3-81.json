@@ -1,0 +1,31 @@
+{
+  "policyId": "pen-test-scheduling-p3-81-v1",
+  "schedulingStatus": "SCHEDULED",
+  "primaryVendor": "cobalt",
+  "alternateVendors": ["bishop_fox", "cure53"],
+  "qsaTrack": "pci_counsel_offline_pos",
+  "qsaIntroDate": "2026-06-24",
+  "qsaOpinionTarget": "2026-07-15",
+  "targetKickoff": "2026-07-07",
+  "targetReport": "2026-08-04",
+  "targetRetestComplete": "2026-08-18",
+  "environment": "staging",
+  "budgetUsdLow": 26000,
+  "budgetUsdHigh": 47000,
+  "enterpriseGates": [
+    "pen_test_summary_passed",
+    "cross_tenant_staging_e2e_pass",
+    "qsa_offline_pos_opinion",
+    "nda_and_budget_executed"
+  ],
+  "blockedUntilComplete": true,
+  "honestClaim": "scheduled_not_completed",
+  "upstreamDocs": [
+    "docs/pen-test-plan.md",
+    "docs/pen-test-vendor-selection.md",
+    "docs/offline-pos-pci-review.md"
+  ],
+  "ciGate": true,
+  "checkScript": "check:pen-test-scheduling-p3-81",
+  "verifiedAt": "2026-06-16T16:00:00.000Z"
+}

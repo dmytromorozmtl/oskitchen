@@ -317,6 +317,9 @@ jobs:
       - name: Cross-tenant service scope audit (P3-80)
         run: npm run check:cross-tenant-audit-p3-80
 
+      - name: Pen test scheduling (P3-81)
+        run: npm run check:pen-test-scheduling-p3-81
+
       - name: Build
         run: |
           set -o pipefail

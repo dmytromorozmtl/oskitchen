@@ -1,0 +1,18 @@
+{
+  "selectedVendor": "cobalt",
+  "alternates": ["bishop_fox", "cure53"],
+  "engagementStatus": "scheduled",
+  "schedulingPolicy": "pen-test-scheduling-p3-81-v1",
+  "targetKickoff": "2026-07-07",
+  "targetReport": "2026-08-04",
+  "blockedBy": [],
+  "resolvedBlockers": ["vendor_shortlist", "scheduling_dates", "qsa_track"],
+  "budgetApprovedUsd": 35000,
+  "signOff": {
+    "founder": "approved",
+    "securityEng": "approved",
+    "legal": "nda_pending",
+    "finance": "approved"
+  },
+  "verifiedAt": "2026-06-16T16:00:00.000Z"
+}

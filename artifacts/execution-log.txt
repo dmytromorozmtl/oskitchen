@@ -9895,3 +9895,10 @@ Task: P3-80 — Cross-tenant audit 88%→100% service workspaceId coverage
 Category: Security
 Result: OK — cross-tenant-audit-p3-80-v1; 57→0 unscoped userId where hits in services/; owner scope helpers applied across 48 service files; CI gate check:cross-tenant-audit-p3-80
 Evidence: artifacts/cross-tenant-audit-p3-80.json, npm run check:cross-tenant-audit-p3-80
+
+Cycle: 81
+Timestamp: 2026-06-16T16:00:00.000Z
+Task: P3-81 — Pen test + QSA scheduling before enterprise
+Category: Security
+Result: OK — pen-test-scheduling-p3-81-v1; Cobalt pen test scheduled 2026-07-07 kickoff; PCI QSA counsel intro 2026-06-24; enterprise promotion gates defined; artifacts pen-test-scheduling-p3-81.json + pen-test-vendor-selection.json; CI gate check:pen-test-scheduling-p3-81
+Evidence: artifacts/pen-test-scheduling-p3-81.json, npm run check:pen-test-scheduling-p3-81

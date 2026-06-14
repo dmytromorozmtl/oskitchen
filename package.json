@@ -225,6 +225,7 @@
     "check:otel-bundle-p3-78": "node ./node_modules/vitest/vitest.mjs run tests/unit/otel-bundle-p3-78.test.ts",
     "check:segment-not-found-p3-79": "node ./node_modules/vitest/vitest.mjs run tests/unit/segment-not-found-p3-79.test.ts",
     "check:cross-tenant-audit-p3-80": "node ./node_modules/vitest/vitest.mjs run tests/unit/cross-tenant-audit-p3-80.test.ts",
+    "check:pen-test-scheduling-p3-81": "node ./node_modules/vitest/vitest.mjs run tests/unit/pen-test-scheduling-p3-81.test.ts",
     "test:e2e:maintenance-mode-panel-perf-budget": "playwright test e2e/maintenance-mode-panel-perf-budget.spec.ts --project=chromium",
     "test:e2e:preview-route-redirect-regression": "playwright test e2e/preview-route-redirect-regression.spec.ts --project=chromium",
     "test:e2e:enterprise-sso-saml-e2e": "playwright test e2e/auth.setup.ts e2e/enterprise-sso-saml-e2e.spec.ts --project=setup --project=chromium-authed",

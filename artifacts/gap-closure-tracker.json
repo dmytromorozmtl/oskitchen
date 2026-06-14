@@ -78,5 +78,6 @@
   "p3-77-archive-workflows": "done",
   "p3-78-otel-bundle-analysis": "done",
   "p3-79-segment-not-found": "done",
-  "p3-80-cross-tenant-audit": "done"
+  "p3-80-cross-tenant-audit": "done",
+  "p3-81-pen-test-scheduling": "done"
 }
