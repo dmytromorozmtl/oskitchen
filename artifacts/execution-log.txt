@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-48
+Timestamp: 2026-06-15T19:00:00.000Z
+Task: P2-48 — staticGenerationMaxConcurrency:1 review (measure, increase if safe)
+Category: Backend
+Result: OK — measured 957 app pages; decision retain-vercel-1-local-uncapped; check:static-generation-max-concurrency-p2-48 CI gate
+Evidence: artifacts/static-generation-max-concurrency-p2-48.json; docs/static-generation-max-concurrency-p2-48.md
+
+---
 Cycle: gap-closure-47
 Timestamp: 2026-06-15T18:00:00.000Z
 Task: P2-47 — product-table-image-cell.tsx L52 empty alt → alt={productName}

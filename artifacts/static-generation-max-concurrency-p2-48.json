@@ -1,0 +1,19 @@
+{
+  "version": "static-generation-max-concurrency-v1",
+  "policyId": "static-generation-max-concurrency-p2-48-v1",
+  "measuredAt": "2026-06-15T19:00:00.000Z",
+  "measurements": {
+    "appPages": 957,
+    "dashboardPages": 706,
+    "vercelHeapMb": 14336,
+    "vercelCpus": 1
+  },
+  "decision": "retain-vercel-1-local-uncapped",
+  "vercelConcurrency": 1,
+  "localConcurrency": "next-default",
+  "overrideEnv": "NEXT_STATIC_GENERATION_MAX_CONCURRENCY",
+  "rationale": "957 SSG-capable app routes; Vercel remote builds OOM at concurrency>1 with cpus=1 and 14GB heap. Local builds omit cap unless env override.",
+  "policyModule": "lib/performance/static-generation-concurrency-policy.ts",
+  "nextConfigModule": "next.config.ts",
+  "vercelBuildScript": "scripts/vercel-build.sh"
+}

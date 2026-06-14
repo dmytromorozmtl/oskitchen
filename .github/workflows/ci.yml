@@ -218,6 +218,9 @@ jobs:
       - name: Product thumbnail alt text — alt={productName} (P2-47)
         run: npm run check:product-thumbnail-alt-text-p2-47
 
+      - name: staticGenerationMaxConcurrency — Vercel=1 review (P2-48)
+        run: npm run check:static-generation-max-concurrency-p2-48
+
       - name: Build
         run: |
           set -o pipefail
