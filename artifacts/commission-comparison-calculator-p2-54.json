@@ -1,0 +1,21 @@
+{
+  "version": "commission-comparison-calculator-v1",
+  "policyId": "commission-comparison-calculator-p2-54-v1",
+  "publicRoute": "/commission-comparison",
+  "flowSteps": [
+    "enter_delivery_volume",
+    "compare_doordash_commission",
+    "compare_uber_eats_commission",
+    "combined_savings_vs_owned"
+  ],
+  "benchmarks": {
+    "doordashPct": 30,
+    "uberEatsPct": 25,
+    "ownedMarketplacePct": 0,
+    "defaultProcessingPct": 2.9
+  },
+  "panelTestId": "commission-comparison-doordash-uber-p2-54",
+  "savingsTestId": "commission-comparison-doordash-uber-savings",
+  "panelPath": "components/marketing/commission-comparison-doordash-uber-panel.tsx",
+  "verifiedAt": "2026-06-16T00:00:00.000Z"
+}

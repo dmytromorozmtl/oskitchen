@@ -236,6 +236,9 @@ jobs:
       - name: Maintenance mode panel perf budget — Lighthouse thresholds (P2-53)
         run: npm run check:maintenance-mode-panel-perf-budget-p2-53
 
+      - name: Commission comparison calculator — DoorDash/Uber interactive (P2-54)
+        run: npm run check:commission-comparison-calculator-p2-54
+
       - name: Build
         run: |
           set -o pipefail

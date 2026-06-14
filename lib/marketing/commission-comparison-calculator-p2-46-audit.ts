@@ -64,8 +64,10 @@ export function auditCommissionComparisonCalculatorP2_46(
       : "";
     publicPageWired =
       (pageSource.includes("CommissionComparisonDoorDashPanel") ||
+        pageSource.includes("CommissionComparisonDoorDashUberPanel") ||
         (pageSource.includes("CommissionComparisonLanding") &&
-          landingSource.includes("CommissionComparisonDoorDashPanel"))) &&
+          (landingSource.includes("CommissionComparisonDoorDashPanel") ||
+            landingSource.includes("CommissionComparisonDoorDashUberPanel")))) &&
       pageSource.includes(COMMISSION_COMPARISON_CALCULATOR_P2_46_PUBLIC_ROUTE);
   }
 

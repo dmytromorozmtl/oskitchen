@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Calculator, Percent, TrendingDown } from 'lucide-react';
 
 import { CommissionComparisonCalculator } from '@/components/marketing/commission-comparison-calculator';
-import { CommissionComparisonDoorDashPanel } from '@/components/marketing/commission-comparison-doordash-panel';
+import { CommissionComparisonDoorDashUberPanel } from '@/components/marketing/commission-comparison-doordash-uber-panel';
 import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
 import { SiteFooter } from '@/components/marketing/site-footer';
@@ -115,13 +115,13 @@ export function CommissionComparisonLanding() {
         <section id="calculator" className="border-t border-border/60 py-12 sm:py-16 scroll-mt-20">
           <SectionHeader
             tag="Interactive calculator"
-            title="DoorDash 30% vs owned channel — then full marketplace mix"
-            description="Adjust volume and channel mix live. Results update instantly — directional benchmarks only."
+            title="DoorDash & Uber Eats vs owned channel — then full marketplace mix"
+            description="Enter volume and mix — see savings vs DoorDash and Uber Eats instantly. Full four-channel calculator below."
             centered
             className="mx-auto"
           />
           <div className="mt-10 space-y-8">
-            <CommissionComparisonDoorDashPanel />
+            <CommissionComparisonDoorDashUberPanel />
             <CommissionComparisonCalculator />
           </div>
         </section>
