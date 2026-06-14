@@ -1,0 +1,12 @@
+{
+  "policyId": "copilot-accuracy-benchmark-p2-69-v1",
+  "scenarioCount": 25,
+  "answerAccuracyPct": 100,
+  "hallucinationPct": 0,
+  "thresholdAccuracyPct": 95,
+  "maxHallucinationPct": 0,
+  "evalNote": "Deterministic restaurant Q&A from workspace signals — eval suite with hallucination rate gate, without claiming LLM accuracy certification.",
+  "ciGate": true,
+  "checkScript": "check:copilot-accuracy-benchmark-p2-69",
+  "verifiedAt": "2026-06-16T14:00:00.000Z"
+}

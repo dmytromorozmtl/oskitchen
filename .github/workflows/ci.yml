@@ -281,6 +281,9 @@ jobs:
       - name: Photo invoice AI — Poster POS parity (P2-68)
         run: npm run check:photo-invoice-ai-p2-68
 
+      - name: AI co-pilot accuracy benchmarks (P2-69)
+        run: npm run check:copilot-accuracy-benchmark-p2-69
+
       - name: Build
         run: |
           set -o pipefail
