@@ -5,6 +5,7 @@ import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-d
 import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { VENDOR_PRICE_CHANGE_ALERTS_P2_67_ROUTE } from "@/lib/inventory/vendor-price-change-alerts-p2-67-policy";
 import {
   VENDOR_PRICE_INTELLIGENCE_P2_100_POLICY_ID,
   VENDOR_PRICE_INTELLIGENCE_P2_100_PURCHASING_ROUTE,
@@ -29,9 +30,14 @@ export default async function VendorPriceIntelligencePage() {
             Price history, substitutions, cheaper vendor — policy {VENDOR_PRICE_INTELLIGENCE_P2_100_POLICY_ID}
           </p>
         </div>
-        <Button asChild variant="outline" size="sm" className="rounded-full">
-          <Link href={VENDOR_PRICE_INTELLIGENCE_P2_100_PURCHASING_ROUTE}>Purchasing</Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href={VENDOR_PRICE_CHANGE_ALERTS_P2_67_ROUTE}>Price alerts</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href={VENDOR_PRICE_INTELLIGENCE_P2_100_PURCHASING_ROUTE}>Purchasing</Link>
+          </Button>
+        </div>
       </div>
       <VendorPriceIntelligencePanel snapshot={snapshot} />
     </div>

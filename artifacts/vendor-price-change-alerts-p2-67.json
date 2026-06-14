@@ -1,0 +1,13 @@
+{
+  "policyId": "vendor-price-change-alerts-p2-67-v1",
+  "scenarioCount": 12,
+  "capabilityCoveragePct": 100,
+  "thresholdPct": 100,
+  "defaultAlertThresholdPct": 5,
+  "marginEdgeParityNote": "Auto-alerts when supplier unit costs change beyond a threshold — comparable to MarginEdge price change notifications, without claiming certified parity.",
+  "route": "/dashboard/inventory/vendor-price-alerts",
+  "panelTestId": "vendor-price-change-alerts",
+  "ciGate": true,
+  "checkScript": "check:vendor-price-change-alerts-p2-67",
+  "verifiedAt": "2026-06-16T12:00:00.000Z"
+}

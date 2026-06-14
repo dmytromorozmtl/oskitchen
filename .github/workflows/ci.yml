@@ -275,6 +275,9 @@ jobs:
       - name: Labor forecasting AI — 7shifts parity (P2-66)
         run: npm run check:labor-forecasting-ai-p2-66
 
+      - name: Vendor price change alerts — MarginEdge parity (P2-67)
+        run: npm run check:vendor-price-change-alerts-p2-67
+
       - name: Build
         run: |
           set -o pipefail
