@@ -1,0 +1,18 @@
+{
+  "version": "gap-closure-complete-v1",
+  "policyId": "gap-closure-complete-p3-100-v1",
+  "status": "COMPLETE",
+  "totalTasks": 100,
+  "doneTasks": 100,
+  "completedAt": "2026-06-17T11:00:00.000Z",
+  "trackerPath": "artifacts/gap-closure-tracker.json",
+  "executionLogPath": "artifacts/execution-log.txt",
+  "checkScript": "check:gap-closure-complete-p3-100",
+  "ciGate": true,
+  "priorityBreakdown": {
+    "p0": 15,
+    "p1": 25,
+    "p2": 35,
+    "p3": 25
+  }
+}

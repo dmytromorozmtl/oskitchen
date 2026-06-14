@@ -374,6 +374,9 @@ jobs:
       - name: Not-found audit all verticals (P3-99)
         run: npm run check:not-found-audit-p3-99
 
+      - name: Gap closure complete (P3-100)
+        run: npm run check:gap-closure-complete-p3-100
+
       - name: Build
         run: |
           set -o pipefail
