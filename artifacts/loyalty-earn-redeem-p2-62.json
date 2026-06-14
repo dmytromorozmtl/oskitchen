@@ -1,0 +1,19 @@
+{
+  "policyId": "loyalty-earn-redeem-p2-62-v1",
+  "status": "LIVE",
+  "channels": ["pos", "storefront"],
+  "posRedeemTestId": "pos-loyalty-redeem-input",
+  "posBalanceTestId": "pos-loyalty-balance",
+  "liveRoutes": [
+    "/dashboard/customers/loyalty",
+    "/dashboard/storefront/loyalty"
+  ],
+  "upstreamPolicies": [
+    "loyalty-earn-redeem-p2-41-v1",
+    "loyalty-earn-redeem-e2e-p2-31-v1"
+  ],
+  "squareParityNote": "POS + storefront earn on order, redeem at checkout — Square parity for in-house channels; not certified third-party Square Loyalty API.",
+  "ciGate": true,
+  "checkScript": "check:loyalty-earn-redeem-p2-62",
+  "verifiedAt": "2026-06-16T07:00:00.000Z"
+}

@@ -260,6 +260,9 @@ jobs:
       - name: AI briefing accuracy benchmarks — Toast IQ parity (P2-61)
         run: npm run check:ai-briefing-accuracy-benchmark-p2-61
 
+      - name: Loyalty earn/redeem LIVE — POS + storefront Square parity (P2-62)
+        run: npm run check:loyalty-earn-redeem-p2-62
+
       - name: Build
         run: |
           set -o pipefail

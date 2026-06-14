@@ -11,7 +11,7 @@ import {
 } from "@/lib/navigation/nav-maturity-governance";
 
 /**
- * P1-24 — nav audit: preview badges + suppress hardware / loyalty / QR sprawl.
+ * P1-24 — nav audit: preview badges + suppress hardware / QR sprawl.
  *
  * @see docs/navigation-ia-audit.md
  * @see components/dashboard/dashboard-nav.tsx

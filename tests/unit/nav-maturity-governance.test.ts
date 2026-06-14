@@ -77,12 +77,13 @@ describe("nav maturity governance", () => {
     expect(hrefs).not.toContain("/dashboard/go-live");
     expect(hrefs).not.toContain("/dashboard/integrations/extensions");
     expect(hrefs).not.toContain("/dashboard/gift-cards");
-    expect(hrefs).not.toContain("/dashboard/customers/loyalty");
+    expect(hrefs).toContain("/dashboard/customers/loyalty");
+    expect(hrefs).toContain("/dashboard/storefront/loyalty");
     expect(hrefs).toContain("/dashboard/onboarding-hub");
     expect(hrefs).not.toContain("/dashboard/launch-wizard");
   });
 
-  it("hides loyalty, gift cards, and marketplace extension previews from default nav", () => {
+  it("shows loyalty LIVE routes in default nav; hides gift card previews", () => {
     expect(
       shouldShowNavLinkByMaturity("/dashboard/integrations/extensions", {
         fullNavAccess: false,
@@ -96,7 +97,14 @@ describe("nav maturity governance", () => {
         navScopeAll: false,
         gtmSurfaceAccess: false,
       }),
-    ).toBe(false);
+    ).toBe(true);
+    expect(
+      shouldShowNavLinkByMaturity("/dashboard/customers/loyalty", {
+        fullNavAccess: false,
+        navScopeAll: false,
+        gtmSurfaceAccess: false,
+      }),
+    ).toBe(true);
   });
 
   it("shows go-live when navScopeAll is enabled", () => {

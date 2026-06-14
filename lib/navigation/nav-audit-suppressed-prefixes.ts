@@ -2,8 +2,6 @@
 export const NAV_AUDIT_SUPPRESSED_PREFIXES = [
   "/dashboard/settings/hardware",
   "/dashboard/pos/settings/hardware",
-  "/dashboard/customers/loyalty",
-  "/dashboard/storefront/loyalty",
   "/dashboard/loyalty",
   "/dashboard/qr-codes",
 ] as const;

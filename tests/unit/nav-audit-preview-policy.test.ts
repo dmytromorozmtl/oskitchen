@@ -21,11 +21,11 @@ describe("nav audit preview policy (P1-24)", () => {
   it("locks policy id and suppressed prefixes", () => {
     expect(NAV_AUDIT_PREVIEW_POLICY_ID).toBe("nav-audit-preview-p1-24-v1");
     expect(NAV_AUDIT_SUPPRESSED_PREFIXES).toContain("/dashboard/qr-codes");
-    expect(NAV_AUDIT_SUPPRESSED_PREFIXES).toContain("/dashboard/customers/loyalty");
+    expect(NAV_AUDIT_SUPPRESSED_PREFIXES).not.toContain("/dashboard/customers/loyalty");
     expect(NAV_AUDIT_SUPPRESSED_PREFIXES).toContain("/dashboard/settings/hardware");
   });
 
-  it("suppresses hardware, loyalty, and QR from expanded tenant nav", () => {
+  it("suppresses hardware and QR from expanded tenant nav", () => {
     const ctx = {
       fullNavAccess: false,
       navScopeAll: true,
@@ -50,6 +50,7 @@ describe("nav audit preview policy (P1-24)", () => {
     const links = listNavAuditPreviewSidebarLinks();
     expect(links.some((l) => l.href === "/dashboard/copilot")).toBe(true);
     expect(links.some((l) => l.href === "/dashboard/customers/loyalty")).toBe(false);
+    expect(links.some((l) => l.href === "/dashboard/gift-cards")).toBe(true);
   });
 
   it.each(NAV_AUDIT_PREVIEW_UI_MODULES)("UI module %s wires preview badges", (modulePath) => {

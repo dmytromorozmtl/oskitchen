@@ -87,19 +87,9 @@ export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
     matrixRef: "Gift cards",
   },
   {
-    prefix: "/dashboard/customers/loyalty",
-    exposure: "preview",
-    matrixRef: "Loyalty programs",
-  },
-  {
     prefix: "/dashboard/storefront/gift-cards",
     exposure: "preview",
     matrixRef: "Storefront gift cards",
-  },
-  {
-    prefix: "/dashboard/storefront/loyalty",
-    exposure: "preview",
-    matrixRef: "Storefront loyalty",
   },
   {
     prefix: "/dashboard/meal-plans",
