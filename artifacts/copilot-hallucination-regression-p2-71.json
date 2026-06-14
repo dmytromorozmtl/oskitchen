@@ -1,0 +1,13 @@
+{
+  "policyId": "copilot-hallucination-regression-p2-71-v1",
+  "scenarioCount": 50,
+  "operationalCount": 30,
+  "trapCount": 20,
+  "passPct": 100,
+  "hallucinationPct": 0,
+  "maxHallucinationPct": 0,
+  "evalNote": "50-scenario co-pilot Q&A regression — grounded answers only, zero unsupported marketing or certification claims.",
+  "ciGate": true,
+  "checkScript": "check:copilot-hallucination-regression-p2-71",
+  "verifiedAt": "2026-06-16T16:00:00.000Z"
+}

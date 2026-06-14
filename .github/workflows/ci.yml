@@ -287,6 +287,9 @@ jobs:
       - name: Gift cards issue/redeem regression (P2-70)
         run: npm run check:gift-cards-regression-p2-70
 
+      - name: Co-pilot hallucination regression (P2-71)
+        run: npm run check:copilot-hallucination-regression-p2-71
+
       - name: Build
         run: |
           set -o pipefail
