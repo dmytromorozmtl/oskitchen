@@ -213,9 +213,9 @@ export const PUBLIC_ROADMAP_OUT_OF_SCOPE: PublicRoadmapItem[] = [
   },
   {
     id: 'stripe-terminal',
-    title: 'Stripe Terminal hardware SDK',
+    title: 'Native payment terminals (Stripe Terminal SDK)',
     description:
-      'Software counter UX today — reader SDK deferred with no calendar date until design partner demand.',
+      'native payment terminal deferred — browser POS on BYOD, cash/external terminal, and hosted checkout today; reader SDK has no calendar date.',
     status: 'deferred',
     confidence: 'conditional',
   },

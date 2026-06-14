@@ -9986,3 +9986,10 @@ Task: P3-93 — Field sales → digital-only honest acknowledgment
 Category: Marketing
 Result: OK — field-sales-deferral-p3-93-v1; no field sales team or on-site reps; digital-only GTM (Quick Start, book demo, design partner, /kb); added to /roadmap Out of scope + PRODUCT_ROADMAP_2026; banned field-sales tease phrases gated; artifact field-sales-deferral-p3-93.json; CI gate check:field-sales-deferral-p3-93
 Evidence: artifacts/field-sales-deferral-p3-93.json, npm run check:field-sales-deferral-p3-93
+
+Cycle: 94
+Timestamp: 2026-06-17T05:00:00.000Z
+Task: P3-94 — Native payment terminals → defer
+Category: Hardware
+Result: OK — native-payment-terminal-deferral-p3-94-v1; no proprietary OS Kitchen card readers; Stripe Terminal SDK deferred; 4 alternatives (browser POS, cash/external, storefront checkout, Stripe Connect); /roadmap stripe-terminal Out of scope + PRODUCT_ROADMAP NOT_AVAILABLE; banned terminal tease phrases gated; artifact native-payment-terminal-deferral-p3-94.json; CI gate check:native-payment-terminal-deferral-p3-94
+Evidence: artifacts/native-payment-terminal-deferral-p3-94.json, npm run check:native-payment-terminal-deferral-p3-94

@@ -86,7 +86,8 @@ OS Kitchen enters **paid pilot** with a **production-grade core** (orders → pr
 |------------|--------|-----------|
 | **SMS notifications** | NOT_AVAILABLE | TCPA, provider cost, low pilot signal — use email + in-app |
 | **POS offline mode** | NOT_AVAILABLE | Architectural cost; pilot is online-first |
-| **Stripe Terminal (hardware)** | ROADMAP | OS Kitchen POS is software counter UX, not reader SDK |
+| **Stripe Terminal (hardware)** | NOT_AVAILABLE | Native payment terminals deferred — browser POS + cash/external terminal; Stripe Terminal SDK not integrated |
+| **Native payment terminals** | NOT_AVAILABLE | deferred — no proprietary OS Kitchen readers; use browser POS and hosted checkout today |
 | **SOC 2 attestation** | ROADMAP | Foundations only; sell “security program in progress” |
 | **SCIM** | ROADMAP | After SSO; no demand without enterprise ARR |
 | **Native consumer app** | NOT_AVAILABLE | Deferred until **500+** paying operators — storefront PWA + mobile web today |

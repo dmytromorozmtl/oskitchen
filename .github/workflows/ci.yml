@@ -356,6 +356,9 @@ jobs:
       - name: Field sales deferral (P3-93)
         run: npm run check:field-sales-deferral-p3-93
 
+      - name: Native payment terminal deferral (P3-94)
+        run: npm run check:native-payment-terminal-deferral-p3-94
+
       - name: Build
         run: |
           set -o pipefail
