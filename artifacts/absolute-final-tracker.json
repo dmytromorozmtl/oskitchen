@@ -1,7 +1,7 @@
 {
   "1-split-maintenance-mode-panel": "done",
-  "2-activate-sentry-dsn": "blocked",
-  "2-activate-sentry-dsn-note": "SENTRY_DSN missing locally and on Vercel — run: SENTRY_DSN=https://... npm run sentry:production:activate -- --apply --deploy --mirror-public-dsn",
+  "2-activate-sentry-dsn": "done",
+  "2-activate-sentry-dsn-note": "Production /api/health confirms sentryServer.status=live (synced P2-45)",
   "3-remove-deploy-skip-vitest": "done",
   "4-add-error-tsx-top-20": "done",
   "5-suspense-wrap-today": "done",
@@ -152,5 +152,5 @@
   "150-full-competitor-parity-check": "done",
   "151-absolute-final-complete": "done",
   "completedAt": "2026-06-07T02:22:00.000Z",
-  "summary": "149/150 done, 1 blocked (Task 2 Sentry DSN) — OS Kitchen 100/100 audited dimensions"
+  "summary": "150/150 done — OS Kitchen 100/100 audited dimensions (Sentry synced P2-45)"
 }

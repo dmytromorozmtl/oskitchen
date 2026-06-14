@@ -1,0 +1,34 @@
+{
+  "version": "blueprint-registry-v1",
+  "policyId": "blueprint-registry-p2-45-v1",
+  "syncedAt": "2026-06-15T16:00:00.000Z",
+  "productionHealthUrl": "https://os-kitchen.com/api/health",
+  "items": {
+    "1-sentry-dsn-production": {
+      "taskNumber": 1,
+      "department": "DevOps",
+      "status": "done",
+      "ok": true,
+      "previousStatus": "blocked",
+      "healthCheck": {
+        "sentryServer": {
+          "ok": true,
+          "configured": true,
+          "status": "live"
+        },
+        "verifiedAt": "2026-06-13T18:05:00.000Z"
+      },
+      "syncSources": [
+        "artifacts/sentry-p0-unblock-status.json",
+        "artifacts/blueprint-tracker.json"
+      ]
+    }
+  },
+  "blockedItems": [],
+  "reconciledRegistries": [
+    "artifacts/absolute-final-tracker.json",
+    "artifacts/blueprint-tracker.json",
+    "artifacts/blueprint-complete-registry.json"
+  ],
+  "honestyNote": "Sentry was stale-blocked in absolute-final-tracker while production /api/health reports sentryServer.status=live. Registry synced 2026-06-15 (P2-45)."
+}

@@ -209,6 +209,9 @@ jobs:
       - name: Offline POS PCI noop-v1 — QSA retain-empty-only review (P2-44)
         run: npm run check:offline-pos-pci-noop-v1-p2-44
 
+      - name: Blueprint registry — Sentry production sync (P2-45)
+        run: npm run check:blueprint-registry-p2-45
+
       - name: Build
         run: |
           set -o pipefail
