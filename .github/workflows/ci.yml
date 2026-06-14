@@ -353,6 +353,9 @@ jobs:
       - name: Consumer app deferral (P3-92)
         run: npm run check:consumer-app-deferral-p3-92
 
+      - name: Field sales deferral (P3-93)
+        run: npm run check:field-sales-deferral-p3-93
+
       - name: Build
         run: |
           set -o pipefail

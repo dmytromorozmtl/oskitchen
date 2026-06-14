@@ -227,6 +227,14 @@ export const PUBLIC_ROADMAP_OUT_OF_SCOPE: PublicRoadmapItem[] = [
     status: 'deferred',
     confidence: 'conditional',
   },
+  {
+    id: 'field-sales',
+    title: 'Field sales / local rep network',
+    description:
+      'digital-only go-to-market — self-serve signup, book demo, and founder-led design partner outreach; no on-site sales force.',
+    status: 'deferred',
+    confidence: 'conditional',
+  },
 ];
 
 export const PUBLIC_ROADMAP_HONESTY_DISCLAIMER =

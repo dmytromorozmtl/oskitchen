@@ -1,0 +1,11 @@
+{
+  "version": "field-sales-deferral-v1",
+  "policyId": "field-sales-deferral-p3-93-v1",
+  "status": "DIGITAL_ONLY_GTM",
+  "gtmModel": "digital-only",
+  "alternativeCount": 4,
+  "roadmapItemId": "field-sales",
+  "checkScript": "check:field-sales-deferral-p3-93",
+  "ciGate": true,
+  "verifiedAt": "2026-06-17T04:00:00.000Z"
+}

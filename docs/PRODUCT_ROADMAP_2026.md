@@ -90,6 +90,7 @@ OS Kitchen enters **paid pilot** with a **production-grade core** (orders → pr
 | **SOC 2 attestation** | ROADMAP | Foundations only; sell “security program in progress” |
 | **SCIM** | ROADMAP | After SSO; no demand without enterprise ARR |
 | **Native consumer app** | NOT_AVAILABLE | Deferred until **500+** paying operators — storefront PWA + mobile web today |
+| **Field sales / local reps** | NOT_AVAILABLE | digital-only GTM — self-serve signup, book demo, design partner outreach; no Toast-style field force |
 
 ---
 

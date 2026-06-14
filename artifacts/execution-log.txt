@@ -9979,3 +9979,10 @@ Task: P3-92 — Consumer app defer until 500+ customers
 Category: Marketing
 Result: OK — consumer-app-deferral-p3-92-v1; native App Store/Play Store consumer app deferred until 500+ paying operators; added to /roadmap Out of scope + PRODUCT_ROADMAP_2026; 4 alternatives (storefront PWA, mobile web, QR, loyalty); banned tease phrases gated; artifact consumer-app-deferral-p3-92.json; CI gate check:consumer-app-deferral-p3-92
 Evidence: artifacts/consumer-app-deferral-p3-92.json, npm run check:consumer-app-deferral-p3-92
+
+Cycle: 93
+Timestamp: 2026-06-17T04:00:00.000Z
+Task: P3-93 — Field sales → digital-only honest acknowledgment
+Category: Marketing
+Result: OK — field-sales-deferral-p3-93-v1; no field sales team or on-site reps; digital-only GTM (Quick Start, book demo, design partner, /kb); added to /roadmap Out of scope + PRODUCT_ROADMAP_2026; banned field-sales tease phrases gated; artifact field-sales-deferral-p3-93.json; CI gate check:field-sales-deferral-p3-93
+Evidence: artifacts/field-sales-deferral-p3-93.json, npm run check:field-sales-deferral-p3-93
