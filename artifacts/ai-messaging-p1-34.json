@@ -1,0 +1,9 @@
+{
+  "policyId": "ai-messaging-p1-34-v1",
+  "approvedLine": "AI-assisted operations — human-in-the-loop, verify before acting",
+  "bannedPhrases": ["AI-powered", "AI powered", "fully AI-powered"],
+  "preferredTerm": "AI-assisted",
+  "ciGate": true,
+  "checkScript": "check:ai-messaging-p1-34",
+  "verifiedAt": "2026-06-15T05:00:00.000Z"
+}

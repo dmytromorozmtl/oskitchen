@@ -176,6 +176,9 @@ jobs:
       - name: Segment-level not-found.tsx — dashboard, vendor, storefront (P1-33)
         run: npm run check:segment-level-not-found-p1-33
 
+      - name: AI messaging — AI-assisted not AI-powered (P1-34)
+        run: npm run check:ai-messaging-p1-34
+
       - name: Build
         run: |
           set -o pipefail

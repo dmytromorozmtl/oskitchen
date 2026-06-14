@@ -4,6 +4,8 @@
  * @see docs/forbidden-claims-team-cheat-sheet.md
  */
 
+import { AI_MESSAGING_P1_34_APPROVED_LINE } from "@/lib/marketing/ai-messaging-p1-34-policy";
+
 export const FORBIDDEN_CLAIMS_CHEAT_SHEET_P1_26_POLICY_ID =
   "forbidden-claims-cheat-sheet-p1-26-v1" as const;
 
@@ -127,7 +129,16 @@ export const FORBIDDEN_CLAIMS_CHEAT_SHEET_ENTRIES: ForbiddenClaimsCheatSheetEntr
     category: "AI",
     topic: "AI differentiation",
     verdict: "SAFE",
-    sayThis: "Seven proprietary AI modules in production — each at qualified maturity.",
+    sayThis:
+      "AI-assisted operations — seven proprietary modules in production at qualified maturity.",
+  },
+  {
+    id: "ai-assisted-messaging",
+    category: "AI",
+    topic: "AI-assisted vs unqualified autonomy",
+    verdict: "CAVEAT",
+    sayThis: AI_MESSAGING_P1_34_APPROVED_LINE,
+    neverSay: "Full AI autonomy / magic AI that runs your kitchen without operator review",
   },
   {
     id: "ai-perfect",
