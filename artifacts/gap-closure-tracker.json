@@ -40,5 +40,6 @@
   "p1-39-scim-provision-ui-e2e": "done",
   "p1-40-sentry-alert-firing": "done",
   "p2-41-suspense-boundaries-wave-1": "done",
-  "p2-42-dashboard-error-tsx-45-routes": "done"
+  "p2-42-dashboard-error-tsx-45-routes": "done",
+  "p2-43-public-pages-error-tsx": "done"
 }

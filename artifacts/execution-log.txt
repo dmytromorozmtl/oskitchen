@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-43
+Timestamp: 2026-06-15T14:00:00.000Z
+Task: P2-43 — error.tsx on 251 public pages (layout catch-all)
+Category: Frontend
+Result: OK — 10 layout-level PublicLayoutError boundaries; 251/251 public pages with error ancestor; P2-43 CI gate
+Evidence: check:public-pages-error-tsx-p2-43; artifacts/public-pages-error-tsx-p2-43.json; app/error.tsx + segment layouts
+
+---
 Cycle: gap-closure-42
 Timestamp: 2026-06-15T13:00:00.000Z
 Task: P2-42 — error.tsx on 45 dashboard operator routes (Today/Marketplace/POS/Kitchen)

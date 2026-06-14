@@ -203,6 +203,9 @@ jobs:
       - name: Dashboard error.tsx — 45 operator routes templated (P2-42)
         run: npm run check:dashboard-error-tsx-p2-42
 
+      - name: Public pages error.tsx — 251 pages layout catch-all (P2-43)
+        run: npm run check:public-pages-error-tsx-p2-43
+
       - name: Build
         run: |
           set -o pipefail

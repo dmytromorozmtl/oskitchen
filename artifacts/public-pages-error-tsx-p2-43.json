@@ -1,0 +1,12 @@
+{
+  "policyId": "public-pages-error-tsx-p2-43-v1",
+  "publicPageCount": 251,
+  "layoutErrorSegmentCount": 10,
+  "pagesWithErrorAncestor": 251,
+  "uncoveredPages": 0,
+  "component": "components/marketing/public-layout-error.tsx",
+  "scaffoldScript": "scripts/scaffold-public-pages-error-tsx-p2-43.ts",
+  "checkScript": "check:public-pages-error-tsx-p2-43",
+  "ciGate": true,
+  "verifiedAt": "2026-06-15T14:00:00.000Z"
+}
