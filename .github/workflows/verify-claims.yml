@@ -18,7 +18,9 @@ on:
       - "lib/marketing/**"
       - "config/marketing/**"
       - "docs/**"
+      - "scripts/gate-forbidden-claims.ts"
       - "scripts/verify-marketing-claims.ts"
+      - "lib/marketing/forbidden-claims-ci-gate-policy.ts"
       - "lib/governance/marketing-claims-governance-policy.ts"
       - "tests/unit/forbidden-claims-enforcement.test.ts"
       - ".github/workflows/verify-claims.yml"
@@ -46,24 +48,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify marketing claims (strict)
+      - name: Verify marketing claims (forbidden phrases gate)
         id: claims
         run: |
           set -o pipefail
           mkdir -p artifacts
-          if MARKETING_CLAIMS_STRICT=1 npm run verify-claims 2>&1 | tee artifacts/verify-claims.log; then
+          if npm run gate:forbidden-claims 2>&1 | tee artifacts/verify-claims.log; then
             echo "result=PASS" >> "$GITHUB_OUTPUT"
           else
             echo "result=FAIL" >> "$GITHUB_OUTPUT"
             exit 1
           fi
-        env:
-          MARKETING_CLAIMS_STRICT: "1"
 
       - name: Forbidden claims enforcement unit test
-        run: npm run test:ci -- forbidden-claims-enforcement
-        env:
-          MARKETING_CLAIMS_STRICT: "1"
+        run: npm run test:ci:forbidden-claims-enforcement
 
       - name: Write verify-claims artifact
         if: always()

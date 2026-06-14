@@ -104,13 +104,11 @@ jobs:
       - name: Demo scenario plans (static)
         run: npm run check-demo-scenarios
 
-      - name: Marketing vs capability matrix
-        run: npm run verify-claims
+      - name: Forbidden claims CI gate (blocks merge on banned phrases)
+        run: npm run gate:forbidden-claims
 
       - name: Forbidden claims enforcement auto-test
-        run: npm run test:ci -- forbidden-claims-enforcement
-        env:
-          MARKETING_CLAIMS_STRICT: "1"
+        run: npm run test:ci:forbidden-claims-enforcement
 
       - name: Build
         run: |

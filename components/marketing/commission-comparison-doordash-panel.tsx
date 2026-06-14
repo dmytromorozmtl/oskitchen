@@ -29,7 +29,7 @@ export function CommissionComparisonDoorDashPanel() {
       data-testid="commission-comparison-doordash-p2-46"
     >
       <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-        ChowNow parity — DoorDash {COMMISSION_COMPARISON_CALCULATOR_P2_46_DOORDASH_BENCHMARK_PCT}% vs owned{" "}
+        ChowNow parity — directional DoorDash {COMMISSION_COMPARISON_CALCULATOR_P2_46_DOORDASH_BENCHMARK_PCT}% vs owned{" "}
         {COMMISSION_COMPARISON_CALCULATOR_P2_46_OWNED_MARKETPLACE_PCT}%
       </p>
       <p className="mt-2 text-sm text-muted-foreground">
@@ -50,7 +50,7 @@ export function CommissionComparisonDoorDashPanel() {
           onChange={(v) => setNumber("averageOrderValue", v)}
         />
         <Field
-          label="DoorDash mix %"
+          label="DoorDash mix % (directional benchmark)"
           value={inputs.doordashMixPct}
           onChange={(v) => setNumber("doordashMixPct", v)}
         />
@@ -63,7 +63,7 @@ export function CommissionComparisonDoorDashPanel() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <div className="rounded-xl border border-border/80 bg-card p-4">
-          <p className="text-xs font-medium uppercase text-muted-foreground">DoorDash commission</p>
+          <p className="text-xs font-medium uppercase text-muted-foreground">Directional DoorDash commission</p>
           <p className="mt-1 text-2xl font-bold">
             {formatCommissionUsdShort(result.doordashCommissionMonthly)}
             <span className="text-sm font-normal text-muted-foreground"> / mo</span>
