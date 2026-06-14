@@ -164,6 +164,9 @@ jobs:
       - name: Invoice AI photo-first capture (P1-29)
         run: npm run check:invoice-ai-photo-first-p1-29
 
+      - name: Self-serve onboarding — registration → integrations → first order (P1-30)
+        run: npm run check:self-serve-onboarding-p1-30
+
       - name: Build
         run: |
           set -o pipefail

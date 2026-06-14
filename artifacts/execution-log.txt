@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-30
+Timestamp: 2026-06-15T01:00:00.000Z
+Task: P1-30 — Self-serve onboarding (registration → integrations → first order)
+Category: Onboarding
+Result: OK — 4-step Quick Start wizard with channel picker; signup redirects to /dashboard/quick-start; channels flow through applyQuickStartAction/finishQuickStartAction
+Evidence: check:self-serve-onboarding-p1-30 CI gate wired; artifacts/self-serve-onboarding-p1-30.json
+
+---
 Cycle: gap-closure-29
 Timestamp: 2026-06-15T00:00:00.000Z
 Task: P1-29 — Invoice AI photo-first capture (photo → line items → draft PO)

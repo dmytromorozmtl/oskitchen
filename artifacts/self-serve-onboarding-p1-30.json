@@ -1,0 +1,17 @@
+{
+  "policyId": "self-serve-onboarding-p1-30-v1",
+  "route": "/dashboard/quick-start",
+  "signupRedirect": "/dashboard/quick-start",
+  "flowSteps": ["registration", "menu", "integrations", "first-order"],
+  "wizardSteps": ["profile", "menu", "integrations", "order"],
+  "integrationsTestId": "quick-start-integrations-step",
+  "channelOptionsSource": "lib/onboarding/quick-start-types.ts",
+  "integrationLinks": [
+    "/dashboard/sales-channels",
+    "/dashboard/integration-health"
+  ],
+  "targetMinutes": 15,
+  "ciGate": true,
+  "checkScript": "check:self-serve-onboarding-p1-30",
+  "verifiedAt": "2026-06-14T23:30:00.000Z"
+}
