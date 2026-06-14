@@ -32,15 +32,20 @@ export const LOYALTY_REDEEM_INPUT_TEST_ID = "pos-loyalty-redeem-input" as const;
 
 export const LOYALTY_BALANCE_TEST_ID = "pos-loyalty-balance" as const;
 
+export const CRM_LOYALTY_POINTS_TEST_ID = "crm-loyalty-points-balance" as const;
+
+export const CRM_UNIFIED_PROFILE_PATH =
+  "/dashboard/customers/unified-profile" as const;
+
 export const LOYALTY_EARN_REDEEM_E2E_VISIBLE_MS = 60_000 as const;
 
 export const LOYALTY_EARN_REDEEM_E2E_REDEEM_POINTS = 100 as const;
 
 export const LOYALTY_EARN_REDEEM_E2E_FLOW_STEPS = [
   "seed_customer",
-  "earn_points_checkout",
-  "verify_balance_earned",
-  "redeem_at_checkout",
+  "place_order_earn",
+  "verify_crm_points",
+  "redeem_next_order",
   "verify_balance_updated",
 ] as const;
 

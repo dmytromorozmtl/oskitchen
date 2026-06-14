@@ -3,6 +3,8 @@ import { randomUUID } from "crypto";
 import { expect, test, type Page } from "@playwright/test";
 
 import {
+  CRM_LOYALTY_POINTS_TEST_ID,
+  CRM_UNIFIED_PROFILE_PATH,
   LOYALTY_BALANCE_TEST_ID,
   LOYALTY_EARN_REDEEM_E2E_FLOW_STEPS,
   LOYALTY_EARN_REDEEM_E2E_REDEEM_POINTS,
@@ -107,11 +109,20 @@ export async function runLoyaltyEarnRedeemE2EFlow(
 
   await attachPosCustomer(page, customer.id, customer.email);
   await completePosCashSale(page);
-  steps.push("earn_points_checkout");
+  steps.push("place_order_earn");
 
   const balanceAfterEarn = await getLoyaltyBalance(ownerUserId, customer.id);
   expect(balanceAfterEarn).toBeGreaterThanOrEqual(LOYALTY_EARN_REDEEM_E2E_REDEEM_POINTS);
-  steps.push("verify_balance_earned");
+
+  await page.goto(`${CRM_UNIFIED_PROFILE_PATH}/${customer.id}`);
+  await expect(page.getByTestId("unified-customer-profile-panel")).toBeVisible({
+    timeout: LOYALTY_EARN_REDEEM_E2E_VISIBLE_MS,
+  });
+  await expect(page.getByTestId(CRM_LOYALTY_POINTS_TEST_ID)).toContainText(
+    String(balanceAfterEarn),
+    { timeout: LOYALTY_EARN_REDEEM_E2E_VISIBLE_MS },
+  );
+  steps.push("verify_crm_points");
 
   await page.goto("/dashboard/pos/terminal");
   await preparePosTerminal(page);
@@ -126,7 +137,7 @@ export async function runLoyaltyEarnRedeemE2EFlow(
     String(LOYALTY_EARN_REDEEM_E2E_REDEEM_POINTS),
   );
   await completePosCashSale(page);
-  steps.push("redeem_at_checkout");
+  steps.push("redeem_next_order");
 
   const balanceAfterRedeem = await getLoyaltyBalance(ownerUserId, customer.id);
   expect(balanceAfterRedeem).toBeLessThan(balanceAfterEarn);

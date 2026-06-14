@@ -33,5 +33,6 @@
   "p1-32-shopify-realtime-inventory-sync": "done",
   "p1-33-segment-level-not-found": "done",
   "p1-34-ai-messaging": "done",
-  "p1-35-offline-pos-pci-flow-e2e": "done"
+  "p1-35-offline-pos-pci-flow-e2e": "done",
+  "p1-36-loyalty-earn-redeem-e2e": "done"
 }

@@ -28,9 +28,9 @@ test.describe("loyalty earn/redeem e2e policy", () => {
     expect(LOYALTY_EARN_REDEEM_E2E_POLICY_ID).toBe("loyalty-earn-redeem-e2e-p2-31-v1");
     expect(LOYALTY_EARN_REDEEM_E2E_FLOW_STEPS).toEqual([
       "seed_customer",
-      "earn_points_checkout",
-      "verify_balance_earned",
-      "redeem_at_checkout",
+      "place_order_earn",
+      "verify_crm_points",
+      "redeem_next_order",
       "verify_balance_updated",
     ]);
     expect(LOYALTY_REDEEM_INPUT_TEST_ID).toBe("pos-loyalty-redeem-input");

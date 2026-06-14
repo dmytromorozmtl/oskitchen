@@ -1,0 +1,18 @@
+{
+  "policyId": "loyalty-earn-redeem-e2e-p1-36-v1",
+  "chain": ["order", "points", "crm", "apply_next"],
+  "flowSteps": [
+    "seed_customer",
+    "place_order_earn",
+    "verify_crm_points",
+    "redeem_next_order",
+    "verify_balance_updated"
+  ],
+  "crmTestId": "crm-loyalty-points-balance",
+  "crmPath": "/dashboard/customers/unified-profile",
+  "e2eSpec": "e2e/loyalty-earn-redeem-e2e.spec.ts",
+  "ciGate": true,
+  "checkScript": "check:loyalty-earn-redeem-e2e-p1-36",
+  "liveGateEnv": "E2E_LOYALTY_EARN_REDEEM=true",
+  "verifiedAt": "2026-06-15T07:00:00.000Z"
+}

@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-36
+Timestamp: 2026-06-15T07:00:00.000Z
+Task: P1-36 — Loyalty earn→redeem E2E (order→points→CRM→apply next order)
+Category: QA
+Result: OK — flow steps include verify_crm_points; CRM unified profile test id; second checkout redeem; P1-36 CI gate
+Evidence: check:loyalty-earn-redeem-e2e-p1-36; artifacts/loyalty-earn-redeem-e2e-p1-36.json; e2e/loyalty-earn-redeem-e2e.spec.ts
+
+---
 Cycle: gap-closure-35
 Timestamp: 2026-06-15T06:00:00.000Z
 Task: P1-35 — Offline POS PCI flow E2E (offline→AES-GCM→network→sync)

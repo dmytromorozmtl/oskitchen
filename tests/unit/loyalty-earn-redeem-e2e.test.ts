@@ -38,6 +38,7 @@ describe("Loyalty earn/redeem E2E (P2-31)", () => {
     expect(summary.readyHelperPresent).toBe(true);
     expect(summary.earnRedeemWired).toBe(true);
     expect(summary.balanceAssertWired).toBe(true);
+    expect(summary.crmPointsWired).toBe(true);
     expect(summary.passed).toBe(true);
   });
 

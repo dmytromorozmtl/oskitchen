@@ -182,6 +182,9 @@ jobs:
       - name: Offline POS PCI flow E2E — offline→AES-GCM→sync (P1-35)
         run: npm run check:offline-pos-pci-flow-p1-35
 
+      - name: Loyalty earn→redeem E2E — order→CRM→next order (P1-36)
+        run: npm run check:loyalty-earn-redeem-e2e-p1-36
+
       - name: Build
         run: |
           set -o pipefail
