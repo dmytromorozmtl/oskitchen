@@ -65,6 +65,7 @@ export const GITHUB_WORKFLOW_ACTIVE_ALLOWLIST = [
   "verify-claims.yml",
   "webhook-cron-synthetic.yml",
   "woo-shopify-staging-smoke.yml",
+  "migration-health-prod-drift.yml",
 ] as const;
 
 /** Filename patterns for era25 / ops theater workflows → archive. */

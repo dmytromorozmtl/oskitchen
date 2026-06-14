@@ -20,7 +20,7 @@ describe("GitHub workflow archive (P1-17)", () => {
   it("locks policy id and ~40 active workflow target", () => {
     expect(GITHUB_WORKFLOW_ARCHIVE_POLICY_ID).toBe("github-workflow-archive-p1-17-v1");
     expect(GITHUB_WORKFLOW_ACTIVE_MAX).toBe(40);
-    expect(GITHUB_WORKFLOW_ACTIVE_ALLOWLIST.length).toBe(33);
+    expect(GITHUB_WORKFLOW_ACTIVE_ALLOWLIST.length).toBe(34);
   });
 
   it("keeps active workflows under 40 in .github/workflows", () => {

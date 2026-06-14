@@ -305,6 +305,9 @@ jobs:
       - name: Archive era npm scripts (P3-76)
         run: npm run check:archive-era-scripts-p3-76
 
+      - name: Archive GitHub workflows (P3-77)
+        run: npm run check:archive-workflows-p3-77
+
       - name: Build
         run: |
           set -o pipefail

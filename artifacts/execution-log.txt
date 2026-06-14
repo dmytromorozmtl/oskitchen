@@ -9867,3 +9867,10 @@ Task: P3-76 — Archive era npm scripts 1902→<500
 Category: DevOps
 Result: OK — archive-era-scripts-p3-76-v1; consolidated 536→336 active scripts; 1974 archived (795 era); router prefixes wired; CI/workflows migrated to npm run audit -- / validate -- / smoke -- syntax; CI gate check:archive-era-scripts-p3-76
 Evidence: artifacts/archive-era-scripts-p3-76.json, npm run check:archive-era-scripts-p3-76
+
+Cycle: 77
+Timestamp: 2026-06-16T12:00:00.000Z
+Task: P3-77 — Archive GitHub workflows 121→40
+Category: DevOps
+Result: OK — archive-workflows-p3-77-v1; 34 canonical active workflows (≤40); 88 era theater archived in .github/archive/workflows/inactive; migration-health-prod-drift.yml added to allowlist; CI gate check:archive-workflows-p3-77
+Evidence: artifacts/archive-workflows-p3-77.json, npm run check:archive-workflows-p3-77

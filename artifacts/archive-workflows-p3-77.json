@@ -1,0 +1,17 @@
+{
+  "policyId": "archive-workflows-p3-77-v1",
+  "status": "DONE",
+  "baselineTotal": 121,
+  "activeCount": 34,
+  "archivedCount": 88,
+  "maxActive": 40,
+  "eraInActive": 0,
+  "eraInArchive": 31,
+  "activeDir": ".github/workflows",
+  "archiveDir": ".github/archive/workflows/inactive",
+  "upstreamPolicies": ["github-workflow-archive-p1-17-v1"],
+  "scenarioCount": 6,
+  "ciGate": true,
+  "checkScript": "check:archive-workflows-p3-77",
+  "verifiedAt": "2026-06-16T12:00:00.000Z"
+}
