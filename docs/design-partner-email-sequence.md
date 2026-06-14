@@ -1,4 +1,6 @@
-# Design partner email sequence — 3 emails
+# Design partner email sequence — 3 emails (legacy)
+
+> **Superseded by P2-58:** Canonical **5-step** sequence (problem → solution → demo → offer → follow-up) lives in [`design-partner-email-sequence-p2-58.md`](./design-partner-email-sequence-p2-58.md). Use that doc for outbound sends.
 
 **Policy:** `design-partner-email-sequence-v1`  
 **Updated:** 2026-06-02  

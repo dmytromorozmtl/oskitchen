@@ -1,0 +1,19 @@
+{
+  "version": "design-partner-email-sequence-v2",
+  "policyId": "design-partner-email-sequence-p2-58-v1",
+  "stepCount": 5,
+  "steps": [
+    { "id": "problem", "sendDayOffset": 0, "label": "Problem" },
+    { "id": "solution", "sendDayOffset": 3, "label": "Solution" },
+    { "id": "demo", "sendDayOffset": 6, "label": "Demo" },
+    { "id": "offer", "sendDayOffset": 9, "label": "Offer" },
+    { "id": "follow_up", "sendDayOffset": 14, "label": "Follow-up" }
+  ],
+  "offer": {
+    "name": "Design Partner Program",
+    "price": "$0 platform / 90 days free",
+    "pricingDoc": "docs/pricing-pilot-sku-p0-8.md",
+    "loiDoc": "docs/loi-design-partner-template.md"
+  },
+  "verifiedAt": "2026-06-16T03:00:00.000Z"
+}

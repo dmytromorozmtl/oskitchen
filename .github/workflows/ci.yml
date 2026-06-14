@@ -248,6 +248,9 @@ jobs:
       - name: Works with OS Kitchen — 17 LIVE integrations with logos (P2-57)
         run: npm run check:works-with-os-kitchen-p2-57
 
+      - name: Design partner email sequence — 5-step founder outreach (P2-58)
+        run: npm run check:design-partner-email-sequence-p2-58
+
       - name: Build
         run: |
           set -o pipefail
