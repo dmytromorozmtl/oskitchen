@@ -1,0 +1,14 @@
+{
+  "policyId": "ai-briefing-accuracy-benchmark-p2-61-v1",
+  "scenarioCount": 25,
+  "insightRecallPct": 100,
+  "routeAccuracyPct": 100,
+  "hallucinationPct": 0,
+  "thresholdRecallPct": 95,
+  "thresholdRoutePct": 95,
+  "maxHallucinationPct": 0,
+  "toastIqParityNote": "Deterministic hub-signal briefing — comparable daily ops summary category to Toast IQ, without claiming certified parity.",
+  "ciGate": true,
+  "checkScript": "check:ai-briefing-accuracy-benchmark-p2-61",
+  "verifiedAt": "2026-06-16T06:00:00.000Z"
+}

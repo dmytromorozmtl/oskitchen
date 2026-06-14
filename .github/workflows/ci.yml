@@ -257,6 +257,9 @@ jobs:
       - name: Product Hunt launch prep — assets, copy, checklist (P2-60)
         run: npm run check:product-hunt-launch-prep-p2-60
 
+      - name: AI briefing accuracy benchmarks — Toast IQ parity (P2-61)
+        run: npm run check:ai-briefing-accuracy-benchmark-p2-61
+
       - name: Build
         run: |
           set -o pipefail
