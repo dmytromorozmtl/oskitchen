@@ -8,6 +8,8 @@ import { CompareFaqSection } from "@/components/marketing/compare-faq-section";
 import { CommissionComparisonCalculator } from "@/components/marketing/commission-comparison-calculator";
 import { DesignPartnerPricingTier } from "@/components/marketing/design-partner-pricing-tier";
 import { PricingCompetitorBenchmark } from "@/components/marketing/pricing-competitor-benchmark";
+import { PricingProcessingFeesDisclosure } from "@/components/marketing/pricing-processing-fees-disclosure";
+import { TransparentPricingTiersBar } from "@/components/marketing/transparent-pricing-tiers-bar";
 import { ToastPositioningSection } from "@/components/marketing/toast-positioning-section";
 import { SquarePositioningSection } from "@/components/marketing/square-positioning-section";
 import { LightspeedPositioningSection } from "@/components/marketing/lightspeed-positioning-section";
@@ -15,6 +17,7 @@ import { MarketmanPositioningSection } from "@/components/marketing/marketman-po
 import { MarginedgePositioningSection } from "@/components/marketing/marginedge-positioning-section";
 import { TcoCalculator } from "@/components/marketing/tco-calculator";
 import { PRICING_FAQ_ITEMS } from "@/lib/marketing/pricing-faq";
+import { TRANSPARENT_PRICING_COMPARISON_HEADERS } from "@/lib/marketing/pricing-transparent-tiers-p0-9-content";
 import {
   PUBLIC_PRICING_COMPARE_ROWS,
   PUBLIC_PRICING_PLANS,
@@ -71,8 +74,9 @@ export function PricingPage() {
             Plans that match real kitchens
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Four transparent plans — self-serve signup with a 14-day trial. POS, kitchen display, orders,
-            production, and integrations in one workspace. No proprietary hardware required.
+            Four transparent plans with published list prices — Starter $49, Pro $79, Team $199, Enterprise
+            $499/mo. Self-serve signup with a 14-day trial. POS, kitchen display, orders, production, and
+            integrations in one workspace. No proprietary hardware required.
           </p>
           <ul
             data-testid="pricing-universal-benefits"
@@ -116,6 +120,8 @@ export function PricingPage() {
             </button>
           </div>
         </div>
+
+        <TransparentPricingTiersBar />
 
         <div className="mt-14 grid gap-6 lg:grid-cols-4">
           {PUBLIC_PRICING_PLANS.map((plan) => (
@@ -169,6 +175,8 @@ export function PricingPage() {
             </Card>
           ))}
         </div>
+
+        <PricingProcessingFeesDisclosure />
 
         <DesignPartnerPricingTier />
 
@@ -281,10 +289,11 @@ export function PricingPage() {
               <thead className="bg-muted/40">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">Capability</th>
-                  <th className="px-4 py-3">Starter</th>
-                  <th className="px-4 py-3">Pro</th>
-                  <th className="px-4 py-3">Team</th>
-                  <th className="px-4 py-3">Enterprise</th>
+                  {TRANSPARENT_PRICING_COMPARISON_HEADERS.map((header) => (
+                    <th key={header.key} className="px-4 py-3 text-center font-medium">
+                      {header.label}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>

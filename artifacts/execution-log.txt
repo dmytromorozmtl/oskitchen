@@ -9275,6 +9275,13 @@ Next: FINAL — docs/ultimate-complete.md
 ---
 ---
 ---
+Cycle: gap-closure-9
+Timestamp: 2026-06-14T11:30:00.000Z
+Task: P0-9 — Transparent pricing tiers — Square parity on /pricing
+Category: Marketing
+Result: OK — TransparentPricingTiersBar ($49/$79/$199/$499), PricingProcessingFeesDisclosure (Stripe separate), feature comparison headers with prices; policy + tests
+Evidence: npm run check:pricing-transparent-tiers-p0-9 (5 passed), npm run gate:forbidden-claims (PASS)
+
 Cycle: gap-closure-8
 Timestamp: 2026-06-14T11:25:00.000Z
 Task: P0-8 — Pricing page — Design Partner Program pilot SKU (free for 90 days)
