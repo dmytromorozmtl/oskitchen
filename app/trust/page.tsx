@@ -3,13 +3,14 @@ import type { Metadata } from "next";
 
 import { Disclaimer, FeatureGrid, Hero, PublicShell } from "@/components/marketing/public-page";
 import { TrustMaturityLabelsSection } from "@/components/marketing/trust-maturity-labels-section";
+import { TrustPageSecurityDetailsSection } from "@/components/marketing/trust-page-security-details-section";
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 /** Trust page — BETA / PREVIEW / SKIPPED maturity labels (MKT-08, FINAL-19). */
 export const metadata: Metadata = marketingPageMetadata({
-  title: "Trust center — BETA, Preview & SKIPPED labels explained",
+  title: "Trust center — security, uptime, GDPR, PCI & honest feature labels",
   description:
-    "What OS Kitchen maturity badges mean: pilot ready, BETA, Preview, SKIPPED, and LIVE. Honest integration status — not fake green tiles.",
+    "Webhook security 59/59 verified, uptime probes, US-primary data residency, GDPR/PCI posture, and BETA/Preview/SKIPPED maturity labels — not fake compliance badges.",
   path: "/trust",
   keywords: [
     "OS Kitchen BETA badge",
@@ -32,6 +33,7 @@ export default function TrustPage() {
         secondaryHref="/pricing"
       />
       <TrustMaturityLabelsSection />
+      <TrustPageSecurityDetailsSection />
       <section className="mx-auto max-w-6xl px-4 pb-4 sm:px-6">
         <h2 className="text-2xl font-semibold tracking-tight">Security & data handling</h2>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">

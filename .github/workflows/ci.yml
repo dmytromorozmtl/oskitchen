@@ -155,6 +155,9 @@ jobs:
       - name: SOC 2 messaging — in progress not certified (P1-26)
         run: npm run check:soc2-messaging-p1-26
 
+      - name: Trust page security details (P1-27)
+        run: npm run check:trust-page-security-p1-27
+
       - name: Build
         run: |
           set -o pipefail

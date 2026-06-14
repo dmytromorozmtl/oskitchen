@@ -1,0 +1,21 @@
+{
+  "policyId": "trust-page-security-p1-27-v1",
+  "trustPageRoute": "/trust",
+  "sectionTestId": "trust-page-security-details-p1-27",
+  "requiredTopics": [
+    "webhook-security",
+    "uptime",
+    "data-residency",
+    "gdpr",
+    "pci"
+  ],
+  "webhookSignatureAudit": {
+    "artifact": "artifacts/webhook-signature-audit.json",
+    "verifiedCount": 59,
+    "totalRoutes": 59,
+    "overall": "PASSED"
+  },
+  "ciGate": true,
+  "checkScript": "check:trust-page-security-p1-27",
+  "verifiedAt": "2026-06-14T22:00:00.000Z"
+}
