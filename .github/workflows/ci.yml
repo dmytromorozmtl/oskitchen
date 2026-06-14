@@ -299,6 +299,9 @@ jobs:
       - name: QR ordering E2E — scan to KDS (P2-74)
         run: npm run check:qr-ordering-e2e-p2-74
 
+      - name: Developer API rate limits + docs (P2-75)
+        run: npm run check:developer-api-rate-limits-p2-75
+
       - name: Build
         run: |
           set -o pipefail

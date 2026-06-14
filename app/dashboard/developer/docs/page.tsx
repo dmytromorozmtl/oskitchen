@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DeveloperApiRateLimitsPanel } from "@/components/developer/developer-api-rate-limits-panel";
 import { requireDeveloperCenterAccess } from "@/lib/developer/developer-permissions";
 
 const SECTIONS: { title: string; body: string }[] = [
@@ -46,10 +47,13 @@ export default async function DeveloperDocsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">SDK & documentation hub</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Curated operational guidance for platform engineers. Language examples: curl and TypeScript clients should live
-          alongside your public developer site when launched.
+          Curated operational guidance for platform engineers. OpenAPI spec at{" "}
+          <code className="rounded bg-muted px-1 text-xs">/api/openapi.json</code> — per-key rate
+          limits, sandbox keys, and TypeScript snippets below.
         </p>
       </div>
+
+      <DeveloperApiRateLimitsPanel />
 
       <div className="grid gap-4 md:grid-cols-2">
         {SECTIONS.map((s) => (

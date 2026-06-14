@@ -1,0 +1,38 @@
+{
+  "policyId": "developer-api-rate-limits-p2-75-v1",
+  "status": "LIVE",
+  "perKeyLimiting": {
+    "productionBurstPolicy": "public_api_key_burst",
+    "productionBurstMax": 600,
+    "sandboxBurstPolicy": "public_api_sandbox_key_burst",
+    "sandboxBurstMax": 120,
+    "headers": [
+      "X-RateLimit-Limit",
+      "X-RateLimit-Remaining",
+      "X-RateLimit-Reset",
+      "Retry-After"
+    ]
+  },
+  "openapi": {
+    "path": "/api/openapi.json",
+    "version": "3.0.3",
+    "securityScheme": "bearerApiKey"
+  },
+  "sandbox": {
+    "keyPrefix": "kos_test_",
+    "productionKeyPrefix": "kos_",
+    "createVia": "/dashboard/developer/api-keys"
+  },
+  "panelTestIds": {
+    "panel": "developer-api-rate-limits-panel",
+    "perKey": "developer-api-rate-limits-per-key",
+    "openapi": "developer-api-rate-limits-openapi",
+    "sandbox": "developer-api-rate-limits-sandbox"
+  },
+  "liveRoutes": ["/dashboard/developer/docs", "/api/public/v1/*"],
+  "upstreamPolicies": ["public-api-rate-limit-e2e-v1"],
+  "scenarioCount": 6,
+  "ciGate": true,
+  "checkScript": "check:developer-api-rate-limits-p2-75",
+  "verifiedAt": "2026-06-16T10:00:00.000Z"
+}

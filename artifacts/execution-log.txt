@@ -9853,3 +9853,10 @@ Task: P2-74 — QR ordering E2E — scan to KDS
 Category: QR
 Result: OK — qr-ordering-e2e-p2-74-v1 policy; 6-scenario flow benchmark; QrOrderingE2EPanel on /dashboard/qr-codes; scan→checkout→webhook→KitchenTask→KDS wiring verified; CI gate check:qr-ordering-e2e-p2-74
 Evidence: artifacts/qr-ordering-e2e-p2-74.json, npm run check:qr-ordering-e2e-p2-74
+
+Cycle: 75
+Timestamp: 2026-06-16T10:00:00.000Z
+Task: P2-75 — Developer API rate limits + OpenAPI spec + sandbox
+Category: API
+Result: OK — developer-api-rate-limits-p2-75-v1 policy; per-key burst (600 prod / 120 sandbox); OpenAPI at /api/openapi.json; kos_test_ sandbox keys; DeveloperApiRateLimitsPanel on /dashboard/developer/docs; CI gate check:developer-api-rate-limits-p2-75
+Evidence: artifacts/developer-api-rate-limits-p2-75.json, npm run check:developer-api-rate-limits-p2-75
