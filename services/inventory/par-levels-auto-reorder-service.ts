@@ -9,10 +9,10 @@ import { lineTotalCost, sumMoney } from "@/lib/purchasing/purchasing-calculation
 import { prisma } from "@/lib/prisma";
 import {
   ingredientListWhereForOwner,
-  ownerScopedAnd,
   reorderQueueItemListWhereForOwner,
+  supplierListWhereForOwner,
 } from "@/lib/scope/workspace-resource-scope";
-import { findSupplierByName, nextPurchaseOrderNumber } from "@/services/purchasing/purchasing-service";
+import { nextPurchaseOrderNumber } from "@/services/purchasing/purchasing-service";
 
 export type SyncParLevelsResult = {
   scanned: number;
@@ -27,6 +27,27 @@ export type CreateDraftPosFromQueueResult = {
   skippedUnassigned: number;
   errors: string[];
 };
+
+type ParCandidate = {
+  ing: {
+    id: string;
+    name: string;
+    unit: string;
+    purchaseUnit: string | null;
+    supplier: string | null;
+    parLevel: unknown;
+    reorderPoint: unknown;
+    currentStock: unknown;
+  };
+  snapshot: { currentStock: number; parLevel: number; reorderPoint: number | null };
+  suggested: number;
+  sourceId: string;
+  parGap: number;
+};
+
+function supplierItemPairKey(supplierId: string, ingredientId: string): string {
+  return `${supplierId}:${ingredientId}`;
+}
 
 export async function syncReorderQueueFromBelowParLevels(userId: string): Promise<SyncParLevelsResult> {
   const ingredientScope = await ingredientListWhereForOwner(userId);
@@ -44,9 +65,7 @@ export async function syncReorderQueueFromBelowParLevels(userId: string): Promis
     },
   });
 
-  let created = 0;
-  let skippedExisting = 0;
-
+  const candidates: ParCandidate[] = [];
   for (const ing of ingredients) {
     const snapshot = {
       currentStock: Number(ing.currentStock),
@@ -58,51 +77,110 @@ export async function syncReorderQueueFromBelowParLevels(userId: string): Promis
     const suggested = suggestParReplenishmentQuantity(snapshot);
     if (suggested <= 0) continue;
 
-    const sourceId = buildParReplenishmentSourceId(ing.id);
-    const existing = await prisma.reorderQueueItem.findFirst({
-      where: await ownerScopedAnd(userId, {
-        ingredientId: ing.id,
-        sourceType: "PAR_REPLENISHMENT",
-        status: "OPEN",
-      }),
+    candidates.push({
+      ing,
+      snapshot,
+      suggested,
+      sourceId: buildParReplenishmentSourceId(ing.id),
+      parGap: snapshot.parLevel - snapshot.currentStock,
     });
-    if (existing) {
-      skippedExisting += 1;
-      continue;
-    }
-
-    const supplierRow = ing.supplier ? await findSupplierByName(userId, ing.supplier) : null;
-    const supplierItem = supplierRow
-      ? await prisma.supplierItem.findFirst({
-          where: { supplierId: supplierRow.id, ingredientId: ing.id, active: true },
-          select: { id: true, leadTimeDays: true },
-        })
-      : null;
-
-    const leadTimeDays = supplierItem?.leadTimeDays ?? 7;
-    const parGap = snapshot.parLevel - snapshot.currentStock;
-
-    await prisma.reorderQueueItem.create({
-      data: {
-        userId,
-        ingredientId: ing.id,
-        supplierId: supplierRow?.id ?? null,
-        sourceType: "PAR_REPLENISHMENT",
-        sourceId,
-        requiredQuantity: snapshot.parLevel,
-        unit: ing.purchaseUnit ?? ing.unit,
-        shortageQuantity: parGap,
-        suggestedPurchaseQuantity: suggested,
-        urgency: urgencyFromParGap(parGap, leadTimeDays),
-        requiredByDate: defaultParRequiredByDate(new Date(), leadTimeDays),
-        status: "OPEN",
-        notes: `Par replenishment — stock ${snapshot.currentStock.toFixed(2)} below par ${snapshot.parLevel.toFixed(2)}`,
-      },
-    });
-    created += 1;
   }
 
-  return { scanned: ingredients.length, created, skippedExisting };
+  if (candidates.length === 0) {
+    return { scanned: ingredients.length, created: 0, skippedExisting: 0 };
+  }
+
+  const reorderScope = await reorderQueueItemListWhereForOwner(userId);
+  const existingItems = await prisma.reorderQueueItem.findMany({
+    where: {
+      AND: [
+        reorderScope,
+        {
+          ingredientId: { in: candidates.map((c) => c.ing.id) },
+          sourceType: "PAR_REPLENISHMENT",
+          status: "OPEN",
+        },
+      ],
+    },
+    select: { ingredientId: true },
+  });
+  const existingIngredientIds = new Set(existingItems.map((item) => item.ingredientId));
+
+  const toCreate = candidates.filter((c) => !existingIngredientIds.has(c.ing.id));
+  const skippedExisting = candidates.length - toCreate.length;
+
+  if (toCreate.length === 0) {
+    return { scanned: ingredients.length, created: 0, skippedExisting };
+  }
+
+  const supplierNames = [
+    ...new Set(
+      toCreate
+        .map((c) => c.ing.supplier?.trim())
+        .filter((name): name is string => Boolean(name)),
+    ),
+  ];
+
+  const supplierScope = await supplierListWhereForOwner(userId);
+  const suppliers =
+    supplierNames.length > 0
+      ? await prisma.supplier.findMany({
+          where: {
+            AND: [supplierScope, { name: { in: supplierNames }, active: true }],
+          },
+          select: { id: true, name: true },
+        })
+      : [];
+  const supplierByName = new Map(suppliers.map((s) => [s.name, s]));
+
+  const supplierIds = suppliers.map((s) => s.id);
+  const ingredientIds = toCreate.map((c) => c.ing.id);
+  const supplierItems =
+    supplierIds.length > 0
+      ? await prisma.supplierItem.findMany({
+          where: {
+            supplierId: { in: supplierIds },
+            ingredientId: { in: ingredientIds },
+            active: true,
+          },
+          select: { id: true, supplierId: true, ingredientId: true, leadTimeDays: true },
+        })
+      : [];
+  const supplierItemByPair = new Map(
+    supplierItems.map((si) => [supplierItemPairKey(si.supplierId, si.ingredientId), si]),
+  );
+
+  const createData = toCreate.map(({ ing, snapshot, suggested, sourceId, parGap }) => {
+    const supplierRow = ing.supplier ? (supplierByName.get(ing.supplier.trim()) ?? null) : null;
+    const supplierItem = supplierRow
+      ? (supplierItemByPair.get(supplierItemPairKey(supplierRow.id, ing.id)) ?? null)
+      : null;
+    const leadTimeDays = supplierItem?.leadTimeDays ?? 7;
+
+    return {
+      userId,
+      ingredientId: ing.id,
+      supplierId: supplierRow?.id ?? null,
+      sourceType: "PAR_REPLENISHMENT" as const,
+      sourceId,
+      requiredQuantity: snapshot.parLevel,
+      unit: ing.purchaseUnit ?? ing.unit,
+      shortageQuantity: parGap,
+      suggestedPurchaseQuantity: suggested,
+      urgency: urgencyFromParGap(parGap, leadTimeDays),
+      requiredByDate: defaultParRequiredByDate(new Date(), leadTimeDays),
+      status: "OPEN" as const,
+      notes: `Par replenishment — stock ${snapshot.currentStock.toFixed(2)} below par ${snapshot.parLevel.toFixed(2)}`,
+    };
+  });
+
+  const result = await prisma.reorderQueueItem.createMany({ data: createData });
+
+  return {
+    scanned: ingredients.length,
+    created: result.count,
+    skippedExisting,
+  };
 }
 
 export async function createDraftPurchaseOrdersFromReorderQueue(
@@ -144,6 +222,30 @@ export async function createDraftPurchaseOrdersFromReorderQueue(
   }
 
   for (const [supplierId, items] of bySupplier) {
+    const ingredientIds = items.map((item) => item.ingredientId);
+    const supplierItemsRaw = await prisma.supplierItem.findMany({
+      where: { supplierId, ingredientId: { in: ingredientIds }, active: true },
+      select: {
+        id: true,
+        ingredientId: true,
+        unitCost: true,
+        purchaseUnit: true,
+        lastUpdatedAt: true,
+      },
+      orderBy: { lastUpdatedAt: "desc" },
+    });
+
+    const supplierItemByIngredient = new Map<
+      string,
+      (typeof supplierItemsRaw)[number]
+    >();
+    for (const si of supplierItemsRaw) {
+      const prev = supplierItemByIngredient.get(si.ingredientId);
+      if (!prev || si.lastUpdatedAt > prev.lastUpdatedAt) {
+        supplierItemByIngredient.set(si.ingredientId, si);
+      }
+    }
+
     const linePayloads: {
       queueItemId: string;
       ingredientId: string;
@@ -157,11 +259,7 @@ export async function createDraftPurchaseOrdersFromReorderQueue(
     }[] = [];
 
     for (const item of items) {
-      const supplierItem = await prisma.supplierItem.findFirst({
-        where: { supplierId, ingredientId: item.ingredientId, active: true },
-        select: { id: true, unitCost: true, purchaseUnit: true },
-        orderBy: { lastUpdatedAt: "desc" },
-      });
+      const supplierItem = supplierItemByIngredient.get(item.ingredientId) ?? null;
 
       const quantity = Number(item.suggestedPurchaseQuantity);
       const unitCost = supplierItem

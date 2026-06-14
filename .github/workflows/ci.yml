@@ -128,6 +128,9 @@ jobs:
       - name: API mutation rate limit coverage (P1-17)
         run: npm run check:api-mutation-rate-limit-p1-17
 
+      - name: Par levels auto-reorder N+1 batch fix (P1-18)
+        run: npm run check:par-levels-auto-reorder-p1-18
+
       - name: Build
         run: |
           set -o pipefail

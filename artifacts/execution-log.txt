@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-18
+Timestamp: 2026-06-14T14:00:00.000Z
+Task: P1-18 — Batch-fix par-levels-auto-reorder N+1 (findMany + createMany)
+Category: Backend
+Result: OK — syncReorderQueueFromBelowParLevels: findMany (existing/suppliers/supplierItems) + createMany; createDraftPurchaseOrdersFromReorderQueue: findMany per supplier group
+Evidence: npm run check:par-levels-auto-reorder-p1-18 (4 passed)
+
+---
 Cycle: gap-closure-17
 Timestamp: 2026-06-14T13:15:00.000Z
 Task: P1-17 — Rate-limit API mutation routes (enforceApiRateLimit)

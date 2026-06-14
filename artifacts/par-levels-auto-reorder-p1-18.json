@@ -1,0 +1,21 @@
+{
+  "policyId": "p1-18-par-levels-auto-reorder-n1-v1",
+  "batchFixed": true,
+  "service": "services/inventory/par-levels-auto-reorder-service.ts",
+  "syncFunction": "syncReorderQueueFromBelowParLevels",
+  "draftPoFunction": "createDraftPurchaseOrdersFromReorderQueue",
+  "batchPatterns": [
+    "reorderQueueItem.findMany",
+    "supplier.findMany",
+    "supplierItem.findMany",
+    "reorderQueueItem.createMany"
+  ],
+  "removedPatterns": [
+    "reorderQueueItem.findFirst (per ingredient)",
+    "reorderQueueItem.create (per ingredient)",
+    "findSupplierByName (per ingredient)",
+    "supplierItem.findFirst (per PO line)"
+  ],
+  "checkScript": "check:par-levels-auto-reorder-p1-18",
+  "verifiedAt": "2026-06-14T14:00:00.000Z"
+}
