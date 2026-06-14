@@ -1,0 +1,10 @@
+{
+  "version": "native-ios-app-deferral-v1",
+  "policyId": "native-ios-app-deferral-p3-95-v1",
+  "status": "DEFERRED_NO_CALENDAR_DATE",
+  "roadmapItemId": "native-ios-app",
+  "alternativeCount": 4,
+  "checkScript": "check:native-ios-app-deferral-p3-95",
+  "ciGate": true,
+  "verifiedAt": "2026-06-17T06:00:00.000Z"
+}

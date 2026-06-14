@@ -235,6 +235,14 @@ export const PUBLIC_ROADMAP_OUT_OF_SCOPE: PublicRoadmapItem[] = [
     status: 'deferred',
     confidence: 'conditional',
   },
+  {
+    id: 'native-ios-app',
+    title: 'Native iOS operator app (App Store)',
+    description:
+      'native iOS deferred — browser dashboard, POS, and KDS on iPad/iPhone via mobile Safari or Chrome; no staff App Store download.',
+    status: 'deferred',
+    confidence: 'conditional',
+  },
 ];
 
 export const PUBLIC_ROADMAP_HONESTY_DISCLAIMER =

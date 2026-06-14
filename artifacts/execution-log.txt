@@ -9993,3 +9993,10 @@ Task: P3-94 — Native payment terminals → defer
 Category: Hardware
 Result: OK — native-payment-terminal-deferral-p3-94-v1; no proprietary OS Kitchen card readers; Stripe Terminal SDK deferred; 4 alternatives (browser POS, cash/external, storefront checkout, Stripe Connect); /roadmap stripe-terminal Out of scope + PRODUCT_ROADMAP NOT_AVAILABLE; banned terminal tease phrases gated; artifact native-payment-terminal-deferral-p3-94.json; CI gate check:native-payment-terminal-deferral-p3-94
 Evidence: artifacts/native-payment-terminal-deferral-p3-94.json, npm run check:native-payment-terminal-deferral-p3-94
+
+Cycle: 95
+Timestamp: 2026-06-17T06:00:00.000Z
+Task: P3-95 — Native iOS app → defer
+Category: Mobile
+Result: OK — native-ios-app-deferral-p3-95-v1; no staff App Store iOS app; browser dashboard/POS/KDS on iPad/iPhone; 4 alternatives (mobile dashboard, browser POS, browser KDS, Add to Home Screen); /roadmap native-ios-app Out of scope + PRODUCT_ROADMAP NOT_AVAILABLE; banned iOS tease phrases gated; artifact native-ios-app-deferral-p3-95.json; CI gate check:native-ios-app-deferral-p3-95
+Evidence: artifacts/native-ios-app-deferral-p3-95.json, npm run check:native-ios-app-deferral-p3-95

@@ -359,6 +359,9 @@ jobs:
       - name: Native payment terminal deferral (P3-94)
         run: npm run check:native-payment-terminal-deferral-p3-94
 
+      - name: Native iOS app deferral (P3-95)
+        run: npm run check:native-ios-app-deferral-p3-95
+
       - name: Build
         run: |
           set -o pipefail
