@@ -4,8 +4,8 @@
  * noop-v1 is permitted only for empty plaintext. Non-empty PCI-adjacent fields
  * require aes-gcm-v1 or the queue is blocked via assertOfflinePciEncryptionAvailable.
  *
+ * @see docs/offline-pos-pci-noop-v1-p2-44.md
  * @see docs/offline-pos-full-mode-p1-31.md
- * @see docs/offline-pos-pci-review.md
  */
 
 import type { OfflinePciSealedBlob } from "@/lib/pos/offline-pci-local-encryption";

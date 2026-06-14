@@ -206,6 +206,9 @@ jobs:
       - name: Public pages error.tsx — 251 pages layout catch-all (P2-43)
         run: npm run check:public-pages-error-tsx-p2-43
 
+      - name: Offline POS PCI noop-v1 — QSA retain-empty-only review (P2-44)
+        run: npm run check:offline-pos-pci-noop-v1-p2-44
+
       - name: Build
         run: |
           set -o pipefail

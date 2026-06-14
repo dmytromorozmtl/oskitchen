@@ -1,0 +1,13 @@
+{
+  "policyId": "offline-pos-pci-noop-v1-p2-44-v1",
+  "decision": "retain-empty-only",
+  "algorithm": "noop-v1",
+  "allowedUse": "empty plaintext sentinel only",
+  "removedPatterns": ["btoa(trimmed)"],
+  "legacyUnsealMigrationReadOnly": true,
+  "productionCardClaimsBlockedUntilQsa": true,
+  "encryptionModule": "lib/pos/offline-pci-local-encryption.ts",
+  "checkScript": "check:offline-pos-pci-noop-v1-p2-44",
+  "ciGate": true,
+  "verifiedAt": "2026-06-15T15:00:00.000Z"
+}
