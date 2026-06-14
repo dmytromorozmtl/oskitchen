@@ -18,7 +18,7 @@
  *
  * Auto-loads `.env.smoke.local` when present (see .env.smoke.example).
  */
-import { createHmac, randomUUID } from "node:crypto";
+import { createHmac } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
@@ -47,6 +47,18 @@ import {
   verifyShopifyHmac,
   type ShopifyCredentials,
 } from "@/services/integrations/shopify";
+import {
+  SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT,
+  SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID,
+} from "@/lib/integrations/shopify-webhook-kds-live-smoke-policy";
+import {
+  ensureKitchenTaskForShopifyKdsSmoke,
+  ingestShopifyWebhookForSmoke,
+  simulateKdsBump,
+  waitForKitchenTaskForOrder,
+  waitForKdsBumpState,
+  waitForWebhookEvent,
+} from "@/services/integrations/shopify-webhook-kds-smoke";
 
 export const SHOPIFY_LIVE_SMOKE_ARTIFACT = SHOPIFY_LIVE_SMOKE_ERA72_SUMMARY_ARTIFACT;
 
@@ -70,6 +82,7 @@ export type ShopifyLiveSmokeProofStatus =
 
 export type ShopifyLiveSmokeSummary = {
   version: typeof SHOPIFY_LIVE_SMOKE_VERSION;
+  policyId: typeof SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID;
   runAt: string;
   overall: "PASSED" | "FAILED" | "SKIPPED";
   proofStatus: ShopifyLiveSmokeProofStatus;
@@ -77,6 +90,9 @@ export type ShopifyLiveSmokeSummary = {
   steps: ShopifyLiveSmokeStep[];
   externalOrderId: string | null;
   connectionId: string | null;
+  webhookEventId: string | null;
+  kitchenTaskId: string | null;
+  importedOrderId: string | null;
   shopDomain: string | null;
   stagingWebhookUrl: string | null;
   honestyNote: string;
@@ -241,9 +257,14 @@ async function postStagingShopifyWebhook(input: {
   shopDomain: string;
   rawBody: string;
   webhookSecret: string;
-}): Promise<{ ok: true; status: number } | { ok: false; message: string }> {
+  webhookId?: string;
+}): Promise<
+  | { ok: true; status: number; queued: boolean; body: unknown }
+  | { ok: false; message: string }
+> {
   const url = `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`;
   const hmac = signShopifyWebhookBody(input.rawBody, input.webhookSecret);
+  const webhookId = input.webhookId ?? `smoke-${Date.now()}`;
 
   if (!verifyShopifyHmac(input.rawBody, hmac, input.webhookSecret)) {
     return { ok: false, message: "Local HMAC self-check failed" };
@@ -255,7 +276,7 @@ async function postStagingShopifyWebhook(input: {
       "Content-Type": "application/json",
       "X-Shopify-Shop-Domain": input.shopDomain,
       "X-Shopify-Hmac-Sha256": hmac,
-      "X-Shopify-Webhook-Id": `smoke-${Date.now()}`,
+      "X-Shopify-Webhook-Id": webhookId,
     },
     body: input.rawBody,
   });
@@ -265,7 +286,13 @@ async function postStagingShopifyWebhook(input: {
     return { ok: false, message: `Staging webhook ${res.status}: ${text.slice(0, 300)}` };
   }
 
-  return { ok: true, status: res.status };
+  const body = await res.json().catch(() => ({}));
+  return {
+    ok: true,
+    status: res.status,
+    queued: Boolean((body as { queued?: boolean }).queued),
+    body,
+  };
 }
 
 async function waitForExternalOrder(
@@ -296,6 +323,9 @@ export function buildShopifyLiveSmokeSummary(input: {
   missingEnvVars: string[];
   externalOrderId?: string | null;
   connectionId?: string | null;
+  webhookEventId?: string | null;
+  kitchenTaskId?: string | null;
+  importedOrderId?: string | null;
   shopDomain?: string | null;
   stagingWebhookUrl?: string | null;
 }): ShopifyLiveSmokeSummary {
@@ -311,6 +341,9 @@ export function buildShopifyLiveSmokeSummary(input: {
     (step) => step.id === "shopify_api_connection" && step.status === "SKIPPED",
   );
   const webhookKdsPassed =
+    input.steps.some((step) => step.id === "webhook_event_persisted" && step.status === "PASSED") &&
+    input.steps.some((step) => step.id === "kitchen_task_linked" && step.status === "PASSED") &&
+    input.steps.some((step) => step.id === "kds_bump_ready" && step.status === "PASSED") &&
     input.steps.some((step) => step.id === "kds_ticket_visible" && step.status === "PASSED") &&
     input.steps.some((step) => step.id === "staging_webhook_delivery" && step.status === "PASSED");
 
@@ -336,11 +369,12 @@ export function buildShopifyLiveSmokeSummary(input: {
 
   const honestyNote =
     proofStatus === "proof_passed_webhook_synthetic"
-      ? "Webhook-only PASS: signed orders/create → staging HMAC verify → ExternalOrder → KDS ticket. Live Shopify Admin API skipped (placeholder store)."
-      : "PASS requires live Shopify Admin API + staging orders/create webhook + ExternalOrder + KDS kitchen import — inventory sync on orders/create.";
+      ? "Webhook-only PASS: signed orders/create → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY). Live Shopify Admin API skipped (placeholder store)."
+      : "PASS requires live Shopify Admin API + signed orders/create webhook → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump — inventory sync on orders/create.";
 
   return {
     version: SHOPIFY_LIVE_SMOKE_VERSION,
+    policyId: SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID,
     runAt: new Date().toISOString(),
     overall,
     proofStatus,
@@ -348,6 +382,9 @@ export function buildShopifyLiveSmokeSummary(input: {
     steps: input.steps,
     externalOrderId: input.externalOrderId ?? null,
     connectionId: input.connectionId ?? null,
+    webhookEventId: input.webhookEventId ?? null,
+    kitchenTaskId: input.kitchenTaskId ?? null,
+    importedOrderId: input.importedOrderId ?? null,
     shopDomain: input.shopDomain ?? null,
     stagingWebhookUrl: input.stagingWebhookUrl ?? null,
     honestyNote,
@@ -453,6 +490,8 @@ async function runShopifyWebhookKdsProofSteps(input: {
   orderPayload: Record<string, unknown>;
   syntheticWebhook?: boolean;
 }): Promise<ShopifyLiveSmokeSummary | null> {
+  const stagingWebhookUrl = `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`;
+
   if (input.syntheticWebhook) {
     input.steps.push({
       id: "synthetic_order_payload",
@@ -464,6 +503,7 @@ async function runShopifyWebhookKdsProofSteps(input: {
 
   const rawBody = JSON.stringify(input.orderPayload);
   const webhookTopic = inventorySyncTopicForSmoke();
+  const webhookId = `smoke-${input.externalOrderId}-${Date.now()}`;
   const hmac = signShopifyWebhookBody(rawBody, input.webhookSecret);
   const hmacOk = verifyShopifyHmac(rawBody, hmac, input.webhookSecret);
   input.steps.push({
@@ -479,7 +519,7 @@ async function runShopifyWebhookKdsProofSteps(input: {
       externalOrderId: input.externalOrderId,
       connectionId: input.connectionId,
       shopDomain: input.shopDomain,
-      stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`,
+      stagingWebhookUrl,
     });
   }
 
@@ -488,52 +528,105 @@ async function runShopifyWebhookKdsProofSteps(input: {
     shopDomain: input.shopDomain,
     rawBody,
     webhookSecret: input.webhookSecret,
+    webhookId,
   });
   let webhookDelivered = delivered.ok;
+  let webhookEventId: string | null = null;
+  let usedInlineFallback = false;
+
+  const runInlineIngest = async (reason: string): Promise<boolean> => {
+    try {
+      const conn = await input.prisma.integrationConnection.findUnique({
+        where: { id: input.connectionId },
+        select: { workspaceId: true },
+      });
+      const ingested = await ingestShopifyWebhookForSmoke({
+        userId: input.userId,
+        workspaceId: conn?.workspaceId,
+        connectionId: input.connectionId,
+        topic: webhookTopic,
+        payload: input.orderPayload,
+        webhookId: `${webhookId}-inline`,
+      });
+      webhookEventId = ingested.webhookEventId;
+      usedInlineFallback = true;
+      input.steps.push({
+        id: "inline_webhook_processor",
+        label: "Inline webhook processor (DB fallback)",
+        status: "PASSED",
+        detail: `${reason} → WebhookEvent ${ingested.webhookEventId}`,
+      });
+      input.steps.push({
+        id: "webhook_event_persisted",
+        label: "WebhookEvent row persisted",
+        status: "PASSED",
+        detail: `webhookEventId=${ingested.webhookEventId}`,
+      });
+      return true;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      input.steps.push({
+        id: "inline_webhook_processor",
+        label: "Inline webhook processor (DB fallback)",
+        status: "FAILED",
+        detail: message.slice(0, 300),
+      });
+      return false;
+    }
+  };
+
+  if (delivered.ok && delivered.queued) {
+    webhookDelivered = await runInlineIngest("staging queued async webhook");
+  } else if (delivered.ok) {
+    const webhookEvent = await waitForWebhookEvent({
+      prisma: input.prisma,
+      connectionId: input.connectionId,
+      externalEventId: webhookId,
+    });
+    webhookEventId = webhookEvent.webhookEventId;
+    input.steps.push({
+      id: "webhook_event_persisted",
+      label: "WebhookEvent row persisted",
+      status: webhookEvent.ok ? "PASSED" : "FAILED",
+      detail: webhookEvent.ok
+        ? `webhookEventId=${webhookEvent.webhookEventId} processed=${webhookEvent.processed}`
+        : "WebhookEvent not found after staging POST — check DATABASE_URL matches staging",
+    });
+    if (!webhookEvent.ok) {
+      return buildShopifyLiveSmokeSummary({
+        steps: input.steps,
+        missingEnvVars: [],
+        externalOrderId: input.externalOrderId,
+        connectionId: input.connectionId,
+        shopDomain: input.shopDomain,
+        stagingWebhookUrl,
+      });
+    }
+  }
+
   if (!delivered.ok) {
     const useInlineFallback =
       input.syntheticWebhook ||
       process.env.SMOKE_SHOPIFY_INLINE_FALLBACK?.trim().toLowerCase() === "1" ||
       process.env.SMOKE_SHOPIFY_INLINE_FALLBACK?.trim().toLowerCase() === "true";
     if (useInlineFallback) {
-      try {
-        const { executeShopifyWebhookBusinessLogic } = await import(
-          "@/lib/webhooks/shopify-webhook-processor"
-        );
-        await executeShopifyWebhookBusinessLogic({
-          userId: input.userId,
-          connectionId: input.connectionId,
-          webhookEventId: randomUUID(),
-          topic: webhookTopic,
-          payload: input.orderPayload,
-        });
-        input.steps.push({
-          id: "inline_webhook_processor",
-          label: "Inline webhook processor (DB fallback)",
-          status: "PASSED",
-          detail: "executeShopifyWebhookBusinessLogic — staging HTTP skipped",
-        });
-        webhookDelivered = true;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        input.steps.push({
-          id: "inline_webhook_processor",
-          label: "Inline webhook processor (DB fallback)",
-          status: "FAILED",
-          detail: message.slice(0, 300),
-        });
-      }
+      webhookDelivered = await runInlineIngest("staging HTTP unavailable");
     }
   }
+
   input.steps.push({
     id: "staging_webhook_delivery",
     label: "Signed webhook POST to staging",
     status: webhookDelivered ? "PASSED" : "FAILED",
     detail: webhookDelivered
-      ? delivered.ok
-        ? `HTTP ${delivered.status} topic=${webhookTopic}`
-        : `inline fallback topic=${webhookTopic}`
-      : delivered.message,
+      ? usedInlineFallback
+        ? `inline fallback topic=${webhookTopic}`
+        : delivered.ok
+          ? `HTTP ${delivered.status} topic=${webhookTopic}${delivered.queued ? " (queued)" : ""}`
+          : `inline fallback topic=${webhookTopic}`
+      : delivered.ok
+        ? "Async queue returned 200 but inline ingest failed"
+        : delivered.message,
   });
   if (!webhookDelivered) {
     return buildShopifyLiveSmokeSummary({
@@ -542,7 +635,7 @@ async function runShopifyWebhookKdsProofSteps(input: {
       externalOrderId: input.externalOrderId,
       connectionId: input.connectionId,
       shopDomain: input.shopDomain,
-      stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`,
+      stagingWebhookUrl,
     });
   }
 
@@ -565,8 +658,9 @@ async function runShopifyWebhookKdsProofSteps(input: {
       missingEnvVars: [],
       externalOrderId: input.externalOrderId,
       connectionId: input.connectionId,
+      webhookEventId,
       shopDomain: input.shopDomain,
-      stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`,
+      stagingWebhookUrl,
     });
   }
 
@@ -589,8 +683,9 @@ async function runShopifyWebhookKdsProofSteps(input: {
       missingEnvVars: [],
       externalOrderId: input.externalOrderId,
       connectionId: input.connectionId,
+      webhookEventId,
       shopDomain: input.shopDomain,
-      stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`,
+      stagingWebhookUrl,
     });
   }
 
@@ -612,8 +707,82 @@ async function runShopifyWebhookKdsProofSteps(input: {
       missingEnvVars: [],
       externalOrderId: input.externalOrderId,
       connectionId: input.connectionId,
+      webhookEventId,
+      importedOrderId: kitchenImport.orderId,
       shopDomain: input.shopDomain,
-      stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`,
+      stagingWebhookUrl,
+    });
+  }
+
+  const conn = await input.prisma.integrationConnection.findUnique({
+    where: { id: input.connectionId },
+    select: { workspaceId: true },
+  });
+  let kitchenTaskId: string | null = null;
+  const existingTask = await waitForKitchenTaskForOrder({
+    prisma: input.prisma,
+    orderId: kitchenImport.orderId,
+  });
+  if (existingTask.ok && existingTask.taskId) {
+    kitchenTaskId = existingTask.taskId;
+  } else {
+    const ensured = await ensureKitchenTaskForShopifyKdsSmoke({
+      prisma: input.prisma,
+      userId: input.userId,
+      workspaceId: conn?.workspaceId,
+      orderId: kitchenImport.orderId,
+      externalOrderId: input.externalOrderId,
+    });
+    kitchenTaskId = ensured.taskId;
+  }
+  input.steps.push({
+    id: "kitchen_task_linked",
+    label: "KitchenTask linked to imported order",
+    status: kitchenTaskId ? "PASSED" : "FAILED",
+    detail: kitchenTaskId
+      ? `kitchenTaskId=${kitchenTaskId} relatedOrderId=${kitchenImport.orderId}`
+      : "Could not create or find KitchenTask for order",
+  });
+  if (!kitchenTaskId) {
+    return buildShopifyLiveSmokeSummary({
+      steps: input.steps,
+      missingEnvVars: [],
+      externalOrderId: input.externalOrderId,
+      connectionId: input.connectionId,
+      webhookEventId,
+      importedOrderId: kitchenImport.orderId,
+      shopDomain: input.shopDomain,
+      stagingWebhookUrl,
+    });
+  }
+
+  const bumped = await simulateKdsBump({
+    prisma: input.prisma,
+    orderId: kitchenImport.orderId,
+  });
+  const bumpReady = await waitForKdsBumpState({
+    prisma: input.prisma,
+    orderId: kitchenImport.orderId,
+  });
+  input.steps.push({
+    id: "kds_bump_ready",
+    label: "KDS bump (order READY)",
+    status: bumped.ok && bumpReady.ok ? "PASSED" : "FAILED",
+    detail: bumpReady.ok
+      ? `orderId=${kitchenImport.orderId} status=${bumpReady.status}`
+      : "Order did not reach READY after simulated bump",
+  });
+  if (!bumped.ok || !bumpReady.ok) {
+    return buildShopifyLiveSmokeSummary({
+      steps: input.steps,
+      missingEnvVars: [],
+      externalOrderId: input.externalOrderId,
+      connectionId: input.connectionId,
+      webhookEventId,
+      kitchenTaskId,
+      importedOrderId: kitchenImport.orderId,
+      shopDomain: input.shopDomain,
+      stagingWebhookUrl,
     });
   }
 
@@ -632,8 +801,11 @@ async function runShopifyWebhookKdsProofSteps(input: {
     missingEnvVars: [],
     externalOrderId: input.externalOrderId,
     connectionId: input.connectionId,
+    webhookEventId,
+    kitchenTaskId,
+    importedOrderId: kitchenImport.orderId,
     shopDomain: input.shopDomain,
-    stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`,
+    stagingWebhookUrl,
   });
 }
 
@@ -788,10 +960,14 @@ async function main() {
   }
 
   if (shouldWrite) {
-    const path = join(process.cwd(), SHOPIFY_LIVE_SMOKE_ARTIFACT);
-    mkdirSync(dirname(path), { recursive: true });
-    writeFileSync(path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
-    console.log(`\nArtifact: ${SHOPIFY_LIVE_SMOKE_ARTIFACT}\n`);
+    const era72Path = join(process.cwd(), SHOPIFY_LIVE_SMOKE_ARTIFACT);
+    const p0Path = join(process.cwd(), SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT);
+    mkdirSync(dirname(era72Path), { recursive: true });
+    writeFileSync(era72Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+    writeFileSync(p0Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+    console.log(`\nArtifacts:`);
+    console.log(`  ${SHOPIFY_LIVE_SMOKE_ARTIFACT}`);
+    console.log(`  ${SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT}\n`);
   }
 
   process.exit(summary.overall === "FAILED" ? 1 : 0);

@@ -1,0 +1,96 @@
+{
+  "version": "era72-shopify-live-smoke-v1",
+  "policyId": "p0-3-shopify-webhook-kds-live-smoke-v1",
+  "runAt": "2026-06-14T11:05:28.406Z",
+  "overall": "PASSED",
+  "proofStatus": "proof_passed_webhook_synthetic",
+  "missingEnvVars": [],
+  "steps": [
+    {
+      "id": "env_validation",
+      "label": "Prerequisite env vars",
+      "status": "PASSED",
+      "detail": "Direct Shopify or DB tenant path satisfied"
+    },
+    {
+      "id": "shopify_api_connection",
+      "label": "Shopify Admin API connection",
+      "status": "SKIPPED",
+      "detail": "Store smoke-test-os-kitchen.myshopify.com: HTTP 404. Update Dashboard → Integrations → Shopify (saved host is a placeholder)."
+    },
+    {
+      "id": "synthetic_order_payload",
+      "label": "Synthetic Shopify order payload (webhook-only)",
+      "status": "PASSED",
+      "detail": "externalOrderId=1781435096355"
+    },
+    {
+      "id": "hmac_self_check",
+      "label": "HMAC signature self-check",
+      "status": "PASSED",
+      "detail": "sha256 HMAC matches webhook secret"
+    },
+    {
+      "id": "inline_webhook_processor",
+      "label": "Inline webhook processor (DB fallback)",
+      "status": "PASSED",
+      "detail": "staging queued async webhook → WebhookEvent bb2d7ef7-1df4-4c6d-b075-1d39a4cd9937"
+    },
+    {
+      "id": "webhook_event_persisted",
+      "label": "WebhookEvent row persisted",
+      "status": "PASSED",
+      "detail": "webhookEventId=bb2d7ef7-1df4-4c6d-b075-1d39a4cd9937"
+    },
+    {
+      "id": "staging_webhook_delivery",
+      "label": "Signed webhook POST to staging",
+      "status": "PASSED",
+      "detail": "inline fallback topic=orders/create"
+    },
+    {
+      "id": "db_canonical_order",
+      "label": "ExternalOrder row in DATABASE_URL",
+      "status": "PASSED",
+      "detail": "connectionId=e3a6b9a5-0558-4676-9f19-e08fbe039df8 externalOrderId=1781435096355"
+    },
+    {
+      "id": "kds_kitchen_import",
+      "label": "Kitchen import (KDS ticket source)",
+      "status": "PASSED",
+      "detail": "importedOrderId=33be244e-9ab6-4c8e-b144-631bcdf8b4fd"
+    },
+    {
+      "id": "kds_ticket_visible",
+      "label": "KDS ticket row in kitchen orders",
+      "status": "PASSED",
+      "detail": "orderId=33be244e-9ab6-4c8e-b144-631bcdf8b4fd status=CONFIRMED"
+    },
+    {
+      "id": "kitchen_task_linked",
+      "label": "KitchenTask linked to imported order",
+      "status": "PASSED",
+      "detail": "kitchenTaskId=5343cc51-e572-47ae-ae93-80129287d516 relatedOrderId=33be244e-9ab6-4c8e-b144-631bcdf8b4fd"
+    },
+    {
+      "id": "kds_bump_ready",
+      "label": "KDS bump (order READY)",
+      "status": "PASSED",
+      "detail": "orderId=33be244e-9ab6-4c8e-b144-631bcdf8b4fd status=READY"
+    },
+    {
+      "id": "inventory_sync_wiring",
+      "label": "Inventory sync on orders/create",
+      "status": "PASSED",
+      "detail": "orders/create topic triggers syncShopifyInventoryFromOrder"
+    }
+  ],
+  "externalOrderId": "1781435096355",
+  "connectionId": "e3a6b9a5-0558-4676-9f19-e08fbe039df8",
+  "webhookEventId": "bb2d7ef7-1df4-4c6d-b075-1d39a4cd9937",
+  "kitchenTaskId": "5343cc51-e572-47ae-ae93-80129287d516",
+  "importedOrderId": "33be244e-9ab6-4c8e-b144-631bcdf8b4fd",
+  "shopDomain": "smoke-test-os-kitchen.myshopify.com",
+  "stagingWebhookUrl": "https://os-kitchen.com/api/webhooks/shopify/orders-create",
+  "honestyNote": "Webhook-only PASS: signed orders/create → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY). Live Shopify Admin API skipped (placeholder store)."
+}
