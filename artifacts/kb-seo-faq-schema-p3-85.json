@@ -1,0 +1,17 @@
+{
+  "version": "kb-seo-faq-schema-v1",
+  "policyId": "kb-seo-faq-schema-p3-85-v1",
+  "route": "/kb",
+  "schemaType": "FAQPage",
+  "faqEntryCount": 8,
+  "locales": ["en", "fr", "es"],
+  "visibleFaqSection": true,
+  "jsonLdComponent": "components/seo/schema-org.tsx#FAQSchema",
+  "kbFaqSection": "components/kb/kb-faq-section.tsx",
+  "contentModule": "lib/kb/kb-faq-content.ts",
+  "schemaModule": "lib/kb/kb-faq-schema.ts",
+  "featuredSnippetsTarget": true,
+  "checkScript": "check:kb-seo-faq-schema-p3-85",
+  "ciGate": true,
+  "verifiedAt": "2026-06-16T20:00:00.000Z"
+}

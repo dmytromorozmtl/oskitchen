@@ -9923,3 +9923,10 @@ Task: P3-84 — QuickBooks certified partner program application
 Category: Marketing
 Result: OK — quickbooks-certified-partner-p3-84-v1; Intuit App Partner application checklist (7 phases) + listing copy + 5 asset specs; upstream LIVE QuickBooks OAuth + journal proofs linked; status APPLICATION_PREP_NOT_CERTIFIED (target submit 2026-07-15); artifact quickbooks-certified-partner-p3-84.json; CI gate check:quickbooks-certified-partner-p3-84
 Evidence: artifacts/quickbooks-certified-partner-p3-84.json, npm run check:quickbooks-certified-partner-p3-84
+
+Cycle: 85
+Timestamp: 2026-06-16T20:00:00.000Z
+Task: P3-85 — /kb SEO FAQPage schema for Featured Snippets
+Category: Marketing
+Result: OK — kb-seo-faq-schema-p3-85-v1; 8 curated FAQ entries (en/fr/es); FAQPage JSON-LD via FAQSchema + visible kb-faq-section on /kb home; lib/kb/kb-faq-content.ts + kb-faq-schema.ts; artifact kb-seo-faq-schema-p3-85.json; CI gate check:kb-seo-faq-schema-p3-85
+Evidence: artifacts/kb-seo-faq-schema-p3-85.json, npm run check:kb-seo-faq-schema-p3-85

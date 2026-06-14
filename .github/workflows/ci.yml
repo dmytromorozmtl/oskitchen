@@ -329,6 +329,9 @@ jobs:
       - name: QuickBooks certified partner program (P3-84)
         run: npm run check:quickbooks-certified-partner-p3-84
 
+      - name: KB SEO FAQ schema (P3-85)
+        run: npm run check:kb-seo-faq-schema-p3-85
+
       - name: Build
         run: |
           set -o pipefail
