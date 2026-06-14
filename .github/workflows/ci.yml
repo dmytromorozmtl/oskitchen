@@ -326,6 +326,9 @@ jobs:
       - name: Shopify Partner marketplace listing (P3-83)
         run: npm run check:shopify-partner-marketplace-p3-83
 
+      - name: QuickBooks certified partner program (P3-84)
+        run: npm run check:quickbooks-certified-partner-p3-84
+
       - name: Build
         run: |
           set -o pipefail

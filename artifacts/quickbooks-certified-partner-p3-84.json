@@ -1,0 +1,31 @@
+{
+  "version": "quickbooks-certified-partner-v1",
+  "policyId": "quickbooks-certified-partner-p3-84-v1",
+  "status": "APPLICATION_PREP_NOT_CERTIFIED",
+  "appName": "OS Kitchen Sales Sync",
+  "applicationStatus": "not yet certified",
+  "intuitEndorsementClaimed": false,
+  "targetSubmitDate": "2026-07-15",
+  "integrationDoc": "docs/QUICKBOOKS_INTEGRATION.md",
+  "archiveDir": "artifacts/quickbooks-partner-program",
+  "copyArtifacts": [
+    "artifacts/quickbooks-partner-program/listing-draft.md",
+    "artifacts/quickbooks-partner-program/application-checklist.md"
+  ],
+  "requiredAssetCount": 5,
+  "checklistItemCount": 7,
+  "requiredScopes": [
+    "com.intuit.quickbooks.accounting",
+    "openid",
+    "profile",
+    "email"
+  ],
+  "upstreamProofs": [
+    "docs/QUICKBOOKS_INTEGRATION.md",
+    "artifacts/quickbooks-live-smoke-summary.json",
+    "tests/unit/quickbooks-live-oauth.test.ts"
+  ],
+  "checkScript": "check:quickbooks-certified-partner-p3-84",
+  "ciGate": true,
+  "verifiedAt": "2026-06-16T19:00:00.000Z"
+}

@@ -9916,3 +9916,10 @@ Task: P3-83 — Shopify Partner App Marketplace listing
 Category: Marketing
 Result: OK — shopify-partner-marketplace-p3-83-v1; listing copy + 6 asset specs + 7-phase submission checklist; upstream P0-3/P0-11/P0-14 LIVE proofs linked; status PREP_READY_NOT_LISTED (honest — not yet listed); artifact shopify-partner-marketplace-p3-83.json; CI gate check:shopify-partner-marketplace-p3-83
 Evidence: artifacts/shopify-partner-marketplace-p3-83.json, npm run check:shopify-partner-marketplace-p3-83
+
+Cycle: 84
+Timestamp: 2026-06-16T19:00:00.000Z
+Task: P3-84 — QuickBooks certified partner program application
+Category: Marketing
+Result: OK — quickbooks-certified-partner-p3-84-v1; Intuit App Partner application checklist (7 phases) + listing copy + 5 asset specs; upstream LIVE QuickBooks OAuth + journal proofs linked; status APPLICATION_PREP_NOT_CERTIFIED (target submit 2026-07-15); artifact quickbooks-certified-partner-p3-84.json; CI gate check:quickbooks-certified-partner-p3-84
+Evidence: artifacts/quickbooks-certified-partner-p3-84.json, npm run check:quickbooks-certified-partner-p3-84

@@ -81,5 +81,6 @@
   "p3-80-cross-tenant-audit": "done",
   "p3-81-pen-test-scheduling": "done",
   "p3-82-offline-pos-pci-full": "done",
-  "p3-83-shopify-partner-marketplace": "done"
+  "p3-83-shopify-partner-marketplace": "done",
+  "p3-84-quickbooks-certified-partner": "done"
 }
