@@ -125,6 +125,9 @@ jobs:
       - name: Deploy skip vitest removed (P1-16)
         run: npm run check:deploy-skip-vitest-p1-16
 
+      - name: API mutation rate limit coverage (P1-17)
+        run: npm run check:api-mutation-rate-limit-p1-17
+
       - name: Build
         run: |
           set -o pipefail

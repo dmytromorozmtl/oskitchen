@@ -1,0 +1,1411 @@
+{
+  "generatedAt": "2026-06-14T11:43:39.985Z",
+  "policyId": "api-mutation-rate-limit-audit-v1",
+  "scannedRoutes": 297,
+  "mutationRoutes": 200,
+  "middlewareCovered": 130,
+  "dedicatedCovered": 20,
+  "exemptClass": 50,
+  "rows": [
+    {
+      "routePath": "/api/accounting/ocr",
+      "file": "app/api/accounting/ocr/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/billing-portal",
+      "file": "app/api/billing-portal/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/billing/checkout",
+      "file": "app/api/billing/checkout/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/billing/portal",
+      "file": "app/api/billing/portal/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/capital/lender-offers/consent",
+      "file": "app/api/capital/lender-offers/consent/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/capital/revenue-attestation/generate",
+      "file": "app/api/capital/revenue-attestation/generate/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/capital/revenue-attestation/verify",
+      "file": "app/api/capital/revenue-attestation/verify/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/checkout",
+      "file": "app/api/checkout/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/cross-channel-inventory-reconciliation",
+      "file": "app/api/cron/cross-channel-inventory-reconciliation/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/health-ping",
+      "file": "app/api/cron/health-ping/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/incident-remediation-reminders",
+      "file": "app/api/cron/incident-remediation-reminders/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/kds-overdue-alerts",
+      "file": "app/api/cron/kds-overdue-alerts/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/meal-plan-auto-renew",
+      "file": "app/api/cron/meal-plan-auto-renew/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/menu-rotation",
+      "file": "app/api/cron/menu-rotation/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/multi-location-weekly-report",
+      "file": "app/api/cron/multi-location-weekly-report/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/outbound-webhook-deliveries",
+      "file": "app/api/cron/outbound-webhook-deliveries/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/pilot-daily-health",
+      "file": "app/api/cron/pilot-daily-health/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/reminders",
+      "file": "app/api/cron/reminders/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/scheduled-reports-weekly",
+      "file": "app/api/cron/scheduled-reports-weekly/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/shopify-b2b-collector-digest",
+      "file": "app/api/cron/shopify-b2b-collector-digest/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/shopify-b2b-dunning",
+      "file": "app/api/cron/shopify-b2b-dunning/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-cart-recovery",
+      "file": "app/api/cron/storefront-cart-recovery/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-domain-recheck",
+      "file": "app/api/cron/storefront-domain-recheck/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-edge-sync",
+      "file": "app/api/cron/storefront-edge-sync/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-ga4-parity",
+      "file": "app/api/cron/storefront-ga4-parity/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-invite-audit-retention",
+      "file": "app/api/cron/storefront-invite-audit-retention/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-team-invite-reminders",
+      "file": "app/api/cron/storefront-team-invite-reminders/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-theme-publish",
+      "file": "app/api/cron/storefront-theme-publish/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/storefront-webhook-retention",
+      "file": "app/api/cron/storefront-webhook-retention/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/cron/webhook-jobs",
+      "file": "app/api/cron/webhook-jobs/route.ts",
+      "routeClass": "cron_secret",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/dashboard/storefront/experiment-legal-hold",
+      "file": "app/api/dashboard/storefront/experiment-legal-hold/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/delivery/cancel",
+      "file": "app/api/delivery/cancel/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/delivery/create",
+      "file": "app/api/delivery/create/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/delivery/quote",
+      "file": "app/api/delivery/quote/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/embed/partner-app/verify",
+      "file": "app/api/embed/partner-app/verify/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/7shifts/sync",
+      "file": "app/api/integrations/7shifts/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/7shifts/sync-labor",
+      "file": "app/api/integrations/7shifts/sync-labor/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/7shifts/sync-schedule",
+      "file": "app/api/integrations/7shifts/sync-schedule/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/clover/sync",
+      "file": "app/api/integrations/clover/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/doordash/menu",
+      "file": "app/api/integrations/doordash/menu/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/email-orders/intake",
+      "file": "app/api/integrations/email-orders/intake/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/google-forms/sync",
+      "file": "app/api/integrations/google-forms/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/grubhub/menu",
+      "file": "app/api/integrations/grubhub/menu/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/homebase/sync",
+      "file": "app/api/integrations/homebase/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/homebase/sync-schedule",
+      "file": "app/api/integrations/homebase/sync-schedule/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/homebase/sync-timeclock",
+      "file": "app/api/integrations/homebase/sync-timeclock/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/klaviyo/connect",
+      "file": "app/api/integrations/klaviyo/connect/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/klaviyo/export-segment",
+      "file": "app/api/integrations/klaviyo/export-segment/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/klaviyo/sync",
+      "file": "app/api/integrations/klaviyo/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/klaviyo/trigger-campaign",
+      "file": "app/api/integrations/klaviyo/trigger-campaign/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/lightspeed/sync",
+      "file": "app/api/integrations/lightspeed/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/mailchimp/sync",
+      "file": "app/api/integrations/mailchimp/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/mailchimp/sync-list",
+      "file": "app/api/integrations/mailchimp/sync-list/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/mailchimp/trigger-automation",
+      "file": "app/api/integrations/mailchimp/trigger-automation/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/moneris/process-payment",
+      "file": "app/api/integrations/moneris/process-payment/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/opentable/availability",
+      "file": "app/api/integrations/opentable/availability/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/opentable/sync",
+      "file": "app/api/integrations/opentable/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/quickbooks/sync-journal",
+      "file": "app/api/integrations/quickbooks/sync-journal/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/resy/sync",
+      "file": "app/api/integrations/resy/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/resy/sync-reservations",
+      "file": "app/api/integrations/resy/sync-reservations/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/resy/sync-waitlist",
+      "file": "app/api/integrations/resy/sync-waitlist/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/shopify/import-market-prices",
+      "file": "app/api/integrations/shopify/import-market-prices/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/shopify/push-market-prices",
+      "file": "app/api/integrations/shopify/push-market-prices/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/shopify/sync-orders",
+      "file": "app/api/integrations/shopify/sync-orders/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/shopify/sync-products",
+      "file": "app/api/integrations/shopify/sync-products/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/shopify/test",
+      "file": "app/api/integrations/shopify/test/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/square-payments/process-payment",
+      "file": "app/api/integrations/square-payments/process-payment/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/square-payments/sync-refunds",
+      "file": "app/api/integrations/square-payments/sync-refunds/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/square/sync",
+      "file": "app/api/integrations/square/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/stripe/connect",
+      "file": "app/api/integrations/stripe/connect/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/stripe/payment-intent",
+      "file": "app/api/integrations/stripe/payment-intent/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/stripe/reconcile-payouts",
+      "file": "app/api/integrations/stripe/reconcile-payouts/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/stripe/webhook",
+      "file": "app/api/integrations/stripe/webhook/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/toast/sync",
+      "file": "app/api/integrations/toast/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/uber-eats/menu",
+      "file": "app/api/integrations/uber-eats/menu/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/uber-eats/test",
+      "file": "app/api/integrations/uber-eats/test/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/woocommerce/sync-orders",
+      "file": "app/api/integrations/woocommerce/sync-orders/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/woocommerce/sync-products",
+      "file": "app/api/integrations/woocommerce/sync-products/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/woocommerce/test",
+      "file": "app/api/integrations/woocommerce/test/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/xero/reconcile-bank",
+      "file": "app/api/integrations/xero/reconcile-bank/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/integrations/xero/sync-invoices",
+      "file": "app/api/integrations/xero/sync-invoices/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/dsr/export",
+      "file": "app/api/internal/dsr/export/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/experiment-dna-audit-block",
+      "file": "app/api/internal/experiment-dna-audit-block/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/experiment-ebpf-sample",
+      "file": "app/api/internal/experiment-ebpf-sample/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/experiment-ethics-review",
+      "file": "app/api/internal/experiment-ethics-review/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/experiment-quantum-seal",
+      "file": "app/api/internal/experiment-quantum-seal/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/experiment-tee-attest",
+      "file": "app/api/internal/experiment-tee-attest/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/experiment-wetware-calibrate",
+      "file": "app/api/internal/experiment-wetware-calibrate/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/internal/experiment-zk-proof",
+      "file": "app/api/internal/experiment-zk-proof/route.ts",
+      "routeClass": "platform_internal",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/invite/magic-link",
+      "file": "app/api/invite/magic-link/route.ts",
+      "routeClass": "invite",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/iot/temperature",
+      "file": "app/api/iot/temperature/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/kitchen/cameras/live/frame",
+      "file": "app/api/kitchen/cameras/live/frame/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/leads/roi",
+      "file": "app/api/leads/roi/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/marketplace/stripe-connect/webhook",
+      "file": "app/api/marketplace/stripe-connect/webhook/route.ts",
+      "routeClass": null,
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/notifications/push/subscribe",
+      "file": "app/api/notifications/push/subscribe/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/nps",
+      "file": "app/api/nps/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/oauth/token",
+      "file": "app/api/oauth/token/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/pay/b2b/[token]/checkout",
+      "file": "app/api/pay/b2b/[token]/checkout/route.ts",
+      "routeClass": null,
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/pay/b2b/batch/[token]/checkout",
+      "file": "app/api/pay/b2b/batch/[token]/checkout/route.ts",
+      "routeClass": null,
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/pos/offline-card/sync",
+      "file": "app/api/pos/offline-card/sync/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/pos/terminal",
+      "file": "app/api/pos/terminal/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 3
+    },
+    {
+      "routePath": "/api/public/qr-order",
+      "file": "app/api/public/qr-order/route.ts",
+      "routeClass": "public_api_key",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/public/qr-table/pay-share",
+      "file": "app/api/public/qr-table/pay-share/route.ts",
+      "routeClass": "public_api_key",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/public/v1/orders",
+      "file": "app/api/public/v1/orders/route.ts",
+      "routeClass": "public_api_key",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/public/v1/recipes",
+      "file": "app/api/public/v1/recipes/route.ts",
+      "routeClass": "public_api_key",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/public/v1/webhooks",
+      "file": "app/api/public/v1/webhooks/route.ts",
+      "routeClass": "public_api_key",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/purchasing/edi/submit",
+      "file": "app/api/purchasing/edi/submit/route.ts",
+      "routeClass": "dashboard_session",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/scim/v2/Users",
+      "file": "app/api/scim/v2/Users/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/scim/v2/Users/[id]",
+      "file": "app/api/scim/v2/Users/[id]/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 2
+    },
+    {
+      "routePath": "/api/storefront/account/orders",
+      "file": "app/api/storefront/account/orders/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/account/reorder",
+      "file": "app/api/storefront/account/reorder/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/account/subscription",
+      "file": "app/api/storefront/account/subscription/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/analytics",
+      "file": "app/api/storefront/analytics/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/builder/add",
+      "file": "app/api/storefront/builder/add/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/builder/publish",
+      "file": "app/api/storefront/builder/publish/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/builder/remove",
+      "file": "app/api/storefront/builder/remove/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/builder/reorder",
+      "file": "app/api/storefront/builder/reorder/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/cart",
+      "file": "app/api/storefront/cart/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 3
+    },
+    {
+      "routePath": "/api/storefront/cart-recovery",
+      "file": "app/api/storefront/cart-recovery/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/experiment/auto-conclude/approve",
+      "file": "app/api/storefront/experiment/auto-conclude/approve/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/experiment/auto-conclude/bulk-approve",
+      "file": "app/api/storefront/experiment/auto-conclude/bulk-approve/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/experiment/auto-conclude/reject",
+      "file": "app/api/storefront/experiment/auto-conclude/reject/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/experiment/causal-discovery/approve",
+      "file": "app/api/storefront/experiment/causal-discovery/approve/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/experiment/orchestrator/approve",
+      "file": "app/api/storefront/experiment/orchestrator/approve/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/forms/upload",
+      "file": "app/api/storefront/forms/upload/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/guest-account",
+      "file": "app/api/storefront/guest-account/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/loyalty/redeem",
+      "file": "app/api/storefront/loyalty/redeem/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/preview-token",
+      "file": "app/api/storefront/preview-token/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/qr",
+      "file": "app/api/storefront/qr/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/reservations",
+      "file": "app/api/storefront/reservations/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/shipping/quote",
+      "file": "app/api/storefront/shipping/quote/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme-experiment",
+      "file": "app/api/storefront/theme-experiment/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme/custom-css",
+      "file": "app/api/storefront/theme/custom-css/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme/publish",
+      "file": "app/api/storefront/theme/publish/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme/restore",
+      "file": "app/api/storefront/theme/restore/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme/save",
+      "file": "app/api/storefront/theme/save/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme/save-draft",
+      "file": "app/api/storefront/theme/save-draft/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme/seo-social",
+      "file": "app/api/storefront/theme/seo-social/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/theme/versions",
+      "file": "app/api/storefront/theme/versions/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "exempt_class",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/storefront/waitlist",
+      "file": "app/api/storefront/waitlist/route.ts",
+      "routeClass": "storefront_public",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/telemetry/ai-briefing-feedback",
+      "file": "app/api/telemetry/ai-briefing-feedback/route.ts",
+      "routeClass": null,
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/telemetry/briefing",
+      "file": "app/api/telemetry/briefing/route.ts",
+      "routeClass": null,
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/vendor/webhooks",
+      "file": "app/api/vendor/webhooks/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/voice/alexa",
+      "file": "app/api/voice/alexa/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/voice/google",
+      "file": "app/api/voice/google/route.ts",
+      "routeClass": null,
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-bayesian-prior",
+      "file": "app/api/webhooks/bigquery-bayesian-prior/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-causal-discovery-outcomes",
+      "file": "app/api/webhooks/bigquery-causal-discovery-outcomes/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-causal-lift",
+      "file": "app/api/webhooks/bigquery-causal-lift/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-causal-posteriors",
+      "file": "app/api/webhooks/bigquery-causal-posteriors/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-federated-gradients",
+      "file": "app/api/webhooks/bigquery-federated-gradients/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-ga4-parity",
+      "file": "app/api/webhooks/bigquery-ga4-parity/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-global-mesh-outcomes",
+      "file": "app/api/webhooks/bigquery-global-mesh-outcomes/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-homomorphic-metrics",
+      "file": "app/api/webhooks/bigquery-homomorphic-metrics/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-interference-matrix",
+      "file": "app/api/webhooks/bigquery-interference-matrix/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-linucb-weights",
+      "file": "app/api/webhooks/bigquery-linucb-weights/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-off-policy",
+      "file": "app/api/webhooks/bigquery-off-policy/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-spillover-daily",
+      "file": "app/api/webhooks/bigquery-spillover-daily/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/bigquery-workspace-acl",
+      "file": "app/api/webhooks/bigquery-workspace-acl/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/capital-lender/[partnerSlug]",
+      "file": "app/api/webhooks/capital-lender/[partnerSlug]/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/cen-cenelec-digital-product-governance-registry",
+      "file": "app/api/webhooks/cen-cenelec-digital-product-governance-registry/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/doordash/orders",
+      "file": "app/api/webhooks/doordash/orders/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/eu-ai-act-art71-pmm-live",
+      "file": "app/api/webhooks/eu-ai-act-art71-pmm-live/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/eu-ai-act-live-registry",
+      "file": "app/api/webhooks/eu-ai-act-live-registry/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/eu-ai-office-conformity-sync",
+      "file": "app/api/webhooks/eu-ai-office-conformity-sync/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/experiment-cislunar-dtn-bundle",
+      "file": "app/api/webhooks/experiment-cislunar-dtn-bundle/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/experiment-dtn-bundle",
+      "file": "app/api/webhooks/experiment-dtn-bundle/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/experiment-feature-stream",
+      "file": "app/api/webhooks/experiment-feature-stream/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/experiment-feature-stream-flink",
+      "file": "app/api/webhooks/experiment-feature-stream-flink/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/experiment-heliopause-dtn-bundle",
+      "file": "app/api/webhooks/experiment-heliopause-dtn-bundle/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/experiment-holdout-ws-push",
+      "file": "app/api/webhooks/experiment-holdout-ws-push/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/experiment-scientist-proposal",
+      "file": "app/api/webhooks/experiment-scientist-proposal/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/grubhub/orders",
+      "file": "app/api/webhooks/grubhub/orders/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/icao-imo-ai-aviation-registry",
+      "file": "app/api/webhooks/icao-imo-ai-aviation-registry/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/iso-42001-cert-body-attest",
+      "file": "app/api/webhooks/iso-42001-cert-body-attest/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/iso-iec-ai-standards-harmonization-registry",
+      "file": "app/api/webhooks/iso-iec-ai-standards-harmonization-registry/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/itu-uncitral-digital-commerce-ai-registry",
+      "file": "app/api/webhooks/itu-uncitral-digital-commerce-ai-registry/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/nist-ai-rmf-live-control-feed",
+      "file": "app/api/webhooks/nist-ai-rmf-live-control-feed/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/oecd-state-ag-ai-transparency-mesh",
+      "file": "app/api/webhooks/oecd-state-ag-ai-transparency-mesh/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/opentable/reservations",
+      "file": "app/api/webhooks/opentable/reservations/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/resend",
+      "file": "app/api/webhooks/resend/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/resy/reservations",
+      "file": "app/api/webhooks/resy/reservations/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/scim/experiment-auditor",
+      "file": "app/api/webhooks/scim/experiment-auditor/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/shopify/app-uninstalled",
+      "file": "app/api/webhooks/shopify/app-uninstalled/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/shopify/markets-create",
+      "file": "app/api/webhooks/shopify/markets-create/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/shopify/markets-delete",
+      "file": "app/api/webhooks/shopify/markets-delete/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/shopify/markets-update",
+      "file": "app/api/webhooks/shopify/markets-update/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/shopify/orders-create",
+      "file": "app/api/webhooks/shopify/orders-create/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/shopify/orders-updated",
+      "file": "app/api/webhooks/shopify/orders-updated/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/shopify/products-update",
+      "file": "app/api/webhooks/shopify/products-update/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/skip/orders",
+      "file": "app/api/webhooks/skip/orders/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/slack/experiment-interactive",
+      "file": "app/api/webhooks/slack/experiment-interactive/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/stripe",
+      "file": "app/api/webhooks/stripe/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "dedicated",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/uber-direct",
+      "file": "app/api/webhooks/uber-direct/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/uber-eats/orders",
+      "file": "app/api/webhooks/uber-eats/orders/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/uk-dsit-algorithmic-transparency",
+      "file": "app/api/webhooks/uk-dsit-algorithmic-transparency/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/un-ai-office-global-registry-mesh",
+      "file": "app/api/webhooks/un-ai-office-global-registry-mesh/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/us-ftc-ai-transparency-live",
+      "file": "app/api/webhooks/us-ftc-ai-transparency-live/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/vertex-ml-model",
+      "file": "app/api/webhooks/vertex-ml-model/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/woocommerce",
+      "file": "app/api/webhooks/woocommerce/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    },
+    {
+      "routePath": "/api/webhooks/wto-upu-cross-border-ai-trade-registry",
+      "file": "app/api/webhooks/wto-upu-cross-border-ai-trade-registry/route.ts",
+      "routeClass": "webhook_signed",
+      "coverage": "middleware",
+      "mutationHandlers": 1
+    }
+  ]
+}

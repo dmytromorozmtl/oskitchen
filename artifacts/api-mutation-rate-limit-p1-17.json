@@ -1,0 +1,15 @@
+{
+  "policyId": "p1-17-api-mutation-rate-limit-v1",
+  "extendsPolicyId": "api-mutation-rate-limit-blueprint-v1",
+  "mutationRoutes": 200,
+  "middlewareCovered": 130,
+  "dedicatedCovered": 20,
+  "exemptClass": 50,
+  "uncoveredMutationRoutes": 0,
+  "enforceFunction": "enforceApiRateLimit",
+  "middlewareFunction": "enforceApiMutationRateLimitMiddleware",
+  "auditArtifact": "artifacts/api-mutation-rate-limit-audit.json",
+  "checkScript": "check:api-mutation-rate-limit-p1-17",
+  "status": "COVERED",
+  "recordedAt": "2026-06-14T13:15:00.000Z"
+}

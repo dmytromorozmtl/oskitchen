@@ -1,7 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
-Cycle: gap-closure-16
+Cycle: gap-closure-17
+Timestamp: 2026-06-14T13:15:00.000Z
+Task: P1-17 — Rate-limit API mutation routes (enforceApiRateLimit)
+Category: Security
+Result: OK — 200/200 mutation routes covered (130 middleware + 20 dedicated + 50 exempt class); 0 uncovered; middleware.ts enforceApiMutationRateLimitMiddleware
+Evidence: npm run check:api-mutation-rate-limit-p1-17 (14 passed), npm run audit:api-mutation-rate-limit
+
+---
 Timestamp: 2026-06-14T13:00:00.000Z
 Task: P1-16 — Remove DEPLOY_SKIP_VITEST from deploy scripts
 Category: DevOps

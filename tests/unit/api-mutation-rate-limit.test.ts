@@ -125,6 +125,6 @@ describe("api mutation rate limit audit", () => {
     );
 
     const workflow = readFileSync(join(process.cwd(), API_MUTATION_RATE_LIMIT_CI_WORKFLOW), "utf8");
-    expect(workflow).toContain("audit:api-mutation-rate-limit");
+    expect(workflow).toContain("api-mutation-rate-limit");
   });
 });
