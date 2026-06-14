@@ -1,13 +1,10 @@
-'use client';
+"use client";
 
-import { RouteError } from '@/components/dashboard/route-states';
+import { ErrorBoundaryTemplate } from "@/components/dashboard/error-boundary-template";
 
-export default function Error({
-  error,
-  reset,
-}: {
+export default function Error(props: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  return <RouteError error={error} reset={reset} />;
+  return <ErrorBoundaryTemplate {...props} />;
 }

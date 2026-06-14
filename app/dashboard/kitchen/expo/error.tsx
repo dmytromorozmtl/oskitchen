@@ -1,22 +1,10 @@
 "use client";
 
-import { RouteError } from "@/components/dashboard/route-states";
+import { ErrorBoundaryTemplate } from "@/components/dashboard/error-boundary-template";
 
-export default function KdsExpoViewError({
-  error,
-  reset,
-}: {
+export default function Error(props: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  return (
-    <RouteError
-      error={error}
-      reset={reset}
-      title="Expo view unavailable"
-      description={error.message || "Could not load expo runner board."}
-      homeHref="/dashboard/kitchen"
-      homeLabel="Back to kitchen"
-    />
-  );
+  return <ErrorBoundaryTemplate {...props} />;
 }

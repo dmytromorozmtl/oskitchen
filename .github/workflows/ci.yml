@@ -200,6 +200,9 @@ jobs:
       - name: Suspense boundaries — wave 1 Today/Marketplace/POS/Kitchen (P2-41)
         run: npm run check:suspense-boundaries-p2-41
 
+      - name: Dashboard error.tsx — 45 operator routes templated (P2-42)
+        run: npm run check:dashboard-error-tsx-p2-42
+
       - name: Build
         run: |
           set -o pipefail

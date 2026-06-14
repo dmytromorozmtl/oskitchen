@@ -1,22 +1,10 @@
 "use client";
 
-import { RouteError } from "@/components/dashboard/route-states";
+import { ErrorBoundaryTemplate } from "@/components/dashboard/error-boundary-template";
 
-export default function PosCashManagementError({
-  error,
-  reset,
-}: {
+export default function Error(props: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  return (
-    <RouteError
-      error={error}
-      reset={reset}
-      title="Cash management unavailable"
-      description={error.message || "Something went wrong loading cash controls."}
-      homeHref="/dashboard/pos"
-      homeLabel="Back to POS"
-    />
-  );
+  return <ErrorBoundaryTemplate {...props} />;
 }

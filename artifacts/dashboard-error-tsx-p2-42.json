@@ -1,0 +1,11 @@
+{
+  "policyId": "dashboard-error-tsx-p2-42-v1",
+  "routeCount": 45,
+  "templateMarker": "ErrorBoundaryTemplate",
+  "templateComponent": "components/dashboard/error-boundary-template.tsx",
+  "scaffoldScript": "scripts/scaffold-dashboard-error-tsx-p2-42.ts",
+  "checkScript": "check:dashboard-error-tsx-p2-42",
+  "migratedToTemplate": 16,
+  "ciGate": true,
+  "verifiedAt": "2026-06-15T13:00:00.000Z"
+}

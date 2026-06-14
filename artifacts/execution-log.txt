@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-42
+Timestamp: 2026-06-15T13:00:00.000Z
+Task: P2-42 — error.tsx on 45 dashboard operator routes (Today/Marketplace/POS/Kitchen)
+Category: Frontend
+Result: OK — 45 routes use ErrorBoundaryTemplate; 16 RouteError-only files migrated; P2-42 CI gate
+Evidence: check:dashboard-error-tsx-p2-42; artifacts/dashboard-error-tsx-p2-42.json; scripts/scaffold-dashboard-error-tsx-p2-42.ts
+
+---
 Cycle: gap-closure-41
 Timestamp: 2026-06-15T12:00:00.000Z
 Task: P2-41 — Suspense boundaries wave 1 (Today, Marketplace, POS, Kitchen ~55 pages)
