@@ -29,9 +29,9 @@ export default async function FloorPlansPage({
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Visual floor plan editor</h1>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-          Oracle MICROS parity layout canvas — drag-and-drop tables, section zones, shape controls,
-          and realtime status via Supabase when configured. BETA — not certified live occupancy for
-          every venue.
+          Lightspeed parity — visual editor with drag-and-drop layout, real-time table management,
+          section zones, and shape controls. Supabase Realtime when configured; polling fallback
+          otherwise. BETA — not certified live occupancy for every venue.
         </p>
       </div>
       {location ? (

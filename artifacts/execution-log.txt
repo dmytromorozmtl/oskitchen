@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-65
+Timestamp: 2026-06-16T10:00:00.000Z
+Task: P2-65 — Floor plan editor (visual editor + real-time table management — Lightspeed parity)
+Category: POS
+Result: OK — drag-and-drop canvas + table management panel + Supabase Realtime hook; 12-scenario benchmark 100% capability coverage; check:floor-plan-editor-p2-65 CI gate
+Evidence: artifacts/floor-plan-editor-p2-65.json; docs/floor-plan-editor-p2-65.md; app/dashboard/floor-plans/page.tsx; components/restaurant/floor-plan-editor.tsx
+
+---
 Cycle: gap-closure-64
 Timestamp: 2026-06-16T09:00:00.000Z
 Task: P2-64 — Catering BEO format (layout, menu, timeline — Tripleseat parity)

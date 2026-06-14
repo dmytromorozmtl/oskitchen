@@ -1,0 +1,13 @@
+{
+  "policyId": "floor-plan-editor-p2-65-v1",
+  "scenarioCount": 12,
+  "capabilityCoveragePct": 100,
+  "thresholdPct": 100,
+  "realtimeScenarioCount": 7,
+  "lightspeedParityNote": "Visual floor plan editor with drag-and-drop layout and real-time table management — comparable to Lightspeed floor plan, without claiming certified parity.",
+  "route": "/dashboard/floor-plans",
+  "tableManagementTestId": "floor-plan-table-management",
+  "ciGate": true,
+  "checkScript": "check:floor-plan-editor-p2-65",
+  "verifiedAt": "2026-06-16T10:00:00.000Z"
+}

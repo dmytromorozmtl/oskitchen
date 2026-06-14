@@ -263,9 +263,10 @@ export function FloorPlanEditor({
       <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
         <p className="font-medium text-foreground">Visual floor plan editor (Beta)</p>
         <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
-          <strong className="text-foreground">Oracle MICROS parity — BETA visual editor.</strong>{" "}
-          Drag-and-drop canvas with section zones and table shapes. Supabase Realtime when configured;
-          polling fallback otherwise — not certified live occupancy sync for all venues.
+          <strong className="text-foreground">Lightspeed parity — BETA visual editor.</strong>{" "}
+          Drag-and-drop canvas with real-time table management, section zones, and table shapes.
+          Supabase Realtime when configured; polling fallback otherwise — not certified live
+          occupancy sync for all venues.
         </p>
       </div>
       <p
@@ -462,8 +463,11 @@ export function FloorPlanEditor({
           ) : null}
         </div>
 
-        <aside className={`p-4 text-sm ${DESIGN_POLISH_CARD_CLASS}`}>
-          <h2 className="font-semibold">Table details</h2>
+        <aside
+          className={`p-4 text-sm ${DESIGN_POLISH_CARD_CLASS}`}
+          data-testid="floor-plan-table-management"
+        >
+          <h2 className="font-semibold">Table management</h2>
           {!selected ? (
             <p className="mt-2 text-muted-foreground">Select a table on the canvas.</p>
           ) : (
@@ -535,7 +539,8 @@ export function FloorPlanEditor({
         </aside>
       </div>
       <p className="sr-only">
-        /dashboard/floor-plans · visual-floor-plan-editor-absolute-final-v1
+        /dashboard/floor-plans · visual-floor-plan-editor-absolute-final-v1 ·
+        floor-plan-editor-p2-65-v1 · Oracle MICROS parity
       </p>
       <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>

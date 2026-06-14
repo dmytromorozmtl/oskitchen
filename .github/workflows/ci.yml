@@ -269,6 +269,9 @@ jobs:
       - name: Catering BEO format — Tripleseat parity (P2-64)
         run: npm run check:catering-beo-format-p2-64
 
+      - name: Floor plan editor — Lightspeed parity (P2-65)
+        run: npm run check:floor-plan-editor-p2-65
+
       - name: Build
         run: |
           set -o pipefail
