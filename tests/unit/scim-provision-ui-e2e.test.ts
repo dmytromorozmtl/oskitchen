@@ -24,7 +24,7 @@ const ROOT = process.cwd();
 describe("SCIM provision UI E2E (P2-35)", () => {
   it("locks policy id and five-step provision flow", () => {
     expect(SCIM_PROVISION_UI_E2E_POLICY_ID).toBe("scim-provision-ui-e2e-p2-35-v1");
-    expect(SCIM_PROVISION_UI_E2E_FLOW_STEPS).toHaveLength(5);
+    expect(SCIM_PROVISION_UI_E2E_FLOW_STEPS).toHaveLength(6);
   });
 
   it("audits spec, panel, deactivate action, and flow helper", () => {
@@ -34,6 +34,7 @@ describe("SCIM provision UI E2E (P2-35)", () => {
     expect(summary.readyHelperPresent).toBe(true);
     expect(summary.panelComponentPresent).toBe(true);
     expect(summary.deactivateActionWired).toBe(true);
+    expect(summary.userGroupWired).toBe(true);
     expect(summary.passed).toBe(true);
   });
 

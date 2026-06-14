@@ -36,5 +36,6 @@
   "p1-35-offline-pos-pci-flow-e2e": "done",
   "p1-36-loyalty-earn-redeem-e2e": "done",
   "p1-37-qr-scan-storefront-kds-e2e": "done",
-  "p1-38-invoice-scanner-accuracy": "done"
+  "p1-38-invoice-scanner-accuracy": "done",
+  "p1-39-scim-provision-ui-e2e": "done"
 }

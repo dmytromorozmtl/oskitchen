@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-39
+Timestamp: 2026-06-15T10:00:00.000Z
+Task: P1-39 — SCIM provision UI E2E (IdP→user group→provision→deprovisioning)
+Category: QA
+Result: OK — six-step flow with assign_user_group via Groups API; deactivate + membership revoke; P1-39 CI gate
+Evidence: check:scim-provision-ui-e2e-p1-39; artifacts/scim-provision-ui-e2e-p1-39.json; e2e/scim-provision-ui-e2e.spec.ts
+
+---
 Cycle: gap-closure-38
 Timestamp: 2026-06-15T09:00:00.000Z
 Task: P1-38 — AI invoice scanner accuracy (100 invoices, field-level)

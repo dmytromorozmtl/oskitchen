@@ -17,6 +17,7 @@ export type ScimProvisionUiE2EAuditSummary = {
   readyHelperPresent: boolean;
   panelComponentPresent: boolean;
   deactivateActionWired: boolean;
+  userGroupWired: boolean;
   flowStepCount: number;
   passed: boolean;
 };
@@ -53,12 +54,17 @@ export function auditScimProvisionUiE2E(root = process.cwd()): ScimProvisionUiE2
     specPresent && readFileSync(specPath, "utf8").includes(SCIM_PROVISION_UI_E2E_POLICY_ID);
 
   let flowWired = false;
+  let userGroupWired = false;
   if (flowHelperPresent) {
     const source = readFileSync(flowPath, "utf8");
     flowWired =
       source.includes("createScimUserViaApi") &&
       source.includes("deactivateScimUserFromUi") &&
       source.includes("assertScimUserRevokedInDb");
+    userGroupWired =
+      source.includes("fetchScimUserGroupViaApi") &&
+      source.includes("assign_user_group") &&
+      source.includes("scimGroupsApiPath");
   }
 
   const passed =
@@ -69,8 +75,9 @@ export function auditScimProvisionUiE2E(root = process.cwd()): ScimProvisionUiE2
     deactivateActionWired &&
     panelTestIdsWired &&
     flowWired &&
+    userGroupWired &&
     specReferencesPolicy &&
-    SCIM_PROVISION_UI_E2E_FLOW_STEPS.length === 5;
+    SCIM_PROVISION_UI_E2E_FLOW_STEPS.length === 6;
 
   return {
     policyId: SCIM_PROVISION_UI_E2E_POLICY_ID,
@@ -79,6 +86,7 @@ export function auditScimProvisionUiE2E(root = process.cwd()): ScimProvisionUiE2
     readyHelperPresent,
     panelComponentPresent,
     deactivateActionWired,
+    userGroupWired,
     flowStepCount: SCIM_PROVISION_UI_E2E_FLOW_STEPS.length,
     passed,
   };
@@ -94,7 +102,8 @@ export function formatScimProvisionUiE2EAuditLines(
     `Ready helper: ${summary.readyHelperPresent ? "yes" : "no"}`,
     `Provision panel component: ${summary.panelComponentPresent ? "yes" : "no"}`,
     `Deactivate action wired: ${summary.deactivateActionWired ? "yes" : "no"}`,
-    `Flow steps (${summary.flowStepCount}): ${summary.flowStepCount === 5 ? "yes" : "no"}`,
+    `User group wired: ${summary.userGroupWired ? "yes" : "no"}`,
+    `Flow steps (${summary.flowStepCount}): ${summary.flowStepCount === 6 ? "yes" : "no"}`,
     `Passed: ${summary.passed ? "YES" : "NO"}`,
   ];
 }

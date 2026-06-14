@@ -15,6 +15,8 @@ import {
   SCIM_PROVISION_USER_ROW_TEST_ID,
   SCIM_PROVISION_USER_STATUS_TEST_ID,
   SCIM_PROVISION_USERS_PANEL_TEST_ID,
+  SCIM_DEFAULT_USER_GROUP_ID,
+  scimGroupsApiPath,
   scimUsersApiPath,
   type ScimProvisionUiE2EFlowStep,
 } from "@/lib/qa/scim-provision-ui-e2e-policy";
@@ -74,6 +76,28 @@ export async function seedScimWorkspaceForE2E(
   });
 
   return bearerToken;
+}
+
+export async function fetchScimUserGroupViaApi(
+  request: APIRequestContext,
+  bearerToken: string,
+  groupId = SCIM_DEFAULT_USER_GROUP_ID,
+): Promise<{ groupId: string; displayName: string }> {
+  const res = await request.get(scimGroupsApiPath(), {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+      Accept: "application/scim+json",
+    },
+  });
+  expect(res.status()).toBe(200);
+  const body = (await res.json()) as {
+    Resources?: Array<{ id?: string; displayName?: string }>;
+  };
+  const group = body.Resources?.find((row) => row.id === groupId);
+  if (!group?.id) {
+    throw new Error(`SCIM group ${groupId} not found in IdP group list`);
+  }
+  return { groupId: group.id, displayName: group.displayName ?? "STAFF" };
 }
 
 export async function createScimUserViaApi(
@@ -184,10 +208,13 @@ export async function runScimProvisionUiE2EFlow(
   });
 
   const bearerToken = await seedScimWorkspaceForE2E(ctx.workspaceId, ctx.ownerUserId);
-  steps.push("seed_scim_workspace");
+  steps.push("configure_idp");
+
+  await fetchScimUserGroupViaApi(request, bearerToken);
+  steps.push("assign_user_group");
 
   const { scimUserId, userId } = await createScimUserViaApi(request, bearerToken, userName);
-  steps.push("create_user_scim_api");
+  steps.push("provision_user");
 
   await verifyScimUserOnDashboardUi(page, scimUserId, userName);
   steps.push("verify_dashboard_ui");
@@ -200,7 +227,7 @@ export async function runScimProvisionUiE2EFlow(
     scimUserId,
     userId,
   });
-  steps.push("verify_revoked");
+  steps.push("verify_deprovisioned");
 
   return {
     scimUserId,

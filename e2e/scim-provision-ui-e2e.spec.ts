@@ -26,14 +26,15 @@ import {
  */
 
 test.describe("scim provision ui e2e policy", () => {
-  test("exports five-step provision deactivate flow", () => {
+  test("exports six-step IdP group provision deprovision flow", () => {
     expect(SCIM_PROVISION_UI_E2E_POLICY_ID).toBe("scim-provision-ui-e2e-p2-35-v1");
     expect(SCIM_PROVISION_UI_E2E_FLOW_STEPS).toEqual([
-      "seed_scim_workspace",
-      "create_user_scim_api",
+      "configure_idp",
+      "assign_user_group",
+      "provision_user",
       "verify_dashboard_ui",
       "deactivate_user_ui",
-      "verify_revoked",
+      "verify_deprovisioned",
     ]);
     expect(SCIM_PROVISION_UI_E2E_PATH).toBe("/dashboard/enterprise/sso-scim");
     expect(scimUsersApiPath()).toBe("/api/scim/v2/Users");

@@ -34,11 +34,12 @@ export const SCIM_PROVISION_USER_COUNT_TEST_ID = "scim-provision-user-count" as 
 export const SCIM_PROVISION_UI_E2E_VISIBLE_MS = 30_000 as const;
 
 export const SCIM_PROVISION_UI_E2E_FLOW_STEPS = [
-  "seed_scim_workspace",
-  "create_user_scim_api",
+  "configure_idp",
+  "assign_user_group",
+  "provision_user",
   "verify_dashboard_ui",
   "deactivate_user_ui",
-  "verify_revoked",
+  "verify_deprovisioned",
 ] as const;
 
 export type ScimProvisionUiE2EFlowStep = (typeof SCIM_PROVISION_UI_E2E_FLOW_STEPS)[number];
@@ -72,3 +73,9 @@ export function isScimProvisionUiE2EEnabled(): boolean {
 export function scimUsersApiPath(): string {
   return "/api/scim/v2/Users";
 }
+
+export function scimGroupsApiPath(): string {
+  return "/api/scim/v2/Groups";
+}
+
+export const SCIM_DEFAULT_USER_GROUP_ID = "group-staff" as const;

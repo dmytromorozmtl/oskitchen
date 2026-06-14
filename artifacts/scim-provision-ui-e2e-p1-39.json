@@ -1,0 +1,21 @@
+{
+  "policyId": "scim-provision-ui-e2e-p1-39-v1",
+  "chain": ["idp", "user_group", "provision", "delete", "deprovisioning"],
+  "flowSteps": [
+    "configure_idp",
+    "assign_user_group",
+    "provision_user",
+    "verify_dashboard_ui",
+    "deactivate_user_ui",
+    "verify_deprovisioned"
+  ],
+  "defaultUserGroupId": "group-staff",
+  "groupsApi": "/api/scim/v2/Groups",
+  "usersApi": "/api/scim/v2/Users",
+  "dashboardPath": "/dashboard/enterprise/sso-scim",
+  "e2eSpec": "e2e/scim-provision-ui-e2e.spec.ts",
+  "ciGate": true,
+  "checkScript": "check:scim-provision-ui-e2e-p1-39",
+  "liveGateEnv": "E2E_SCIM_PROVISION_UI=true",
+  "verifiedAt": "2026-06-15T10:00:00.000Z"
+}
