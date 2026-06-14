@@ -18,5 +18,6 @@
   "p1-17-api-mutation-rate-limit": "done",
   "p1-18-par-levels-auto-reorder-n1": "done",
   "p1-19-remaining-n-plus-one": "done",
-  "p1-20-cron-heartbeat-monitoring": "done"
+  "p1-20-cron-heartbeat-monitoring": "done",
+  "p1-21-rate-limit-regression": "done"
 }

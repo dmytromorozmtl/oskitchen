@@ -1,0 +1,11 @@
+{
+  "policyId": "rate-limit-regression-p1-21-v1",
+  "windowMs": 60000,
+  "productionMax": 120,
+  "highVolumeBurst": 201,
+  "policyKey": "api_mutation",
+  "primaryTarget": "pos-terminal-post",
+  "expected429AtRequest": 121,
+  "checkScript": "check:rate-limit-regression-p1-21",
+  "verifiedAt": "2026-06-14T17:00:00.000Z"
+}

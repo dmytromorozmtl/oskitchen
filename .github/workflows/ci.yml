@@ -137,6 +137,9 @@ jobs:
       - name: Production cron heartbeat monitoring (P1-20)
         run: npm run check:cron-heartbeat-monitoring-p1-20
 
+      - name: Rate limit regression — mutation routes (P1-21)
+        run: npm run check:rate-limit-regression-p1-21
+
       - name: Build
         run: |
           set -o pipefail

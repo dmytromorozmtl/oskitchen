@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-21
+Timestamp: 2026-06-14T17:00:00.000Z
+Task: P1-21 — Rate limit regression (200+ requests / 60s → 429 on mutation routes)
+Category: QA
+Result: OK — api_mutation 120/60s; 201-request burst → 429 at request 121 on pos-terminal-post; P1-18 fast smoke retained
+Evidence: npm run check:rate-limit-regression-p1-21 (9 passed)
+
+---
 Cycle: gap-closure-20
 Timestamp: 2026-06-14T16:00:00.000Z
 Task: P1-20 — Production cron heartbeat monitoring (cronExecution.ok CI gate)

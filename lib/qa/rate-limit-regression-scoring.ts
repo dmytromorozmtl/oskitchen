@@ -86,6 +86,7 @@ async function invokeMutationGate(
 export async function runRateLimitRegressionScenario(
   target: RateLimitRegressionTarget,
   burstCount: number,
+  simulatedMax: number = RATE_LIMIT_REGRESSION_SIMULATED_MAX,
 ): Promise<RateLimitRegressionScenarioResult> {
   let first429AtRequest: number | null = null;
 
@@ -97,9 +98,8 @@ export async function runRateLimitRegressionScenario(
     }
   }
 
-  const passed =
-    first429AtRequest !== null &&
-    first429AtRequest === RATE_LIMIT_REGRESSION_SIMULATED_MAX + 1;
+  const expected429At = simulatedMax + 1;
+  const passed = first429AtRequest !== null && first429AtRequest === expected429At;
 
   return {
     id: target.id,
@@ -111,7 +111,7 @@ export async function runRateLimitRegressionScenario(
     detail: passed
       ? `${target.method} ${target.pathname} → 429 at request ${first429AtRequest}`
       : first429AtRequest
-        ? `${target.method} ${target.pathname} → 429 at ${first429AtRequest}, expected ${RATE_LIMIT_REGRESSION_SIMULATED_MAX + 1}`
+        ? `${target.method} ${target.pathname} → 429 at ${first429AtRequest}, expected ${expected429At}`
         : `${target.method} ${target.pathname} → no 429 in ${burstCount} requests`,
   };
 }
