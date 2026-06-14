@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-38
+Timestamp: 2026-06-15T09:00:00.000Z
+Task: P1-38 — AI invoice scanner accuracy (100 invoices, field-level)
+Category: AI/QA
+Result: OK — 100-invoice corpus; field-level scoring (header + line); ≥85% threshold; P1-38 CI gate
+Evidence: check:invoice-scanner-accuracy-p1-38; artifacts/invoice-scanner-accuracy-p1-38.json
+
+---
 Cycle: gap-closure-37
 Timestamp: 2026-06-15T08:00:00.000Z
 Task: P1-37 — QR scan→storefront→KDS E2E (QR→checkout→WebhookEvent→KitchenTask)

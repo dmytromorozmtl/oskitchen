@@ -1,0 +1,18 @@
+{
+  "policyId": "invoice-scanner-accuracy-p1-38-v1",
+  "invoiceCount": 100,
+  "fieldAccuracyPct": 100,
+  "thresholdPct": 85,
+  "headerFields": [
+    "supplierName",
+    "invoiceNumber",
+    "invoiceDate",
+    "dueDate",
+    "totalAmount",
+    "taxAmount"
+  ],
+  "lineFields": ["description", "quantity", "unitPrice", "totalPrice"],
+  "ciGate": true,
+  "checkScript": "check:invoice-scanner-accuracy-p1-38",
+  "verifiedAt": "2026-06-15T09:00:00.000Z"
+}

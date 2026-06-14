@@ -188,6 +188,9 @@ jobs:
       - name: QR scan→storefront→KDS E2E — webhook→KitchenTask (P1-37)
         run: npm run check:qr-scan-storefront-kds-e2e-p1-37
 
+      - name: AI invoice scanner accuracy — 100 invoices field-level (P1-38)
+        run: npm run check:invoice-scanner-accuracy-p1-38
+
       - name: Build
         run: |
           set -o pipefail
