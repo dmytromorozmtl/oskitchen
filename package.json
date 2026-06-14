@@ -235,6 +235,7 @@
     "check:public-roadmap-honest-dates-p3-88": "node ./node_modules/vitest/vitest.mjs run tests/unit/public-roadmap-honest-dates-p3-88.test.ts",
     "check:app-marketplace-listing-p3-89": "node ./node_modules/vitest/vitest.mjs run tests/unit/app-marketplace-listing-p3-89.test.ts",
     "check:meal-prep-niche-p3-90": "node ./node_modules/vitest/vitest.mjs run tests/unit/meal-prep-niche-p3-90.test.ts",
+    "check:native-budgeting-p3-91": "node ./node_modules/vitest/vitest.mjs run tests/unit/native-budgeting-p3-91.test.ts",
     "test:e2e:maintenance-mode-panel-perf-budget": "playwright test e2e/maintenance-mode-panel-perf-budget.spec.ts --project=chromium",
     "test:e2e:preview-route-redirect-regression": "playwright test e2e/preview-route-redirect-regression.spec.ts --project=chromium",
     "test:e2e:enterprise-sso-saml-e2e": "playwright test e2e/auth.setup.ts e2e/enterprise-sso-saml-e2e.spec.ts --project=setup --project=chromium-authed",

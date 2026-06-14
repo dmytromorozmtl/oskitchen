@@ -347,6 +347,9 @@ jobs:
       - name: Meal Prep OS niche positioning (P3-90)
         run: npm run check:meal-prep-niche-p3-90
 
+      - name: Native budgeting module (P3-91)
+        run: npm run check:native-budgeting-p3-91
+
       - name: Build
         run: |
           set -o pipefail

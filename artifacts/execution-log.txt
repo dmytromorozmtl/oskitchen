@@ -9965,3 +9965,10 @@ Task: P3-90 — Meal Prep OS niche positioning (subscription + production + stor
 Category: Marketing
 Result: OK — meal-prep-niche-p3-90-v1; Meal Prep OS brand on /meal-prep-software; 3 pillars (subscription BETA, production LIVE, storefront BETA); MealPrepOsNicheSection component; weekly loop + honesty note; meta title updated; artifact meal-prep-niche-p3-90.json; CI gate check:meal-prep-niche-p3-90
 Evidence: artifacts/meal-prep-niche-p3-90.json, npm run check:meal-prep-niche-p3-90
+
+Cycle: 91
+Timestamp: 2026-06-17T02:00:00.000Z
+Task: P3-91 — Native budgeting module budget vs actual (R365 parity)
+Category: Finance
+Result: OK — native-budgeting-p3-91-v1; /dashboard/finance/budget page with operator-editable category targets; 9 R365-style categories; settings in finance.nativeBudget; PnL statement uses pnlLineBudgetAmount; artifact native-budgeting-p3-91.json; CI gate check:native-budgeting-p3-91
+Evidence: artifacts/native-budgeting-p3-91.json, npm run check:native-budgeting-p3-91

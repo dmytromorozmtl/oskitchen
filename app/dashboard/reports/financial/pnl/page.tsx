@@ -59,6 +59,12 @@ export default async function RestaurantPnLPage({
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/dashboard/finance/budget"
+            className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted"
+          >
+            Native budgeting
+          </Link>
           <PnlRefreshButton period={period} />
           {canExport && (
             <a

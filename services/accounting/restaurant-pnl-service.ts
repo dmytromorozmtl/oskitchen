@@ -1,4 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import {
+  pnlLineBudgetAmount,
+  resolveNativeBudgetSettings,
+} from "@/lib/finance/native-budgeting-builders";
 import { timeEntryListWhereForOwner } from "@/lib/scope/workspace-accounting-scope";
 import {
   costSnapshotListWhereForOwner,
@@ -123,16 +127,19 @@ export async function getRestaurantPnL(userId: string, period: PnlPeriod) {
 }
 
 export async function getRestaurantPnLStatement(userId: string, period: PnlPeriod) {
-  const summary = await getRestaurantPnL(userId, period);
+  const [summary, settings] = await Promise.all([
+    getRestaurantPnL(userId, period),
+    resolveNativeBudgetSettings(userId),
+  ]);
   const rev = summary.totalRevenue;
 
   const line = (key: string, label: string, actual: number, budgetPct: number, subtotal = false): PnlLine => {
-    const budget = rev * budgetPct;
+    const budget = pnlLineBudgetAmount(key, rev, settings);
     return {
       key,
       label,
       actual: Math.round(actual * 100) / 100,
-      budget: Math.round(budget * 100) / 100,
+      budget,
       variance: Math.round((actual - budget) * 100) / 100,
       isSubtotal: subtotal,
     };
@@ -154,15 +161,36 @@ export async function getRestaurantPnLStatement(userId: string, period: PnlPerio
   const lines: PnlLine[] = [
     line("revenue", "Food & beverage sales", rev, 1),
     line("food_cost", "Food cost", food, BUDGET_PCTS.foodCost),
-    { key: "gross", label: "Gross profit", actual: grossProfit, budget: rev * (1 - BUDGET_PCTS.foodCost), variance: grossProfit - rev * (1 - BUDGET_PCTS.foodCost), isSubtotal: true },
+    {
+      key: "gross",
+      label: "Gross profit",
+      actual: grossProfit,
+      budget: pnlLineBudgetAmount("gross", rev, settings),
+      variance: grossProfit - pnlLineBudgetAmount("gross", rev, settings),
+      isSubtotal: true,
+    },
     line("labor", "Labor cost", labor, BUDGET_PCTS.labor),
     line("occupancy", "Occupancy", occupancy, BUDGET_PCTS.occupancy),
     line("supplies", "Operating supplies", supplies, BUDGET_PCTS.supplies),
     line("repairs", "Repairs & maintenance", repairs, BUDGET_PCTS.repairs),
     line("marketing", "Marketing", marketing, BUDGET_PCTS.marketing),
     line("admin", "Admin & G&A", admin, BUDGET_PCTS.admin),
-    { key: "ebitda", label: "EBITDA", actual: ebitda, budget: rev * 0.15, variance: ebitda - rev * 0.15, isSubtotal: true },
-    { key: "net", label: "Net income (est.)", actual: netIncome, budget: rev * 0.12, variance: netIncome - rev * 0.12, isSubtotal: true },
+    {
+      key: "ebitda",
+      label: "EBITDA",
+      actual: ebitda,
+      budget: pnlLineBudgetAmount("ebitda", rev, settings),
+      variance: ebitda - pnlLineBudgetAmount("ebitda", rev, settings),
+      isSubtotal: true,
+    },
+    {
+      key: "net",
+      label: "Net income (est.)",
+      actual: netIncome,
+      budget: pnlLineBudgetAmount("net", rev, settings),
+      variance: netIncome - pnlLineBudgetAmount("net", rev, settings),
+      isSubtotal: true,
+    },
   ];
 
   return { period, summary, lines };

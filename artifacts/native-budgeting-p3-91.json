@@ -1,0 +1,14 @@
+{
+  "version": "native-budgeting-v1",
+  "policyId": "native-budgeting-p3-91-v1",
+  "route": "/dashboard/finance/budget",
+  "pnlRoute": "/dashboard/reports/financial/pnl",
+  "categoryCount": 9,
+  "storageKey": "finance.nativeBudget",
+  "parityTarget": "Restaurant365 budget vs actual",
+  "accountantRequired": false,
+  "service": "services/finance/native-budgeting-service.ts",
+  "checkScript": "check:native-budgeting-p3-91",
+  "ciGate": true,
+  "verifiedAt": "2026-06-17T02:00:00.000Z"
+}
