@@ -6,9 +6,9 @@ import { SOLUTION_SEGMENT_META } from '@/lib/marketing/solution-segment-meta';
 export const GHOST_KITCHEN_LANDING_PATH = '/ghost-kitchen-software' as const;
 
 export const GHOST_KITCHEN_LANDING_META = {
-  title: 'Ghost Kitchen Software — Multi-Brand Order Hub | OS Kitchen',
+  title: 'Ghost Kitchen Software — One Queue, Margin Per Brand | OS Kitchen',
   description:
-    'Run virtual brands from one kitchen — unified order hub, marketplace purchasing, AI purchasing suggestions, production board, and profit per brand. 14-day free trial.',
+    'Ghost kitchen operators: unify delivery tablets into one Order Hub, see brand-level P&L, and stop blended-margin blind spots. 14-day free trial.',
   keywords: [
     'ghost kitchen software',
     'virtual brand kitchen',
@@ -37,6 +37,8 @@ export const GHOST_KITCHEN_PAIN_POINTS = [
       'Revenue rolls up in payment processor reports, but labor, food cost, and channel fees stay blended — you cannot kill the weak brand fast enough.',
   },
 ] as const;
+
+export { ICP_LANDING_P1_24_GHOST_KITCHEN_PAINS as GHOST_KITCHEN_PAIN_POINTS_P1_24 } from '@/lib/marketing/icp-landing-pages-p1-24-content';
 
 export const GHOST_KITCHEN_SOLUTION = {
   title: 'One kitchen OS for every virtual brand',

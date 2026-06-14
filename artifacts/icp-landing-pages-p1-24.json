@@ -1,0 +1,12 @@
+{
+  "policyId": "icp-landing-pages-p1-24-v1",
+  "paths": ["/meal-prep-software", "/ghost-kitchen-software"],
+  "contentModule": "lib/marketing/icp-landing-pages-p1-24-content.ts",
+  "bridgeComponent": "components/marketing/icp-pain-solution-bridge-section.tsx",
+  "painFields": ["symptom", "operatorCost", "solution"],
+  "mealPrepHeroH1": "Your Sunday spreadsheet is lying to your kitchen",
+  "ghostKitchenHeroH1": "Four delivery tablets. Zero margin per brand.",
+  "ciGate": true,
+  "checkScript": "check:icp-landing-pages-p1-24",
+  "verifiedAt": "2026-06-14T19:00:00.000Z"
+}

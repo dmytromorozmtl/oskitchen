@@ -6,9 +6,9 @@ import { SOLUTION_SEGMENT_META } from '@/lib/marketing/solution-segment-meta';
 export const MEAL_PREP_SOFTWARE_LANDING_PATH = '/meal-prep-software' as const;
 
 export const MEAL_PREP_SOFTWARE_LANDING_META = {
-  title: 'Meal Prep Software — Weekly Production & Packing | OS Kitchen',
+  title: 'Meal Prep Software — Stop Sunday Spreadsheet Chaos | OS Kitchen',
   description:
-    'Meal prep software for weekly menus, preorder cutoffs, production board, and packing labels. Replace Sunday spreadsheets. 14-day free trial from $29/mo.',
+    'Meal prep operators: end Sunday reconciliation, cutoff chaos, and packing mispacks. Weekly menu → production board → packing lanes. 14-day trial from $29/mo.',
   keywords: [
     'meal prep software',
     'meal prep business software',
@@ -37,6 +37,8 @@ export const MEAL_PREP_SOFTWARE_PAIN_POINTS = [
       'Lane sheets are handwritten or missing dietary flags — mispacks erode trust during pickup and delivery windows.',
   },
 ] as const;
+
+export { ICP_LANDING_P1_24_MEAL_PREP_PAINS as MEAL_PREP_SOFTWARE_PAIN_POINTS_P1_24 } from '@/lib/marketing/icp-landing-pages-p1-24-content';
 
 export const MEAL_PREP_SOFTWARE_SOLUTION = {
   title: 'One system from weekly menu to packed handoff',

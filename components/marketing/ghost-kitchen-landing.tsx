@@ -13,6 +13,7 @@ import {
 
 import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
+import { IcpPainSolutionBridgeSection } from '@/components/marketing/icp-pain-solution-bridge-section';
 import { IcpPilotHighlightsSection } from '@/components/marketing/icp-pilot-highlights-section';
 import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
@@ -29,6 +30,7 @@ import {
   GHOST_KITCHEN_LANDING_PATH,
   GHOST_KITCHEN_LIMITATIONS,
   GHOST_KITCHEN_PAIN_POINTS,
+  GHOST_KITCHEN_PAIN_POINTS_P1_24,
   GHOST_KITCHEN_SCREENSHOTS,
   GHOST_KITCHEN_SOLUTION,
   GHOST_KITCHEN_TESTIMONIAL_PLACEHOLDER,
@@ -36,6 +38,8 @@ import {
   getGhostKitchenLandingContent,
   getGhostKitchenSegmentMeta,
 } from '@/lib/marketing/ghost-kitchen-landing-content';
+import { icpLandingP124HeroForSegment } from '@/lib/marketing/icp-landing-pages-p1-24-content';
+import { ICP_LANDING_PAGES_P1_24_ENTRIES } from '@/lib/marketing/icp-landing-pages-p1-24-policy';
 import { faqForSolution } from '@/lib/marketing/solution-page-faq';
 
 const FEATURE_ICONS = {
@@ -50,6 +54,10 @@ export function GhostKitchenLanding() {
   const content = getGhostKitchenLandingContent();
   const meta = getGhostKitchenSegmentMeta();
   const faq = faqForSolution('ghost-kitchens');
+  const p1_24Hero = icpLandingP124HeroForSegment('ghost-kitchen');
+  const bridgeTestId =
+    ICP_LANDING_PAGES_P1_24_ENTRIES.find((e) => e.id === 'ghost-kitchen')?.bridgeTestId ??
+    'icp-pain-solution-bridge-ghost-kitchen-p1-24';
 
   const breadcrumbItems = [
     { name: 'Home', href: '/' },
@@ -95,6 +103,7 @@ export function GhostKitchenLanding() {
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
               {content.subtitle}
             </p>
+            <p className="mt-4 text-sm font-medium text-primary/90">{p1_24Hero.painHook}</p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <MarketingButton href={ghostKitchenCtaHref('/signup')} size="lg">
                 Start free trial
@@ -130,6 +139,12 @@ export function GhostKitchenLanding() {
             ))}
           </div>
         </section>
+
+        <IcpPainSolutionBridgeSection
+          segment="ghost-kitchen"
+          pains={GHOST_KITCHEN_PAIN_POINTS_P1_24}
+          testId={bridgeTestId}
+        />
 
         <section className="border-t border-border/60 py-16 sm:py-20" data-testid="ghost-kitchen-solution">
           <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-2 lg:items-center">

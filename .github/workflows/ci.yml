@@ -146,6 +146,9 @@ jobs:
       - name: Honest competitor comparison pages (P1-23)
         run: npm run check:honest-competitor-comparison-p1-23
 
+      - name: ICP landing pages — meal prep + ghost kitchen (P1-24)
+        run: npm run check:icp-landing-pages-p1-24
+
       - name: Build
         run: |
           set -o pipefail

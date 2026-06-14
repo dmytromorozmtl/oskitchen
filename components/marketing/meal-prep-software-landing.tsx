@@ -13,6 +13,7 @@ import {
 
 import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
+import { IcpPainSolutionBridgeSection } from '@/components/marketing/icp-pain-solution-bridge-section';
 import { IcpPilotHighlightsSection } from '@/components/marketing/icp-pilot-highlights-section';
 import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
@@ -31,11 +32,14 @@ import {
   MEAL_PREP_SOFTWARE_LANDING_PATH,
   MEAL_PREP_SOFTWARE_LIMITATIONS,
   MEAL_PREP_SOFTWARE_PAIN_POINTS,
+  MEAL_PREP_SOFTWARE_PAIN_POINTS_P1_24,
   MEAL_PREP_SOFTWARE_SCREENSHOTS,
   MEAL_PREP_SOFTWARE_SOLUTION,
   MEAL_PREP_SOFTWARE_TESTIMONIAL_PLACEHOLDER,
   mealPrepSoftwareCtaHref,
 } from '@/lib/marketing/meal-prep-software-landing-content';
+import { icpLandingP124HeroForSegment } from '@/lib/marketing/icp-landing-pages-p1-24-content';
+import { ICP_LANDING_PAGES_P1_24_ENTRIES } from '@/lib/marketing/icp-landing-pages-p1-24-policy';
 import { faqForSolution } from '@/lib/marketing/solution-page-faq';
 
 const FEATURE_ICONS = {
@@ -50,6 +54,10 @@ export function MealPrepSoftwareLanding() {
   const content = getMealPrepSoftwareLandingContent();
   const meta = getMealPrepSoftwareSegmentMeta();
   const faq = faqForSolution('meal-prep');
+  const p1_24Hero = icpLandingP124HeroForSegment('meal-prep');
+  const bridgeTestId =
+    ICP_LANDING_PAGES_P1_24_ENTRIES.find((e) => e.id === 'meal-prep')?.bridgeTestId ??
+    'icp-pain-solution-bridge-meal-prep-p1-24';
 
   const breadcrumbItems = [
     { name: 'Home', href: '/' },
@@ -95,6 +103,7 @@ export function MealPrepSoftwareLanding() {
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
               {content.subtitle}
             </p>
+            <p className="mt-4 text-sm font-medium text-primary/90">{p1_24Hero.painHook}</p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <MarketingButton href={mealPrepSoftwareCtaHref('/signup')} size="lg">
                 Start free trial
@@ -130,6 +139,12 @@ export function MealPrepSoftwareLanding() {
             ))}
           </div>
         </section>
+
+        <IcpPainSolutionBridgeSection
+          segment="meal-prep"
+          pains={MEAL_PREP_SOFTWARE_PAIN_POINTS_P1_24}
+          testId={bridgeTestId}
+        />
 
         <section className="border-t border-border/60 py-16 sm:py-20" data-testid="meal-prep-software-solution">
           <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-2 lg:items-center">
