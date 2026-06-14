@@ -1,0 +1,17 @@
+{
+  "p0-1-production-crons-vercel-schedule": "done",
+  "p0-2-woocommerce-live-smoke": "pending",
+  "p0-3-shopify-live-smoke": "pending",
+  "p0-4-delete-stale-webhook-route": "pending",
+  "p0-5-preview-blocked-redirect": "pending",
+  "p0-6-forbidden-claims-ci-gate": "pending",
+  "p0-7-design-partner-outreach": "pending",
+  "p0-8-pricing-pilot-sku": "pending",
+  "p0-9-transparent-pricing-tiers": "pending",
+  "p0-10-woocommerce-inventory-sync": "pending",
+  "p0-11-shopify-inventory-sync": "pending",
+  "p0-12-authed-rsc-probe": "pending",
+  "p0-13-woocommerce-webhook-kds-e2e": "pending",
+  "p0-14-shopify-webhook-kds-e2e": "pending",
+  "p0-15-cross-tenant-data-leak-e2e": "pending"
+}

@@ -51,10 +51,10 @@ jobs:
         run: npx prisma validate
 
       - name: Validate production cron manifest
-        run: npm run validate -- production-crons
+        run: npm run validate:production-crons
 
       - name: Validate cron route inventory
-        run: npm run validate -- cron-inventory
+        run: npm run validate:cron-inventory
 
       - name: Validate API route registry
         run: npm run validate -- api-route-registry

@@ -32,6 +32,9 @@ export const ALLOWED_PRODUCTION_CRON_SLUGS = [
   "scheduled-reports-weekly",
 ] as const;
 
+/** Staging-only utility crons on disk — not production-scheduled; excluded from experimental surface count. */
+export const STAGING_UTILITY_CRON_SLUGS = ["health-ping"] as const;
+
 export type ProductionCronSlug = (typeof ALLOWED_PRODUCTION_CRON_SLUGS)[number];
 
 /**

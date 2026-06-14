@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "verifiedAt": "2026-06-14T10:55:29.266Z",
+  "reconciliation": {
+    "ok": true,
+    "failures": []
+  },
+  "criticalCrons": [
+    {
+      "slug": "webhook-jobs",
+      "schedule": "*/5 * * * *",
+      "path": "/api/cron/webhook-jobs",
+      "inVercelJson": true,
+      "scheduleMatch": true
+    },
+    {
+      "slug": "storefront-edge-sync",
+      "schedule": "*/2 * * * *",
+      "path": "/api/cron/storefront-edge-sync",
+      "inVercelJson": true,
+      "scheduleMatch": true
+    },
+    {
+      "slug": "doordash-sync",
+      "schedule": "*/5 * * * *",
+      "path": "/api/cron/doordash-sync",
+      "inVercelJson": true,
+      "scheduleMatch": true
+    },
+    {
+      "slug": "grubhub-sync",
+      "schedule": "*/5 * * * *",
+      "path": "/api/cron/grubhub-sync",
+      "inVercelJson": true,
+      "scheduleMatch": true
+    },
+    {
+      "slug": "kds-overdue-alerts",
+      "schedule": "*/10 * * * *",
+      "path": "/api/cron/kds-overdue-alerts",
+      "inVercelJson": true,
+      "scheduleMatch": true
+    }
+  ],
+  "evidenceSlugs": [
+    "webhook-jobs",
+    "storefront-edge-sync",
+    "storefront-cart-recovery",
+    "doordash-sync",
+    "grubhub-sync",
+    "kds-overdue-alerts"
+  ],
+  "liveProbe": {
+    "attempted": false,
+    "appUrl": null,
+    "health": null,
+    "webhookJobsDryRun": null
+  },
+  "failures": []
+}
