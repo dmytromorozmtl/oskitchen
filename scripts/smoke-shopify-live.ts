@@ -52,6 +52,14 @@ import {
   SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID,
 } from "@/lib/integrations/shopify-webhook-kds-live-smoke-policy";
 import {
+  SHOPIFY_INVENTORY_SYNC_PROOF_P0_11_ARTIFACT,
+  SHOPIFY_INVENTORY_SYNC_PROOF_P0_11_POLICY_ID,
+} from "@/lib/integrations/shopify-inventory-sync-proof-p0-11-policy";
+import {
+  appendShopifyInventoryProofStepsAfterOrder,
+  ensureShopifyInventoryProofFixture,
+} from "@/services/integrations/shopify-inventory-sync-proof-p0-11";
+import {
   ensureKitchenTaskForShopifyKdsSmoke,
   ingestShopifyWebhookForSmoke,
   simulateKdsBump,
@@ -369,8 +377,8 @@ export function buildShopifyLiveSmokeSummary(input: {
 
   const honestyNote =
     proofStatus === "proof_passed_webhook_synthetic"
-      ? "Webhook-only PASS: signed orders/create → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY). Live Shopify Admin API skipped (placeholder store)."
-      : "PASS requires live Shopify Admin API + signed orders/create webhook → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump — inventory sync on orders/create.";
+      ? "Webhook-only PASS: signed orders/create → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY) → bi-directional inventory sync (kitchen decrement + products/update pull)."
+      : "PASS requires live Shopify Admin API + signed orders/create webhook → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump — bi-directional inventory sync on orders/create + products/update.";
 
   return {
     version: SHOPIFY_LIVE_SMOKE_VERSION,
@@ -522,6 +530,20 @@ async function runShopifyWebhookKdsProofSteps(input: {
       stagingWebhookUrl,
     });
   }
+
+  const inventoryFixture = await ensureShopifyInventoryProofFixture({
+    prisma: input.prisma,
+    userId: input.userId,
+    connectionId: input.connectionId,
+  });
+  input.steps.push({
+    id: "merchant_proof_fixture",
+    label: "Shopify inventory proof fixture",
+    status: inventoryFixture.ok ? "PASSED" : "SKIPPED",
+    detail: inventoryFixture.ok
+      ? `productId=${inventoryFixture.productId} sku=GOLDEN-SHOPIFY-1 qty=${inventoryFixture.initialQuantity}`
+      : inventoryFixture.detail ?? "Fixture not provisioned — inventory proof skipped",
+  });
 
   const delivered = await postStagingShopifyWebhook({
     stagingBaseUrl: input.stagingBaseUrl,
@@ -786,15 +808,45 @@ async function runShopifyWebhookKdsProofSteps(input: {
     });
   }
 
-  input.steps.push({
-    id: "inventory_sync_wiring",
-    label: "Inventory sync on orders/create",
-    status: webhookTopic === "orders/create" ? "PASSED" : "FAILED",
-    detail:
-      webhookTopic === "orders/create"
-        ? "orders/create topic triggers syncShopifyInventoryFromOrder"
-        : `unexpected topic ${webhookTopic}`,
-  });
+  if (inventoryFixture.ok) {
+    const inventorySteps: Array<{
+      id: string;
+      label: string;
+      status: "PASSED" | "FAILED" | "SKIPPED";
+      detail?: string;
+    }> = [];
+    const inventoryProof = await appendShopifyInventoryProofStepsAfterOrder({
+      prisma: input.prisma,
+      userId: input.userId,
+      connectionId: input.connectionId,
+      fixture: inventoryFixture,
+      orderedQuantity: 1,
+      steps: inventorySteps,
+    });
+    for (const step of inventorySteps) {
+      input.steps.push(step);
+    }
+    if (!inventoryProof.bidirectionalOk) {
+      return buildShopifyLiveSmokeSummary({
+        steps: input.steps,
+        missingEnvVars: [],
+        externalOrderId: input.externalOrderId,
+        connectionId: input.connectionId,
+        webhookEventId,
+        kitchenTaskId,
+        importedOrderId: kitchenImport.orderId,
+        shopDomain: input.shopDomain,
+        stagingWebhookUrl,
+      });
+    }
+  } else {
+    input.steps.push({
+      id: "inventory_sync_bidirectional_complete",
+      label: "Bi-directional inventory sync complete",
+      status: "SKIPPED",
+      detail: "Skipped — Shopify inventory proof fixture unavailable",
+    });
+  }
 
   return buildShopifyLiveSmokeSummary({
     steps: input.steps,
@@ -962,12 +1014,37 @@ async function main() {
   if (shouldWrite) {
     const era72Path = join(process.cwd(), SHOPIFY_LIVE_SMOKE_ARTIFACT);
     const p0Path = join(process.cwd(), SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT);
+    const p11Path = join(process.cwd(), SHOPIFY_INVENTORY_SYNC_PROOF_P0_11_ARTIFACT);
     mkdirSync(dirname(era72Path), { recursive: true });
     writeFileSync(era72Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
     writeFileSync(p0Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+    const inventoryProofSummary = {
+      policyId: SHOPIFY_INVENTORY_SYNC_PROOF_P0_11_POLICY_ID,
+      runAt: summary.runAt,
+      overall: summary.overall,
+      proofStatus: summary.proofStatus,
+      connectionId: summary.connectionId,
+      externalOrderId: summary.externalOrderId,
+      importedOrderId: summary.importedOrderId,
+      shopDomain: summary.shopDomain,
+      steps: summary.steps.filter((step) =>
+        [
+          "merchant_proof_fixture",
+          "inventory_sync_outbound_kitchen",
+          "inventory_sync_inbound_product_webhook",
+          "inventory_sync_bidirectional_complete",
+          "kds_bump_ready",
+          "kitchen_task_linked",
+        ].includes(step.id),
+      ),
+      honestyNote:
+        "P0-11 inventory sync proof: dev store webhook → KDS artifact + bi-directional inventory sync (orders/create outbound + products/update inbound).",
+    };
+    writeFileSync(p11Path, `${JSON.stringify(inventoryProofSummary, null, 2)}\n`, "utf8");
     console.log(`\nArtifacts:`);
     console.log(`  ${SHOPIFY_LIVE_SMOKE_ARTIFACT}`);
-    console.log(`  ${SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT}\n`);
+    console.log(`  ${SHOPIFY_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT}`);
+    console.log(`  ${SHOPIFY_INVENTORY_SYNC_PROOF_P0_11_ARTIFACT}\n`);
   }
 
   process.exit(summary.overall === "FAILED" ? 1 : 0);

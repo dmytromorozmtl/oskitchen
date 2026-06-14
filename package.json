@@ -331,6 +331,7 @@
     "test:ci:woocommerce-webhook-kds-p0-2": "node ./node_modules/vitest/vitest.mjs run tests/unit/smoke-woocommerce-live.test.ts tests/unit/woocommerce-webhook-kds-live-smoke.test.ts",
     "test:ci:woocommerce-merchant-proof-p0-10": "node ./node_modules/vitest/vitest.mjs run tests/unit/woocommerce-merchant-proof-p0-10.test.ts tests/unit/woocommerce-inventory-sync.test.ts",
     "test:ci:shopify-webhook-kds-p0-3": "node ./node_modules/vitest/vitest.mjs run tests/unit/smoke-shopify-live.test.ts tests/unit/shopify-webhook-kds-live-smoke.test.ts",
+    "test:ci:shopify-inventory-sync-proof-p0-11": "node ./node_modules/vitest/vitest.mjs run tests/unit/shopify-inventory-sync-proof-p0-11.test.ts tests/unit/shopify-inventory-sync.test.ts",
     "cron:archive:status": "tsx scripts/cron-archive-status.ts",
     "cron:archive:experimental": "tsx scripts/archive-experimental-crons.ts",
     "cron:restore:archived": "tsx scripts/restore-archived-crons.ts",

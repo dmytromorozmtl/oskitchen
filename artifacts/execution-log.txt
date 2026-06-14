@@ -9275,6 +9275,13 @@ Next: FINAL — docs/ultimate-complete.md
 ---
 ---
 ---
+Cycle: gap-closure-11
+Timestamp: 2026-06-14T11:40:00.000Z
+Task: P0-11 — Shopify bi-directional inventory sync proof
+Category: Integration
+Result: OK — syncShopifyInventoryFromProductWebhook (products/update → kitchen); smoke proof steps + artifacts/shopify-inventory-sync-proof.json; e2e/shopify-inventory-sync-proof.spec.ts
+Evidence: npm run test:ci:shopify-inventory-sync-proof-p0-11 (6 passed), npm run test:ci:shopify-webhook-kds-p0-3 (8 passed)
+
 Cycle: gap-closure-10
 Timestamp: 2026-06-14T11:35:00.000Z
 Task: P0-10 — WooCommerce merchant proof — bi-directional inventory sync

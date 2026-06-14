@@ -101,7 +101,7 @@ describe("smoke-shopify-live", () => {
         { id: "kds_ticket_visible", label: "KDS ticket row in kitchen orders", status: "PASSED" },
         { id: "kitchen_task_linked", label: "KitchenTask linked to imported order", status: "PASSED" },
         { id: "kds_bump_ready", label: "KDS bump (order READY)", status: "PASSED" },
-        { id: "inventory_sync_wiring", label: "Inventory sync on orders/create", status: "PASSED" },
+        { id: "inventory_sync_bidirectional_complete", label: "Bi-directional inventory sync complete", status: "PASSED" },
       ],
       missingEnvVars: [],
       externalOrderId: "smoke-456",

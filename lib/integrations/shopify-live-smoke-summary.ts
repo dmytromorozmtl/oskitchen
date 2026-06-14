@@ -74,21 +74,30 @@ export function auditShopifyLiveSmokeWiring(root: string = process.cwd()): {
       if (!src.includes("syncShopifyInventoryFromOrder")) {
         failures.push("inventory-sync.service.ts missing syncShopifyInventoryFromOrder");
       }
+      if (!src.includes("syncShopifyInventoryFromProductWebhook")) {
+        failures.push("inventory-sync.service.ts missing syncShopifyInventoryFromProductWebhook");
+      }
     }
     if (rel === "lib/webhooks/shopify-webhook-processor.ts") {
       if (!src.includes("importShopifyOrderToKitchen")) {
         failures.push("shopify-webhook-processor.ts missing kitchen import");
       }
       if (!src.includes("syncShopifyInventoryFromOrder")) {
-        failures.push("shopify-webhook-processor.ts missing inventory sync");
+        failures.push("shopify-webhook-processor.ts missing outbound inventory sync");
+      }
+      if (!src.includes("syncShopifyInventoryFromProductWebhook")) {
+        failures.push("shopify-webhook-processor.ts missing inbound inventory sync");
       }
     }
     if (rel === "scripts/smoke-shopify-live.ts") {
       if (!src.includes("kds_kitchen_import")) {
         failures.push("smoke-shopify-live.ts missing kds_kitchen_import step");
       }
-      if (!src.includes("inventory_sync_wiring")) {
-        failures.push("smoke-shopify-live.ts missing inventory_sync_wiring step");
+      if (!src.includes("inventory_sync_bidirectional_complete")) {
+        failures.push("smoke-shopify-live.ts missing inventory_sync_bidirectional_complete step");
+      }
+      if (!src.includes("appendShopifyInventoryProofStepsAfterOrder")) {
+        failures.push("smoke-shopify-live.ts missing inbound inventory proof wiring");
       }
     }
   }
