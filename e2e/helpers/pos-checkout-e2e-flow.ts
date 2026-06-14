@@ -18,11 +18,11 @@ import { refundPosTransaction } from "@/services/pos/pos-refund-service";
 import { voidPosTransaction } from "@/services/pos/pos-void-service";
 
 import {
-  assertClosedShiftReport,
   closeShiftWithExpectedCash,
   ensureOpenShift,
   preparePosTerminal,
 } from "./pos-checkout-shift-flow";
+import { assertClosedShiftTotalsBalanced } from "./pos-shift-open-close-flow";
 
 export type PosCheckoutE2EFlowResult = {
   shiftId: string;
@@ -173,7 +173,7 @@ export async function runPosCheckoutE2EFlow(page: Page): Promise<PosCheckoutE2EF
   steps.push("void_sale");
 
   await closeShiftWithExpectedCash(page, shiftId);
-  await assertClosedShiftReport(page, shiftId);
+  await assertClosedShiftTotalsBalanced(page, shiftId);
   steps.push("close_shift");
 
   if (steps.length !== POS_CHECKOUT_E2E_FLOW_STEPS.length) {

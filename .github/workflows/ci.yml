@@ -224,6 +224,9 @@ jobs:
       - name: Prisma config — prisma.config.ts migration (P2-49)
         run: npm run check:prisma-config-p2-49
 
+      - name: POS shift open→close E2E — refund void reconcile (P2-50)
+        run: npm run check:pos-shift-open-close-p2-50
+
       - name: Build
         run: |
           set -o pipefail

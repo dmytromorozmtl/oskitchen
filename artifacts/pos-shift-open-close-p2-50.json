@@ -1,0 +1,20 @@
+{
+  "version": "pos-shift-open-close-e2e-v1",
+  "policyId": "pos-shift-open-close-p2-50-v1",
+  "flowSteps": [
+    "open_shift",
+    "transactions",
+    "refund",
+    "void",
+    "close_shift",
+    "reconcile_totals"
+  ],
+  "e2eSpec": "e2e/pos-checkout-e2e.spec.ts",
+  "flowHelper": "e2e/helpers/pos-checkout-e2e-flow.ts",
+  "reconcileHelper": "e2e/helpers/pos-shift-open-close-flow.ts",
+  "basePolicies": [
+    "lib/pos/pos-checkout-e2e-policy.ts",
+    "lib/qa/pos-shift-open-close-e2e-policy.ts"
+  ],
+  "verifiedAt": "2026-06-15T21:00:00.000Z"
+}

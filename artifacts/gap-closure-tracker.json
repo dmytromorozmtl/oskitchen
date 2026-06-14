@@ -47,5 +47,6 @@
   "p2-46-npm-audit-ci-gate": "done",
   "p2-47-product-thumbnail-alt-text": "done",
   "p2-48-static-generation-max-concurrency": "done",
-  "p2-49-prisma-config-migration": "done"
+  "p2-49-prisma-config-migration": "done",
+  "p2-50-pos-shift-open-close-e2e": "done"
 }
