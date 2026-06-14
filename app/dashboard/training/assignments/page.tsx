@@ -10,23 +10,55 @@ export default async function AssignmentsPage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const assignments = await listAssignments(dataUserId);
 
-  const lessonsByAssignment = await Promise.all(
-    assignments.map(async (a) => {
-      const lessons = await prisma.trainingLesson.findMany({
-        where: { module: { programId: a.programId } },
-        orderBy: [{ module: { orderIndex: "asc" } }, { orderIndex: "asc" }],
-        select: {
-          id: true, title: true, lessonType: true, estimatedMinutes: true,
-        },
-      });
-      const progressRows = await prisma.trainingProgress.findMany({
-        where: { userId: dataUserId, assignmentId: a.id },
-        select: { lessonId: true, progressPercent: true, status: true },
-      });
-      const progressByLesson = new Map(progressRows.map((p) => [p.lessonId, p]));
-      return { assignmentId: a.id, lessons, progressByLesson };
+  const programIds = [...new Set(assignments.map((a) => a.programId))];
+  const assignmentIds = assignments.map((a) => a.id);
+
+  const [allLessons, allProgress] = await Promise.all([
+    prisma.trainingLesson.findMany({
+      where: { module: { programId: { in: programIds } } },
+      orderBy: [{ module: { orderIndex: "asc" } }, { orderIndex: "asc" }],
+      select: {
+        id: true,
+        title: true,
+        lessonType: true,
+        estimatedMinutes: true,
+        module: { select: { programId: true } },
+      },
     }),
-  );
+    prisma.trainingProgress.findMany({
+      where: { userId: dataUserId, assignmentId: { in: assignmentIds } },
+      select: { assignmentId: true, lessonId: true, progressPercent: true, status: true },
+    }),
+  ]);
+
+  const lessonsByProgram = new Map<string, typeof allLessons>();
+  for (const lesson of allLessons) {
+    const programId = lesson.module.programId;
+    const list = lessonsByProgram.get(programId) ?? [];
+    list.push(lesson);
+    lessonsByProgram.set(programId, list);
+  }
+
+  const progressByAssignment = new Map<
+    string,
+    Map<string, { progressPercent: number; status: string }>
+  >();
+  for (const row of allProgress) {
+    const map =
+      progressByAssignment.get(row.assignmentId) ??
+      new Map<string, { progressPercent: number; status: string }>();
+    map.set(row.lessonId, {
+      progressPercent: row.progressPercent,
+      status: row.status,
+    });
+    progressByAssignment.set(row.assignmentId, map);
+  }
+
+  const lessonsByAssignment = assignments.map((a) => ({
+    assignmentId: a.id,
+    lessons: lessonsByProgram.get(a.programId) ?? [],
+    progressByLesson: progressByAssignment.get(a.id) ?? new Map(),
+  }));
 
   const lessonsMap = new Map(lessonsByAssignment.map((row) => [row.assignmentId, row]));
 

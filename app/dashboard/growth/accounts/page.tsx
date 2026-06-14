@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { computeCustomerHealth } from "@/lib/growth/customer-health";
+import { computeCustomerHealthBatch } from "@/lib/growth/customer-health";
 import { prisma } from "@/lib/prisma";
 
 export default async function GrowthAccountsPage() {
@@ -33,12 +33,16 @@ export default async function GrowthAccountsPage() {
     },
   });
 
-  const enriched = await Promise.all(
-    profiles.map(async (p) => {
-      const health = await computeCustomerHealth(p.id);
-      return { ...p, health };
-    }),
-  );
+  const userIds = profiles.map((p) => p.id);
+  const healthByUser = await computeCustomerHealthBatch(userIds);
+  const enriched = profiles.map((p) => ({
+    ...p,
+    health: healthByUser.get(p.id) ?? {
+      score: 0,
+      status: "NEEDS_ATTENTION" as const,
+      signals: {},
+    },
+  }));
 
   return (
     <Card>

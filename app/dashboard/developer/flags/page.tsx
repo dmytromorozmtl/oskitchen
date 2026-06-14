@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { requireDeveloperCenterAccess } from "@/lib/developer/developer-permissions";
-import { canUseFeature, FEATURE_KEYS, type FeatureKey } from "@/lib/plans/feature-registry";
+import { resolveAllFeaturesForUser, type FeatureKey } from "@/lib/plans/feature-registry";
 
 function humanizeFeature(key: FeatureKey): string {
   return key.replace(/_/g, " ");
@@ -15,12 +15,12 @@ function humanizeFeature(key: FeatureKey): string {
 
 export default async function DeveloperFlagsPage() {
   const ctx = await requireDeveloperCenterAccess();
-  const entries = await Promise.all(
-    FEATURE_KEYS.map(async (key) => {
-      const gate = await canUseFeature(ctx.userId, key);
-      return { key, label: humanizeFeature(key), allowed: gate.allowed };
-    }),
-  );
+  const resolved = await resolveAllFeaturesForUser(ctx.userId);
+  const entries = resolved.map(({ key, allowed }) => ({
+    key,
+    label: humanizeFeature(key),
+    allowed,
+  }));
 
   return (
     <div className="space-y-8">

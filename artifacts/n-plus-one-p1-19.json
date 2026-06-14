@@ -1,0 +1,20 @@
+{
+  "policyId": "p1-19-n-plus-one-batch-v1",
+  "targetsFixed": 7,
+  "targets": [
+    "app/dashboard/training/assignments/page.tsx",
+    "app/dashboard/growth/customer-success/page.tsx",
+    "app/dashboard/growth/accounts/page.tsx",
+    "app/dashboard/developer/flags/page.tsx",
+    "actions/menus.ts",
+    "services/purchasing/bulk-price-service.ts",
+    "services/franchise/franchise-service.ts"
+  ],
+  "batchHelpers": [
+    "computeCustomerHealthBatch",
+    "buildRetentionSummariesBatch",
+    "resolveAllFeaturesForUser"
+  ],
+  "checkScript": "check:n-plus-one-p1-19",
+  "verifiedAt": "2026-06-14T15:00:00.000Z"
+}

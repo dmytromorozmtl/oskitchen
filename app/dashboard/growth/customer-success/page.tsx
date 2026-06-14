@@ -22,8 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { computeCustomerHealth } from "@/lib/growth/customer-health";
-import { buildRetentionSnapshot } from "@/lib/customer-health";
+import { computeCustomerHealthBatch } from "@/lib/growth/customer-health";
+import { buildRetentionSummariesBatch } from "@/lib/customer-health";
 import { prisma } from "@/lib/prisma";
 
 export default async function CustomerSuccessPage() {
@@ -40,24 +40,39 @@ export default async function CustomerSuccessPage() {
     },
   });
 
-  const enriched = await Promise.all(
-    users.map(async (u) => {
-      const health = await computeCustomerHealth(u.id);
-      const retention = await buildRetentionSnapshot(u.id);
-      const integrationsErr = u.integrationConnections.filter(
-        (c) => c.status === "ERROR",
-      ).length;
-      const trialActive =
-        u.trialState?.status === "ACTIVE" && u.trialState.trialEndsAt > new Date();
-      return {
-        ...u,
-        health,
-        retention,
-        integrationsErr,
-        trialActive,
-      };
-    }),
-  );
+  const userIds = users.map((u) => u.id);
+  const [healthByUser, retentionByUser] = await Promise.all([
+    computeCustomerHealthBatch(userIds),
+    buildRetentionSummariesBatch(
+      users.map((u) => ({
+        id: u.id,
+        onboardingCompleted: u.onboardingCompleted,
+        trialState: u.trialState,
+        subscription: u.subscription,
+      })),
+    ),
+  ]);
+
+  const enriched = users.map((u) => {
+    const health = healthByUser.get(u.id) ?? {
+      score: 0,
+      status: "NEEDS_ATTENTION" as const,
+      signals: {},
+    };
+    const retention = retentionByUser.get(u.id) ?? { summary: "Stable" };
+    const integrationsErr = u.integrationConnections.filter(
+      (c) => c.status === "ERROR",
+    ).length;
+    const trialActive =
+      u.trialState?.status === "ACTIVE" && u.trialState.trialEndsAt > new Date();
+    return {
+      ...u,
+      health,
+      retention,
+      integrationsErr,
+      trialActive,
+    };
+  });
 
   return (
     <div className="space-y-8">
