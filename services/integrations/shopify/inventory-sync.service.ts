@@ -171,3 +171,67 @@ export async function syncShopifyInventoryFromProductWebhook(input: {
     quantity,
   };
 }
+
+async function findMappedExternalProductByInventoryItemId(
+  connectionId: string,
+  inventoryItemId: string,
+): Promise<{
+  mappedProductId: string;
+  externalProductId: string;
+  externalVariantId: string;
+} | null> {
+  const rows = await prisma.externalProduct.findMany({
+    where: {
+      connectionId,
+      provider: IntegrationProvider.SHOPIFY,
+      mappedProductId: { not: null },
+    },
+    select: {
+      mappedProductId: true,
+      externalProductId: true,
+      externalVariantId: true,
+      rawPayloadJson: true,
+    },
+    orderBy: { updatedAt: "desc" },
+    take: 100,
+  });
+
+  for (const row of rows) {
+    if (extractShopifyInventoryItemId(row.rawPayloadJson) === inventoryItemId && row.mappedProductId) {
+      return {
+        mappedProductId: row.mappedProductId,
+        externalProductId: row.externalProductId,
+        externalVariantId: row.externalVariantId,
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * Real-time inbound sync — Shopify inventory_levels/update → mapped kitchen inventory.
+ */
+export async function syncShopifyInventoryFromInventoryLevelWebhook(input: {
+  userId: string;
+  connectionId: string;
+  inventoryItemId: string;
+  available: number;
+}): Promise<ShopifyInboundInventorySyncResult> {
+  const mapped = await findMappedExternalProductByInventoryItemId(
+    input.connectionId,
+    input.inventoryItemId,
+  );
+
+  if (!mapped) {
+    return { updated: false, productId: null, quantity: null };
+  }
+
+  const quantity = Math.max(0, Math.round(input.available));
+  await setKitchenQuantity(input.userId, mapped.mappedProductId, quantity);
+
+  return {
+    updated: true,
+    productId: mapped.mappedProductId,
+    quantity,
+  };
+}

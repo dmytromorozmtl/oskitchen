@@ -1,0 +1,16 @@
+{
+  "policyId": "shopify-realtime-inventory-sync-proof-p1-32-v1",
+  "webhookTopic": "inventory_levels/update",
+  "inventoryItemId": "99001",
+  "latencyBudgetMs": 5000,
+  "requiredSteps": [
+    "realtime_inventory_fixture",
+    "inventory_levels_update_webhook",
+    "kitchen_qty_updated_within_budget",
+    "realtime_sync_complete"
+  ],
+  "extendsPolicy": "p0-11-shopify-inventory-sync-proof-v1",
+  "ciGate": true,
+  "checkScript": "check:shopify-realtime-inventory-sync-proof-p1-32",
+  "verifiedAt": "2026-06-15T03:00:00.000Z"
+}

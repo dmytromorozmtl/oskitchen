@@ -170,6 +170,9 @@ jobs:
       - name: Offline POS full mode — Toast parity + noop-v1 review (P1-31)
         run: npm run check:offline-pos-full-mode-p1-31
 
+      - name: Shopify real-time inventory sync proof (P1-32)
+        run: npm run check:shopify-realtime-inventory-sync-proof-p1-32
+
       - name: Build
         run: |
           set -o pipefail

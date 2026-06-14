@@ -16,7 +16,11 @@ import { touchShopifyMarketsWebhookDelivery } from "@/services/integrations/shop
 import { importShopifyOrderToKitchen } from "@/services/integrations/shopify/kitchen-import.service";
 import { syncShopifyInventoryFromOrder } from "@/services/integrations/shopify/inventory-sync.service";
 import { syncShopifyInventoryFromProductWebhook } from "@/services/integrations/shopify/inventory-sync.service";
-import { extractShopifyInventoryQuantityFromVariant } from "@/services/integrations/shopify-inventory";
+import { syncShopifyInventoryFromInventoryLevelWebhook } from "@/services/integrations/shopify/inventory-sync.service";
+import {
+  extractShopifyInventoryQuantityFromVariant,
+  parseShopifyInventoryLevelWebhook,
+} from "@/services/integrations/shopify-inventory";
 import { normalizeShopifyRestOrder } from "@/services/integrations/shopify";
 
 /**
@@ -184,6 +188,26 @@ export async function executeShopifyWebhookBusinessLogic(params: {
       connectionId: conn.id,
       topic: params.topic,
     });
+    await prisma.integrationConnection.update({
+      where: { id: conn.id },
+      data: { lastError: null },
+    });
+    return;
+  }
+
+  if (params.topic === "inventory_levels/update") {
+    const level = params.payload as Record<string, unknown>;
+    const parsed = parseShopifyInventoryLevelWebhook(level);
+    if (parsed.inventoryItemId && parsed.available != null) {
+      await syncShopifyInventoryFromInventoryLevelWebhook({
+        userId: params.userId,
+        connectionId: conn.id,
+        inventoryItemId: parsed.inventoryItemId,
+        available: parsed.available,
+      }).catch((err) => {
+        console.error("shopify_realtime_inventory_sync_failed", err);
+      });
+    }
     await prisma.integrationConnection.update({
       where: { id: conn.id },
       data: { lastError: null },

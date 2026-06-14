@@ -90,6 +90,26 @@ export function extractShopifyInventoryQuantityFromVariant(
   return Math.max(0, Math.round(parsed));
 }
 
+/** Parse Shopify inventory_levels/update webhook payload. */
+export function parseShopifyInventoryLevelWebhook(payload: Record<string, unknown>): {
+  inventoryItemId: string | null;
+  available: number | null;
+  locationId: string | null;
+} {
+  const inventoryItemId =
+    payload.inventory_item_id != null ? String(payload.inventory_item_id) : null;
+  const locationId = payload.location_id != null ? String(payload.location_id) : null;
+  const rawAvailable = payload.available ?? payload.quantity;
+  if (rawAvailable == null || rawAvailable === "") {
+    return { inventoryItemId, available: null, locationId };
+  }
+  const parsed = Number(rawAvailable);
+  if (!Number.isFinite(parsed)) {
+    return { inventoryItemId, available: null, locationId };
+  }
+  return { inventoryItemId, available: Math.max(0, Math.round(parsed)), locationId };
+}
+
 export type WooInventoryCredentials = {
   baseUrl: string;
   consumerKey: string;

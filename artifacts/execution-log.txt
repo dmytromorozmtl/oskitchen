@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-32
+Timestamp: 2026-06-15T03:00:00.000Z
+Task: P1-32 — Shopify real-time inventory sync proof (inventory_levels/update)
+Category: Integration
+Result: OK — syncShopifyInventoryFromInventoryLevelWebhook wired; synthetic proof with 5s latency budget; artifact + E2E + CI gate
+Evidence: check:shopify-realtime-inventory-sync-proof-p1-32; artifacts/shopify-realtime-inventory-sync-proof-p1-32.json
+
+---
 Cycle: gap-closure-31
 Timestamp: 2026-06-15T02:00:00.000Z
 Task: P1-31 — Offline POS full mode (Toast parity) + PCI noop-v1 fallback review
