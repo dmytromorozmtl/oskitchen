@@ -245,6 +245,9 @@ jobs:
       - name: Case study template pipeline — LOI to day-30 publish (P2-56)
         run: npm run check:case-study-template-pipeline-p2-56
 
+      - name: Works with OS Kitchen — 17 LIVE integrations with logos (P2-57)
+        run: npm run check:works-with-os-kitchen-p2-57
+
       - name: Build
         run: |
           set -o pipefail
