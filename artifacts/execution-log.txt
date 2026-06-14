@@ -9271,6 +9271,14 @@ Next: FINAL — docs/ultimate-complete.md
 
 ---
 ---
+---
+Cycle: gap-closure-4
+Timestamp: 2026-06-14T11:12:00.000Z
+Task: P0-4 — Remove stale webhook route duplicate (app/api/webhooks/skip/orders/route 3.ts)
+Category: Backend
+Result: OK — deleted byte-identical duplicate; canonical route.ts unchanged at /api/webhooks/skip/orders
+Evidence: file removed; tests/unit/webhook-signature-matrix.test.ts still targets /api/webhooks/skip/orders
+
 Cycle: gap-closure-3
 Timestamp: 2026-06-14T11:05:00.000Z
 Task: P0-3 — Shopify LIVE smoke webhook→KDS artifact

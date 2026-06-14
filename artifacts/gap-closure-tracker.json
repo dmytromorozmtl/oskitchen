@@ -2,7 +2,7 @@
   "p0-1-production-crons-vercel-schedule": "done",
   "p0-2-woocommerce-live-smoke": "done",
   "p0-3-shopify-live-smoke": "done",
-  "p0-4-delete-stale-webhook-route": "pending",
+  "p0-4-delete-stale-webhook-route": "done",
   "p0-5-preview-blocked-redirect": "pending",
   "p0-6-forbidden-claims-ci-gate": "pending",
   "p0-7-design-partner-outreach": "pending",
