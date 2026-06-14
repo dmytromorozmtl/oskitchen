@@ -37,6 +37,11 @@ export function canQueueOfflineCardCapture(): boolean {
   return isOfflinePciStorageAvailable();
 }
 
+/** noop-v1 is reserved for empty plaintext only — see offline-pci-noop-v1-review.ts */
+export function isNoopV1EmptyBlob(blob: OfflinePciSealedBlob): boolean {
+  return blob.algorithm === "noop-v1" && blob.sealed === "";
+}
+
 export function assertOfflinePciEncryptionAvailable(): void {
   if (!canQueueOfflineCardCapture()) {
     throw new OfflinePciEncryptionUnavailableError();

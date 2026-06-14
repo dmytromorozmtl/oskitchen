@@ -167,6 +167,9 @@ jobs:
       - name: Self-serve onboarding — registration → integrations → first order (P1-30)
         run: npm run check:self-serve-onboarding-p1-30
 
+      - name: Offline POS full mode — Toast parity + noop-v1 review (P1-31)
+        run: npm run check:offline-pos-full-mode-p1-31
+
       - name: Build
         run: |
           set -o pipefail

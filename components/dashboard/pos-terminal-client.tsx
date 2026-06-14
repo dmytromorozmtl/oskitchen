@@ -48,6 +48,10 @@ import {
   loadPosLocalCart,
   savePosLocalCart,
 } from "@/lib/pos/pos-local-cart";
+import {
+  loadPosOfflineMenuCache,
+  savePosOfflineMenuCache,
+} from "@/lib/pos/pos-offline-menu-cache";
 
 /** ReceiptPanel checkout status live region — data-testid="pos-checkout-status". */
 import {
@@ -172,9 +176,11 @@ export function PosTerminalClient(props: {
   const tabletMode = props.tabletMode ?? false;
   const layoutOrientation = props.layoutOrientation ?? "landscape";
   const showSecondaryPanels = shouldShowPosTerminalSecondaryPanels(speedMode);
+  const [offlineMenuProducts, setOfflineMenuProducts] = useState<PosTerminalProduct[] | null>(null);
+  const products = offlineMenuProducts ?? props.products;
   const categories = useMemo(
-    () => buildPosProductCategories(props.products),
-    [props.products],
+    () => buildPosProductCategories(products),
+    [products],
   );
   const offlinePciEncryptionAvailable = canQueueOfflineCardCapture();
   const offlinePaymentGate = { offlinePciEncryptionAvailable };
@@ -501,25 +507,44 @@ export function PosTerminalClient(props: {
     };
   }, [giftCardCode]);
 
+  useEffect(() => {
+    if (!registerId || props.products.length === 0) return;
+    void savePosOfflineMenuCache(registerId, props.products);
+    setOfflineMenuProducts(null);
+  }, [registerId, props.products]);
+
+  useEffect(() => {
+    if (!registerId || online || props.products.length > 0) return;
+    let cancelled = false;
+    void loadPosOfflineMenuCache(registerId).then((cache) => {
+      if (!cancelled && cache?.products.length) {
+        setOfflineMenuProducts(cache.products as PosTerminalProduct[]);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [registerId, online, props.products.length]);
+
   const shiftId = registerId ? props.openShiftsByRegisterId[registerId]?.id ?? null : null;
 
   const filtered = useMemo(() => {
     if (speedMode) {
       return filterPosProductsForCashierSpeed({
-        products: props.products,
+        products,
         query,
         category: categoryFilter,
       });
     }
     const q = query.trim().toLowerCase();
-    if (!q) return props.products;
-    return props.products.filter(
+    if (!q) return products;
+    return products.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
         (p.barcode && p.barcode.toLowerCase() === q) ||
         p.id.toLowerCase().includes(q),
     );
-  }, [props.products, query, speedMode, categoryFilter]);
+  }, [products, query, speedMode, categoryFilter]);
 
   const cartTotal = useMemo(
     () => cart.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0),
@@ -954,7 +979,7 @@ export function PosTerminalClient(props: {
             className="h-12 rounded-xl text-base"
             onKeyDown={(e) => {
               if (e.key !== "Enter") return;
-              const hit = props.products.find(
+              const hit = products.find(
                 (p) => p.barcode && p.barcode.toLowerCase() === query.trim().toLowerCase(),
               );
               if (hit) {
@@ -1016,14 +1041,14 @@ export function PosTerminalClient(props: {
             <EmptyState
               icon={Tag}
               variant="inline"
-              title={props.products.length === 0 ? "No menu items for POS" : "No matching items"}
+              title={products.length === 0 ? "No menu items for POS" : "No matching items"}
               description={
-                props.products.length === 0
+                products.length === 0
                   ? "Add products to your active menu before ringing sales on this register."
                   : "Try another search term or category filter."
               }
-              primaryLabel={props.products.length === 0 ? "Manage products" : undefined}
-              primaryHref={props.products.length === 0 ? "/dashboard/products" : undefined}
+              primaryLabel={products.length === 0 ? "Manage products" : undefined}
+              primaryHref={products.length === 0 ? "/dashboard/products" : undefined}
               showDemoLink={false}
               className="col-span-full"
             />

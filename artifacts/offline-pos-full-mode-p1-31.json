@@ -1,0 +1,27 @@
+{
+  "policyId": "offline-pos-full-mode-p1-31-v1",
+  "route": "/dashboard/pos/settings/offline",
+  "flowSteps": [
+    "menu-cache",
+    "local-cart",
+    "cash-offline",
+    "pci-aes-gcm",
+    "sync-queue",
+    "conflict-resolution",
+    "noop-v1-review"
+  ],
+  "fullModeTestId": "pos-offline-full-mode-p1-31",
+  "menuCacheDb": "kitchenos-offline-pos-menu",
+  "noopV1PolicyId": "offline-pci-noop-v1-review-p1-31-v1",
+  "noopV1EmptyOnly": true,
+  "insecureBtoaFallbackRemoved": true,
+  "toastParity": [
+    "Ring sales while offline (cash + queued card metadata)",
+    "Menu available after reconnect or from local cache",
+    "Automatic sync when connectivity returns",
+    "Honest limitation: no certified EMV store-and-forward"
+  ],
+  "ciGate": true,
+  "checkScript": "check:offline-pos-full-mode-p1-31",
+  "verifiedAt": "2026-06-15T02:00:00.000Z"
+}
