@@ -9958,3 +9958,10 @@ Task: P3-89 — /app-marketplace empty → remove from nav
 Category: Marketing
 Result: OK — app-marketplace-listing-p3-89-v1; removed /app-marketplace from dashboard extensions nav + strip CTA; strip now links to /partners; page kept for direct URL; 9 nav surfaces scanned; artifact app-marketplace-listing-p3-89.json; CI gate check:app-marketplace-listing-p3-89
 Evidence: artifacts/app-marketplace-listing-p3-89.json, npm run check:app-marketplace-listing-p3-89
+
+Cycle: 90
+Timestamp: 2026-06-17T01:00:00.000Z
+Task: P3-90 — Meal Prep OS niche positioning (subscription + production + storefront)
+Category: Marketing
+Result: OK — meal-prep-niche-p3-90-v1; Meal Prep OS brand on /meal-prep-software; 3 pillars (subscription BETA, production LIVE, storefront BETA); MealPrepOsNicheSection component; weekly loop + honesty note; meta title updated; artifact meal-prep-niche-p3-90.json; CI gate check:meal-prep-niche-p3-90
+Evidence: artifacts/meal-prep-niche-p3-90.json, npm run check:meal-prep-niche-p3-90

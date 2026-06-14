@@ -6,9 +6,9 @@ import { SOLUTION_SEGMENT_META } from '@/lib/marketing/solution-segment-meta';
 export const MEAL_PREP_SOFTWARE_LANDING_PATH = '/meal-prep-software' as const;
 
 export const MEAL_PREP_SOFTWARE_LANDING_META = {
-  title: 'Meal Prep Software — Stop Sunday Spreadsheet Chaos | OS Kitchen',
+  title: 'Meal Prep OS — Subscription, Production & Storefront | OS Kitchen',
   description:
-    'Meal prep operators: end Sunday reconciliation, cutoff chaos, and packing mispacks. Weekly menu → production board → packing lanes. 14-day trial from $29/mo.',
+    'Meal Prep OS for weekly operators: native subscriptions (BETA), production board (LIVE), and owned storefront checkout. Stop Sunday spreadsheet chaos — 14-day trial from $29/mo.',
   keywords: [
     'meal prep software',
     'meal prep business software',

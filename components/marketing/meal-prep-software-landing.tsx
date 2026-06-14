@@ -11,6 +11,7 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 
+import { MealPrepOsNicheSection } from '@/components/marketing/meal-prep-os-niche-section';
 import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
 import { IcpPainSolutionBridgeSection } from '@/components/marketing/icp-pain-solution-bridge-section';
@@ -39,6 +40,7 @@ import {
   mealPrepSoftwareCtaHref,
 } from '@/lib/marketing/meal-prep-software-landing-content';
 import { icpLandingP124HeroForSegment } from '@/lib/marketing/icp-landing-pages-p1-24-content';
+import { MEAL_PREP_NICHE_P3_90_POLICY_ID } from '@/lib/marketing/meal-prep-niche-p3-90-policy';
 import { ICP_LANDING_PAGES_P1_24_ENTRIES } from '@/lib/marketing/icp-landing-pages-p1-24-policy';
 import { faqForSolution } from '@/lib/marketing/solution-page-faq';
 
@@ -71,7 +73,7 @@ export function MealPrepSoftwareLanding() {
   ];
 
   return (
-    <div className="min-h-screen bg-background" data-testid="meal-prep-software-landing">
+    <div className="min-h-screen bg-background" data-testid="meal-prep-software-landing" data-meal-prep-niche-policy={MEAL_PREP_NICHE_P3_90_POLICY_ID}>
       <BreadcrumbSchema items={breadcrumbSchemaItems} />
       <FAQSchema questions={faq} />
       <SiteHeaderClient isAuthenticated={false} />
@@ -119,6 +121,9 @@ export function MealPrepSoftwareLanding() {
             <p className="mt-4 text-sm text-muted-foreground">{meta.trustLine}</p>
           </div>
         </section>
+
+        {/* P3-90: meal-prep-niche-p3-90-v1 */}
+        <MealPrepOsNicheSection />
 
         <IcpPilotHighlightsSection segmentLabel="meal prep operators" />
 

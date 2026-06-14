@@ -344,6 +344,9 @@ jobs:
       - name: App marketplace nav removal (P3-89)
         run: npm run check:app-marketplace-listing-p3-89
 
+      - name: Meal Prep OS niche positioning (P3-90)
+        run: npm run check:meal-prep-niche-p3-90
+
       - name: Build
         run: |
           set -o pipefail

@@ -1,0 +1,18 @@
+{
+  "version": "meal-prep-niche-v1",
+  "policyId": "meal-prep-niche-p3-90-v1",
+  "brand": "Meal Prep OS",
+  "route": "/meal-prep-software",
+  "dashboardPath": "/dashboard/meal-prep",
+  "pillars": ["subscription", "production", "storefront"],
+  "pillarMaturity": {
+    "subscription": "BETA",
+    "production": "LIVE",
+    "storefront": "BETA"
+  },
+  "contentModule": "lib/marketing/meal-prep-niche-p3-90-content.ts",
+  "component": "components/marketing/meal-prep-os-niche-section.tsx",
+  "checkScript": "check:meal-prep-niche-p3-90",
+  "ciGate": true,
+  "verifiedAt": "2026-06-17T01:00:00.000Z"
+}
