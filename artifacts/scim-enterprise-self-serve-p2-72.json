@@ -1,0 +1,15 @@
+{
+  "policyId": "scim-enterprise-self-serve-p2-72-v1",
+  "route": "/dashboard/enterprise/sso-scim",
+  "flowSteps": [
+    "group_provisioning",
+    "attribute_mapping",
+    "self_serve_save",
+    "scim_api_apply"
+  ],
+  "defaultGroupMappings": 3,
+  "assignableRoles": ["ADMIN", "STAFF", "PARTNER"],
+  "ciGate": true,
+  "checkScript": "check:scim-enterprise-self-serve-p2-72",
+  "verifiedAt": "2026-06-16T17:00:00.000Z"
+}

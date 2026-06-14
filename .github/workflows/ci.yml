@@ -290,6 +290,9 @@ jobs:
       - name: Co-pilot hallucination regression (P2-71)
         run: npm run check:copilot-hallucination-regression-p2-71
 
+      - name: SCIM enterprise self-serve UI (P2-72)
+        run: npm run check:scim-enterprise-self-serve-p2-72
+
       - name: Build
         run: |
           set -o pipefail

@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-72
+Timestamp: 2026-06-16T17:00:00.000Z
+Task: P2-72 — SCIM enterprise self-serve UI (group provisioning + attribute mapping)
+Category: Enterprise
+Result: OK — ScimGroupProvisioningPanel + ScimAttributeMappingPanel on /dashboard/enterprise/sso-scim; config persisted in settingsCenterJson; SCIM Users POST applies mappings; check:scim-enterprise-self-serve-p2-72 CI gate
+Evidence: artifacts/scim-enterprise-self-serve-p2-72.json; docs/scim-enterprise-self-serve-p2-72.md; components/enterprise/scim-*-panel.tsx; actions/workspace-scim-self-serve.ts
+
+---
 Cycle: gap-closure-71
 Timestamp: 2026-06-16T16:00:00.000Z
 Task: P2-71 — Co-pilot hallucination regression (50 Q&A with grounded correct answers)

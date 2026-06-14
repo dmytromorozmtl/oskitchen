@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 
 import { EnterpriseSsoScimLivePanel } from "@/components/enterprise/enterprise-sso-scim-live-panel";
+import { ScimAttributeMappingPanel } from "@/components/enterprise/scim-attribute-mapping-panel";
+import { ScimGroupProvisioningPanel } from "@/components/enterprise/scim-group-provisioning-panel";
 import { ScimProvisionedUsersPanel } from "@/components/enterprise/scim-provisioned-users-panel";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getScimEnterpriseSelfServeConfig } from "@/lib/enterprise/scim-enterprise-self-serve-p2-72-service";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { listScimProvisionedUsersForAdmin } from "@/lib/enterprise/workspace-scim-admin-service";
 import { loadEnterpriseSsoScimLiveDashboard } from "@/services/enterprise/enterprise-sso-scim-live-service";
@@ -33,10 +36,15 @@ export default async function EnterpriseSsoScimLivePage() {
 
   const dashboard = await loadEnterpriseSsoScimLiveDashboard(workspaceId);
   const provisionedUsers = await listScimProvisionedUsersForAdmin(workspaceId);
+  const selfServe = await getScimEnterpriseSelfServeConfig(workspaceId);
 
   return (
     <div className="mx-auto max-w-6xl p-4 md:p-6 pb-10">
       <EnterpriseSsoScimLivePanel dashboard={dashboard} />
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <ScimGroupProvisioningPanel groupMappings={selfServe.groupMappings} />
+        <ScimAttributeMappingPanel attributeMapping={selfServe.attributeMapping} />
+      </div>
       <div className="mt-6">
         <ScimProvisionedUsersPanel users={provisionedUsers} />
       </div>
