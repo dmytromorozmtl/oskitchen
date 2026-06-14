@@ -110,6 +110,9 @@ jobs:
       - name: Forbidden claims enforcement auto-test
         run: npm run test:ci:forbidden-claims-enforcement
 
+      - name: Authed RSC probe policy (P0-12 — 46 dashboard routes)
+        run: npm run check:authed-rsc-probe-p0-12
+
       - name: Build
         run: |
           set -o pipefail
@@ -598,4 +601,4 @@ jobs:
         run: npm ci
 
       - name: Authed dashboard RSC probe (46 routes, document + RSC)
-        run: npm run smoke -- rsc-authed-dashboard
+        run: npm run smoke:rsc-authed-dashboard

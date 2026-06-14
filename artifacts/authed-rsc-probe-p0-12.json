@@ -1,0 +1,23 @@
+{
+  "policyId": "p0-12-authed-rsc-probe-v1",
+  "extendsPolicyId": "authed-dashboard-rsc-smoke-v1",
+  "routeCount": 46,
+  "probeModes": ["document", "rsc"],
+  "totalProbes": 92,
+  "npmScript": "smoke:rsc-authed-dashboard",
+  "checkScript": "check:authed-rsc-probe-p0-12",
+  "probeScript": "scripts/probe-authed-dashboard.ts",
+  "workflows": [
+    ".github/workflows/rsc-smoke.yml",
+    ".github/workflows/ci.yml"
+  ],
+  "requiredSecrets": [
+    "E2E_LOGIN_EMAIL",
+    "E2E_LOGIN_PASSWORD",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+  ],
+  "defaultBaseUrl": "https://os-kitchen.com",
+  "status": "WIRED",
+  "recordedAt": "2026-06-14T12:00:00.000Z"
+}

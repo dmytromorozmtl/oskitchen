@@ -10,7 +10,7 @@
   "p0-9-transparent-pricing-tiers": "done",
   "p0-10-woocommerce-inventory-sync": "done",
   "p0-11-shopify-inventory-sync": "done",
-  "p0-12-authed-rsc-probe": "pending",
+  "p0-12-authed-rsc-probe": "done",
   "p0-13-woocommerce-webhook-kds-e2e": "pending",
   "p0-14-shopify-webhook-kds-e2e": "pending",
   "p0-15-cross-tenant-data-leak-e2e": "pending"

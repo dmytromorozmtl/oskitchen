@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-12
+Timestamp: 2026-06-14T12:00:00.000Z
+Task: P0-12 — Authed RSC probe — 46 dashboard URLs post-login
+Category: QA
+Result: OK — scripts/probe-authed-dashboard.ts login→46 routes (document + RSC flight); smoke:rsc-authed-dashboard wired in package.json; CI quality gate + authed-rsc-smoke job; artifacts/authed-rsc-probe-p0-12.json
+Evidence: npm run check:authed-rsc-probe-p0-12 (8 passed)
+
+---
 Cycle: 1
 Timestamp: 2026-05-29T15:35:00.000Z
 Action taken: Fixed first TS error — ApiKey scopesJson in actions/monetization.ts (Prisma client stale; cast until db:generate). Prior session fixes included: pos-page-access-era21.tsx, era25 briefing types, skeleton component, copilot/sso fixes.
