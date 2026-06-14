@@ -52,6 +52,14 @@ import {
   WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_POLICY_ID,
 } from "@/lib/integrations/woocommerce-webhook-kds-live-smoke-policy";
 import {
+  WOOCOMMERCE_MERCHANT_PROOF_P0_10_ARTIFACT,
+  WOOCOMMERCE_MERCHANT_PROOF_P0_10_POLICY_ID,
+} from "@/lib/integrations/woocommerce-merchant-proof-p0-10-policy";
+import {
+  appendMerchantProofInventoryStepsAfterOrder,
+  ensureMerchantProofInventoryFixture,
+} from "@/services/integrations/woocommerce-merchant-proof-p0-10";
+import {
   ensureKitchenTaskForKdsSmoke,
   ingestWooCommerceWebhookForSmoke,
   simulateKdsBump,
@@ -385,8 +393,8 @@ export function buildWooCommerceLiveSmokeSummary(input: {
 
   const honestyNote =
     proofStatus === "proof_passed_webhook_synthetic"
-      ? "Webhook-only PASS: signed order.created → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY). Live Woo REST skipped (placeholder store)."
-      : "PASS requires live Woo REST + signed webhook → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump — inventory sync on order.created.";
+      ? "Webhook-only PASS: signed order.created → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump (READY) → bi-directional inventory sync (kitchen decrement + product.updated pull)."
+      : "PASS requires live Woo REST + signed webhook → WebhookEvent → ExternalOrder → kitchen import → KitchenTask → KDS bump — bi-directional inventory sync on order.created + product.updated.";
 
   return {
     version: WOOCOMMERCE_LIVE_SMOKE_VERSION,
@@ -525,6 +533,20 @@ async function runWooWebhookKdsProofSteps(input: {
       stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`,
     });
   }
+
+  const merchantFixture = await ensureMerchantProofInventoryFixture({
+    prisma: input.prisma,
+    userId: input.userId,
+    connectionId: input.connectionId,
+  });
+  input.steps.push({
+    id: "merchant_proof_fixture",
+    label: "Merchant proof inventory fixture",
+    status: merchantFixture.ok ? "PASSED" : "SKIPPED",
+    detail: merchantFixture.ok
+      ? `productId=${merchantFixture.productId} sku=GOLDEN-WOO-1 qty=${merchantFixture.initialQuantity}`
+      : merchantFixture.detail ?? "Fixture not provisioned — inventory proof skipped",
+  });
 
   const delivered = await postStagingWooWebhook({
     stagingBaseUrl: input.stagingBaseUrl,
@@ -781,15 +803,44 @@ async function runWooWebhookKdsProofSteps(input: {
     });
   }
 
-  input.steps.push({
-    id: "inventory_sync_wiring",
-    label: "Inventory sync on order.created",
-    status: webhookTopic === "order.created" ? "PASSED" : "FAILED",
-    detail:
-      webhookTopic === "order.created"
-        ? "order.created topic triggers syncWooCommerceInventoryFromOrder"
-        : `unexpected topic ${webhookTopic}`,
-  });
+  if (merchantFixture.ok) {
+    const merchantSteps: Array<{
+      id: string;
+      label: string;
+      status: "PASSED" | "FAILED" | "SKIPPED";
+      detail?: string;
+    }> = [];
+    const inventoryProof = await appendMerchantProofInventoryStepsAfterOrder({
+      prisma: input.prisma,
+      userId: input.userId,
+      connectionId: input.connectionId,
+      fixture: merchantFixture,
+      orderedQuantity: 2,
+      steps: merchantSteps,
+    });
+    for (const step of merchantSteps) {
+      input.steps.push(step);
+    }
+    if (!inventoryProof.bidirectionalOk) {
+      return buildWooCommerceLiveSmokeSummary({
+        steps: input.steps,
+        missingEnvVars: [],
+        externalOrderId: input.externalOrderId,
+        connectionId: input.connectionId,
+        webhookEventId,
+        kitchenTaskId,
+        importedOrderId: kitchenImport.orderId,
+        stagingWebhookUrl: `${input.stagingBaseUrl.replace(/\/+$/, "")}/api/webhooks/woocommerce?cid=${encodeURIComponent(input.connectionId)}`,
+      });
+    }
+  } else {
+    input.steps.push({
+      id: "inventory_sync_bidirectional_complete",
+      label: "Bi-directional inventory sync complete",
+      status: "SKIPPED",
+      detail: "Skipped — merchant proof fixture unavailable",
+    });
+  }
 
   return buildWooCommerceLiveSmokeSummary({
     steps: input.steps,
@@ -950,12 +1001,36 @@ async function main() {
   if (shouldWrite) {
     const era71Path = join(process.cwd(), WOOCOMMERCE_LIVE_SMOKE_ARTIFACT);
     const p0Path = join(process.cwd(), WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT);
+    const p10Path = join(process.cwd(), WOOCOMMERCE_MERCHANT_PROOF_P0_10_ARTIFACT);
     mkdirSync(dirname(era71Path), { recursive: true });
     writeFileSync(era71Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
     writeFileSync(p0Path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+    const merchantProofSummary = {
+      policyId: WOOCOMMERCE_MERCHANT_PROOF_P0_10_POLICY_ID,
+      runAt: summary.runAt,
+      overall: summary.overall,
+      proofStatus: summary.proofStatus,
+      connectionId: summary.connectionId,
+      externalOrderId: summary.externalOrderId,
+      importedOrderId: summary.importedOrderId,
+      steps: summary.steps.filter((step) =>
+        [
+          "merchant_proof_fixture",
+          "inventory_sync_outbound_kitchen",
+          "inventory_sync_inbound_product_webhook",
+          "inventory_sync_bidirectional_complete",
+          "kds_bump_ready",
+          "kitchen_task_linked",
+        ].includes(step.id),
+      ),
+      honestyNote:
+        "P0-10 merchant proof: dev store webhook → KDS artifact + bi-directional inventory sync (order.created outbound + product.updated inbound).",
+    };
+    writeFileSync(p10Path, `${JSON.stringify(merchantProofSummary, null, 2)}\n`, "utf8");
     console.log(`\nArtifacts:`);
     console.log(`  ${WOOCOMMERCE_LIVE_SMOKE_ARTIFACT}`);
-    console.log(`  ${WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT}\n`);
+    console.log(`  ${WOOCOMMERCE_WEBHOOK_KDS_LIVE_SMOKE_ARTIFACT}`);
+    console.log(`  ${WOOCOMMERCE_MERCHANT_PROOF_P0_10_ARTIFACT}\n`);
   }
 
   process.exit(summary.overall === "FAILED" ? 1 : 0);

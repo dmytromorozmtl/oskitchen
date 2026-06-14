@@ -9275,6 +9275,13 @@ Next: FINAL — docs/ultimate-complete.md
 ---
 ---
 ---
+Cycle: gap-closure-10
+Timestamp: 2026-06-14T11:35:00.000Z
+Task: P0-10 — WooCommerce merchant proof — bi-directional inventory sync
+Category: Integration
+Result: OK — inbound syncWooCommerceInventoryFromProductWebhook (product.updated → kitchen); smoke merchant proof steps + artifacts/woocommerce-merchant-proof-inventory-sync.json
+Evidence: npm run test:ci:woocommerce-merchant-proof-p0-10 (6 passed), npm run test:ci:woocommerce-webhook-kds-p0-2 (9 passed)
+
 Cycle: gap-closure-9
 Timestamp: 2026-06-14T11:30:00.000Z
 Task: P0-9 — Transparent pricing tiers — Square parity on /pricing

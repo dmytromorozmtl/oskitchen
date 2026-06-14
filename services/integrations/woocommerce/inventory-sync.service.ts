@@ -11,6 +11,12 @@ export type WooCommerceInventorySyncResult = {
   skipped: number;
 };
 
+export type WooCommerceInboundInventorySyncResult = {
+  updated: boolean;
+  productId: string | null;
+  quantity: number | null;
+};
+
 async function kitchenQuantityForProduct(userId: string, productId: string): Promise<number> {
   const item = await prisma.storefrontInventoryItem.findFirst({
     where: { productId, userId },
@@ -116,4 +122,37 @@ export async function syncWooCommerceInventoryFromOrder(input: {
   }
 
   return { adjusted, pushed, skipped };
+}
+
+/**
+ * Inbound sync — WooCommerce product webhook stock_quantity → mapped kitchen inventory.
+ */
+export async function syncWooCommerceInventoryFromProductWebhook(input: {
+  userId: string;
+  connectionId: string;
+  externalProductId: string;
+  stockQuantity: number;
+}): Promise<WooCommerceInboundInventorySyncResult> {
+  const externalProduct = await prisma.externalProduct.findFirst({
+    where: {
+      connectionId: input.connectionId,
+      provider: IntegrationProvider.WOOCOMMERCE,
+      externalProductId: input.externalProductId,
+      mappedProductId: { not: null },
+    },
+    select: { mappedProductId: true },
+  });
+
+  if (!externalProduct?.mappedProductId) {
+    return { updated: false, productId: null, quantity: null };
+  }
+
+  const quantity = Math.max(0, Math.round(input.stockQuantity));
+  await setKitchenQuantity(input.userId, externalProduct.mappedProductId, quantity);
+
+  return {
+    updated: true,
+    productId: externalProduct.mappedProductId,
+    quantity,
+  };
 }
