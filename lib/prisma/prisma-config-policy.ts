@@ -1,7 +1,8 @@
 /**
- * Blueprint P1-15 — Prisma config migration (package.json#prisma → prisma.config.ts).
+ * Blueprint P1-15 / P2-49 — Prisma config migration (package.json#prisma → prisma.config.ts).
  *
  * @see prisma.config.ts
+ * @see docs/prisma-config-p2-49.md
  * @see tests/unit/prisma-config.test.ts
  */
 

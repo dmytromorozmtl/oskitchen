@@ -221,6 +221,9 @@ jobs:
       - name: staticGenerationMaxConcurrency — Vercel=1 review (P2-48)
         run: npm run check:static-generation-max-concurrency-p2-48
 
+      - name: Prisma config — prisma.config.ts migration (P2-49)
+        run: npm run check:prisma-config-p2-49
+
       - name: Build
         run: |
           set -o pipefail

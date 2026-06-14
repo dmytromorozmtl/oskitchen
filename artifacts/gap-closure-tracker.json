@@ -46,5 +46,6 @@
   "p2-45-blueprint-registry-sentry-done": "done",
   "p2-46-npm-audit-ci-gate": "done",
   "p2-47-product-thumbnail-alt-text": "done",
-  "p2-48-static-generation-max-concurrency": "done"
+  "p2-48-static-generation-max-concurrency": "done",
+  "p2-49-prisma-config-migration": "done"
 }

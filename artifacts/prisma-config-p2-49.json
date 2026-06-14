@@ -1,0 +1,13 @@
+{
+  "version": "prisma-config-migration-v1",
+  "policyId": "prisma-config-p2-49-v1",
+  "configPath": "prisma.config.ts",
+  "schemaPath": "prisma/schema.prisma",
+  "migrationsPath": "prisma/migrations",
+  "seedCommand": "tsx prisma/seed.ts",
+  "deprecatedRemoved": "package.json#prisma",
+  "prismaVersion": "^6.1.0",
+  "datasourceInSchema": true,
+  "note": "Prisma 6.x keeps datasource url in schema.prisma; CLI config (schema, migrations, seed) lives in prisma.config.ts.",
+  "verifiedAt": "2026-06-15T20:00:00.000Z"
+}

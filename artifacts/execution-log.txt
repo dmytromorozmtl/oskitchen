@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-49
+Timestamp: 2026-06-15T20:00:00.000Z
+Task: P2-49 — Prisma config deprecated → migrate to prisma.config.ts
+Category: Backend
+Result: OK — prisma.config.ts defineConfig (schema/migrations/seed); package.json#prisma removed; check:prisma-config-p2-49 CI gate
+Evidence: artifacts/prisma-config-p2-49.json; docs/prisma-config-p2-49.md
+
+---
 Cycle: gap-closure-48
 Timestamp: 2026-06-15T19:00:00.000Z
 Task: P2-48 — staticGenerationMaxConcurrency:1 review (measure, increase if safe)
