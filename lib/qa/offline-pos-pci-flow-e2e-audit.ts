@@ -19,7 +19,7 @@ export type OfflinePosPciFlowE2EAuditSummary = {
   flowHelperPresent: boolean;
   readyHelperPresent: boolean;
   reconnectSyncWired: boolean;
-  noopV1ScoringWired: boolean;
+  aesGcmScoringWired: boolean;
   posTerminalPagePresent: boolean;
   flowStepCount: number;
   passed: boolean;
@@ -50,14 +50,14 @@ export function auditOfflinePosPciFlowE2E(
         flowSource.includes("getOfflineIndexedDbQueueSize"));
   }
 
-  let noopV1ScoringWired = false;
+  let aesGcmScoringWired = false;
   if (existsSync(scoringPath) && flowHelperPresent) {
     const flowSource = readFileSync(flowPath, "utf8");
     const scoringSource = readFileSync(scoringPath, "utf8");
-    noopV1ScoringWired =
+    aesGcmScoringWired =
       flowSource.includes("runOfflinePosPciNoopV1ContractChecks") &&
-      flowSource.includes("verify_noop_v1_pci") &&
-      scoringSource.includes("auditOfflinePosPciEncryptionHardening");
+      flowSource.includes("aes_gcm_seal") &&
+      scoringSource.includes("non-empty-uses-aes-gcm");
   }
 
   const specReferencesPolicy =
@@ -71,7 +71,7 @@ export function auditOfflinePosPciFlowE2E(
     readyHelperPresent &&
     posTerminalPagePresent &&
     reconnectSyncWired &&
-    noopV1ScoringWired &&
+    aesGcmScoringWired &&
     specReferencesPolicy &&
     OFFLINE_POS_PCI_FLOW_E2E_FLOW_STEPS.length === 5;
 
@@ -81,7 +81,7 @@ export function auditOfflinePosPciFlowE2E(
     flowHelperPresent,
     readyHelperPresent,
     reconnectSyncWired,
-    noopV1ScoringWired,
+    aesGcmScoringWired,
     posTerminalPagePresent,
     flowStepCount: OFFLINE_POS_PCI_FLOW_E2E_FLOW_STEPS.length,
     passed,
@@ -97,7 +97,7 @@ export function formatOfflinePosPciFlowAuditLines(
     `Flow helper: ${summary.flowHelperPresent ? "present" : "missing"}`,
     `Ready helper: ${summary.readyHelperPresent ? "present" : "missing"}`,
     `Reconnect sync wired: ${summary.reconnectSyncWired ? "yes" : "no"}`,
-    `noop-v1 PCI scoring wired: ${summary.noopV1ScoringWired ? "yes" : "no"}`,
+    `AES-GCM PCI scoring wired: ${summary.aesGcmScoringWired ? "yes" : "no"}`,
     `POS terminal page: ${summary.posTerminalPagePresent ? "present" : "missing"}`,
     `Terminal path: ${POS_TERMINAL_PATH}`,
     `Flow steps: ${summary.flowStepCount}`,

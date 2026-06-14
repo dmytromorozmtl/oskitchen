@@ -17,7 +17,7 @@ import {
 } from "./helpers/offline-pos-pci-flow-ready";
 
 /**
- * Offline POS PCI flow — network off → transaction → noop-v1 check → reconnect → sync.
+ * Offline POS PCI flow — network off → AES-GCM seal → queue → reconnect → sync.
  *
  * @see e2e/offline-pos-reconnect-sync.spec.ts
  * @see lib/pos/offline-pci-local-encryption.ts
@@ -31,8 +31,8 @@ test.describe("offline pos pci flow policy", () => {
     expect(OFFLINE_POS_INDEXED_DB_NAME).toBe("kitchenos-offline-pos");
     expect(OFFLINE_POS_PCI_FLOW_E2E_FLOW_STEPS).toEqual([
       "go_offline",
+      "aes_gcm_seal",
       "queue_transaction",
-      "verify_noop_v1_pci",
       "reconnect_online",
       "sync_drain",
     ]);
@@ -57,7 +57,7 @@ test.describe("offline pos pci flow (chromium-authed)", () => {
     skipOfflinePosPciFlowIfNotAuthed();
   });
 
-  test("offline transaction syncs after reconnect with noop-v1 PCI guard", async ({
+  test("offline transaction syncs after reconnect with AES-GCM PCI guard", async ({
     page,
     context,
   }) => {

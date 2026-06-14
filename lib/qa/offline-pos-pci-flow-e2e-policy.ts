@@ -44,8 +44,8 @@ export const OFFLINE_POS_PCI_FLOW_E2E_VISIBLE_MS = 60_000 as const;
 
 export const OFFLINE_POS_PCI_FLOW_E2E_FLOW_STEPS = [
   "go_offline",
+  "aes_gcm_seal",
   "queue_transaction",
-  "verify_noop_v1_pci",
   "reconnect_online",
   "sync_drain",
 ] as const;

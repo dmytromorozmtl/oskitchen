@@ -1,0 +1,18 @@
+{
+  "policyId": "offline-pos-pci-flow-e2e-p1-35-v1",
+  "chain": ["offline", "aes_gcm", "network", "sync"],
+  "flowSteps": [
+    "go_offline",
+    "aes_gcm_seal",
+    "queue_transaction",
+    "reconnect_online",
+    "sync_drain"
+  ],
+  "aesGcmAlgorithm": "aes-gcm-v1",
+  "noopV1EmptyOnly": "noop-v1",
+  "e2eSpec": "e2e/offline-pos-pci-flow.spec.ts",
+  "ciGate": true,
+  "checkScript": "check:offline-pos-pci-flow-p1-35",
+  "liveGateEnv": "E2E_OFFLINE_POS_PCI_FLOW=true",
+  "verifiedAt": "2026-06-15T06:00:00.000Z"
+}

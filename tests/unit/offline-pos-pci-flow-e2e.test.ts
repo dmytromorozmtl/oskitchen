@@ -26,7 +26,7 @@ describe("Offline POS PCI flow E2E (P1-21)", () => {
     expect(OFFLINE_POS_PCI_FLOW_E2E_POLICY_ID).toBe("offline-pos-pci-flow-e2e-p1-21-v1");
     expect(POS_TERMINAL_PATH).toBe("/dashboard/pos/terminal");
     expect(OFFLINE_POS_PCI_FLOW_E2E_FLOW_STEPS).toHaveLength(5);
-    expect(OFFLINE_POS_PCI_FLOW_E2E_FLOW_STEPS).toContain("verify_noop_v1_pci");
+    expect(OFFLINE_POS_PCI_FLOW_E2E_FLOW_STEPS).toContain("aes_gcm_seal");
     expect(isNoopV1EmptyOnly("noop-v1", "", "")).toBe(true);
     expect(isNoopV1EmptyOnly("aes-gcm-v1", "cipher", "4242")).toBe(true);
   });
@@ -45,7 +45,7 @@ describe("Offline POS PCI flow E2E (P1-21)", () => {
     expect(summary.specPresent).toBe(true);
     expect(summary.flowHelperPresent).toBe(true);
     expect(summary.reconnectSyncWired).toBe(true);
-    expect(summary.noopV1ScoringWired).toBe(true);
+    expect(summary.aesGcmScoringWired).toBe(true);
     expect(summary.passed).toBe(true);
   });
 

@@ -26,8 +26,8 @@ export async function runOfflinePosPciFlowE2E(
 
   const steps: OfflinePosPciFlowE2EFlowStep[] = [
     "go_offline",
+    "aes_gcm_seal",
     "queue_transaction",
-    "verify_noop_v1_pci",
     "reconnect_online",
     "sync_drain",
   ];
