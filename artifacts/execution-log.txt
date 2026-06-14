@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-33
+Timestamp: 2026-06-15T04:00:00.000Z
+Task: P1-33 — Segment-level not-found.tsx (dashboard, vendor, storefront)
+Category: Frontend
+Result: OK — app/vendor/not-found.tsx + app/s/not-found.tsx added; dashboard not-found test id; P1-33 CI gate
+Evidence: check:segment-level-not-found-p1-33; artifacts/segment-level-not-found-p1-33.json
+
+---
 Cycle: gap-closure-32
 Timestamp: 2026-06-15T03:00:00.000Z
 Task: P1-32 — Shopify real-time inventory sync proof (inventory_levels/update)
