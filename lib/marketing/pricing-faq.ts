@@ -35,9 +35,9 @@ export const PRICING_FAQ_ITEMS: Array<{ question: string; answer: string }> = [
     answer: 'Starter, Pro, and Team include a 14-day trial with no credit card required at signup.',
   },
   {
-    question: 'What is the Design Partner tier?',
+    question: 'What is the Design Partner Program?',
     answer:
-      'Design Partner (SKU LOI-DP-001) is a public pilot offer for qualified meal prep, ghost kitchen, and commissary operators: $0 platform fee during a 3-month non-binding LOI, staging workspace, weekly feedback sync, and Integration Health onboarding. Request via /book-demo — not self-serve Stripe checkout. Paid pilot SOW is optional at term end.',
+      'Design Partner Program (SKU LOI-DP-001) is a public pilot offer for qualified meal prep, ghost kitchen, and commissary operators: free platform access for 90 days under a non-binding LOI, staging workspace, weekly feedback sync, and Integration Health onboarding. Apply via /book-demo — not self-serve Stripe checkout. Paid pilot SOW is optional at term end.',
   },
   {
     question: 'Are SOC 2, SSO, or SMS included?',

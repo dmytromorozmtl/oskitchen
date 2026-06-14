@@ -12,8 +12,8 @@ SKU: `LOI-DP-001`
 
 | Field | Value |
 |-------|-------|
-| Name | Design Partner |
-| Price | $0 platform / 3-month LOI |
+| Name | Design Partner Program |
+| Price | $0 platform / 90 days free |
 | Checkout | LOI via `/book-demo` — not Stripe self-serve |
 | ICP | Meal prep, ghost kitchen, commissary, multi-brand delivery |
 

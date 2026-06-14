@@ -10,9 +10,9 @@ import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 import { PRICING_FAQ_ITEMS } from "@/lib/marketing/pricing-faq";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "OS Kitchen Pricing — Plans + Design Partner LOI",
+  title: "OS Kitchen Pricing — Plans + Design Partner Program",
   description:
-    "Published plans: Starter $49, Pro $79, Team $199, Enterprise $499/mo. Public Design Partner tier (LOI-DP-001) — $0 platform during 3-month LOI for qualified operators. 14-day self-serve trial.",
+    "Published plans: Starter $49, Pro $79, Team $199, Enterprise $499/mo. Design Partner Program (LOI-DP-001) — free for 90 days for qualified operators. 14-day self-serve trial.",
   path: "/pricing",
   keywords: [
     "meal prep software pricing",

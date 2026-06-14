@@ -9275,6 +9275,13 @@ Next: FINAL — docs/ultimate-complete.md
 ---
 ---
 ---
+Cycle: gap-closure-8
+Timestamp: 2026-06-14T11:25:00.000Z
+Task: P0-8 — Pricing page — Design Partner Program pilot SKU (free for 90 days)
+Category: Marketing
+Result: OK — /pricing surfaces LOI-DP-001 as "Design Partner Program — free for 90 days"; tier card, pilot SKU table, FAQ, and page metadata updated
+Evidence: npm run check:pricing-pilot-sku-p0-8 (4 passed), npm run check:pricing-page (5 passed), npm run gate:forbidden-claims (PASS)
+
 Cycle: gap-closure-7
 Timestamp: 2026-06-14T11:20:00.000Z
 Task: P0-7 — Design partner outreach — 10 meal prep operators + founder emails

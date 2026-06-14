@@ -30,7 +30,7 @@ describe("Pricing page — public Design Partner tier (P1-30)", () => {
     expect(PRICING_PAGE_P1_30_ROUTE).toBe("/pricing");
     expect(PRICING_PAGE_P1_30_SKU).toBe("LOI-DP-001");
     expect(DESIGN_PARTNER_TIER_SKU).toBe(PRICING_PAGE_P1_30_SKU);
-    expect(DESIGN_PARTNER_TIER_NAME).toBe("Design Partner");
+    expect(DESIGN_PARTNER_TIER_NAME).toBe("Design Partner Program");
   });
 
   it("passes full P1-30 pricing page audit", () => {

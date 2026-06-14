@@ -34,7 +34,7 @@ export function DesignPartnerPricingTier() {
               <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                 Public pilot SKU
               </p>
-              <BetaBadge title="Design Partner LOI is non-binding and ICP-qualified — not self-serve Stripe checkout" />
+              <BetaBadge title="Design Partner Program LOI is non-binding and ICP-qualified — not self-serve Stripe checkout" />
             </div>
             <CardTitle id="design-partner-tier-heading" className="mt-2 text-2xl sm:text-3xl">
               {DESIGN_PARTNER_TIER_HEADLINE}
