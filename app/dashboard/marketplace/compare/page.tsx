@@ -8,12 +8,23 @@ import { parseMarketplaceCompareFilters } from "@/lib/marketplace/compare-filter
 import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-access";
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { loadMarketplaceCompare } from "@/services/marketplace/marketplace-compare-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function MarketplaceComparePage({
-  searchParams,
-}: {
+type MarketplaceComparePageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+};
+
+export default function MarketplaceComparePage(props: MarketplaceComparePageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceComparePageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceComparePageAsync({
+  searchParams,
+}: MarketplaceComparePageProps) {
   const access = await requireMarketplaceReadPage({
     operation: "marketplace.compare.read",
     route: "/dashboard/marketplace/compare",

@@ -18,6 +18,7 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import { loadMarketplaceOrders } from "@/services/marketplace/marketplace-orders-service";
 import type { MarketplaceRecurringOrderRow } from "@/services/marketplace/recurring-orders-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 function filtersAreDefault(filters: MarketplaceOrdersFilters): boolean {
   return (
@@ -55,11 +56,21 @@ async function loadRecurringOrderRows(workspaceId: string): Promise<MarketplaceR
   });
 }
 
-export default async function MarketplaceOrdersPage({
-  searchParams,
-}: {
+type MarketplaceOrdersPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}) {
+};
+
+export default function MarketplaceOrdersPage(props: MarketplaceOrdersPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceOrdersPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceOrdersPageAsync({
+  searchParams,
+}: MarketplaceOrdersPageProps) {
   const { workspaceId } = await getTenantActor();
   if (!workspaceId) {
     return (

@@ -7,13 +7,22 @@ import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { resolveKitchenCameraSyntheticMode } from "@/lib/ai/kitchen-camera-synthetic-mode";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getCameraLiveDashboard } from "@/services/ai/camera-live-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata = {
   title: "AI Camera LIVE — Kitchen",
   description: "Real-time computer vision for queues, PPE compliance, and station downtime.",
 };
 
-export default async function KitchenCamerasLivePage() {
+export default function KitchenCamerasLivePage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KitchenCamerasLivePageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KitchenCamerasLivePageAsync() {
   const { workspaceId } = await getTenantActor();
   if (!workspaceId) {
     return (

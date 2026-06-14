@@ -6,8 +6,17 @@ import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { loadKdsDaisyChainConfigModel } from "@/services/kitchen/kds-daisy-chain-config-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function KdsDaisyChainConfigPage() {
+export default function KdsDaisyChainConfigPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KdsDaisyChainConfigPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KdsDaisyChainConfigPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.configure")) {
     return <PermissionDeniedSurfaceCard surfaceId="kds" />;

@@ -29,12 +29,23 @@ import {
   listOpenShiftCloseoutPreviews,
   listRecentClosedShiftSummaries,
 } from "@/services/pos/pos-shift-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function PosShiftsPage({
-  searchParams,
-}: {
+type PosShiftsPageProps = {
   searchParams?: Promise<{ range?: string }>;
-}) {
+};
+
+export default function PosShiftsPage(props: PosShiftsPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosShiftsPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosShiftsPageAsync({
+  searchParams,
+}: PosShiftsPageProps) {
   const actor = await requireWorkspacePermissionActor();
   const resolvedSearchParams = (await searchParams) ?? {};
   const rangePreset = parseShiftCloseHistoryRangeParam(resolvedSearchParams.range);

@@ -8,10 +8,19 @@ import { requireWorkspacePermissionActor } from "@/lib/permissions/require-works
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { loadKitchenCameraDashboard } from "@/services/ai/kitchen-camera-dashboard";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const dynamic = "force-dynamic";
 
-export default async function KitchenCamerasPage() {
+export default function KitchenCamerasPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KitchenCamerasPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KitchenCamerasPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   const { workspaceId } = await getTenantActor();
 

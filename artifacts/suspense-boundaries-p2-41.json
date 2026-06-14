@@ -1,0 +1,12 @@
+{
+  "policyId": "suspense-boundaries-p2-41-v1",
+  "wave1PageCount": 55,
+  "baselinePageCount": 5,
+  "totalSectorPages": 60,
+  "sectors": ["today", "marketplace", "pos", "kitchen"],
+  "boundaryComponent": "components/dashboard/suspense-wave1-page-boundary.tsx",
+  "codemodScript": "scripts/wrap-suspense-wave1-p2-41.ts",
+  "checkScript": "check:suspense-boundaries-p2-41",
+  "ciGate": true,
+  "verifiedAt": "2026-06-15T12:00:00.000Z"
+}

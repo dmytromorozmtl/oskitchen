@@ -8,13 +8,22 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { KDS_PRODUCTION_VIEW_ROUTE } from "@/lib/kitchen/kds-production-view-policy";
 import { loadKdsProductionView } from "@/services/kitchen/production-view-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
   title: "KDS Production View",
   description: "Station load, bottlenecks, and kitchen ETA across active prep tickets.",
 };
 
-export default async function KdsProductionViewPage() {
+export default function KdsProductionViewPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KdsProductionViewPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KdsProductionViewPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.view")) {
     return <PermissionDeniedSurfaceCard surfaceId="kds" />;

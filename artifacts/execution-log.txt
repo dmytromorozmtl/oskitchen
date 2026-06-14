@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-41
+Timestamp: 2026-06-15T12:00:00.000Z
+Task: P2-41 — Suspense boundaries wave 1 (Today, Marketplace, POS, Kitchen ~55 pages)
+Category: Frontend
+Result: OK — SuspenseWave1PageBoundary + sector skeletons; 55 pages wrapped via codemod; 60/60 sector pages with Suspense; P2-41 CI gate
+Evidence: check:suspense-boundaries-p2-41; artifacts/suspense-boundaries-p2-41.json; scripts/wrap-suspense-wave1-p2-41.ts
+
+---
 Cycle: gap-closure-40
 Timestamp: 2026-06-15T11:00:00.000Z
 Task: P1-40 — Sentry alert firing test (error→Sentry dashboard→alert notification <5min)

@@ -9,12 +9,23 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadMarketplaceVendorDetail } from "@/services/marketplace/marketplace-vendors-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function MarketplaceVendorDetailPage({
-  params,
-}: {
+type MarketplaceVendorDetailPageProps = {
   params: Promise<{ id: string }>;
-}) {
+};
+
+export default function MarketplaceVendorDetailPage(props: MarketplaceVendorDetailPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceVendorDetailPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceVendorDetailPageAsync({
+  params,
+}: MarketplaceVendorDetailPageProps) {
   const { id } = await params;
   const { workspaceId, dataUserId } = await getTenantActor();
   if (!workspaceId) notFound();

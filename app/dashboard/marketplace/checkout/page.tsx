@@ -11,8 +11,17 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getCart, toMarketplaceCartClientView } from "@/services/marketplace/cart-service";
 import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function MarketplaceCheckoutPage() {
+export default function MarketplaceCheckoutPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceCheckoutPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceCheckoutPageAsync() {
   const { workspaceId } = await getTenantActor();
   if (!workspaceId) {
     return (

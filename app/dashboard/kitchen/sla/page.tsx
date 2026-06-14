@@ -1,45 +1,45 @@
 import Link from "next/link";
 
-import { KdsStationRoutingRulesPanel } from "@/components/dashboard/kitchen/kds-station-routing-rules-panel";
+import { KitchenSlaTimersPanel } from "@/components/kitchen/kitchen-sla-timers-panel";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { loadKdsStationRoutingRulesModel } from "@/services/kitchen/kds-station-routing-rules-service";
+import { KITCHEN_SLA_TIMERS_POLICY_ID } from "@/lib/kitchen/kitchen-sla-timers-p2-92-policy";
+import { loadKitchenSlaTimersSnapshot } from "@/services/kitchen/kitchen-sla-timers-p2-92-service";
 import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default function KdsStationRoutingRulesPage() {
+/** Blueprint P2-92 — kitchen SLA timers hub. */
+export default function KitchenSlaTimersPage() {
   return (
     <SuspenseWave1PageBoundary sector="kitchen">
-      <KdsStationRoutingRulesPageAsync  />
+      <KitchenSlaTimersPageAsync  />
     </SuspenseWave1PageBoundary>
   );
 }
 
-async function KdsStationRoutingRulesPageAsync() {
+async function KitchenSlaTimersPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.view")) {
     return <PermissionDeniedSurfaceCard surfaceId="kds" />;
   }
 
-  const model = await loadKdsStationRoutingRulesModel(actor.userId);
+  const snapshot = await loadKitchenSlaTimersSnapshot(actor.userId);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 p-4 md:p-6">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">KDS station routing rules</h1>
-          <p className="max-w-2xl text-sm text-muted-foreground">
-            NCR Aloha-parity routing — product, category, keyword, and default rules assign tickets
-            to grill, fry, expo, and 9 other kitchen lines.
+          <h1 className="text-2xl font-semibold tracking-tight">Kitchen SLA</h1>
+          <p className="text-sm text-muted-foreground">
+            Rush-hour timers — policy {KITCHEN_SLA_TIMERS_POLICY_ID}
           </p>
         </div>
         <Button asChild variant="outline" size="sm" className="rounded-full">
-          <Link href="/dashboard/kitchen">Back to KDS</Link>
+          <Link href="/dashboard/kitchen">Open KDS</Link>
         </Button>
       </div>
-
-      <KdsStationRoutingRulesPanel model={model} />
+      <KitchenSlaTimersPanel snapshot={snapshot} />
     </div>
   );
 }

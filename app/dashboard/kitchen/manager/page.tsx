@@ -8,13 +8,22 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { KDS_MANAGER_VIEW_ROUTE } from "@/lib/kitchen/kds-manager-view-policy";
 import { loadKdsManagerView } from "@/services/kitchen/manager-view-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
   title: "KDS Manager View",
   description: "Kitchen manager dashboard — performance, delays, and line efficiency.",
 };
 
-export default async function KdsManagerViewPage() {
+export default function KdsManagerViewPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KdsManagerViewPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KdsManagerViewPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.view")) {
     return <PermissionDeniedSurfaceCard surfaceId="kds" />;

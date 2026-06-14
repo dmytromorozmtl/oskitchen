@@ -11,8 +11,17 @@ import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-d
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function PosReceiptsPage() {
+export default function PosReceiptsPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosReceiptsPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosReceiptsPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;

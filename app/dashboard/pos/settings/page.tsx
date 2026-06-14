@@ -6,8 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function PosSettingsPage() {
+export default function PosSettingsPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosSettingsPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosSettingsPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.hardware.manage")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;

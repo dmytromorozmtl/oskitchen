@@ -8,13 +8,22 @@ import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-a
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadMarketplaceQualityScoringSnapshot } from "@/services/marketplace/quality-scoring";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata = {
   title: "Marketplace Quality Scoring",
   description: "Supplier quality ratings, tier rankings, and delivery review prompts for HoReCa procurement.",
 };
 
-export default async function MarketplaceQualityScoringPage() {
+export default function MarketplaceQualityScoringPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceQualityScoringPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceQualityScoringPageAsync() {
   const access = await requireMarketplaceReadPage({
     operation: "marketplace.quality_scoring.read",
     route: "/dashboard/marketplace/quality",

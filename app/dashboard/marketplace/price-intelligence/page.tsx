@@ -8,13 +8,22 @@ import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-a
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadPriceIntelligenceSnapshot } from "@/services/marketplace/price-intelligence";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata = {
   title: "Price Intelligence — Marketplace",
   description: "Cheapest supplier detection and one-click auto-switch for HoReCa procurement.",
 };
 
-export default async function PriceIntelligencePage() {
+export default function PriceIntelligencePage() {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <PriceIntelligencePageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PriceIntelligencePageAsync() {
   const access = await requireMarketplaceReadPage({
     operation: "marketplace.price_intelligence.read",
     route: "/dashboard/marketplace/price-intelligence",

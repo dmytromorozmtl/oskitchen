@@ -3,13 +3,22 @@ import Link from "next/link";
 import { KitchenVoicePanel } from "@/components/kitchen/kitchen-voice-panel";
 import { Button } from "@/components/ui/button";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata = {
   title: "Voice-Activated Kitchen",
   description: "Ask OS Kitchen how much ingredient stock remains and how many servings you can make.",
 };
 
-export default async function KitchenVoicePage() {
+export default function KitchenVoicePage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KitchenVoicePageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KitchenVoicePageAsync() {
   await getTenantActor();
 
   return (

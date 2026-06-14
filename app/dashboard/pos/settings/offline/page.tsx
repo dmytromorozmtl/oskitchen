@@ -8,9 +8,18 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { OFFLINE_POS_FULL_MODE_P1_31_POLICY_ID } from "@/lib/pos/offline-pos-full-mode-p1-31-policy";
 import { POS_OFFLINE_MODE_V1_POLICY_ID } from "@/lib/pos/pos-offline-mode-v1-policy";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 /** Blueprint P2-88 — POS offline mode v1.0 settings surface. */
-export default async function PosOfflineSettingsPage() {
+export default function PosOfflineSettingsPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosOfflineSettingsPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosOfflineSettingsPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.hardware.manage")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;

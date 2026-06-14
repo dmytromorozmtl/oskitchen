@@ -9,12 +9,23 @@ import { Button } from "@/components/ui/button";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { loadMyMarketplaceVendors } from "@/services/marketplace/marketplace-vendors-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function MarketplaceVendorsPage({
-  searchParams,
-}: {
+type MarketplaceVendorsPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+};
+
+export default function MarketplaceVendorsPage(props: MarketplaceVendorsPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceVendorsPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceVendorsPageAsync({
+  searchParams,
+}: MarketplaceVendorsPageProps) {
   const sp = await searchParams;
   const query = typeof sp.q === "string" ? sp.q : Array.isArray(sp.q) ? sp.q[0] : undefined;
   const { workspaceId, dataUserId } = await getTenantActor();

@@ -1,43 +1,45 @@
 import Link from "next/link";
 
-import { TableServiceDepthPanel } from "@/components/pos/table-service-depth-panel";
+import { NativeTabletUxPanel } from "@/components/pos/native-tablet-ux-panel";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { TABLE_SERVICE_DEPTH_POLICY_ID } from "@/lib/pos/table-service-depth-policy";
+import { NATIVE_TABLET_UX_P2_95_POLICY_ID, NATIVE_TABLET_UX_P2_95_TABLET_POS_ROUTE } from "@/lib/pos/native-tablet-ux-p2-95-policy";
+import { loadNativeTabletUxSnapshot } from "@/services/pos/native-tablet-ux-p2-95-service";
 import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-/** Blueprint P2-89 — table service depth hub. */
-export default function PosTableServicePage() {
+/** Blueprint P2-95 — native tablet UX hub. */
+export default function NativeTabletUxPage() {
   return (
     <SuspenseWave1PageBoundary sector="pos">
-      <PosTableServicePageAsync  />
+      <NativeTabletUxPageAsync  />
     </SuspenseWave1PageBoundary>
   );
 }
 
-async function PosTableServicePageAsync() {
+async function NativeTabletUxPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
+  const snapshot = await loadNativeTabletUxSnapshot(actor.userId);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Table service</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Native tablet UX</h1>
           <p className="text-sm text-muted-foreground">
-            Split bills, merge tables, transfer seats, bar mode, server banking, tips reconciliation — policy{" "}
-            {TABLE_SERVICE_DEPTH_POLICY_ID}.
+            iPad layouts & floor polish — policy {NATIVE_TABLET_UX_P2_95_POLICY_ID}
           </p>
         </div>
-        <Button asChild variant="outline" size="sm" className="rounded-full">
-          <Link href="/dashboard/pos/tabs">Open tabs</Link>
+        <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full">
+          <Link href={NATIVE_TABLET_UX_P2_95_TABLET_POS_ROUTE}>Open tablet POS</Link>
         </Button>
       </div>
-      <TableServiceDepthPanel />
+      <NativeTabletUxPanel snapshot={snapshot} />
     </div>
   );
 }

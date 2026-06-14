@@ -8,8 +8,17 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { loadMarketplaceAnalytics } from "@/services/marketplace/marketplace-analytics-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function MarketplaceAnalyticsPage() {
+export default function MarketplaceAnalyticsPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceAnalyticsPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceAnalyticsPageAsync() {
   const { workspaceId, dataUserId, userId } = await getTenantActor();
 
   if (!workspaceId) {

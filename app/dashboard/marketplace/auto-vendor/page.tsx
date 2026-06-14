@@ -9,13 +9,22 @@ import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-a
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadAutoVendorDashboard } from "@/services/marketplace/auto-vendor-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata = {
   title: "Auto Vendor — Marketplace",
   description: "Automatic best-price search across HoReCa vendors.",
 };
 
-export default async function AutoVendorMarketplacePage() {
+export default function AutoVendorMarketplacePage() {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <AutoVendorMarketplacePageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function AutoVendorMarketplacePageAsync() {
   const access = await requireMarketplaceReadPage({
     operation: "marketplace.auto_vendor.read",
     route: "/dashboard/marketplace/auto-vendor",

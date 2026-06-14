@@ -15,12 +15,23 @@ import {
 import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-access";
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { loadMarketplaceCatalog } from "@/services/marketplace/marketplace-catalog-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function MarketplaceCatalogPage({
-  searchParams,
-}: {
+type MarketplaceCatalogPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+};
+
+export default function MarketplaceCatalogPage(props: MarketplaceCatalogPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceCatalogPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceCatalogPageAsync({
+  searchParams,
+}: MarketplaceCatalogPageProps) {
   const access = await requireMarketplaceReadPage({
     operation: "marketplace.catalog.read",
     route: "/dashboard/marketplace/catalog",

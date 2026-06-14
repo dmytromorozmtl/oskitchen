@@ -1,68 +1,60 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
-import { PosTabletClient } from "@/components/pos/pos-tablet-client";
+import { CafeModeTerminal } from "@/components/pos/cafe-mode-terminal";
 import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
 import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
-import { mergePosSettings } from "@/lib/pos/pos-settings";
-import {
-  POS_TABLET_POS_MANIFEST_ROUTE,
-  POS_TABLET_POS_MIN_TOUCH_PX,
-} from "@/lib/pos/pos-tablet-pos-policy";
+import { CAFE_MODE_P3_143_ROUTE } from "@/lib/pos/cafe-mode-p3-143-policy";
+import { resolveCafeMode } from "@/lib/pos/cafe-mode-p3-143";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
-import { canUseFeature } from "@/lib/plans/feature-registry";
-import { listCustomersForUser } from "@/services/crm/customer-service";
 import { loadPosTerminalBootstrap } from "@/services/pos/pos-session-service";
-import { BRAND_ACCENT } from "@/lib/constants";
 import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
-  title: "Tablet POS — iPad & Android",
-  description: `Touch-optimized counter POS for iPad and Android tablets — ${POS_TABLET_POS_MIN_TOUCH_PX}px targets, portrait and landscape.`,
-  manifest: POS_TABLET_POS_MANIFEST_ROUTE,
-  appleWebApp: {
-    capable: true,
-    title: "Tablet POS",
-    statusBarStyle: "default",
-  },
+  title: "Café mode POS",
+  description:
+    "Counter-first café POS at /dashboard/pos/cafe — 5 screens max for drinks, modifiers, payment, and receipt.",
 };
 
-export const viewport: Viewport = {
-  themeColor: BRAND_ACCENT,
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+/** PAGE_LAYOUT_EXCEPTION — full-screen café POS chrome. */
+
+type CafePosPageProps = {
+  searchParams?: Promise<{ cafe?: string }>;
 };
 
-/** PAGE_LAYOUT_EXCEPTION — full-screen tablet POS chrome. */
-
-export default function PosTabletPage() {
+export default function CafePosPage(props: CafePosPageProps) {
   return (
     <SuspenseWave1PageBoundary sector="pos">
-      <PosTabletPageAsync  />
+      <CafePosPageAsync {...props} />
     </SuspenseWave1PageBoundary>
   );
 }
 
-async function PosTabletPageAsync() {
+async function CafePosPageAsync({
+  searchParams,
+}: CafePosPageProps) {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
-    return <PermissionDeniedSurfaceCard surfaceId="pos_tablet" />;
+    return <PermissionDeniedSurfaceCard surfaceId="pos_cafe" />;
   }
 
+  const resolvedSearchParams = (await searchParams) ?? {};
   const { userId } = actor;
 
   const [boot, operatingMode, kitchen] = await Promise.all([
     loadPosTerminalBootstrap(userId),
     getTenantOperatingMode(userId),
-    findOwnerKitchenSettings(userId, { businessType: true, posSettingsJson: true }),
+    findOwnerKitchenSettings(userId, { businessType: true }),
   ]);
-  const posSettings = mergePosSettings(kitchen?.posSettingsJson);
+
+  const cafeModeActive = resolveCafeMode({
+    cafeParam: resolvedSearchParams.cafe,
+    businessType: kitchen?.businessType ?? null,
+  });
   const quickOrderEnabled = isDailyServiceMode(operatingMode);
 
   const products = boot.products.map((p) => ({
@@ -70,8 +62,6 @@ async function PosTabletPageAsync() {
     title: p.title,
     price: Number(p.price),
     category: p.category,
-    barcode: p.barcode,
-    image: p.image,
   }));
 
   const locationNameById = new Map(boot.locations.map((l) => [l.id, l.name]));
@@ -85,23 +75,11 @@ async function PosTabletPageAsync() {
 
   const staff = boot.staff.map((s) => ({ id: s.id, name: s.name }));
 
-  const crm = await canUseFeature(userId, "customer_crm");
-  const recentCustomers = crm.allowed
-    ? (
-        await listCustomersForUser({ userId }, { take: 10 })
-      ).map((c) => ({
-        id: c.id,
-        email: c.email,
-        label: (c.displayName?.trim() || c.name?.trim() || c.email.split("@")[0] || c.email) as string,
-        phone: c.phone,
-      }))
-    : [];
-
   if (!registers.length) {
     return (
       <div className="mx-auto max-w-lg space-y-4 pb-10">
-        <h1 className="text-2xl font-semibold tracking-tight">Tablet POS</h1>
-        <p className="text-muted-foreground">Create a register before selling on iPad or Android.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">Café mode</h1>
+        <p className="text-muted-foreground">Create a register before selling on the café counter.</p>
         <Button asChild className="min-h-11 rounded-full">
           <Link href="/dashboard/pos/registers">Add register</Link>
         </Button>
@@ -112,7 +90,7 @@ async function PosTabletPageAsync() {
   if (!staff.length) {
     return (
       <div className="mx-auto max-w-lg space-y-4 pb-10">
-        <h1 className="text-2xl font-semibold tracking-tight">Tablet POS</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Café mode</h1>
         <p className="text-muted-foreground">Add at least one active staff member to attribute sales.</p>
         <Button asChild className="min-h-11 rounded-full">
           <Link href="/dashboard/staff">Open staff</Link>
@@ -123,19 +101,16 @@ async function PosTabletPageAsync() {
 
   return (
     <div className="space-y-4 pb-6 md:-mx-2 md:max-w-none lg:-mx-4">
-      <PosTabletClient
+      <CafeModeTerminal
         registers={registers}
         staff={staff}
         products={products}
         openShiftsByRegisterId={boot.openShiftsByRegisterId}
-        recentCustomers={recentCustomers}
-        customerAttachEnabled={crm.allowed}
+        businessType={kitchen?.businessType ?? "CAFE"}
         quickOrderEnabled={quickOrderEnabled}
-        businessType={kitchen?.businessType ?? "RESTAURANT"}
-        canApplyPosDiscount={hasPermission(actor.granted, "pos.discount.apply")}
-        offlineQueueEnabled={posSettings.offlineQueueEnabled}
-        conflictResolution={posSettings.conflictResolution}
+        cafeModeActive={cafeModeActive}
       />
+      <p className="sr-only">Route: {CAFE_MODE_P3_143_ROUTE}</p>
     </div>
   );
 }

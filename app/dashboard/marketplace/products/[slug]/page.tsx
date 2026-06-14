@@ -6,14 +6,25 @@ import { MarketplaceProductDetailClient } from "@/components/marketplace/marketp
 import { Button } from "@/components/ui/button";
 import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
 import { loadMarketplaceProductDetail } from "@/services/marketplace/marketplace-product-detail-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function MarketplaceProductDetailPage({
-  params,
-  searchParams,
-}: {
+type MarketplaceProductDetailPageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+};
+
+export default function MarketplaceProductDetailPage(props: MarketplaceProductDetailPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceProductDetailPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceProductDetailPageAsync({
+  params,
+  searchParams,
+}: MarketplaceProductDetailPageProps) {
   const { slug } = await params;
   const sp = await searchParams;
   const [access, product] = await Promise.all([

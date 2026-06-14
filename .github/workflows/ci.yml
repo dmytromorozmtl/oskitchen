@@ -197,6 +197,9 @@ jobs:
       - name: Sentry alert firing — error→Sentry→alert <5min (P1-40)
         run: npm run check:sentry-alert-firing-p1-40
 
+      - name: Suspense boundaries — wave 1 Today/Marketplace/POS/Kitchen (P2-41)
+        run: npm run check:suspense-boundaries-p2-41
+
       - name: Build
         run: |
           set -o pipefail

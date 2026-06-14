@@ -5,10 +5,19 @@ import { TabPanel } from "@/components/pos/tab-panel";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getOpenTabs } from "@/services/pos/tab-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const dynamic = "force-dynamic";
 
-export default async function PosTabsPage() {
+export default function PosTabsPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosTabsPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosTabsPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;

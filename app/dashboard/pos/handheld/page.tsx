@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { loadHandheldOrderingBootstrap } from "@/services/pos/handheld-ordering-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
   title: "Handheld POS",
@@ -28,11 +29,21 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default async function HandheldPOSPage({
-  searchParams,
-}: {
+type HandheldPOSPageProps = {
   searchParams: Promise<{ tableId?: string }>;
-}) {
+};
+
+export default function HandheldPOSPage(props: HandheldPOSPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <HandheldPOSPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function HandheldPOSPageAsync({
+  searchParams,
+}: HandheldPOSPageProps) {
   const { tableId } = await searchParams;
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {

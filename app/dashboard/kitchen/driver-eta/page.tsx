@@ -8,13 +8,22 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { KDS_DRIVER_ETA_TRACKING_ROUTE } from "@/lib/kitchen/kds-driver-eta-tracking-absolute-final-policy";
 import { loadKdsDriverEtaTrackingModel } from "@/services/kitchen/kds-driver-eta-tracking-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
   title: "Driver ETA tracking",
   description: "KDS delivery driver ETA board — dispatch status and estimated arrival.",
 };
 
-export default async function KdsDriverEtaPage() {
+export default function KdsDriverEtaPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KdsDriverEtaPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KdsDriverEtaPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.view")) {
     return <PermissionDeniedSurfaceCard surfaceId="kds" />;

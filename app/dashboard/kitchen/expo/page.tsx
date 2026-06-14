@@ -9,13 +9,22 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { KDS_EXPO_VIEW_ROUTE } from "@/lib/kitchen/kds-expo-view-policy";
 import { loadKdsExpoView } from "@/services/kitchen/expo-view-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
   title: "KDS Expo View",
   description: "Expo runner board — ready, waiting, and delayed tickets.",
 };
 
-export default async function KdsExpoViewPage() {
+export default function KdsExpoViewPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KdsExpoViewPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KdsExpoViewPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.view")) {
     return <PermissionDeniedSurfaceCard surfaceId="kds" />;

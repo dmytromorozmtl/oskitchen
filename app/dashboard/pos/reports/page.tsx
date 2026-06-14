@@ -6,8 +6,17 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { canUseFeature } from "@/lib/plans/feature-registry";
 import { prisma } from "@/lib/prisma";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function PosReportsPage() {
+export default function PosReportsPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosReportsPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosReportsPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;

@@ -8,8 +8,17 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { listPosRegisters } from "@/services/pos/pos-register-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function PosRegistersPage() {
+export default function PosRegistersPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosRegistersPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosRegistersPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.register.manage")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;

@@ -14,6 +14,7 @@ import {
 } from "@/lib/pos/pos-mobile-pos-policy";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { loadPosTerminalBootstrap } from "@/services/pos/pos-session-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
   title: "Mobile POS — Phone Terminal",
@@ -36,7 +37,15 @@ export const viewport: Viewport = {
 
 /** PAGE_LAYOUT_EXCEPTION — phone POS full-viewport chrome. */
 
-export default async function PosMobilePage() {
+export default function PosMobilePage() {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosMobilePageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosMobilePageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_mobile" />;

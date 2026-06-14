@@ -9,17 +9,28 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { POS_CASH_MANAGEMENT_ROUTE } from "@/lib/pos/pos-cash-management";
 import { loadPosCashManagementBootstrap } from "@/services/pos/pos-cash-management-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata: Metadata = {
   title: "POS Cash Management",
   description: "Open drawer, mid-shift counts, closeout, and printable cash reports.",
 };
 
-export default async function PosCashManagementPage({
-  searchParams,
-}: {
+type PosCashManagementPageProps = {
   searchParams?: Promise<{ step?: string }>;
-}) {
+};
+
+export default function PosCashManagementPage(props: PosCashManagementPageProps) {
+  return (
+    <SuspenseWave1PageBoundary sector="pos">
+      <PosCashManagementPageAsync {...props} />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function PosCashManagementPageAsync({
+  searchParams,
+}: PosCashManagementPageProps) {
   const actor = await requireWorkspacePermissionActor();
   const canOpen = hasPermission(actor.granted, "pos.shift.open");
   const canClose = hasPermission(actor.granted, "pos.shift.close");

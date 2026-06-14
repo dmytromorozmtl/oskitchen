@@ -6,8 +6,17 @@ import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { loadKdsExpediteScreenModel } from "@/services/kitchen/kds-expedite-screen-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
-export default async function KdsExpediteScreenPage() {
+export default function KdsExpediteScreenPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="kitchen">
+      <KdsExpediteScreenPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function KdsExpediteScreenPageAsync() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.view")) {
     return <PermissionDeniedSurfaceCard surfaceId="kds" />;

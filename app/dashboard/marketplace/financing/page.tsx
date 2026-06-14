@@ -8,13 +8,22 @@ import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-a
 import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadMarketplaceFinancingSnapshot } from "@/services/marketplace/financing";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const metadata = {
   title: "Marketplace Financing",
   description: "Net-30/60/90 terms, early payment discounts, and invoice factoring for HoReCa procurement.",
 };
 
-export default async function MarketplaceFinancingPage() {
+export default function MarketplaceFinancingPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="marketplace">
+      <MarketplaceFinancingPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function MarketplaceFinancingPageAsync() {
   const access = await requireMarketplaceReadPage({
     operation: "marketplace.financing.read",
     route: "/dashboard/marketplace/financing",

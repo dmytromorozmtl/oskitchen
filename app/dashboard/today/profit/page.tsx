@@ -7,10 +7,19 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import { getProfitEngineSnapshot } from "@/services/analytics/profit-engine-service";
 import { getRealTimeProfit } from "@/services/analytics/real-time-profit-service";
+import { SuspenseWave1PageBoundary } from "@/components/dashboard/suspense-wave1-page-boundary";
 
 export const dynamic = "force-dynamic";
 
-export default async function TodayProfitPage() {
+export default function TodayProfitPage() {
+  return (
+    <SuspenseWave1PageBoundary sector="today">
+      <TodayProfitPageAsync  />
+    </SuspenseWave1PageBoundary>
+  );
+}
+
+async function TodayProfitPageAsync() {
   const { dataUserId } = await getTenantActor();
   const currencyPromise = prisma.kitchenSettings.findUnique({
     where: { userId: dataUserId },
