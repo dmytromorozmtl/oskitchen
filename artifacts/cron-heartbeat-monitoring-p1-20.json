@@ -1,0 +1,25 @@
+{
+  "policyId": "p1-20-cron-heartbeat-monitoring-v1",
+  "healthCheckField": "checks.cronExecution.ok",
+  "healthRoute": "app/api/health/route.ts",
+  "evidenceLoader": "loadCriticalCronExecutionHealth",
+  "summarizer": "summarizeCriticalCronExecutionEvidence",
+  "criticalSlugs": [
+    "webhook-jobs",
+    "storefront-edge-sync",
+    "storefront-cart-recovery",
+    "doordash-sync",
+    "grubhub-sync",
+    "kds-overdue-alerts"
+  ],
+  "reportedStaleSlugs": [
+    "webhook-jobs",
+    "storefront-edge-sync",
+    "doordash-sync",
+    "grubhub-sync",
+    "kds-overdue-alerts"
+  ],
+  "ciGate": true,
+  "checkScript": "check:cron-heartbeat-monitoring-p1-20",
+  "verifiedAt": "2026-06-14T16:00:00.000Z"
+}

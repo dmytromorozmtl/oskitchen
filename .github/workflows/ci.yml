@@ -134,6 +134,9 @@ jobs:
       - name: Remaining N+1 batch fixes (P1-19)
         run: npm run check:n-plus-one-p1-19
 
+      - name: Production cron heartbeat monitoring (P1-20)
+        run: npm run check:cron-heartbeat-monitoring-p1-20
+
       - name: Build
         run: |
           set -o pipefail
