@@ -1,0 +1,35 @@
+{
+  "version": "seo-blog-articles-v1",
+  "policyId": "seo-blog-articles-p2-55-v1",
+  "upstreamPolicyId": "seo-blog-articles-p1-28-v1",
+  "postCount": 5,
+  "icpTopics": ["meal_prep", "ghost_kitchen", "restaurant_pos"],
+  "posts": [
+    {
+      "slug": "how-to-start-meal-prep-business",
+      "icpTopic": "meal_prep",
+      "path": "/blog/how-to-start-meal-prep-business"
+    },
+    {
+      "slug": "meal-prep-order-queue-cut-packing-errors",
+      "icpTopic": "meal_prep",
+      "path": "/blog/meal-prep-order-queue-cut-packing-errors"
+    },
+    {
+      "slug": "ghost-kitchen-setup-complete-guide",
+      "icpTopic": "ghost_kitchen",
+      "path": "/blog/ghost-kitchen-setup-complete-guide"
+    },
+    {
+      "slug": "ghost-kitchen-software-2026",
+      "icpTopic": "ghost_kitchen",
+      "path": "/blog/ghost-kitchen-software-2026"
+    },
+    {
+      "slug": "restaurant-pos-comparison-2026",
+      "icpTopic": "restaurant_pos",
+      "path": "/blog/restaurant-pos-comparison-2026"
+    }
+  ],
+  "verifiedAt": "2026-06-16T00:30:00.000Z"
+}

@@ -239,6 +239,9 @@ jobs:
       - name: Commission comparison calculator — DoorDash/Uber interactive (P2-54)
         run: npm run check:commission-comparison-calculator-p2-54
 
+      - name: SEO blog articles — 5 posts meal prep ghost kitchen POS (P2-55)
+        run: npm run check:seo-blog-articles-p2-55
+
       - name: Build
         run: |
           set -o pipefail
