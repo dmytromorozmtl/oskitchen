@@ -76,5 +76,6 @@
   "p2-75-developer-api-rate-limits": "done",
   "p3-76-archive-era-scripts": "done",
   "p3-77-archive-workflows": "done",
-  "p3-78-otel-bundle-analysis": "done"
+  "p3-78-otel-bundle-analysis": "done",
+  "p3-79-segment-not-found": "done"
 }

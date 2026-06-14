@@ -1,0 +1,32 @@
+{
+  "policyId": "segment-not-found-p3-79-v1",
+  "status": "DONE",
+  "upstreamPolicy": "segment-level-not-found-p1-33-v1",
+  "segments": [
+    {
+      "id": "dashboard",
+      "path": "app/dashboard/not-found.tsx",
+      "testId": "segment-not-found-dashboard",
+      "primaryHref": "/dashboard/today",
+      "layoutPath": "app/dashboard/layout.tsx"
+    },
+    {
+      "id": "vendor",
+      "path": "app/vendor/not-found.tsx",
+      "testId": "segment-not-found-vendor",
+      "primaryHref": "/vendor/dashboard",
+      "layoutPath": "app/vendor/layout.tsx"
+    },
+    {
+      "id": "storefront",
+      "path": "app/s/not-found.tsx",
+      "testId": "segment-not-found-storefront",
+      "primaryHref": "/"
+    }
+  ],
+  "rootFallback": "app/not-found.tsx",
+  "scenarioCount": 6,
+  "ciGate": true,
+  "checkScript": "check:segment-not-found-p3-79",
+  "verifiedAt": "2026-06-16T14:00:00.000Z"
+}
