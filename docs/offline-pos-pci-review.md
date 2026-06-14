@@ -1,6 +1,7 @@
 # Offline POS queue — PCI scope review
 
 **Policy:** `offline-pos-pci-review-absolute-final-v1`  
+**Full review (P3-82):** [`offline-pos-pci-full-p3-82-v1`](./offline-pos-pci-full-p3-82.md) — AES-GCM engineering pass, external QSA pending  
 **Date:** 2026-06-06  
 **Owner:** Engineering + Compliance  
 **Scope:** PCI-DSS boundary review for browser offline POS checkout queue and card-metadata staging  
@@ -147,7 +148,7 @@ Policy id: `pos-offline-queue-v2` — `services/pos-offline-queue.ts`.
 | R2 | Confirm UI never collects full card number offline | Eng | **Pass** — last4 input only, 4-digit max |
 | R3 | Stripe Terminal capture path documented | Eng | **Pass** — capture on reconnect only |
 | R4 | Sales forbidden-claims scan excludes “PCI certified offline POS” | Marketing | **Pass** — registry + CI |
-| R5 | QSA or PCI counsel review of last4/brand staging | Legal | **Engineering pre-review complete (P2-44 retain-empty-only) — external QSA pending** |
+| R5 | QSA or PCI counsel review of last4/brand staging | Legal | **Engineering full review complete (P3-82 AES-GCM + P2-44 retain-empty-only) — external QSA pending (intro 2026-06-24)** |
 | R6 | Pen test of IndexedDB extraction on shared tablet | Security | **Pending** |
 | R7 | Pilot operator attestation for cash-only offline | CS | **Pending** — Phase 2 offline-pos-plan |
 | R8 | Insurance / liability review for queued card metadata | Founder | **Pending** |

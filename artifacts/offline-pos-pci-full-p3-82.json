@@ -1,0 +1,34 @@
+{
+  "policyId": "offline-pos-pci-full-p3-82-v1",
+  "signoffStatus": "engineering_ready_pending_external_qsa",
+  "aesGcmAlgorithm": "aes-gcm-v1",
+  "keySizeBytes": 32,
+  "ivSizeBytes": 12,
+  "indexedDbKeyStore": "kitchenos-offline-pci-keys",
+  "encryptionModule": "lib/pos/offline-pci-local-encryption.ts",
+  "engineeringReviewPassed": true,
+  "engineeringReviewDate": "2026-06-16",
+  "externalQsaPending": true,
+  "qsaIntroDate": "2026-06-24",
+  "penTestKickoff": "2026-07-07",
+  "productionCardClaimsBlocked": true,
+  "upstreamGates": {
+    "p2-44-noop-v1": "pass",
+    "p1-35-e2e-chain": "pass",
+    "p3-81-qsa-track": "scheduled",
+    "task-39-pci-review": "pass"
+  },
+  "qsaChecklist": [
+    "aes-gcm-v1-non-empty-seal",
+    "12-byte-random-iv",
+    "32-byte-device-local-key",
+    "indexeddb-key-isolation",
+    "no-plaintext-fallback",
+    "noop-v1-empty-only-upstream-p2-44",
+    "e2e-offline-aes-gcm-sync-upstream-p1-35",
+    "production-card-claims-blocked-until-external-qsa"
+  ],
+  "checkScript": "check:offline-pos-pci-full-p3-82",
+  "ciGate": true,
+  "verifiedAt": "2026-06-16T17:00:00.000Z"
+}
