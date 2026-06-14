@@ -1,0 +1,26 @@
+{
+  "version": "maintenance-mode-panel-perf-budget-v1",
+  "policyId": "maintenance-mode-panel-perf-budget-p2-53-v1",
+  "upstreamPolicyId": "maintenance-mode-panel-perf-budget-v1",
+  "paths": [
+    "/dashboard/today",
+    "/platform/implementations"
+  ],
+  "flowSteps": [
+    "validate_lhci_config",
+    "assert_panel_component_wiring",
+    "assert_fcp_lcp_cls_tbt_thresholds",
+    "verify_ci_gate"
+  ],
+  "budgets": {
+    "fcpMaxMs": 2500,
+    "lcpMaxMs": 4000,
+    "clsMax": 0.1,
+    "tbtMaxMs": 350,
+    "performanceMinScore": 0.85
+  },
+  "panelTestId": "maintenance-mode-panel",
+  "lhciConfig": "lighthouserc.maintenance-mode-panel.cjs",
+  "componentPath": "components/dashboard/maintenance/maintenance-mode-panel.tsx",
+  "verifiedAt": "2026-06-15T23:30:00.000Z"
+}

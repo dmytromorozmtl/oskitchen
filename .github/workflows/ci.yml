@@ -233,6 +233,9 @@ jobs:
       - name: Preview route redirect regression — deep link preserved (P2-52)
         run: npm run check:preview-route-redirect-regression-p2-52
 
+      - name: Maintenance mode panel perf budget — Lighthouse thresholds (P2-53)
+        run: npm run check:maintenance-mode-panel-perf-budget-p2-53
+
       - name: Build
         run: |
           set -o pipefail
