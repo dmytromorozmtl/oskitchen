@@ -134,3 +134,31 @@ export function getSyncHealthMarketingChannel(
 ): SyncHealthMarketingChannel | undefined {
   return SYNC_HEALTH_DASHBOARD_MARKETING_CHANNELS.find((c) => c.id === id);
 }
+
+export type SyncHealthMarketingMaturityCounts = {
+  live: number;
+  beta: number;
+  skipped: number;
+  setupReady: number;
+  total: number;
+};
+
+/** Live integration counter for homepage hero — derived from marketing channel matrix. */
+export function countSyncHealthMarketingMaturity(): SyncHealthMarketingMaturityCounts {
+  const counts: SyncHealthMarketingMaturityCounts = {
+    live: 0,
+    beta: 0,
+    skipped: 0,
+    setupReady: 0,
+    total: SYNC_HEALTH_DASHBOARD_MARKETING_CHANNELS.length,
+  };
+
+  for (const channel of SYNC_HEALTH_DASHBOARD_MARKETING_CHANNELS) {
+    if (channel.maturity === "LIVE") counts.live += 1;
+    else if (channel.maturity === "BETA") counts.beta += 1;
+    else if (channel.maturity === "SKIPPED") counts.skipped += 1;
+    else if (channel.maturity === "SETUP_READY") counts.setupReady += 1;
+  }
+
+  return counts;
+}

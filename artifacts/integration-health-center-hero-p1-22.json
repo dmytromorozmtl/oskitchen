@@ -1,0 +1,20 @@
+{
+  "policyId": "integration-health-center-hero-p1-22-v1",
+  "homePage": "app/page.tsx",
+  "landingComponent": "components/marketing/landing-integration-health-moat.tsx",
+  "dashboardComponent": "components/marketing/sync-health-dashboard-marketing.tsx",
+  "counterHelper": "countSyncHealthMarketingMaturity",
+  "ihcRoute": "/integration-health-center",
+  "heroTestId": "integration-health-center-hero-p1-22",
+  "counterTestId": "integration-health-live-counter-p1-22",
+  "dashboardTestId": "sync-health-dashboard-marketing",
+  "expectedMaturityCounts": {
+    "live": 2,
+    "beta": 2,
+    "skipped": 3,
+    "total": 7
+  },
+  "ciGate": true,
+  "checkScript": "check:integration-health-center-hero-p1-22",
+  "verifiedAt": "2026-06-14T17:00:00.000Z"
+}

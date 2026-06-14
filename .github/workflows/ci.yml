@@ -140,6 +140,9 @@ jobs:
       - name: Rate limit regression — mutation routes (P1-21)
         run: npm run check:rate-limit-regression-p1-21
 
+      - name: Integration Health Center hero section (P1-22)
+        run: npm run check:integration-health-center-hero-p1-22
+
       - name: Build
         run: |
           set -o pipefail
