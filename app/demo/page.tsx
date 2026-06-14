@@ -6,6 +6,7 @@ import { DemoImportForm } from "@/components/demo/demo-import-form";
 import { DemoLaunchButton } from "@/components/demo/demo-launch-button";
 import { DemoGuidedTourSection } from "@/components/marketing/demo-guided-tour-section";
 import { DemoInteractiveSandboxWorkspace } from "@/components/marketing/demo-interactive-sandbox-workspace";
+import { DemoTestCredentialsPanel } from "@/components/marketing/demo-test-credentials-panel";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { Badge } from "@/components/ui/badge";
@@ -27,9 +28,9 @@ import {
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "OS Kitchen Demo — See it in action",
+  title: "OS Kitchen Demo — Interactive sandbox with test credentials",
   description:
-    "Launch a free demo workspace with realistic orders, vendors, and analytics. No signup — explore OS Kitchen for two hours.",
+    "Launch a free 2-hour guest workspace or explore the interactive Integration Health sandbox. LIVE WooCommerce + Shopify smokes on staging dev stores — no signup required.",
   path: "/demo",
   keywords: ["kitchen software demo", "restaurant POS demo", "food ops platform demo"],
 });
@@ -84,6 +85,8 @@ export default async function DemoHubPage({
             </div>
           </div>
         </section>
+
+        <DemoTestCredentialsPanel />
 
         <DemoInteractiveSandboxWorkspace />
 

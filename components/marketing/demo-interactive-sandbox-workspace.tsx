@@ -29,6 +29,7 @@ import {
   type DemoSandboxChannelStatus,
   type DemoSandboxIntegrationChannel,
 } from "@/lib/marketing/demo-page-p1-29-content";
+import { getDemoP128LiveProof } from "@/lib/marketing/demo-interactive-sandbox-p1-28-content";
 import {
   DEMO_PAGE_P1_29_INTEGRATION_HEALTH_TEST_ID,
   DEMO_PAGE_P1_29_SANDBOX_TEST_ID,
@@ -206,7 +207,14 @@ function IntegrationHealthPanel({
                   <div className="flex min-w-0 items-center gap-3">
                     <StatusIcon className="h-4 w-4 shrink-0" aria-hidden />
                     <div className="min-w-0">
-                      <span className="block text-sm font-medium">{channel.label}</span>
+                      <span className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-medium">{channel.label}</span>
+                        {getDemoP128LiveProof(channel.id) ? (
+                          <span className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-1.5 py-0 text-[9px] font-semibold uppercase text-emerald-800 dark:text-emerald-200">
+                            LIVE
+                          </span>
+                        ) : null}
+                      </span>
                       <span className="block truncate text-xs text-muted-foreground">
                         Last sync: {channel.lastSync}
                       </span>
@@ -244,6 +252,15 @@ function IntegrationHealthPanel({
                 Recovery playbook
               </p>
               <p className="mt-2 text-sm font-medium text-primary">{selectedChannel.playbook}</p>
+              {(() => {
+                const liveProof = getDemoP128LiveProof(selectedChannel.id);
+                if (!liveProof?.artifact) return null;
+                return (
+                  <p className="mt-3 font-mono text-xs text-muted-foreground">
+                    LIVE proof: {liveProof.artifact}
+                  </p>
+                );
+              })()}
             </CardContent>
           </Card>
         ) : null}

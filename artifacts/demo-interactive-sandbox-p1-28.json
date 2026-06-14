@@ -1,0 +1,13 @@
+{
+  "policyId": "demo-interactive-sandbox-p1-28-v1",
+  "route": "/demo",
+  "credentialsTestId": "demo-test-credentials-p1-28",
+  "sandboxTestId": "demo-interactive-sandbox-workspace",
+  "liveIntegrationChannels": ["shopify", "woocommerce", "storefront", "pos"],
+  "guestEmailPattern": "guest-{id}@demo.os-kitchen.app",
+  "sessionHours": 2,
+  "stagingEnvFile": ".env.smoke.local",
+  "ciGate": true,
+  "checkScript": "check:demo-interactive-sandbox-p1-28",
+  "verifiedAt": "2026-06-14T23:00:00.000Z"
+}
