@@ -233,6 +233,7 @@
     "check:advisory-board-page-p3-86": "node ./node_modules/vitest/vitest.mjs run tests/unit/advisory-board-page-p3-86.test.ts",
     "check:public-changelog-p3-87": "node ./node_modules/vitest/vitest.mjs run tests/unit/public-changelog-p3-87.test.ts",
     "check:public-roadmap-honest-dates-p3-88": "node ./node_modules/vitest/vitest.mjs run tests/unit/public-roadmap-honest-dates-p3-88.test.ts",
+    "check:app-marketplace-listing-p3-89": "node ./node_modules/vitest/vitest.mjs run tests/unit/app-marketplace-listing-p3-89.test.ts",
     "test:e2e:maintenance-mode-panel-perf-budget": "playwright test e2e/maintenance-mode-panel-perf-budget.spec.ts --project=chromium",
     "test:e2e:preview-route-redirect-regression": "playwright test e2e/preview-route-redirect-regression.spec.ts --project=chromium",
     "test:e2e:enterprise-sso-saml-e2e": "playwright test e2e/auth.setup.ts e2e/enterprise-sso-saml-e2e.spec.ts --project=setup --project=chromium-authed",

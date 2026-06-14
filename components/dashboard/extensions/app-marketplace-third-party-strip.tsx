@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Store } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { APP_MARKETPLACE_THIRD_PARTY_ROUTE } from '@/lib/platform/app-marketplace-third-party-absolute-final-policy';
+import { APP_MARKETPLACE_LISTING_P3_89_FALLBACK_HREF } from '@/lib/marketing/app-marketplace-listing-p3-89-policy';
 
 export function AppMarketplaceThirdPartyStrip() {
   return (
@@ -21,7 +21,7 @@ export function AppMarketplaceThirdPartyStrip() {
         </div>
       </div>
       <Button asChild variant="outline" size="sm" className="shrink-0 rounded-full">
-        <Link href={APP_MARKETPLACE_THIRD_PARTY_ROUTE}>View marketplace</Link>
+        <Link href={APP_MARKETPLACE_LISTING_P3_89_FALLBACK_HREF}>Partner program</Link>
       </Button>
     </div>
   );

@@ -44,9 +44,6 @@ export default async function IntegrationsExtensionsPage() {
             <Link href="/dashboard/integrations/oauth-apps">OAuth apps</Link>
           </Button>
           <Button asChild variant="ghost" size="sm" className="rounded-full">
-            <Link href="/app-marketplace">App marketplace</Link>
-          </Button>
-          <Button asChild variant="ghost" size="sm" className="rounded-full">
             <Link href="/developers">Developer roadmap</Link>
           </Button>
         </div>

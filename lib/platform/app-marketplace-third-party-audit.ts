@@ -68,8 +68,19 @@ export function auditAppMarketplaceThirdPartyWiring(
     failures.push("extensions page missing marketplace strip");
   }
 
-  if (!stripSource.includes(APP_MARKETPLACE_THIRD_PARTY_ROUTE)) {
-    failures.push("strip missing public marketplace route");
+  if (
+    stripSource.includes('href="/app-marketplace"') ||
+    stripSource.includes("href={'/app-marketplace'}") ||
+    stripSource.includes("href={APP_MARKETPLACE_THIRD_PARTY_ROUTE}")
+  ) {
+    failures.push("strip must not link to /app-marketplace nav route (P3-89)");
+  }
+
+  if (
+    !stripSource.includes("APP_MARKETPLACE_LISTING_P3_89_FALLBACK_HREF") &&
+    !stripSource.includes("/partners")
+  ) {
+    failures.push("strip should link to partner program fallback");
   }
 
   if (!contentSource.includes("app-marketplace-third-party-absolute-final-v1")) {

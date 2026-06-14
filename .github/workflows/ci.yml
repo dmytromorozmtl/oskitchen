@@ -341,6 +341,9 @@ jobs:
       - name: Public roadmap honest dates (P3-88)
         run: npm run check:public-roadmap-honest-dates-p3-88
 
+      - name: App marketplace nav removal (P3-89)
+        run: npm run check:app-marketplace-listing-p3-89
+
       - name: Build
         run: |
           set -o pipefail

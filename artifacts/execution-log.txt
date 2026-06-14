@@ -9951,3 +9951,10 @@ Task: P3-88 — /roadmap honest quarter dates, no undated hardware
 Category: Marketing
 Result: OK — public-roadmap-honest-dates-p3-88-v1; confidence badges (high/medium/conditional) on all 19 items; Q2–Q4 2026 labels only; hardware (Stripe Terminal, offline POS) in Out of scope with no calendar dates; banned undated phrases gated; artifact public-roadmap-honest-dates-p3-88.json; CI gate check:public-roadmap-honest-dates-p3-88
 Evidence: artifacts/public-roadmap-honest-dates-p3-88.json, npm run check:public-roadmap-honest-dates-p3-88
+
+Cycle: 89
+Timestamp: 2026-06-17T00:00:00.000Z
+Task: P3-89 — /app-marketplace empty → remove from nav
+Category: Marketing
+Result: OK — app-marketplace-listing-p3-89-v1; removed /app-marketplace from dashboard extensions nav + strip CTA; strip now links to /partners; page kept for direct URL; 9 nav surfaces scanned; artifact app-marketplace-listing-p3-89.json; CI gate check:app-marketplace-listing-p3-89
+Evidence: artifacts/app-marketplace-listing-p3-89.json, npm run check:app-marketplace-listing-p3-89
