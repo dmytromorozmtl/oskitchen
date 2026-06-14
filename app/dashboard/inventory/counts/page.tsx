@@ -21,6 +21,9 @@ export default async function InventoryCountsPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-3 text-sm">
+          <Link href="/dashboard/inventory/photo-count" className="text-primary hover:underline">
+            Shelf photo count →
+          </Link>
           <Link href="/dashboard/inventory/pos-impacts" className="text-primary hover:underline">
             POS impacts →
           </Link>

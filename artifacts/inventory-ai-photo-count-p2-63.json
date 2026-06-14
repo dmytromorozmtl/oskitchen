@@ -1,0 +1,13 @@
+{
+  "policyId": "inventory-ai-photo-count-p2-63-v1",
+  "scenarioCount": 15,
+  "itemRecallPct": 100,
+  "hallucinationPct": 0,
+  "thresholdRecallPct": 90,
+  "maxHallucinationPct": 0,
+  "marketManParityNote": "Shelf photo → AI item counts → physical count lines — comparable to MarketMan photo count, without claiming certified parity.",
+  "route": "/dashboard/inventory/photo-count",
+  "ciGate": true,
+  "checkScript": "check:inventory-ai-photo-count-p2-63",
+  "verifiedAt": "2026-06-16T08:00:00.000Z"
+}

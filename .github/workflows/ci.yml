@@ -263,6 +263,9 @@ jobs:
       - name: Loyalty earn/redeem LIVE — POS + storefront Square parity (P2-62)
         run: npm run check:loyalty-earn-redeem-p2-62
 
+      - name: Inventory AI photo count — MarketMan parity (P2-63)
+        run: npm run check:inventory-ai-photo-count-p2-63
+
       - name: Build
         run: |
           set -o pipefail
