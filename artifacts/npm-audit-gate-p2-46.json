@@ -1,0 +1,14 @@
+{
+  "version": "npm-audit-gate-v1",
+  "policyId": "npm-audit-gate-p2-46-v1",
+  "auditLevel": "high",
+  "command": "npm audit --audit-level=high",
+  "npmScript": "audit:dependencies:high",
+  "ciWorkflows": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/deploy-prod-gate.yml"
+  ],
+  "ciStepName": "Dependency audit (high severity gate)",
+  "runsAfterInstall": true,
+  "verifiedAt": "2026-06-15T17:00:00.000Z"
+}

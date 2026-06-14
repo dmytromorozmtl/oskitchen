@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Dependency audit (high severity gate)
-        run: npm run audit -- dependencies:high
+        run: npm run audit:dependencies:high
 
       - name: Prisma generate
         run: npx prisma generate
@@ -211,6 +211,9 @@ jobs:
 
       - name: Blueprint registry — Sentry production sync (P2-45)
         run: npm run check:blueprint-registry-p2-45
+
+      - name: npm audit gate — high severity dependency check (P2-46)
+        run: npm run check:npm-audit-gate-p2-46
 
       - name: Build
         run: |

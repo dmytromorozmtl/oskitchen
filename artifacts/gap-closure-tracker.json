@@ -43,5 +43,6 @@
   "p2-42-dashboard-error-tsx-45-routes": "done",
   "p2-43-public-pages-error-tsx": "done",
   "p2-44-offline-pos-pci-noop-v1-review": "done",
-  "p2-45-blueprint-registry-sentry-done": "done"
+  "p2-45-blueprint-registry-sentry-done": "done",
+  "p2-46-npm-audit-ci-gate": "done"
 }
