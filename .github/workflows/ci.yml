@@ -227,6 +227,9 @@ jobs:
       - name: POS shift open→close E2E — refund void reconcile (P2-50)
         run: npm run check:pos-shift-open-close-p2-50
 
+      - name: Enterprise SSO SAML E2E — Okta redirect assertion dashboard (P2-51)
+        run: npm run check:enterprise-sso-saml-e2e-p2-51
+
       - name: Build
         run: |
           set -o pipefail

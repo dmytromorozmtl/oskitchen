@@ -1,0 +1,28 @@
+{
+  "version": "enterprise-sso-saml-e2e-v1",
+  "policyId": "enterprise-sso-saml-e2e-p2-51-v1",
+  "idpVendor": "OKTA",
+  "flowSteps": [
+    "login_entry",
+    "saml_redirect",
+    "saml_assertion",
+    "dashboard"
+  ],
+  "e2eSpec": "e2e/enterprise-sso-saml-e2e.spec.ts",
+  "authCallbackRoute": "app/auth/callback/route.ts",
+  "ssoLoginModule": "lib/enterprise/workspace-sso-login-initiate.ts",
+  "ssoCallbackModule": "lib/enterprise/workspace-sso-callback-service.ts",
+  "requiredEnv": [
+    "E2E_ENTERPRISE_SSO_SAML",
+    "SSO_STAGING_WORKSPACE_ID",
+    "SSO_STAGING_IDP_VENDOR",
+    "SSO_STAGING_ALLOWED_DOMAIN",
+    "SSO_STAGING_SUPABASE_PROVIDER_REF",
+    "E2E_STAGING_BASE_URL"
+  ],
+  "oktaCredentialsEnv": [
+    "SSO_STAGING_OKTA_USERNAME",
+    "SSO_STAGING_OKTA_PASSWORD"
+  ],
+  "verifiedAt": "2026-06-15T22:00:00.000Z"
+}
