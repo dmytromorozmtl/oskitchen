@@ -2,6 +2,7 @@ import { mapOcrResultToScannedInvoice } from "@/lib/qa/invoice-scanner-ocr-mappe
 import { prisma } from "@/lib/prisma";
 import {
   INVOICE_SCANNER_NOTES_MARKER,
+  type CreateDraftPurchaseOrderFromInvoiceResult,
   type CreateSupplyFromInvoiceResult,
   type InvoiceScanHistoryEntry,
   type ScannedInvoice,
@@ -19,6 +20,7 @@ import { nextPurchaseOrderNumber } from "@/services/purchasing/purchasing-servic
 export {
   INVOICE_SCANNER_NOTES_MARKER,
   confidenceBadgeVariant,
+  type CreateDraftPurchaseOrderFromInvoiceResult,
   type CreateSupplyFromInvoiceResult,
   type InvoiceScanHistoryEntry,
   type ScannedInvoice,
@@ -305,6 +307,116 @@ export async function createSupplyFromInvoice(
     supplierInvoiceId: supplierInvoice.id,
     linesReceived: resolvedLines.length,
     stockUpdated,
+  };
+}
+
+/** Photo-first flow — create DRAFT PO + PENDING invoice from scanned line items (no stock receive). */
+export async function createDraftPurchaseOrderFromInvoice(
+  userId: string,
+  workspaceId: string | null,
+  invoice: ScannedInvoice,
+  options?: {
+    performedById?: string;
+    imageUrl?: string;
+  },
+): Promise<CreateDraftPurchaseOrderFromInvoiceResult> {
+  const performedById = options?.performedById ?? userId;
+  const supplierId = await resolveSupplierId(userId, workspaceId, invoice.supplier);
+
+  const resolvedLines: Array<ScannedInvoiceLineItem & { ingredientId: string }> = [];
+  for (const line of invoice.lineItems) {
+    if (line.quantity <= 0) continue;
+    const ingredientId = await findOrCreateIngredient(userId, workspaceId, line);
+    resolvedLines.push({ ...line, ingredientId });
+  }
+
+  if (resolvedLines.length === 0) {
+    throw new Error("No valid line items for draft PO.");
+  }
+
+  const subtotal = resolvedLines.reduce((sum, line) => sum + line.total, 0);
+  const orderNumber = await nextPurchaseOrderNumber(userId);
+
+  const po = await prisma.purchaseOrder.create({
+    data: {
+      userId,
+      workspaceId,
+      supplierId,
+      orderNumber,
+      status: "DRAFT",
+      sourceType: "MANUAL",
+      subtotal,
+      tax: invoice.tax,
+      shipping: 0,
+      total: invoice.total || subtotal + invoice.tax,
+      createdById: performedById,
+      notes: `${INVOICE_SCANNER_NOTES_MARKER}. Photo-first draft PO from invoice #${invoice.invoiceNumber || orderNumber}. Confidence: ${Math.round(invoice.confidence * 100)}%.`,
+      lines: {
+        create: resolvedLines.map((line) => ({
+          ingredientId: line.ingredientId,
+          description: line.name,
+          quantity: line.quantity,
+          unit: line.unit || "each",
+          unitCost: line.unitPrice,
+          totalCost: line.total,
+          status: "OPEN",
+          notes: INVOICE_SCANNER_NOTES_MARKER,
+        })),
+      },
+    },
+  });
+
+  const supplierInvoice = await prisma.supplierInvoice.create({
+    data: {
+      userId,
+      workspaceId,
+      supplierId,
+      invoiceNumber: invoice.invoiceNumber || `DRAFT-${orderNumber}`,
+      invoiceDate: invoice.date ? new Date(invoice.date) : new Date(),
+      dueDate: invoice.dueDate ? new Date(invoice.dueDate) : null,
+      totalAmount: invoice.total || subtotal + invoice.tax,
+      taxAmount: invoice.tax,
+      status: "PENDING",
+      pdfUrl: options?.imageUrl ?? invoice.imageUrl ?? null,
+      notes: `${INVOICE_SCANNER_NOTES_MARKER}. Draft PO ${orderNumber} — review before submit.`,
+      lineItems: {
+        create: resolvedLines.map((line) => ({
+          description: line.name,
+          quantity: line.quantity,
+          unitPrice: line.unitPrice,
+          totalPrice: line.total,
+          purchaseOrderId: po.id,
+          ingredientId: line.ingredientId,
+        })),
+      },
+    },
+  });
+
+  void auditLog({
+    action: "inventory.invoice_scan_draft_po_created",
+    category: "INVENTORY",
+    source: "AI_COPILOT",
+    actor: { userId: performedById },
+    workspaceId,
+    entity: {
+      type: "PurchaseOrder",
+      id: po.id,
+      label: orderNumber,
+    },
+    metadata: {
+      supplierInvoiceId: supplierInvoice.id,
+      lineCount: resolvedLines.length,
+      confidence: invoice.confidence,
+      status: "DRAFT",
+    },
+  });
+
+  return {
+    purchaseOrderId: po.id,
+    orderNumber,
+    supplierInvoiceId: supplierInvoice.id,
+    lineCount: resolvedLines.length,
+    status: "DRAFT",
   };
 }
 

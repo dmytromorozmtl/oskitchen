@@ -161,6 +161,9 @@ jobs:
       - name: Demo interactive sandbox — test credentials + LIVE integrations (P1-28)
         run: npm run check:demo-interactive-sandbox-p1-28
 
+      - name: Invoice AI photo-first capture (P1-29)
+        run: npm run check:invoice-ai-photo-first-p1-29
+
       - name: Build
         run: |
           set -o pipefail

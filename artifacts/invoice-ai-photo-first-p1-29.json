@@ -1,0 +1,19 @@
+{
+  "policyId": "invoice-ai-photo-first-p1-29-v1",
+  "flowSteps": ["photo-capture", "ai-line-items", "draft-po"],
+  "draftPoStatus": "DRAFT",
+  "routes": [
+    "/dashboard/accounting/invoices",
+    "/dashboard/inventory/invoice-scanner"
+  ],
+  "testIds": {
+    "panel": "invoice-scanner-panel",
+    "camera": "invoice-scan-camera-btn",
+    "confirm": "invoice-scan-confirm-btn"
+  },
+  "serviceFunction": "createDraftPurchaseOrderFromInvoice",
+  "action": "confirmInvoiceScanDraftPoAction",
+  "ciGate": true,
+  "checkScript": "check:invoice-ai-photo-first-p1-29",
+  "verifiedAt": "2026-06-15T00:00:00.000Z"
+}

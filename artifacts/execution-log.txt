@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-29
+Timestamp: 2026-06-15T00:00:00.000Z
+Task: P1-29 — Invoice AI photo-first capture (photo → line items → draft PO)
+Category: AI
+Result: OK — createDraftPurchaseOrderFromInvoice + confirmInvoiceScanDraftPoAction; photo-first scanner on /dashboard/accounting/invoices; Create draft PO confirm button
+Evidence: npm run check:invoice-ai-photo-first-p1-29 (6 passed)
+
+---
 Cycle: gap-closure-28
 Timestamp: 2026-06-14T23:00:00.000Z
 Task: P1-28 — Demo page interactive sandbox with test credentials + LIVE integrations

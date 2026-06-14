@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import {
-  confirmInvoiceScanAction,
+  confirmInvoiceScanDraftPoAction,
   scanInvoiceAction,
 } from "@/actions/inventory/invoice-scanner";
 import { Badge } from "@/components/ui/badge";
@@ -333,7 +333,7 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
           }
         } else if (entry.kind === "confirm" && entry.confirmPayload) {
           const result = await invokeServerAction(() =>
-            confirmInvoiceScanAction(entry.confirmPayload!),
+            confirmInvoiceScanDraftPoAction(entry.confirmPayload!),
           );
           const err = getActionError(result);
           if (err) throw new Error(err);
@@ -388,19 +388,19 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
     });
   }
 
-  function confirmSupply() {
+  function confirmDraftPo() {
     if (!draft) return;
     startTransition(async () => {
       if (!navigator.onLine) {
         await enqueueOfflineInvoiceConfirm(draft);
         await refreshQueueCount();
-        toast.info("Supply saved offline — will create when you reconnect.");
+        toast.info("Draft saved offline — will create when you reconnect.");
         setDraft(null);
         setPreviewUrl(null);
         return;
       }
 
-      const result = await invokeServerAction(() => confirmInvoiceScanAction(draft));
+      const result = await invokeServerAction(() => confirmInvoiceScanDraftPoAction(draft));
       const err = getActionError(result);
       if (err) {
         toast.error(err);
@@ -408,7 +408,7 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
       }
       if (isActionSuccess(result)) {
         toast.success(
-          `Supply created — PO ${result.data.orderNumber}, ${result.data.linesReceived} line(s) received.`,
+          `Draft PO ${result.data.orderNumber} created — ${result.data.lineCount} line(s). Review in Purchasing.`,
         );
         setDraft(null);
         setPreviewUrl(null);
@@ -622,7 +622,7 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
                 type="button"
                 data-testid="invoice-scan-confirm-btn"
                 className="h-12 flex-1 text-base"
-                onClick={confirmSupply}
+                onClick={confirmDraftPo}
                 disabled={pending || draft.lineItems.length === 0}
               >
                 {pending ? (
@@ -630,7 +630,7 @@ export function InvoiceScannerMobile({ history, aiConfigured }: Props) {
                 ) : (
                   <Check className="mr-2 h-4 w-4" />
                 )}
-                Confirm All
+                Create draft PO
               </Button>
             </div>
           </div>

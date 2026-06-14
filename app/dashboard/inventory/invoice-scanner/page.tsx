@@ -21,7 +21,8 @@ export default async function InvoiceScannerPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Invoice Scanner</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Photograph a supplier invoice to create a supply receipt and update inventory stock.
+          Photograph a supplier invoice — AI extracts line items and creates a draft purchase order
+          for review before receiving stock.
         </p>
       </div>
 

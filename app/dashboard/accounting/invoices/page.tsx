@@ -4,16 +4,18 @@ import {
   markPaidInvoiceAction,
   matchInvoiceAction,
 } from "@/actions/accounting/ap";
-import { InvoiceOcrUpload } from "@/components/accounting/invoice-ocr-upload";
-import { OCRUploadButton } from "@/components/dashboard/accounting/ocr-upload";
+import { InvoiceScannerClient } from "@/components/inventory/invoice-scanner-client";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { isCopilotLlmConfigured } from "@/lib/ai/copilot-llm-routing";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import { getAPSummary, listInvoices } from "@/services/accounting/ap-service";
+import { listInvoiceScanHistory } from "@/services/ai/invoice-scanner-service";
 
 export default async function SupplierInvoicesPage() {
   const { dataUserId } = await getTenantActor();
-  const [invoices, suppliers, pos, summary] = await Promise.all([
+  const [invoices, suppliers, pos, summary, scanHistory, aiConfigured] = await Promise.all([
     listInvoices(dataUserId),
     prisma.supplier.findMany({
       where: { userId: dataUserId, active: true },
@@ -27,6 +29,8 @@ export default async function SupplierInvoicesPage() {
       orderBy: { createdAt: "desc" },
     }),
     getAPSummary(dataUserId),
+    listInvoiceScanHistory(dataUserId, 5),
+    Promise.resolve(isCopilotLlmConfigured()),
   ]);
 
   return (
@@ -52,16 +56,15 @@ export default async function SupplierInvoicesPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">AI invoice capture (OCR)</CardTitle>
+          <CardTitle className="text-base">Photo-first invoice capture</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <OCRUploadButton />
-            <InvoiceOcrUpload />
-          </div>
+        <CardContent className="space-y-4">
+          <AiHonestyBanner moduleId="invoice-scanner" compact />
           <p className="text-sm text-muted-foreground">
-            Uses OpenAI Vision when OPENAI_API_KEY is set; auto-matches PO by supplier + amount.
+            Photograph a supplier receipt → AI extracts line items → create a draft purchase order
+            for review. Requires OPENAI_API_KEY on the server.
           </p>
+          <InvoiceScannerClient history={scanHistory} aiConfigured={aiConfigured} />
         </CardContent>
       </Card>
 
