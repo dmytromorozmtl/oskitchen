@@ -1,0 +1,14 @@
+{
+  "policyId": "sentry-alert-firing-p1-40-v1",
+  "chain": ["error", "sentry_capture", "alert_notification"],
+  "alertSlaMs": 300000,
+  "alertSlaMinutes": 5,
+  "triggerRoute": "/api/cron/health-ping?fail=1",
+  "opsSignal": "cron_failure",
+  "alertRulesDoc": "docs/SENTRY_ALERT_RULES.md",
+  "runScript": "run:sentry-alert-firing-p2-36",
+  "ciGate": true,
+  "checkScript": "check:sentry-alert-firing-p1-40",
+  "liveGateEnv": "SENTRY_ALERT_FIRING_LIVE=true",
+  "verifiedAt": "2026-06-15T11:00:00.000Z"
+}

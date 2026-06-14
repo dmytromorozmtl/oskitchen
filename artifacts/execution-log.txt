@@ -1,6 +1,14 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: gap-closure-40
+Timestamp: 2026-06-15T11:00:00.000Z
+Task: P1-40 — Sentry alert firing test (error→Sentry dashboard→alert notification <5min)
+Category: QA/DevOps
+Result: OK — P1-40 policy/audit/artifact; flow step verify_alert_notification; 5-min SLA; CI gate in main workflow
+Evidence: check:sentry-alert-firing-p1-40; artifacts/sentry-alert-firing-p1-40.json; docs/sentry-alert-firing-p1-40.md
+
+---
 Cycle: gap-closure-39
 Timestamp: 2026-06-15T10:00:00.000Z
 Task: P1-39 — SCIM provision UI E2E (IdP→user group→provision→deprovisioning)

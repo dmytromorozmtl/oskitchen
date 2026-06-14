@@ -47,7 +47,7 @@ export const SENTRY_ALERT_FIRING_P2_36_CI_WORKFLOW =
 export const SENTRY_ALERT_FIRING_P2_36_FLOW_STEPS = [
   "trigger_error",
   "verify_sentry_capture",
-  "assert_alert_rules_doc",
+  "verify_alert_notification",
   "verify_production_health",
 ] as const;
 

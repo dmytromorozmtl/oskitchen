@@ -194,6 +194,9 @@ jobs:
       - name: SCIM provision UI E2E — IdP→group→deprovision (P1-39)
         run: npm run check:scim-provision-ui-e2e-p1-39
 
+      - name: Sentry alert firing — error→Sentry→alert <5min (P1-40)
+        run: npm run check:sentry-alert-firing-p1-40
+
       - name: Build
         run: |
           set -o pipefail
