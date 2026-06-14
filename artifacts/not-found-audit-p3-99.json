@@ -1,0 +1,69 @@
+{
+  "version": "not-found-audit-v1",
+  "policyId": "not-found-audit-p3-99-v1",
+  "status": "DONE",
+  "upstreamPolicy": "segment-not-found-p3-79-v1",
+  "verticalCount": 8,
+  "segments": [
+    {
+      "id": "dashboard",
+      "path": "app/dashboard/not-found.tsx",
+      "testId": "segment-not-found-dashboard",
+      "primaryHref": "/dashboard/today",
+      "layoutPath": "app/dashboard/layout.tsx"
+    },
+    {
+      "id": "vendor",
+      "path": "app/vendor/not-found.tsx",
+      "testId": "segment-not-found-vendor",
+      "primaryHref": "/vendor/dashboard",
+      "layoutPath": "app/vendor/layout.tsx"
+    },
+    {
+      "id": "storefront",
+      "path": "app/s/not-found.tsx",
+      "testId": "segment-not-found-storefront",
+      "primaryHref": "/"
+    },
+    {
+      "id": "platform",
+      "path": "app/platform/not-found.tsx",
+      "testId": "segment-not-found-platform",
+      "primaryHref": "/platform/dashboard",
+      "layoutPath": "app/platform/layout.tsx"
+    },
+    {
+      "id": "onboarding",
+      "path": "app/onboarding/not-found.tsx",
+      "testId": "segment-not-found-onboarding",
+      "primaryHref": "/onboarding",
+      "layoutPath": "app/onboarding/layout.tsx"
+    },
+    {
+      "id": "help",
+      "path": "app/help/not-found.tsx",
+      "testId": "segment-not-found-help",
+      "primaryHref": "/help",
+      "layoutPath": "app/help/layout.tsx"
+    },
+    {
+      "id": "q",
+      "path": "app/q/not-found.tsx",
+      "testId": "segment-not-found-q",
+      "primaryHref": "/",
+      "layoutPath": "app/q/layout.tsx"
+    },
+    {
+      "id": "integrations",
+      "path": "app/integrations/not-found.tsx",
+      "testId": "segment-not-found-integrations",
+      "primaryHref": "/integrations",
+      "layoutPath": "app/integrations/layout.tsx"
+    }
+  ],
+  "rootFallback": "app/not-found.tsx",
+  "scenarioCount": 8,
+  "checkScript": "check:not-found-audit-p3-99",
+  "ciGate": true,
+  "verifiedAt": "2026-06-17T10:00:00.000Z"
+}

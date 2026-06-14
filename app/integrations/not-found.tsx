@@ -1,0 +1,26 @@
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+
+export default function IntegrationsNotFound() {
+  return (
+    <div
+      className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center px-4 py-16 text-center"
+      data-testid="segment-not-found-integrations"
+    >
+      <p className="text-sm font-semibold uppercase tracking-wide text-primary">404</p>
+      <h1 className="mt-4 text-2xl font-semibold tracking-tight">Integration page not found</h1>
+      <p className="mt-3 text-muted-foreground">
+        This integration guide does not exist or may have been renamed.
+      </p>
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <Button asChild className="rounded-full">
+          <Link href="/integrations">Integrations hub</Link>
+        </Button>
+        <Button asChild variant="outline" className="rounded-full">
+          <Link href="/dashboard/integrations">Dashboard integrations</Link>
+        </Button>
+      </div>
+    </div>
+  );
+}

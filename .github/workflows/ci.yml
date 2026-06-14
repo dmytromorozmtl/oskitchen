@@ -371,6 +371,9 @@ jobs:
       - name: Native mobile app deferral (P3-98)
         run: npm run check:native-mobile-app-deferral-p3-98
 
+      - name: Not-found audit all verticals (P3-99)
+        run: npm run check:not-found-audit-p3-99
+
       - name: Build
         run: |
           set -o pipefail
