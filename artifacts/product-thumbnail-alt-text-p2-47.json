@@ -1,0 +1,9 @@
+{
+  "version": "product-thumbnail-alt-text-v1",
+  "policyId": "product-thumbnail-alt-text-p2-47-v1",
+  "component": "components/dashboard/product-table-image-cell.tsx",
+  "line": 52,
+  "fix": "alt={productName}",
+  "caller": "components/dashboard/product-manager.tsx",
+  "verifiedAt": "2026-06-15T18:00:00.000Z"
+}

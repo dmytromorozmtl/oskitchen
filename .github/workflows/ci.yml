@@ -215,6 +215,9 @@ jobs:
       - name: npm audit gate — high severity dependency check (P2-46)
         run: npm run check:npm-audit-gate-p2-46
 
+      - name: Product thumbnail alt text — alt={productName} (P2-47)
+        run: npm run check:product-thumbnail-alt-text-p2-47
+
       - name: Build
         run: |
           set -o pipefail
