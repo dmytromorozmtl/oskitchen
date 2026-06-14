@@ -33,6 +33,8 @@ npm run test:ci:public-roadmap:cert
 
 Deploy gate: `.github/workflows/deploy-prod-gate.yml`
 
+**P3-88 extension:** [`docs/public-roadmap-honest-dates-p3-88.md`](./public-roadmap-honest-dates-p3-88.md) — confidence badges, no undated hardware in quarter sections.
+
 ---
 
 ## Status

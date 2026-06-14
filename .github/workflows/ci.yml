@@ -338,6 +338,9 @@ jobs:
       - name: Public changelog updates (P3-87)
         run: npm run check:public-changelog-p3-87
 
+      - name: Public roadmap honest dates (P3-88)
+        run: npm run check:public-roadmap-honest-dates-p3-88
+
       - name: Build
         run: |
           set -o pipefail

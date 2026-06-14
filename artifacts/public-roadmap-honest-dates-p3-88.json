@@ -1,0 +1,15 @@
+{
+  "version": "public-roadmap-honest-dates-v1",
+  "policyId": "public-roadmap-honest-dates-p3-88-v1",
+  "route": "/roadmap",
+  "quarterCount": 3,
+  "confidenceLevels": ["high", "medium", "conditional"],
+  "hardwareInQuarters": false,
+  "contentModule": "lib/marketing/public-roadmap-content.ts",
+  "measurementModule": "lib/marketing/public-roadmap-honest-dates-p3-88-measurement.ts",
+  "checkScript": "check:public-roadmap-honest-dates-p3-88",
+  "ciGate": true,
+  "upstreamP369": "docs/public-roadmap-p3-69.md",
+  "upstreamP125": "lib/marketing/remove-hardware-roadmap-p1-25-policy.ts",
+  "verifiedAt": "2026-06-16T23:00:00.000Z"
+}

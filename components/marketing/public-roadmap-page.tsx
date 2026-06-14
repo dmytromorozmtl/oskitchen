@@ -8,6 +8,7 @@ import { Breadcrumbs } from '@/components/seo/breadcrumbs';
 import { BreadcrumbSchema } from '@/components/seo/schema-org';
 import { PRODUCTION_APP_URL } from '@/lib/auth/public-site-url';
 import {
+  PUBLIC_ROADMAP_CONFIDENCE_LABELS,
   PUBLIC_ROADMAP_HONESTY_DISCLAIMER,
   PUBLIC_ROADMAP_OUT_OF_SCOPE,
   PUBLIC_ROADMAP_PATH,
@@ -31,6 +32,33 @@ function statusBadgeClass(status: PublicRoadmapStatus): string {
     case 'deferred':
       return 'border-muted-foreground/30 bg-muted text-muted-foreground';
   }
+}
+
+function RoadmapItemBadges({
+  status,
+  confidence,
+}: {
+  status: PublicRoadmapStatus;
+  confidence: keyof typeof PUBLIC_ROADMAP_CONFIDENCE_LABELS;
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <span
+        className={cn(
+          'rounded-full border px-2.5 py-0.5 text-xs font-medium',
+          statusBadgeClass(status),
+        )}
+      >
+        {PUBLIC_ROADMAP_STATUS_LABELS[status]}
+      </span>
+      <span
+        className="rounded-full border border-border/80 bg-muted/50 px-2.5 py-0.5 text-xs text-muted-foreground"
+        data-testid="public-roadmap-confidence"
+      >
+        {PUBLIC_ROADMAP_CONFIDENCE_LABELS[confidence]}
+      </span>
+    </div>
+  );
 }
 
 export function PublicRoadmapPage() {
@@ -91,14 +119,7 @@ export function PublicRoadmapPage() {
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <h3 className="font-semibold text-foreground">{item.title}</h3>
-                      <span
-                        className={cn(
-                          'rounded-full border px-2.5 py-0.5 text-xs font-medium',
-                          statusBadgeClass(item.status),
-                        )}
-                      >
-                        {PUBLIC_ROADMAP_STATUS_LABELS[item.status]}
-                      </span>
+                      <RoadmapItemBadges status={item.status} confidence={item.confidence} />
                     </div>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       {item.description}
@@ -125,14 +146,7 @@ export function PublicRoadmapPage() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <h3 className="font-medium text-foreground">{item.title}</h3>
-                  <span
-                    className={cn(
-                      'rounded-full border px-2.5 py-0.5 text-xs font-medium',
-                      statusBadgeClass(item.status),
-                    )}
-                  >
-                    {PUBLIC_ROADMAP_STATUS_LABELS[item.status]}
-                  </span>
+                  <RoadmapItemBadges status={item.status} confidence={item.confidence} />
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
               </li>

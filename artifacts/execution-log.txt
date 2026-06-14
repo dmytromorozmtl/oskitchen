@@ -9944,3 +9944,10 @@ Task: P3-87 — /changelog regular updates LIVE/beta/preview
 Category: Marketing
 Result: OK — public-changelog-updates-p3-87-v1; 3 curated releases (Jun 2026) with LIVE/BETA/PREVIEW badges on /changelog fallback; PublicChangelogEntries component; DB ReleaseNote primary when published; artifact public-changelog-updates-p3-87.json; CI gate check:public-changelog-p3-87
 Evidence: artifacts/public-changelog-updates-p3-87.json, npm run check:public-changelog-p3-87
+
+Cycle: 88
+Timestamp: 2026-06-16T23:00:00.000Z
+Task: P3-88 — /roadmap honest quarter dates, no undated hardware
+Category: Marketing
+Result: OK — public-roadmap-honest-dates-p3-88-v1; confidence badges (high/medium/conditional) on all 19 items; Q2–Q4 2026 labels only; hardware (Stripe Terminal, offline POS) in Out of scope with no calendar dates; banned undated phrases gated; artifact public-roadmap-honest-dates-p3-88.json; CI gate check:public-roadmap-honest-dates-p3-88
+Evidence: artifacts/public-roadmap-honest-dates-p3-88.json, npm run check:public-roadmap-honest-dates-p3-88
