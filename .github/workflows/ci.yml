@@ -335,6 +335,9 @@ jobs:
       - name: Advisory board page (P3-86)
         run: npm run check:advisory-board-page-p3-86
 
+      - name: Public changelog updates (P3-87)
+        run: npm run check:public-changelog-p3-87
+
       - name: Build
         run: |
           set -o pipefail

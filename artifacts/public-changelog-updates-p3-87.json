@@ -1,0 +1,13 @@
+{
+  "version": "public-changelog-updates-v1",
+  "policyId": "public-changelog-updates-p3-87-v1",
+  "route": "/changelog",
+  "releaseCount": 3,
+  "maturityLevels": ["LIVE", "BETA", "PREVIEW"],
+  "contentModule": "lib/marketing/public-changelog-p3-87-content.ts",
+  "component": "components/marketing/public-changelog-entries.tsx",
+  "fallbackWhenDbEmpty": true,
+  "checkScript": "check:public-changelog-p3-87",
+  "ciGate": true,
+  "verifiedAt": "2026-06-16T22:00:00.000Z"
+}

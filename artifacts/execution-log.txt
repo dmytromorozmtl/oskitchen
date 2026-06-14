@@ -9937,3 +9937,10 @@ Task: P3-86 — /advisory-board honest page (real people or remove)
 Category: Marketing
 Result: OK — advisory-board-page-p3-86-v1; recruiting_application_only mode; 0 published members disclosed; no fabricated advisor grid; honesty block + apply form on /advisory-board; forbidden patterns gated; artifact advisory-board-page-p3-86.json; CI gate check:advisory-board-page-p3-86
 Evidence: artifacts/advisory-board-page-p3-86.json, npm run check:advisory-board-page-p3-86
+
+Cycle: 87
+Timestamp: 2026-06-16T22:00:00.000Z
+Task: P3-87 — /changelog regular updates LIVE/beta/preview
+Category: Marketing
+Result: OK — public-changelog-updates-p3-87-v1; 3 curated releases (Jun 2026) with LIVE/BETA/PREVIEW badges on /changelog fallback; PublicChangelogEntries component; DB ReleaseNote primary when published; artifact public-changelog-updates-p3-87.json; CI gate check:public-changelog-p3-87
+Evidence: artifacts/public-changelog-updates-p3-87.json, npm run check:public-changelog-p3-87
