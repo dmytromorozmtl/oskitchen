@@ -1,6 +1,16 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: perf-verification-16
+Timestamp: 2026-06-15T20:00:00.000Z
+Task: Step 14–15 — Service Worker verify + Lighthouse fix
+Category: Performance
+Checked: Step 14 sw.js exists and RegisterServiceWorker wired in app/layout; Lighthouse POS terminal score 64 (LCP 4.8s, SI 14.7s, unused JS 167KiB)
+Fixed: RouteAwareMarketingTags skips GA/Ads/Meta/LinkedIn/cookie banner on /dashboard, /vendor, /kitchen, /platform routes
+Result: OK — commit "perf: Lighthouse score fix"
+Evidence: components/analytics/route-aware-marketing-tags.tsx, app/layout.tsx
+
+---
 Cycle: perf-verification-15
 Timestamp: 2026-06-15T19:00:00.000Z
 Task: Step 13 — batch queries in export-service (final Step 13 cycle)

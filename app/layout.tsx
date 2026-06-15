@@ -2,11 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans, Syne } from "next/font/google";
 
 import { SkipToContent } from "@/components/a11y/skip-to-content";
-import { CookieConsentBanner } from "@/components/analytics/cookie-consent";
-import { GoogleAdsTracking } from "@/components/analytics/google-ads";
-import { GoogleAnalytics } from "@/components/analytics/google-analytics";
-import { LinkedInInsightTag } from "@/components/analytics/linkedin-insight";
-import { MetaPixel } from "@/components/analytics/meta-pixel";
+import { RouteAwareMarketingTags } from "@/components/analytics/route-aware-marketing-tags";
 import { OfflineIndicator } from "@/components/pwa/offline-indicator";
 import { RegisterServiceWorker } from "@/components/pwa/register-service-worker";
 import { Providers } from "@/components/providers/providers";
@@ -104,11 +100,7 @@ export default function RootLayout({
             {children}
           </div>
         </Providers>
-        <GoogleAnalytics />
-        <GoogleAdsTracking />
-        <MetaPixel />
-        <LinkedInInsightTag />
-        <CookieConsentBanner />
+        <RouteAwareMarketingTags />
         <RegisterServiceWorker />
         <OfflineIndicator />
       </body>
