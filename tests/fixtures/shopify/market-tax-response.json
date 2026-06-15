@@ -1,0 +1,20 @@
+{
+  "data": {
+    "market": {
+      "id": "gid://shopify/Market/8947691234567",
+      "name": "United States",
+      "enabled": true,
+      "currencySettings": {
+        "baseCurrency": {
+          "currencyCode": "USD"
+        }
+      },
+      "regions": {
+        "nodes": [
+          { "name": "United States", "code": "US" },
+          { "name": "California", "code": "US-CA" }
+        ]
+      }
+    }
+  }
+}

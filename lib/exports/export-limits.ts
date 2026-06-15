@@ -1,0 +1,1 @@
+export const EXPORT_SYNC_SOFT_ROW_WARNING = 50_000;

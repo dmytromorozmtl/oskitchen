@@ -1,0 +1,187 @@
+"use server";
+
+
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+
+import { commitNotSupportedReason, isCommittableType } from "@/lib/import-center/import-commit";
+import {
+  requireImportCenterJobCancel,
+  requireImportCenterJobCommit,
+  requireImportCenterJobRollback,
+  requireImportCenterUpload,
+} from "@/lib/import-center/require-import-center-actor";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
+import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
+import { logUploadDenied } from "@/services/audit/upload-audit";
+
+import {
+  cancelImportJob,
+  commitImportJob,
+  rollbackImportJob,
+  uploadImportCsv,
+} from "@/services/import-center/import-center-service";
+import type { ImportCommitMode, ImportType } from "@prisma/client";
+
+const IMPORT_TYPE_VALUES = [
+  "PRODUCTS",
+  "CUSTOMERS",
+  "ORDERS",
+  "INGREDIENTS",
+  "RECIPES",
+  "STAFF",
+  "SUPPLIERS",
+  "BRANDS",
+  "LOCATIONS",
+  "NUTRITION_ALLERGENS",
+  "PRODUCT_MAPPINGS",
+  "MENU_ASSIGNMENTS",
+  "PURCHASE_ITEMS",
+] as const;
+
+const COMMIT_MODE_VALUES = ["CREATE_ONLY", "UPDATE_EXISTING", "UPSERT", "SKIP_DUPLICATES"] as const;
+
+const uploadSchema = z.object({
+  type: z.enum(IMPORT_TYPE_VALUES),
+  mode: z.enum(COMMIT_MODE_VALUES).default("CREATE_ONLY"),
+});
+
+export async function uploadImportCsvAction(formData: FormData): Promise<void> {
+  const parsed = uploadSchema.parse({
+    type: formData.get("type"),
+    mode: formData.get("mode") ?? "CREATE_ONLY",
+  });
+  const access = await requireImportCenterUpload(parsed.type as ImportType);
+  if (!access.ok) {
+    throw new Error(access.error);
+  }
+  const { userId, profileId } = access;
+
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) {
+    throw new Error("Please select a CSV file to upload.");
+  }
+  const csvBytes = new Uint8Array(await file.arrayBuffer());
+  const csvValidated = validateImportCsvUpload({
+    bytes: csvBytes,
+    filename: file.name || "upload.csv",
+  });
+  if (!csvValidated.ok) {
+    void logUploadDenied({
+      channel: "import_csv",
+      actorUserId: profileId,
+      workspaceId: null,
+      entity: { type: "ImportJob", id: "upload" },
+      mimeType: "text/csv",
+      sizeBytes: csvBytes.byteLength,
+      reason: csvValidated.error,
+    });
+    throw new Error(csvValidated.error);
+  }
+  const safe = await enforceUploadContentSafety({
+    bytes: csvBytes,
+    mimeType: "text/csv",
+    channel: "import_csv",
+    actorUserId: profileId,
+    entity: { type: "ImportJob", id: "upload" },
+    metadata: { filename: file.name || "upload.csv" },
+  });
+  if (!safe.ok) {
+    throw new Error(safe.error);
+  }
+  const csvText = new TextDecoder("utf-8", { fatal: false }).decode(csvBytes);
+  const outcome = await uploadImportCsv({
+    userId,
+    performedById: profileId,
+    type: parsed.type as ImportType,
+    filename: file.name || "upload.csv",
+    csvText,
+    commitMode: parsed.mode as ImportCommitMode,
+  });
+  if (!outcome.ok) throw new Error(outcome.error);
+  revalidatePath("/dashboard/import-center");
+  revalidatePath("/dashboard/import-center/history");
+  redirect(`/dashboard/import-center/jobs/${outcome.importJobId}`);
+}
+
+const commitSchema = z.object({
+  jobId: z.string().uuid(),
+  includeWarnings: z.boolean().default(false),
+  confirm: z.literal(true),
+});
+
+export async function commitImportJobAction(formData: FormData): Promise<void> {
+  const parsed = commitSchema.parse({
+    jobId: formData.get("jobId"),
+    includeWarnings: formData.get("includeWarnings") === "on",
+    confirm: formData.get("confirm") === "true",
+  });
+  const { userId } = await requireTenantActor();
+  const access = await requireImportCenterJobCommit(userId, parsed.jobId);
+  if (!access.ok) throw new Error(access.error);
+  const { profileId } = access;
+  const result = await commitImportJob({
+    userId,
+    performedById: profileId,
+    jobId: parsed.jobId,
+    includeWarnings: parsed.includeWarnings,
+  });
+  if (!result.ok) throw new Error(result.error);
+  revalidatePath("/dashboard/import-center");
+  revalidatePath(`/dashboard/import-center/jobs/${parsed.jobId}`);
+  revalidatePath("/dashboard/import-center/history");
+}
+
+const rollbackSchema = z.object({
+  jobId: z.string().uuid(),
+  reason: z.string().min(3, "Provide a reason for the rollback.").max(800),
+  confirm: z.literal(true),
+});
+
+export async function rollbackImportJobAction(formData: FormData): Promise<void> {
+  const parsed = rollbackSchema.parse({
+    jobId: formData.get("jobId"),
+    reason: formData.get("reason") ?? "",
+    confirm: formData.get("confirm") === "true",
+  });
+  const { userId } = await requireTenantActor();
+  const access = await requireImportCenterJobRollback(userId, parsed.jobId);
+  if (!access.ok) throw new Error(access.error);
+  const { profileId } = access;
+  const result = await rollbackImportJob({
+    userId,
+    performedById: profileId,
+    jobId: parsed.jobId,
+    reason: parsed.reason,
+  });
+  if (!result.ok) throw new Error(result.error);
+  revalidatePath(`/dashboard/import-center/jobs/${parsed.jobId}`);
+  revalidatePath("/dashboard/import-center");
+  revalidatePath("/dashboard/import-center/history");
+}
+
+const cancelSchema = z.object({
+  jobId: z.string().uuid(),
+  reason: z.string().max(400).optional(),
+});
+
+export async function cancelImportJobAction(formData: FormData): Promise<void> {
+  const parsed = cancelSchema.parse({
+    jobId: formData.get("jobId"),
+    reason: (formData.get("reason") as string | null) ?? undefined,
+  });
+  const { userId } = await requireTenantActor();
+  const access = await requireImportCenterJobCancel(userId, parsed.jobId);
+  if (!access.ok) throw new Error(access.error);
+  const result = await cancelImportJob(userId, parsed.jobId, parsed.reason ?? null);
+  if (!result.ok) throw new Error(result.error);
+  revalidatePath("/dashboard/import-center");
+  revalidatePath(`/dashboard/import-center/jobs/${parsed.jobId}`);
+}
+
+export async function assertCommitable(type: ImportType): Promise<{ ok: boolean; reason?: string }> {
+  if (isCommittableType(type)) return { ok: true };
+  return { ok: false, reason: commitNotSupportedReason(type) };
+}

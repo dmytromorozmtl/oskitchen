@@ -1,0 +1,56 @@
+/**
+ * Pilot-critical dashboard routes for authenticated RSC smoke (fullreport6june §1.1).
+ * Unauthenticated probe expects 307; authed probe expects 200 document + clean RSC flight.
+ */
+export const AUTHED_DASHBOARD_RSC_SMOKE_POLICY_ID = "authed-dashboard-rsc-smoke-v1" as const;
+
+export const AUTHED_DASHBOARD_RSC_SMOKE_ROUTES = [
+  "/dashboard/today",
+  "/dashboard/menus",
+  "/dashboard/marketplace",
+  "/dashboard/marketplace/catalog",
+  "/dashboard/marketplace/orders",
+  "/dashboard/marketplace/wishlist",
+  "/dashboard/marketplace/compare",
+  "/dashboard/marketplace/vendors",
+  "/dashboard/marketplace/analytics",
+  "/dashboard/pos/terminal",
+  "/dashboard/pos/tablet",
+  "/dashboard/pos/mobile",
+  "/dashboard/pos/handheld",
+  "/dashboard/pos/cash",
+  "/dashboard/kitchen",
+  "/dashboard/kitchen/production",
+  "/dashboard/kitchen/expo",
+  "/dashboard/kitchen/manager",
+  "/dashboard/quick-start",
+  "/dashboard/qr-codes",
+  "/dashboard/today/profit",
+  "/dashboard/ai/co-pilot",
+  "/dashboard/enterprise/multi-location",
+  "/dashboard/enterprise/multi-brand",
+  "/dashboard/enterprise/commissary",
+  "/dashboard/enterprise/reports",
+  "/dashboard/catering",
+  "/dashboard/meal-prep",
+  "/dashboard/loyalty/program-builder",
+  "/dashboard/loyalty/gift-cards",
+  "/dashboard/developers",
+  "/dashboard/inventory/invoice-scanner",
+  "/dashboard/finance/bank-import",
+  "/dashboard/roles/owner",
+  "/dashboard/roles/manager",
+  "/dashboard/roles/chef",
+  "/dashboard/roles/cashier",
+  "/dashboard/roles/driver",
+  "/dashboard/command-center",
+  "/dashboard/analytics/suite",
+  "/dashboard/analytics/digital-twin",
+  "/dashboard/analytics/food-cost",
+  "/dashboard/analytics/benchmarks",
+  "/dashboard/inventory/purchasing-ai",
+  "/dashboard/kitchen/cameras",
+  "/dashboard/menu/universal",
+] as const;
+
+export type AuthedDashboardRscSmokeRoute = (typeof AUTHED_DASHBOARD_RSC_SMOKE_ROUTES)[number];

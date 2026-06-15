@@ -1,0 +1,39 @@
+{
+  "name": "OS Kitchen — Your Restaurant. One Screen.",
+  "short_name": "OS Kitchen",
+  "description": "One screen for orders, kitchen, delivery, and staff. No extra hardware.",
+  "start_url": "/dashboard/today",
+  "display": "standalone",
+  "shortcuts": [
+    {
+      "name": "Scan Invoice",
+      "short_name": "Scan",
+      "description": "Photograph supplier invoices to update inventory stock",
+      "url": "/dashboard/inventory/invoice-scanner",
+      "icons": [{ "src": "/icons/invoice-scanner.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Handheld Waiter",
+      "short_name": "Waiter",
+      "description": "Tableside ordering with offline cash checkout",
+      "url": "/dashboard/pos/handheld",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF5F1F",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

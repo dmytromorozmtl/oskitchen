@@ -1,0 +1,24 @@
+{
+  "id": 5001001,
+  "name": "#5001",
+  "email": "shopify-golden@example.invalid",
+  "phone": "+15550195001",
+  "currency": "USD",
+  "subtotal_price": "30.00",
+  "total_tax": "2.40",
+  "total_price": "32.40",
+  "fulfillment_status": null,
+  "customer": {
+    "first_name": "Shopify",
+    "last_name": "Guest"
+  },
+  "line_items": [
+    {
+      "id": 90001,
+      "title": "Test Salad",
+      "quantity": 1,
+      "sku": "GOLDEN-SHOPIFY-1",
+      "price": "30.00"
+    }
+  ]
+}

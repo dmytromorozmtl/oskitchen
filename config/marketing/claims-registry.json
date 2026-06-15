@@ -1,0 +1,66 @@
+[
+  {
+    "claim": "OS Kitchen unifies storefront, POS, production, packing, and routes in one platform.",
+    "page": "/",
+    "evidenceType": "codebase-surface-audit",
+    "evidenceSource": "docs/kitchenos-p0-p3-readiness-audit.md",
+    "dateVerified": "2026-05-25",
+    "status": "verified"
+  },
+  {
+    "claim": "Starter, Pro, Team, and Enterprise pricing tiers are publicly visible.",
+    "page": "/pricing",
+    "evidenceType": "product-page",
+    "evidenceSource": "app/pricing/page.tsx",
+    "dateVerified": "2026-05-25",
+    "status": "verified"
+  },
+  {
+    "claim": "Interactive OS Kitchen demo is available without API keys.",
+    "page": "/demo",
+    "evidenceType": "product-page",
+    "evidenceSource": "app/demo/page.tsx",
+    "dateVerified": "2026-05-25",
+    "status": "verified"
+  },
+  {
+    "claim": "OS Kitchen provides signed revenue export JSON for lender conversations — not a credit decision.",
+    "page": "/dashboard/analytics/capital",
+    "evidenceType": "product-page",
+    "evidenceSource": "services/commercial/revenue-attestation-service.ts + docs/commercial/capital-partner-disclosures.md",
+    "dateVerified": "2026-05-31",
+    "status": "verified"
+  },
+  {
+    "claim": "OS Kitchen provides third-party restaurant financing resources — not loans or credit decisions.",
+    "page": "/resources/restaurant-financing",
+    "evidenceType": "product-page",
+    "evidenceSource": "app/resources/restaurant-financing/page.tsx + docs/commercial/capital-partner-disclosures.md",
+    "dateVerified": "2026-05-31",
+    "status": "verified"
+  },
+  {
+    "claim": "OS Kitchen reduces food cost by a measurable percentage.",
+    "page": "/pricing",
+    "evidenceType": "illustrative-roi",
+    "evidenceSource": "internal estimate only — not a verified customer case study; do not use as direct sales proof",
+    "dateVerified": "2026-05-27",
+    "status": "illustrative"
+  },
+  {
+    "claim": "OS Kitchen saves operators hours every week.",
+    "page": "/solutions",
+    "evidenceType": "internal-estimate",
+    "evidenceSource": "illustrative ROI calculator assumptions",
+    "dateVerified": "2026-05-25",
+    "status": "illustrative"
+  },
+  {
+    "claim": "White-label storefront and custom-domain workflow are fully production-ready.",
+    "page": "/partners",
+    "evidenceType": "capability-matrix",
+    "evidenceSource": "config/product/module-readiness.json",
+    "dateVerified": "2026-05-25",
+    "status": "deprecated"
+  }
+]

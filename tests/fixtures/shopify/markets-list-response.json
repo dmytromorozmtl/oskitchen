@@ -1,0 +1,48 @@
+{
+  "data": {
+    "markets": {
+      "nodes": [
+        {
+          "id": "gid://shopify/Market/8947691234567",
+          "name": "United States",
+          "handle": "us",
+          "enabled": true,
+          "primary": true,
+          "currencySettings": {
+            "baseCurrency": {
+              "currencyCode": "USD"
+            }
+          },
+          "regions": {
+            "nodes": [
+              {
+                "name": "United States",
+                "code": "US"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gid://shopify/Market/8947691234568",
+          "name": "Canada",
+          "handle": "ca",
+          "enabled": true,
+          "primary": false,
+          "currencySettings": {
+            "baseCurrency": {
+              "currencyCode": "CAD"
+            }
+          },
+          "regions": {
+            "nodes": [
+              {
+                "name": "Canada",
+                "code": "CA"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

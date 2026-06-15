@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-31T22:00:00.000Z",
+  "defaultCurrency": "USD",
+  "defaultRevenueShareBps": 1500,
+  "defaultMonthlyPlatformFeeCentsPerInstall": 500,
+  "defaultApiRequestFeeCentsPerCall": 1,
+  "defaultWebhookDeliveryFeeCentsPerDelivery": 2,
+  "installActivationFeeCents": 0,
+  "disclosure": "Partner billing accrues gross platform meter revenue; publisher statements pay revenueShareBps of gross via Stripe Connect when MARKETPLACE_PARTNER_STRIPE_CONNECT=1. Dry-run payouts with PARTNER_STRIPE_PAYOUT_DRY_RUN=1.",
+  "apps": [
+    {
+      "clientId": "sandbox-opsbridge-connector",
+      "publisherKey": "kitchenos-certified-si-opsbridge",
+      "revenueShareBps": 2000,
+      "monthlyPlatformFeeCentsPerInstall": 500,
+      "apiRequestFeeCentsPerCall": 1,
+      "webhookDeliveryFeeCentsPerDelivery": 2
+    },
+    {
+      "clientId": "sandbox-growthkitchen-sync",
+      "publisherKey": "kitchenos-certified-si-growthkitchen",
+      "revenueShareBps": 1800,
+      "monthlyPlatformFeeCentsPerInstall": 500,
+      "apiRequestFeeCentsPerCall": 1,
+      "webhookDeliveryFeeCentsPerDelivery": 2
+    }
+  ]
+}
