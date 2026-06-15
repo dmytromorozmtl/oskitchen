@@ -44,14 +44,16 @@ export default async function AssignmentsPage() {
     Map<string, { progressPercent: number; status: string }>
   >();
   for (const row of allProgress) {
+    if (!row.assignmentId) continue;
+    const assignmentId = row.assignmentId;
     const map =
-      progressByAssignment.get(row.assignmentId) ??
+      progressByAssignment.get(assignmentId) ??
       new Map<string, { progressPercent: number; status: string }>();
     map.set(row.lessonId, {
       progressPercent: row.progressPercent,
       status: row.status,
     });
-    progressByAssignment.set(row.assignmentId, map);
+    progressByAssignment.set(assignmentId, map);
   }
 
   const lessonsByAssignment = assignments.map((a) => ({

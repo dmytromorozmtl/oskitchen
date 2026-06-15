@@ -11,6 +11,7 @@ export default function KitchenTabletAliasPage() {
   );
 }
 
-async function KitchenTabletAliasRedirectAsync() {
+async function KitchenTabletAliasRedirectAsync(): Promise<null> {
   redirect("/dashboard/kitchen/fullscreen");
+  return null;
 }

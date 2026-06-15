@@ -899,12 +899,6 @@ export async function productionStationListWhereForOwner(
   return resolveOwnerScopedWhere(ownerUserId) as Prisma.ProductionStationWhereInput;
 }
 
-export async function lifecycleEventListWhereForOwner(
-  ownerUserId: string,
-): Promise<Prisma.LifecycleEventWhereInput> {
-  return resolveOwnerScopedWhere(ownerUserId) as Prisma.LifecycleEventWhereInput;
-}
-
 export async function storefrontInventoryItemListWhereForOwner(
   ownerUserId: string,
 ): Promise<Prisma.StorefrontInventoryItemWhereInput> {

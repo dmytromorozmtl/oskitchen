@@ -10,6 +10,7 @@ export default function KitchenFullscreenRedirectPage() {
   );
 }
 
-async function KitchenFullscreenRedirectAsync() {
+async function KitchenFullscreenRedirectAsync(): Promise<null> {
   redirect("/dashboard/kitchen?fullscreen=1");
+  return null;
 }

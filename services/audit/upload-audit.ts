@@ -11,6 +11,7 @@ export type UploadAuditChannel =
   | "kitchen_business_logo"
   | "profile_avatar"
   | "invoice_ocr_image"
+  | "inventory_photo_count"
   | "import_csv"
   | "storefront_form_attachment";
 

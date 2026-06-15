@@ -6,7 +6,20 @@ import { prisma } from "@/lib/prisma";
 
 type Scope = { userId: string };
 
-function mapQuoteToBeoInput(quote: NonNullable<Awaited<ReturnType<typeof loadQuote>>): BeoQuoteInput {
+async function loadQuote(scope: Scope, quoteId: string) {
+  return prisma.cateringQuote.findFirst({
+    where: await cateringQuoteByIdWhereForOwner(scope.userId, quoteId),
+    include: {
+      items: { orderBy: { sortOrder: "asc" } },
+      brand: { select: { name: true } },
+      location: { select: { name: true } },
+    },
+  });
+}
+
+type LoadedQuote = NonNullable<Awaited<ReturnType<typeof loadQuote>>>;
+
+function mapQuoteToBeoInput(quote: LoadedQuote): BeoQuoteInput {
   return {
     quoteNumber: quote.quoteNumber,
     eventName: quote.eventName,
@@ -41,17 +54,6 @@ function mapQuoteToBeoInput(quote: NonNullable<Awaited<ReturnType<typeof loadQuo
     locationName: quote.location?.name ?? null,
     brandName: quote.brand?.name ?? null,
   };
-}
-
-async function loadQuote(scope: Scope, quoteId: string) {
-  return prisma.cateringQuote.findFirst({
-    where: await cateringQuoteByIdWhereForOwner(scope.userId, quoteId),
-    include: {
-      items: { orderBy: { sortOrder: "asc" } },
-      brand: { select: { name: true } },
-      location: { select: { name: true } },
-    },
-  });
 }
 
 export async function buildCateringBeoForQuote(
