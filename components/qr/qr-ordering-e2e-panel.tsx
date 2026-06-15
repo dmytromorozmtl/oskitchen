@@ -25,7 +25,7 @@ export function QrOrderingE2EPanel() {
         >
           <p className="font-medium">Scan + checkout</p>
           <ul className="mt-2 list-inside list-disc text-muted-foreground">
-            <li>Deep link `/q/{slug}/{table}`</li>
+            <li>{"Deep link `/q/{slug}/{table}`"}</li>
             <li>Guest menu (`qr-ordering-page`)</li>
             <li>POST `/api/public/qr-order`</li>
           </ul>
