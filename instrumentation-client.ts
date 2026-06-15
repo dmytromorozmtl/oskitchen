@@ -4,6 +4,16 @@ import { resolveClientTracesSampleRate, resolveSentryRelease } from "@/lib/obser
 
 const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN?.trim();
 if (dsn) {
+  const browserIntegrations =
+    typeof window !== "undefined"
+      ? [
+          Sentry.replayIntegration(),
+          Sentry.feedbackIntegration({
+            colorScheme: "system",
+          }),
+        ]
+      : [];
+
   Sentry.init({
     dsn,
     tracesSampleRate: resolveClientTracesSampleRate(),
@@ -11,12 +21,7 @@ if (dsn) {
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
     enableLogs: true,
-    integrations: [
-      Sentry.replayIntegration(),
-      Sentry.feedbackIntegration({
-        colorScheme: "system",
-      }),
-    ],
+    integrations: browserIntegrations,
   });
 }
 
