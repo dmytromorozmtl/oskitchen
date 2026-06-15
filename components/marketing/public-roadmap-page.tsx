@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { ArrowRight, Calendar, Map } from 'lucide-react';
 
 import { MarketingButton } from '@/components/marketing/button';
@@ -160,16 +159,12 @@ export function PublicRoadmapPage() {
             Design partners get weekly product feedback and direct influence on Q3 priorities.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <MarketingButton asChild>
-              <Link href={publicRoadmapCtaHref('/book-demo')}>
-                Book a demo
-                <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-              </Link>
+            <MarketingButton href={publicRoadmapCtaHref("/book-demo")}>
+              Book a demo
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </MarketingButton>
-            <MarketingButton variant="outline" asChild>
-              <Link href={publicRoadmapCtaHref('/blog/why-we-built-os-kitchen')}>
-                Read founder story
-              </Link>
+            <MarketingButton variant="secondary" href={publicRoadmapCtaHref("/blog/why-we-built-os-kitchen")}>
+              Read founder story
             </MarketingButton>
           </div>
         </div>
