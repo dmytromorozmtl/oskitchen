@@ -70,7 +70,7 @@ type Props = {
 
 /** Blueprint P1-29 — interactive sandbox workspace with clickable Integration Health. */
 export function DemoInteractiveSandboxWorkspace({ className }: Props) {
-  const [activeStop, setActiveStop] = useState(DEMO_PAGE_P1_29_DEFAULT_STOP_ID);
+  const [activeStop, setActiveStop] = useState<string>(DEMO_PAGE_P1_29_DEFAULT_STOP_ID);
   const [selectedChannelId, setSelectedChannelId] = useState<string>(
     DEMO_PAGE_P1_29_DEFAULT_CHANNEL_ID,
   );
