@@ -1,6 +1,16 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: perf-verification-17
+Timestamp: 2026-06-15T20:15:00.000Z
+Task: Step 15 — Lighthouse fix (PostHog skip on operational routes)
+Category: Performance
+Checked: Step 15 still matches — prod Lighthouse POS terminal score 50–64 (target ≥80); marketing-tags fix not yet deployed
+Fixed: isOperationalSurface shared helper; PostHogProvider + WebVitalsReporter skip on /dashboard, /vendor, /kitchen, /platform
+Result: OK — commit "perf: skip PostHog on operational routes"
+Evidence: lib/navigation/operational-surface.ts, components/analytics/posthog-provider.tsx, web-vitals-reporter.tsx
+
+---
 Cycle: perf-verification-16
 Timestamp: 2026-06-15T20:00:00.000Z
 Task: Step 14–15 — Service Worker verify + Lighthouse fix

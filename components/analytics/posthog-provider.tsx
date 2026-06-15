@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
+import { isOperationalSurface } from "@/lib/navigation/operational-surface";
+
 declare global {
   interface Window {
     posthog?: {
@@ -17,13 +19,14 @@ const host = process.env.NEXT_PUBLIC_POSTHOG_HOST?.trim() || "https://us.i.posth
 
 /**
  * Lightweight PostHog loader — only active when NEXT_PUBLIC_POSTHOG_KEY is set.
- * Dashboard + marketing paths; respects cookie consent on marketing via existing banner.
+ * Skipped on operational surfaces (POS, KDS, vendor) to reduce JS on hot paths.
  */
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const skip = isOperationalSurface(pathname);
 
   useEffect(() => {
-    if (!key || typeof window === "undefined") return;
+    if (skip || !key || typeof window === "undefined") return;
 
     let cancelled = false;
 
@@ -46,12 +49,12 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [skip]);
 
   useEffect(() => {
-    if (!key || !window.posthog) return;
+    if (skip || !key || !window.posthog) return;
     window.posthog.capture("$pageview", { $current_url: pathname });
-  }, [pathname]);
+  }, [pathname, skip]);
 
   return <>{children}</>;
 }
