@@ -133,6 +133,7 @@ function stampStorefrontCdnTags(res: NextResponse, pathname: string, marketId?: 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  // Deep link preserved on preview redirect (?redirect=…) via previewRouteRedirectUrl.
   const previewRouteBlock = enforcePreviewRouteGuard(request);
   if (previewRouteBlock) return previewRouteBlock;
 
