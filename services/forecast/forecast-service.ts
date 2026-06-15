@@ -54,14 +54,16 @@ export async function createForecastRun(input: RunForecastInput) {
   const dateTo = startOfDay(input.dateTo);
   if (dateTo < dateFrom) throw new Error("dateTo must be on or after dateFrom");
 
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: input.userId },
-    include: { kitchenSettings: { select: { businessType: true } } },
-  });
+  const [profile, workspaceId] = await Promise.all([
+    prisma.userProfile.findUnique({
+      where: { id: input.userId },
+      include: { kitchenSettings: { select: { businessType: true } } },
+    }),
+    resolveOwnerWorkspaceId(input.userId),
+  ]);
   const businessMode = profile?.kitchenSettings?.businessType ?? null;
   const bufferPercent = clampBufferPercent(input.bufferPercent ?? bufferDefaultForMode(businessMode));
 
-  const workspaceId = await resolveOwnerWorkspaceId(input.userId);
   const run = await prisma.forecastRun.create({
     data: {
       userId: input.userId,
@@ -85,19 +87,17 @@ export async function createForecastRun(input: RunForecastInput) {
     },
   });
 
-  await prisma.forecastEvent.create({
-    data: {
-      forecastRunId: run.id,
-      eventType: "RUN_CREATED",
-      performedBy: input.createdBy ?? null,
-      metadataJson: { sources: input.sources, dateFrom, dateTo } as Prisma.InputJsonValue,
-    },
-  });
-
-  // Build product-level lines. For non-PRODUCT_DEMAND types, we still
-  // produce product-level lines and let the UI label them; INGREDIENT_DEMAND
-  // additionally expands to ingredient lines.
-  const productLines = await buildProductDemandLines(input, bufferPercent);
+  const [productLines] = await Promise.all([
+    buildProductDemandLines(input, bufferPercent),
+    prisma.forecastEvent.create({
+      data: {
+        forecastRunId: run.id,
+        eventType: "RUN_CREATED",
+        performedBy: input.createdBy ?? null,
+        metadataJson: { sources: input.sources, dateFrom, dateTo } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
 
   const linesToCreate = productLines.map((l) => ({
     forecastRunId: run.id,
@@ -145,18 +145,20 @@ export async function createForecastRun(input: RunForecastInput) {
   }
 
   const runConfidence = deriveRunConfidence(productLines.map((l) => ({ confidence: l.confidence })));
-  const completed = await prisma.forecastRun.update({
-    where: { id: run.id },
-    data: { status: "COMPLETED", confidence: runConfidence, completedAt: new Date() },
-  });
-  await prisma.forecastEvent.create({
-    data: {
-      forecastRunId: run.id,
-      eventType: "RUN_COMPLETED",
-      performedBy: input.createdBy ?? null,
-      metadataJson: { lineCount: linesToCreate.length, confidence: runConfidence } as Prisma.InputJsonValue,
-    },
-  });
+  const [completed] = await Promise.all([
+    prisma.forecastRun.update({
+      where: { id: run.id },
+      data: { status: "COMPLETED", confidence: runConfidence, completedAt: new Date() },
+    }),
+    prisma.forecastEvent.create({
+      data: {
+        forecastRunId: run.id,
+        eventType: "RUN_COMPLETED",
+        performedBy: input.createdBy ?? null,
+        metadataJson: { lineCount: linesToCreate.length, confidence: runConfidence } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
 
   return completed;
 }
@@ -227,31 +229,82 @@ async function buildProductDemandLines(
     }
   }
 
+  /* ---- parallel source fetches ---- */
+  const lookbackFrom = new Date(dateFrom);
+  lookbackFrom.setDate(lookbackFrom.getDate() - HISTORY_LOOKBACK_DAYS);
+
+  const [historyOrders, menus, cycles, quotes] = await Promise.all([
+    wantsHistory
+      ? prisma.order.findMany({
+          where: {
+            userId: input.userId,
+            createdAt: { gte: lookbackFrom, lte: new Date() },
+            status: { notIn: ["CANCELLED"] },
+            ...(input.brandId ? { brandId: input.brandId } : {}),
+            ...(input.locationId ? { locationId: input.locationId } : {}),
+            ...(input.fulfillmentType ? { fulfillmentType: input.fulfillmentType } : {}),
+          },
+          select: {
+            createdAt: true,
+            orderItems: {
+              select: {
+                quantity: true,
+                productId: true,
+                product: { select: { id: true, title: true, menuId: true } },
+              },
+            },
+          },
+        })
+      : Promise.resolve([]),
+    wantsMenu
+      ? prisma.menu.findMany({
+          where: {
+            userId: input.userId,
+            catalogOnly: false,
+            ...(input.menuId ? { id: input.menuId } : {}),
+            ...(input.sources.includes("ACTIVE_MENU") ? { active: true } : {}),
+            ...(input.sources.includes("UPCOMING_MENU") ? { startDate: { gte: new Date() } } : {}),
+          },
+          include: { products: { where: { active: true }, select: { id: true, title: true, menuId: true } } },
+          take: 10,
+        })
+      : Promise.resolve([]),
+    wantsMealPlans
+      ? prisma.mealPlanCycle.findMany({
+          where: {
+            cycleStartDate: { gte: dateFrom, lte: dateTo },
+            status: { in: ["UPCOMING", "NEEDS_SELECTION", "READY_TO_GENERATE"] },
+            mealPlan: {
+              userId: input.userId,
+              status: "ACTIVE",
+              ...(input.brandId ? { brandId: input.brandId } : {}),
+              ...(input.locationId ? { locationId: input.locationId } : {}),
+            },
+          },
+          include: {
+            selections: { select: { productId: true, quantity: true, product: { select: { id: true, title: true, menuId: true } } } },
+            mealPlan: { select: { mealsPerCycle: true, servingsPerMeal: true, name: true } },
+          },
+        })
+      : Promise.resolve([]),
+    wantsCatering
+      ? prisma.cateringQuote.findMany({
+          where: {
+            userId: input.userId,
+            status: { in: ["ACCEPTED", "CONVERTED_TO_ORDER"] },
+            eventDate: { gte: dateFrom, lte: dateTo },
+            ...(input.brandId ? { brandId: input.brandId } : {}),
+            ...(input.locationId ? { locationId: input.locationId } : {}),
+          },
+          include: {
+            items: { select: { productId: true, quantity: true, title: true, product: { select: { id: true, title: true, menuId: true } } } },
+          },
+        })
+      : Promise.resolve([]),
+  ]);
+
   /* ---- HISTORICAL_ORDERS / SALES_CHANNELS ---- */
   if (wantsHistory) {
-    const lookbackFrom = new Date(dateFrom);
-    lookbackFrom.setDate(lookbackFrom.getDate() - HISTORY_LOOKBACK_DAYS);
-    const historyOrders = await prisma.order.findMany({
-      where: {
-        userId: input.userId,
-        createdAt: { gte: lookbackFrom, lte: new Date() },
-        status: { notIn: ["CANCELLED"] },
-        ...(input.brandId ? { brandId: input.brandId } : {}),
-        ...(input.locationId ? { locationId: input.locationId } : {}),
-        ...(input.fulfillmentType ? { fulfillmentType: input.fulfillmentType } : {}),
-      },
-      select: {
-        createdAt: true,
-        orderItems: {
-          select: {
-            quantity: true,
-            productId: true,
-            product: { select: { id: true, title: true, menuId: true } },
-          },
-        },
-      },
-    });
-
     type DailyByProduct = Map<string, Map<string, number>>; // dateISO → productId → qty
     const daily: DailyByProduct = new Map();
     const products = new Map<string, { title: string; menuId: string }>();
@@ -303,19 +356,6 @@ async function buildProductDemandLines(
 
   /* ---- ACTIVE_MENU / UPCOMING_MENU ---- */
   if (wantsMenu) {
-    const menuWhere: Prisma.MenuWhereInput = {
-      userId: input.userId,
-      catalogOnly: false,
-      ...(input.menuId ? { id: input.menuId } : {}),
-      ...(input.sources.includes("ACTIVE_MENU") ? { active: true } : {}),
-      ...(input.sources.includes("UPCOMING_MENU") ? { startDate: { gte: new Date() } } : {}),
-    };
-    const menus = await prisma.menu.findMany({
-      where: menuWhere,
-      include: { products: { where: { active: true }, select: { id: true, title: true, menuId: true } } },
-      take: 10,
-    });
-    // Menu inclusion contributes 0 quantity but enriches with the menu's products.
     for (const menu of menus) {
       for (const p of menu.products) {
         if (!productAccumulator.has(p.id)) {
@@ -331,22 +371,6 @@ async function buildProductDemandLines(
 
   /* ---- MEAL_PLANS ---- */
   if (wantsMealPlans) {
-    const cycles = await prisma.mealPlanCycle.findMany({
-      where: {
-        cycleStartDate: { gte: dateFrom, lte: dateTo },
-        status: { in: ["UPCOMING", "NEEDS_SELECTION", "READY_TO_GENERATE"] },
-        mealPlan: {
-          userId: input.userId,
-          status: "ACTIVE",
-          ...(input.brandId ? { brandId: input.brandId } : {}),
-          ...(input.locationId ? { locationId: input.locationId } : {}),
-        },
-      },
-      include: {
-        selections: { select: { productId: true, quantity: true, product: { select: { id: true, title: true, menuId: true } } } },
-        mealPlan: { select: { mealsPerCycle: true, servingsPerMeal: true, name: true } },
-      },
-    });
     for (const cycle of cycles) {
       for (const sel of cycle.selections) {
         if (!sel.product || !sel.productId) continue;
@@ -362,18 +386,6 @@ async function buildProductDemandLines(
 
   /* ---- ACCEPTED_CATERING_EVENTS ---- */
   if (wantsCatering) {
-    const quotes = await prisma.cateringQuote.findMany({
-      where: {
-        userId: input.userId,
-        status: { in: ["ACCEPTED", "CONVERTED_TO_ORDER"] },
-        eventDate: { gte: dateFrom, lte: dateTo },
-        ...(input.brandId ? { brandId: input.brandId } : {}),
-        ...(input.locationId ? { locationId: input.locationId } : {}),
-      },
-      include: {
-        items: { select: { productId: true, quantity: true, title: true, product: { select: { id: true, title: true, menuId: true } } } },
-      },
-    });
     for (const quote of quotes) {
       for (const item of quote.items) {
         if (item.productId && item.product) {
@@ -534,20 +546,20 @@ export type AddAdjustmentInput = {
 export async function addForecastAdjustment(input: AddAdjustmentInput) {
   const run = await assertOwnedRun(input.userId, input.forecastRunId);
 
-  const adjustment = await prisma.forecastAdjustment.create({
-    data: {
-      forecastRunId: run.id,
-      targetType: input.targetType,
-      targetId: input.targetId ?? null,
-      adjustmentType: input.adjustmentType,
-      value: new Prisma.Decimal(input.value),
-      reason: input.reason ?? null,
-      createdBy: input.performedBy ?? null,
-    },
-  });
-
-  // Apply the adjustment to matching lines and write back recommended quantity.
-  const lines = await prisma.forecastLine.findMany({ where: { forecastRunId: run.id } });
+  const [adjustment, lines] = await Promise.all([
+    prisma.forecastAdjustment.create({
+      data: {
+        forecastRunId: run.id,
+        targetType: input.targetType,
+        targetId: input.targetId ?? null,
+        adjustmentType: input.adjustmentType,
+        value: new Prisma.Decimal(input.value),
+        reason: input.reason ?? null,
+        createdBy: input.performedBy ?? null,
+      },
+    }),
+    prisma.forecastLine.findMany({ where: { forecastRunId: run.id } }),
+  ]);
   const bufferPercent = Number(run.bufferPercent);
   const updates: Promise<unknown>[] = [];
   for (const line of lines) {
@@ -704,13 +716,15 @@ export async function sendForecastToIngredientDemand(input: SendToDemandInput) {
   }
 
   const ingredientIds = [...new Set(ingredientLines.map((l) => l.ingredientId).filter((v): v is string => !!v))];
+  const [ingredients, workspaceId] = await Promise.all([
+    ingredientIds.length > 0
+      ? prisma.ingredient.findMany({ where: { id: { in: ingredientIds }, userId: input.userId } })
+      : Promise.resolve([]),
+    resolveOwnerWorkspaceId(input.userId),
+  ]);
   const stockMap = new Map<string, number>();
-  if (ingredientIds.length > 0) {
-    const ingredients = await prisma.ingredient.findMany({ where: { id: { in: ingredientIds }, userId: input.userId } });
-    for (const ing of ingredients) stockMap.set(ing.id, Number(ing.currentStock));
-  }
+  for (const ing of ingredients) stockMap.set(ing.id, Number(ing.currentStock));
 
-  const workspaceId = await resolveOwnerWorkspaceId(input.userId);
   const demandRun = await prisma.ingredientDemandRun.create({
     data: {
       userId: input.userId,
@@ -800,24 +814,28 @@ export async function getForecastRunDetail(userId: string, runId: string) {
 
 export async function archiveForecastRun(userId: string, runId: string) {
   const run = await assertOwnedRun(userId, runId);
-  const updated = await prisma.forecastRun.update({
-    where: { id: run.id },
-    data: { status: "ARCHIVED" },
-  });
-  await prisma.forecastEvent.create({
-    data: { forecastRunId: run.id, eventType: "ARCHIVED", metadataJson: {} as Prisma.InputJsonValue },
-  });
+  const [updated] = await Promise.all([
+    prisma.forecastRun.update({
+      where: { id: run.id },
+      data: { status: "ARCHIVED" },
+    }),
+    prisma.forecastEvent.create({
+      data: { forecastRunId: run.id, eventType: "ARCHIVED", metadataJson: {} as Prisma.InputJsonValue },
+    }),
+  ]);
   return updated;
 }
 
 export async function restoreForecastRun(userId: string, runId: string) {
   const run = await assertOwnedRun(userId, runId);
-  const updated = await prisma.forecastRun.update({
-    where: { id: run.id },
-    data: { status: "COMPLETED" },
-  });
-  await prisma.forecastEvent.create({
-    data: { forecastRunId: run.id, eventType: "RESTORED", metadataJson: {} as Prisma.InputJsonValue },
-  });
+  const [updated] = await Promise.all([
+    prisma.forecastRun.update({
+      where: { id: run.id },
+      data: { status: "COMPLETED" },
+    }),
+    prisma.forecastEvent.create({
+      data: { forecastRunId: run.id, eventType: "RESTORED", metadataJson: {} as Prisma.InputJsonValue },
+    }),
+  ]);
   return updated;
 }

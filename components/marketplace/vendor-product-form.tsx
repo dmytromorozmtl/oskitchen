@@ -98,17 +98,17 @@ export function VendorProductForm({
       volumePricing: volumePricing.filter((tier) => tier.minQuantity > 0 && tier.price > 0),
     };
 
+    toast.success(product ? "Saved" : "Product created");
     startTransition(async () => {
       const result = product
         ? await updateVendorProductAction({ ...payload, productId: product.id })
         : await createVendorProductAction({ ...payload, submitForReview });
 
       if (result.ok) {
-        toast.success(product ? "Product updated" : "Product created");
         router.push("/vendor/products");
         router.refresh();
       } else {
-        toast.error(result.error ?? "Save failed");
+        toast.error(result.error ?? "Failed to save. Please retry.");
       }
     });
   }

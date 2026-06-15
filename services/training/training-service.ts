@@ -277,21 +277,36 @@ export type RecordProgressInput = {
 };
 
 export async function recordProgress(input: RecordProgressInput) {
-  const assignment = await prisma.trainingAssignment.findFirst({
-    where: await trainingAssignmentByIdWhereForOwner(input.userId, input.assignmentId),
-    select: {
-      id: true, userId: true, programId: true, dueAt: true, practiceMode: true,
-      assignedToProfileId: true, assignedToStaffId: true, status: true,
-    },
-  });
+  const [assignmentWhere, programWhere, progressWhere] = await Promise.all([
+    trainingAssignmentByIdWhereForOwner(input.userId, input.assignmentId),
+    trainingProgramListWhereForOwner(input.userId),
+    ownerScopedAnd(input.userId, {
+      lessonId: input.lessonId,
+      assignmentId: input.assignmentId,
+    }),
+  ]);
+
+  const [assignment, lesson, existingProgress] = await Promise.all([
+    prisma.trainingAssignment.findFirst({
+      where: assignmentWhere,
+      select: {
+        id: true, userId: true, programId: true, dueAt: true, practiceMode: true,
+        assignedToProfileId: true, assignedToStaffId: true, status: true,
+      },
+    }),
+    prisma.trainingLesson.findFirst({
+      where: {
+        id: input.lessonId,
+        module: { program: programWhere },
+      },
+      select: { id: true, moduleId: true },
+    }),
+    prisma.trainingProgress.findFirst({
+      where: progressWhere,
+      select: { id: true },
+    }),
+  ]);
   if (!assignment) return { ok: false as const, error: "Assignment not found" };
-  const lesson = await prisma.trainingLesson.findFirst({
-    where: {
-      id: input.lessonId,
-      module: { program: await trainingProgramListWhereForOwner(input.userId) },
-    },
-    select: { id: true, moduleId: true },
-  });
   if (!lesson) return { ok: false as const, error: "Lesson not found" };
   const percent = clampProgressPercent(input.progressPercent);
   const completedNow = input.completed === true || percent >= 100;
@@ -306,13 +321,7 @@ export async function recordProgress(input: RecordProgressInput) {
 
   const progress = await prisma.trainingProgress.upsert({
     where: {
-      id: (await prisma.trainingProgress.findFirst({
-        where: await ownerScopedAnd(input.userId, {
-          lessonId: lesson.id,
-          assignmentId: assignment.id,
-        }),
-        select: { id: true },
-      }))?.id ?? "00000000-0000-0000-0000-000000000000",
+      id: existingProgress?.id ?? "00000000-0000-0000-0000-000000000000",
     },
     update: {
       progressPercent: percent,
@@ -337,15 +346,15 @@ export async function recordProgress(input: RecordProgressInput) {
   });
 
   // Recompute assignment completion from all lessons
-  const lessonsInProgram = await prisma.trainingLesson.count({
-    where: { module: { programId: assignment.programId } },
-  });
-  const completedLessons = await prisma.trainingProgress.count({
-    where: await ownerScopedAnd(input.userId, {
+  const [lessonsInProgram, completedLessons] = await Promise.all([
+    prisma.trainingLesson.count({
+      where: { module: { programId: assignment.programId } },
+    }),
+    ownerScopedAnd(input.userId, {
       assignmentId: assignment.id,
       status: "COMPLETED",
-    }),
-  });
+    }).then((where) => prisma.trainingProgress.count({ where })),
+  ]);
   const completion = lessonsInProgram === 0 ? 0 : Math.round((completedLessons / lessonsInProgram) * 100);
   const nextStatus: TrainingAssignmentStatus = deriveAssignmentStatus({
     completionPercent: completion,
@@ -353,19 +362,21 @@ export async function recordProgress(input: RecordProgressInput) {
     needsManagerReview: false,
     dueAt: assignment.dueAt,
   });
-  await prisma.trainingAssignment.update({
-    where: { id: assignment.id },
-    data: { completionPercent: completion, status: nextStatus },
-  });
-  await recordEvent({
-    userId: input.userId,
-    eventType: "PROGRESS_RECORDED",
-    programId: assignment.programId,
-    assignmentId: assignment.id,
-    performedById: input.performedById ?? null,
-    summary: `Lesson ${lesson.id.slice(0, 8)} → ${status}`,
-    metadata: { percent, status },
-  });
+  await Promise.all([
+    prisma.trainingAssignment.update({
+      where: { id: assignment.id },
+      data: { completionPercent: completion, status: nextStatus },
+    }),
+    recordEvent({
+      userId: input.userId,
+      eventType: "PROGRESS_RECORDED",
+      programId: assignment.programId,
+      assignmentId: assignment.id,
+      performedById: input.performedById ?? null,
+      summary: `Lesson ${lesson.id.slice(0, 8)} → ${status}`,
+      metadata: { percent, status },
+    }),
+  ]);
   return { ok: true as const, progress, completion, nextStatus };
 }
 
@@ -443,29 +454,31 @@ export type IssueCertificationInput = {
 
 export async function issueCertification(input: IssueCertificationInput) {
   const expiresAt = input.expiresAt === null ? null : input.expiresAt ?? defaultExpiry(input.certificationType);
-  const cert = await prisma.trainingCertification.create({
-    data: {
+  const [cert] = await Promise.all([
+    prisma.trainingCertification.create({
+      data: {
+        userId: input.userId,
+        certificationType: input.certificationType,
+        programId: input.programId ?? undefined,
+        assignmentId: input.assignmentId ?? undefined,
+        recipientProfileId: input.recipientProfileId ?? undefined,
+        recipientStaffId: input.recipientStaffId ?? undefined,
+        recipientName: input.recipientName ?? undefined,
+        recipientEmail: input.recipientEmail ?? undefined,
+        issuedById: input.performedById ?? undefined,
+        expiresAt: expiresAt ?? undefined,
+        metadataJson: input.notes ? ({ notes: input.notes } as unknown as Prisma.InputJsonValue) : undefined,
+      },
+    }),
+    recordEvent({
       userId: input.userId,
-      certificationType: input.certificationType,
-      programId: input.programId ?? undefined,
-      assignmentId: input.assignmentId ?? undefined,
-      recipientProfileId: input.recipientProfileId ?? undefined,
-      recipientStaffId: input.recipientStaffId ?? undefined,
-      recipientName: input.recipientName ?? undefined,
-      recipientEmail: input.recipientEmail ?? undefined,
-      issuedById: input.performedById ?? undefined,
-      expiresAt: expiresAt ?? undefined,
-      metadataJson: input.notes ? ({ notes: input.notes } as unknown as Prisma.InputJsonValue) : undefined,
-    },
-  });
-  await recordEvent({
-    userId: input.userId,
-    eventType: "CERTIFICATION_ISSUED",
-    programId: input.programId ?? null,
-    assignmentId: input.assignmentId ?? null,
-    performedById: input.performedById ?? null,
-    summary: `${input.certificationType} issued`,
-  });
+      eventType: "CERTIFICATION_ISSUED",
+      programId: input.programId ?? null,
+      assignmentId: input.assignmentId ?? null,
+      performedById: input.performedById ?? null,
+      summary: `${input.certificationType} issued`,
+    }),
+  ]);
   return { ok: true as const, cert };
 }
 
@@ -479,16 +492,18 @@ export async function revokeCertification(input: {
     where: await trainingCertificationByIdWhereForOwner(input.userId, input.certId),
   });
   if (!cert) return { ok: false as const, error: "Certification not found" };
-  await prisma.trainingCertification.update({
-    where: { id: cert.id },
-    data: { revokedAt: new Date(), revokedReason: input.reason },
-  });
-  await recordEvent({
-    userId: input.userId,
-    eventType: "CERTIFICATION_REVOKED",
-    performedById: input.performedById ?? null,
-    summary: `${cert.certificationType} revoked: ${input.reason}`,
-  });
+  await Promise.all([
+    prisma.trainingCertification.update({
+      where: { id: cert.id },
+      data: { revokedAt: new Date(), revokedReason: input.reason },
+    }),
+    recordEvent({
+      userId: input.userId,
+      eventType: "CERTIFICATION_REVOKED",
+      performedById: input.performedById ?? null,
+      summary: `${cert.certificationType} revoked: ${input.reason}`,
+    }),
+  ]);
   return { ok: true as const };
 }
 
@@ -504,21 +519,23 @@ export type CreateSimulationInput = {
 export async function createSimulation(input: CreateSimulationInput) {
   const template = SIMULATION_TEMPLATES[input.simulationType];
   const config = input.config ?? template;
-  const sim = await prisma.trainingSimulation.create({
-    data: {
+  const [sim] = await Promise.all([
+    prisma.trainingSimulation.create({
+      data: {
+        userId: input.userId,
+        title: input.title,
+        simulationType: input.simulationType,
+        moduleId: input.moduleId ?? undefined,
+        simulationConfigJson: config as unknown as Prisma.InputJsonValue,
+      },
+    }),
+    recordEvent({
       userId: input.userId,
-      title: input.title,
-      simulationType: input.simulationType,
-      moduleId: input.moduleId ?? undefined,
-      simulationConfigJson: config as unknown as Prisma.InputJsonValue,
-    },
-  });
-  await recordEvent({
-    userId: input.userId,
-    eventType: "SIMULATION_CREATED",
-    performedById: input.performedById ?? null,
-    summary: `${input.simulationType} simulation created`,
-  });
+      eventType: "SIMULATION_CREATED",
+      performedById: input.performedById ?? null,
+      summary: `${input.simulationType} simulation created`,
+    }),
+  ]);
   return { ok: true as const, simulation: sim };
 }
 
@@ -616,16 +633,18 @@ export async function publishSop(input: { userId: string; performedById?: string
     where: await sopDocumentByIdWhereForOwner(input.userId, input.sopId),
   });
   if (!sop) return { ok: false as const, error: "SOP not found" };
-  await prisma.sOPDocument.update({
-    where: { id: sop.id },
-    data: { status: "ACTIVE", publishedAt: new Date() },
-  });
-  await recordEvent({
-    userId: input.userId,
-    eventType: "SOP_PUBLISHED",
-    performedById: input.performedById ?? null,
-    summary: sop.title,
-  });
+  await Promise.all([
+    prisma.sOPDocument.update({
+      where: { id: sop.id },
+      data: { status: "ACTIVE", publishedAt: new Date() },
+    }),
+    recordEvent({
+      userId: input.userId,
+      eventType: "SOP_PUBLISHED",
+      performedById: input.performedById ?? null,
+      summary: sop.title,
+    }),
+  ]);
   return { ok: true as const };
 }
 
@@ -634,16 +653,18 @@ export async function archiveSop(input: { userId: string; performedById?: string
     where: await sopDocumentByIdWhereForOwner(input.userId, input.sopId),
   });
   if (!sop) return { ok: false as const, error: "SOP not found" };
-  await prisma.sOPDocument.update({
-    where: { id: sop.id },
-    data: { status: "ARCHIVED", archivedAt: new Date() },
-  });
-  await recordEvent({
-    userId: input.userId,
-    eventType: "SOP_ARCHIVED",
-    performedById: input.performedById ?? null,
-    summary: sop.title,
-  });
+  await Promise.all([
+    prisma.sOPDocument.update({
+      where: { id: sop.id },
+      data: { status: "ARCHIVED", archivedAt: new Date() },
+    }),
+    recordEvent({
+      userId: input.userId,
+      eventType: "SOP_ARCHIVED",
+      performedById: input.performedById ?? null,
+      summary: sop.title,
+    }),
+  ]);
   return { ok: true as const };
 }
 
@@ -664,23 +685,25 @@ export async function acknowledgeSop(input: AcknowledgeSopInput) {
   });
   if (!sop) return { ok: false as const, error: "SOP not found" };
   if (sop.status !== "ACTIVE") return { ok: false as const, error: "SOP is not active" };
-  const ack = await prisma.sOPAcknowledgement.create({
-    data: {
+  const [ack] = await Promise.all([
+    prisma.sOPAcknowledgement.create({
+      data: {
+        userId: input.userId,
+        sopId: sop.id,
+        acknowledgedProfileId: input.acknowledgedProfileId ?? input.performedById ?? undefined,
+        acknowledgedStaffId: input.acknowledgedStaffId ?? undefined,
+        acknowledgedName: input.acknowledgedName ?? undefined,
+        acknowledgedEmail: input.acknowledgedEmail ?? undefined,
+        notes: input.notes ?? undefined,
+      },
+    }),
+    recordEvent({
       userId: input.userId,
-      sopId: sop.id,
-      acknowledgedProfileId: input.acknowledgedProfileId ?? input.performedById ?? undefined,
-      acknowledgedStaffId: input.acknowledgedStaffId ?? undefined,
-      acknowledgedName: input.acknowledgedName ?? undefined,
-      acknowledgedEmail: input.acknowledgedEmail ?? undefined,
-      notes: input.notes ?? undefined,
-    },
-  });
-  await recordEvent({
-    userId: input.userId,
-    eventType: "SOP_ACKNOWLEDGED",
-    performedById: input.performedById ?? null,
-    summary: sop.title,
-  });
+      eventType: "SOP_ACKNOWLEDGED",
+      performedById: input.performedById ?? null,
+      summary: sop.title,
+    }),
+  ]);
   return { ok: true as const, ack };
 }
 

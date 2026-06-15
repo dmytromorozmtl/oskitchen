@@ -80,6 +80,7 @@ export function MarketplaceProductDetailClient({
       toast.error("You do not have permission to update the cart.");
       return;
     }
+    if (showToast) toast.success("Added to marketplace cart");
     startTransition(async () => {
       const result = await addMarketplaceProductToCartAction({
         productId: product.id,
@@ -94,10 +95,8 @@ export function MarketplaceProductDetailClient({
         variantId: selectedVariant?.id,
       });
       if (!result.ok) {
-        toast.error(result.error);
-        return;
+        toast.error(result.error ?? "Failed to add to cart");
       }
-      if (showToast) toast.success("Added to marketplace cart");
     });
   }
 

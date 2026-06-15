@@ -371,9 +371,14 @@ export type CommitResult =
   | { ok: false; error: string };
 
 export async function commitImportJob(input: CommitInput): Promise<CommitResult> {
-  const job = await prisma.importJob.findFirst({
-    where: await importJobByIdWhereForOwner(input.userId, input.jobId),
-  });
+  const jobWhere = await importJobByIdWhereForOwner(input.userId, input.jobId);
+  const [job, previewRows] = await Promise.all([
+    prisma.importJob.findFirst({ where: jobWhere }),
+    prisma.importJobPreviewRow.findMany({
+      where: { importJobId: input.jobId },
+      orderBy: { rowNumber: "asc" },
+    }),
+  ]);
   if (!job) return { ok: false, error: "Import job not found." };
   if (job.status === "IMPORTED") return { ok: false, error: "Import job already committed." };
   if (job.status !== "VALIDATED") {
@@ -382,11 +387,6 @@ export async function commitImportJob(input: CommitInput): Promise<CommitResult>
   if (!isCommittableType(job.type)) {
     return { ok: false, error: commitNotSupportedReason(job.type) };
   }
-
-  const previewRows = await prisma.importJobPreviewRow.findMany({
-    where: { importJobId: job.id },
-    orderBy: { rowNumber: "asc" },
-  });
 
   const eligibleStatuses: ImportPreviewRowStatus[] = input.includeWarnings
     ? ["VALID", "WARNING"]
@@ -407,6 +407,27 @@ export async function commitImportJob(input: CommitInput): Promise<CommitResult>
   };
   const createdEntities: { entity: RollbackEntityKind; id: string }[] = [];
   const workspaceId = await resolveOwnerWorkspaceId(input.userId);
+
+  let productsTargetMenu: { id: string } | null = null;
+  if (job.type === "PRODUCTS") {
+    await ensureCatalogMenu(input.userId);
+    const [activeMenuWhere, catalogMenuWhere] = await Promise.all([
+      menuListWhereForOwnerAnd(input.userId, { active: true, catalogOnly: false }),
+      menuListWhereForOwnerAnd(input.userId, { catalogOnly: true }),
+    ]);
+    const [activeMenu, catalogMenu] = await Promise.all([
+      prisma.menu.findFirst({
+        where: activeMenuWhere,
+        orderBy: { createdAt: "desc" },
+        select: { id: true },
+      }),
+      prisma.menu.findFirst({
+        where: catalogMenuWhere,
+        select: { id: true },
+      }),
+    ]);
+    productsTargetMenu = activeMenu ?? catalogMenu;
+  }
 
   try {
     for (const row of eligible) {
@@ -510,18 +531,7 @@ export async function commitImportJob(input: CommitInput): Promise<CommitResult>
           outcome.created += 1;
         }
       } else if (job.type === "PRODUCTS") {
-        await ensureCatalogMenu(input.userId);
-        const activeMenu = await prisma.menu.findFirst({
-          where: await menuListWhereForOwnerAnd(input.userId, {
-            active: true,
-            catalogOnly: false,
-          }),
-          orderBy: { createdAt: "desc" },
-        });
-        const catalogMenu = await prisma.menu.findFirst({
-          where: await menuListWhereForOwnerAnd(input.userId, { catalogOnly: true }),
-        });
-        const targetMenu = activeMenu ?? catalogMenu;
+        const targetMenu = productsTargetMenu;
         if (!targetMenu) {
           outcome.notes.push(`Row ${row.rowNumber}: no menu available`);
           outcome.skipped += 1;
@@ -559,7 +569,6 @@ export async function commitImportJob(input: CommitInput): Promise<CommitResult>
           });
           outcome.updated += 1;
         } else {
-          const workspaceId = await resolveOwnerWorkspaceId(input.userId);
           const created = await prisma.product.create({
             data: {
               menuId: targetMenu.id,
@@ -571,11 +580,14 @@ export async function commitImportJob(input: CommitInput): Promise<CommitResult>
               description: data.description ?? null,
               allergens: data.allergens ?? null,
               active: true,
+              productionTask: { create: {} },
             },
+            include: { productionTask: { select: { id: true } } },
           });
-          const productionTask = await prisma.productionTask.create({ data: { productId: created.id } });
           createdEntities.push({ entity: "product", id: created.id });
-          createdEntities.push({ entity: "productionTask", id: productionTask.id });
+          if (created.productionTask) {
+            createdEntities.push({ entity: "productionTask", id: created.productionTask.id });
+          }
           outcome.created += 1;
         }
       } else {

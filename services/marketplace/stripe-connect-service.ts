@@ -102,11 +102,13 @@ export async function handleAccountUpdate(accountId: string): Promise<void> {
   const stripe = getStripeClient();
   if (!stripe) return;
 
-  const account = await stripe.accounts.retrieve(accountId);
-  const vendor = await prisma.vendor.findFirst({
-    where: { stripeAccountId: accountId },
-    select: { id: true, documents: true, verifiedAt: true },
-  });
+  const [account, vendor] = await Promise.all([
+    stripe.accounts.retrieve(accountId),
+    prisma.vendor.findFirst({
+      where: { stripeAccountId: accountId },
+      select: { id: true, documents: true, verifiedAt: true },
+    }),
+  ]);
   if (!vendor) return;
 
   const payoutsEnabled = Boolean(account.payouts_enabled);
@@ -132,6 +134,9 @@ export async function createPaymentIntent(input: {
   | { ok: true; paymentIntentId: string; clientSecret: string | null }
   | { ok: false; error: string }
 > {
+  const stripe = getStripeClient();
+  if (!stripe) return { ok: false, error: "Stripe is not configured." };
+
   const order = await prisma.marketplacePurchaseOrder.findUnique({
     where: { id: input.orderId },
     include: {
@@ -139,9 +144,6 @@ export async function createPaymentIntent(input: {
     },
   });
   if (!order) return { ok: false, error: "Order not found." };
-
-  const stripe = getStripeClient();
-  if (!stripe) return { ok: false, error: "Stripe is not configured." };
 
   const total = decimalToNumber(order.total);
   const amount = toMinorUnits(total);
@@ -225,16 +227,17 @@ export async function processPayout(vendorId: string): Promise<
   | { ok: true; payoutId: string; amount: number; transferId?: string }
   | { ok: false; error: string }
 > {
-  const vendor = await prisma.vendor.findUnique({
-    where: { id: vendorId },
-    select: { id: true, stripeAccountId: true },
-  });
+  const [vendor, available] = await Promise.all([
+    prisma.vendor.findUnique({
+      where: { id: vendorId },
+      select: { id: true, stripeAccountId: true },
+    }),
+    prisma.vendorTransaction.findMany({
+      where: { vendorId, status: "AVAILABLE" },
+      select: { id: true, netAmount: true },
+    }),
+  ]);
   if (!vendor) return { ok: false, error: "Vendor not found." };
-
-  const available = await prisma.vendorTransaction.findMany({
-    where: { vendorId, status: "AVAILABLE" },
-    select: { id: true, netAmount: true },
-  });
   if (available.length === 0) {
     return { ok: false, error: "No available balance to pay out." };
   }
@@ -310,18 +313,24 @@ async function resolveVendorIdFromConnectEvent(event: Stripe.Event): Promise<str
     return object.metadata.vendorId.trim();
   }
 
-  if (object.metadata?.marketplaceOrderId?.trim()) {
-    const order = await prisma.marketplacePurchaseOrder.findUnique({
-      where: { id: object.metadata.marketplaceOrderId.trim() },
-      select: { vendorId: true },
-    });
-    return order?.vendorId ?? null;
-  }
-
   const destination =
     typeof object.destination === "string"
       ? object.destination
       : object.destination?.id ?? null;
+
+  if (object.metadata?.marketplaceOrderId?.trim()) {
+    const [order, destinationVendor] = await Promise.all([
+      prisma.marketplacePurchaseOrder.findUnique({
+        where: { id: object.metadata.marketplaceOrderId.trim() },
+        select: { vendorId: true },
+      }),
+      destination
+        ? resolveVendorByStripeAccountId(destination)
+        : Promise.resolve(null),
+    ]);
+    return order?.vendorId ?? destinationVendor?.id ?? null;
+  }
+
   if (destination) {
     const vendor = await resolveVendorByStripeAccountId(destination);
     return vendor?.id ?? null;
@@ -371,12 +380,12 @@ async function handleTransferCreated(transfer: Stripe.Transfer): Promise<void> {
     return;
   }
 
+  const destination =
+    typeof transfer.destination === "string" ? transfer.destination : transfer.destination?.id;
   const vendor = await prisma.vendor.findUnique({
     where: { id: vendorId },
     select: { stripeAccountId: true },
   });
-  const destination =
-    typeof transfer.destination === "string" ? transfer.destination : transfer.destination?.id;
   if (!vendor?.stripeAccountId || vendor.stripeAccountId !== destination) {
     logger.warn("[marketplace-connect] transfer destination mismatch", {
       vendorId,
@@ -408,10 +417,12 @@ async function handleTransferReversed(transfer: Stripe.Transfer): Promise<void> 
 }
 
 async function handlePayoutPaid(payout: Stripe.Payout, connectedAccountId: string): Promise<void> {
-  const vendor = await resolveVendorByStripeAccountId(connectedAccountId);
+  const [vendor, { dispatchVendorWebhookEvent }] = await Promise.all([
+    resolveVendorByStripeAccountId(connectedAccountId),
+    import("@/services/marketplace/vendor-api-service"),
+  ]);
   if (!vendor) return;
 
-  const { dispatchVendorWebhookEvent } = await import("@/services/marketplace/vendor-api-service");
   const amount = payout.amount / 100;
 
   await dispatchVendorWebhookEvent({
@@ -489,9 +500,10 @@ export async function handleMarketplaceStripeWebhookEvent(event: Stripe.Event): 
       break;
   }
 
+  const vendorId = await resolveVendorIdFromConnectEvent(event);
   await recordMarketplaceConnectWebhookDelivery({
     event,
-    vendorId: await resolveVendorIdFromConnectEvent(event),
+    vendorId,
   });
 }
 

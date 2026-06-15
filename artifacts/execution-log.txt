@@ -1,6 +1,156 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: perf-verification-15
+Timestamp: 2026-06-15T19:00:00.000Z
+Task: Step 13 — batch queries in export-service (final Step 13 cycle)
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 export-service (18 prisma awaits)
+Fixed: buildExportCsv hoisted productScope into initial scope Promise.all batch; products/production exports reuse batched scope; recordExportJob pipelines workspace resolution into job create
+Result: OK — commit "perf: batch queries in export-service"
+Evidence: services/import-export/export-service.ts
+
+---
+Cycle: perf-verification-14
+Timestamp: 2026-06-15T18:45:00.000Z
+Task: Step 13 — batch queries in stripe-connect-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 stripe-connect-service (18 prisma awaits)
+Fixed: handleAccountUpdate parallel Stripe account+vendor fetch; processPayout parallel vendor+available balance; resolveVendorIdFromConnectEvent parallel order+destination vendor lookup; handlePayoutPaid parallel vendor resolve+webhook import; webhook delivery resolves vendor once
+Result: OK — commit "perf: batch queries in stripe-connect-service"
+Evidence: services/marketplace/stripe-connect-service.ts
+
+---
+Cycle: perf-verification-13
+Timestamp: 2026-06-15T18:30:00.000Z
+Task: Step 13 — batch queries in playbook-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 playbook-service (18 prisma awaits)
+Fixed: ensureSystemPlaybooks single scope+findMany and parallel template sync; create/start/complete/cancel/step transitions use $transaction write+event; getPlaybookKpis tasksGenerated in Promise.all batch
+Result: OK — commit "perf: batch queries in playbook-service"
+Evidence: services/playbooks/playbook-service.ts
+
+---
+Cycle: perf-verification-12
+Timestamp: 2026-06-15T18:15:00.000Z
+Task: Step 13 — batch queries in invoice-scanner-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 invoice-scanner-service (19 prisma awaits)
+Fixed: resolveScannedInvoiceLines batch ingredient lookup; parallel supplier+orderNumber+lines in create flows; parallel receiving/stock/price writes; incrementIngredientStock stock+ingredient in $transaction
+Result: OK — commit "perf: batch queries in invoice-scanner-service"
+Evidence: services/ai/invoice-scanner-service.ts
+
+---
+Cycle: perf-verification-11
+Timestamp: 2026-06-15T18:00:00.000Z
+Task: Step 13 — batch queries in report-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 report-service (19 prisma awaits)
+Fixed: buildExecutiveSummary overlaps order/catering scope resolution with parallel production/packing/delivery fetches; order-based report runners pipeline scope+query; audit_log_report uses export scope
+Result: OK — commit "perf: batch queries in report-service"
+Evidence: services/reports/report-service.ts
+
+---
+Cycle: perf-verification-10
+Timestamp: 2026-06-15T17:45:00.000Z
+Task: Step 13 — batch queries in template-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 template-service (21 prisma awaits)
+Fixed: ensureWorkspaceTemplates parallel upserts; applyTemplate batch module pref lookup and parallel pin/task writes; apply finish via $transaction; rollbackApplication batch pref/task fetch and parallel reversions
+Result: OK — commit "perf: batch queries in template-service"
+Evidence: services/templates/template-service.ts
+
+---
+Cycle: perf-verification-09
+Timestamp: 2026-06-15T17:30:00.000Z
+Task: Step 13 — batch queries in go-live-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 go-live-service (23 prisma awaits)
+Fixed: loadReadinessInputs hoisted customer/label/project scopes and parallel readiness snapshots; createProject createMany rollback plans; refreshAutoValidation parallel project+inputs+checklist and batched checklist updates; mutation paths use $transaction write+event
+Result: OK — commit "perf: batch queries in go-live-service"
+Evidence: services/go-live/go-live-service.ts
+
+---
+Cycle: perf-verification-08
+Timestamp: 2026-06-15T17:15:00.000Z
+Task: Step 13 — batch queries in implementation-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 implementation-service (24 prisma awaits)
+Fixed: getActiveProject parallel active+latest fetch; updateProjectStatus/checklist/phase/risk mutations batched via $transaction write+event; previewTasksFromChecklist parallel scope+existing tasks; generateTasksFromChecklist parallel project+items fetch and batch existing-task lookup
+Result: OK — commit "perf: batch queries in implementation-service"
+Evidence: services/implementation/implementation-service.ts
+
+---
+Cycle: perf-verification-07
+Timestamp: 2026-06-15T17:00:00.000Z
+Task: Step 13 — batch queries in location-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 location-service (25 prisma awaits)
+Fixed: createLocation parallel slug+workspaceId; assignTargetToLocation parallel location verify+target row fetch with early workspaceId promise; loadLocationOverviewKpis parallel order+location scopes; countUnassignedRecords hoisted kitchenTaskScope into scope batch
+Result: OK — commit "perf: batch queries in location-service"
+Evidence: services/locations/location-service.ts
+
+---
+Cycle: perf-verification-06
+Timestamp: 2026-06-15T16:45:00.000Z
+Task: Step 13 — batch queries in product-mapping-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 product-mapping-service (25 prisma awaits)
+Fixed: createOrUpdateMapping parallel runMatch+workspace+scope; approveMapping/changeMappingStatus parallel mapping+product fetch; bulkArchive/bulkIgnore parallel updateMany+createMany; upsertModifierMapping parallel ownership+existing lookup and transaction for write+event
+Result: OK — commit "perf: batch queries in product-mapping-service"
+Evidence: services/product-mapping/product-mapping-service.ts
+
+---
+Cycle: perf-verification-05
+Timestamp: 2026-06-15T16:35:00.000Z
+Task: Step 13 — batch queries in meal-plan-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 meal-plan-service (30 prisma awaits)
+Fixed: createMealPlan parallel customer+workspace, parallel event+cycle+CRM; update/setStatus parallel write+events; materializeUpcomingCycles parallel plan+cycles fetch; skipCycle/setSelection/removeSelection parallel mutations; backfill batch legacy id lookup
+Result: OK — commit "perf: batch queries in meal-plan-service"
+Evidence: services/meal-plans/meal-plan-service.ts
+
+---
+Cycle: perf-verification-04
+Timestamp: 2026-06-15T16:25:00.000Z
+Task: Step 13 — batch queries in training-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 training-service (30 prisma awaits)
+Fixed: recordProgress parallel fetch (assignment+lesson+existing progress), parallel lesson counts, parallel assignment update+event; issueCertification/revokeCertification/createSimulation/publishSop/archiveSop/acknowledgeSop parallel write+event
+Result: OK — commit "perf: batch queries in training-service"
+Evidence: services/training/training-service.ts
+
+---
+Cycle: perf-verification-03
+Timestamp: 2026-06-15T16:15:00.000Z
+Task: Step 13 — batch queries in forecast-service
+Category: Performance
+Checked: Steps 1–12 skipped; step 13 forecast-service (33 prisma awaits)
+Fixed: parallel profile+workspaceId; RUN_CREATED event overlaps buildProductDemandLines; parallel source fetches (orders/menus/mealPlans/quotes); parallel adjustment+lines fetch; parallel archive/restore update+event; parallel ingredients+workspaceId before demand run
+Result: OK — commit "perf: batch queries in forecast-service"
+Evidence: services/forecast/forecast-service.ts
+
+---
+Cycle: perf-verification-02
+Timestamp: 2026-06-15T16:05:00.000Z
+Task: Step 13 — batch queries in import-center-service
+Category: Performance
+Checked: Steps 1–12 skipped (already present); step 13 next service after quote-service (34 prisma awaits)
+Fixed: commitImportJob parallel fetch job+previewRows; hoist menu lookup before PRODUCTS loop with Promise.all; nested product+productionTask create; removed per-row workspaceId re-fetch
+Result: OK — commit "perf: batch queries in import-center-service"
+Evidence: services/import-center/import-center-service.ts
+
+---
+Cycle: perf-verification-01
+Timestamp: 2026-06-15T16:00:00.000Z
+Task: Step 13 — batch queries in quote-service
+Category: Performance
+Checked: Steps 1–12 skipped (already present); step 13 matched (quote-service 36 prisma awaits)
+Fixed: Promise.all for independent update+audit pairs in removeQuoteLine, updateQuoteFields, setQuoteStatus, snapshotQuoteVersion (parallel fetch too), rotatePublicLink, revokePublicLink, completeFollowUp
+Result: OK — 7 functions batched; commit "perf: batch queries in quote-service"
+Evidence: services/catering/quote-service.ts
+
+---
 Cycle: gap-closure-72
 Timestamp: 2026-06-16T17:00:00.000Z
 Task: P2-72 — SCIM enterprise self-serve UI (group provisioning + attribute mapping)

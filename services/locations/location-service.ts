@@ -64,8 +64,10 @@ async function uniqueSlug(userId: string, baseName: string, override?: string | 
 }
 
 export async function createLocation(input: CreateLocationInput) {
-  const slug = await uniqueSlug(input.userId, input.name, input.slug);
-  const workspaceId = await resolveOwnerWorkspaceId(input.userId);
+  const [slug, workspaceId] = await Promise.all([
+    uniqueSlug(input.userId, input.name, input.slug),
+    resolveOwnerWorkspaceId(input.userId),
+  ]);
   return prisma.location.create({
     data: {
       userId: input.userId,
@@ -164,130 +166,139 @@ export async function assignTargetToLocation(
   performedBy: string | null,
 ): Promise<{ assigned: boolean; fromLocationId: string | null }> {
   const userId = scope.userId;
+  const workspaceIdPromise = resolveOwnerWorkspaceId(userId);
 
-  // If locationId is provided, confirm ownership (or null to clear assignment).
-  if (locationId) {
-    const loc = await prisma.location.findFirst({
-      where: await locationByIdWhereForOwner(userId, locationId),
-      select: { id: true },
-    });
-    if (!loc) throw new Error("Target location not found.");
-  }
+  const locationVerifyPromise = locationId
+    ? locationByIdWhereForOwner(userId, locationId).then((where) =>
+        prisma.location.findFirst({ where, select: { id: true } }),
+      )
+    : Promise.resolve({ id: "ok" });
 
-  let fromLocationId: string | null = null;
+  type TargetRow = { id: string; locationId: string | null };
+  const targetRowPromise: Promise<TargetRow | null> = (async () => {
+    switch (target) {
+      case "MENU":
+        return prisma.menu.findFirst({
+          where: await menuByIdWhereForOwner(userId, targetId),
+          select: { id: true, locationId: true },
+        });
+      case "ORDER":
+        return prisma.order.findFirst({
+          where: await orderByIdWhereForOwner(userId, targetId),
+          select: { id: true, locationId: true },
+        });
+      case "BRAND": {
+        const brandScope = await brandListWhereForOwner(userId);
+        return prisma.brand.findFirst({
+          where: { AND: [brandScope, { id: targetId }] },
+          select: { id: true, locationId: true },
+        });
+      }
+      case "PRODUCTION_BATCH":
+        return prisma.productionBatch.findFirst({
+          where: { id: targetId, userId },
+          select: { id: true, locationId: true },
+        });
+      case "PRODUCTION_WORK_ITEM":
+        return prisma.productionWorkItem.findFirst({
+          where: { id: targetId, userId },
+          select: { id: true, locationId: true },
+        });
+      case "PACKING_BATCH":
+        return prisma.packingBatch.findFirst({
+          where: { id: targetId, userId },
+          select: { id: true, locationId: true },
+        });
+      case "PACKING_TASK":
+        return prisma.packingTask.findFirst({
+          where: { id: targetId, userId },
+          select: { id: true, locationId: true },
+        });
+      case "DELIVERY_ROUTE":
+        return prisma.deliveryRoute.findFirst({
+          where: { id: targetId, userId },
+          select: { id: true, locationId: true },
+        });
+      case "INVENTORY_STOCK":
+        return prisma.inventoryStock.findFirst({
+          where: { id: targetId, userId },
+          select: { id: true, locationId: true },
+        });
+      case "PURCHASE_ORDER":
+        return prisma.purchaseOrder.findFirst({
+          where: { id: targetId, userId },
+          select: { id: true, locationId: true },
+        });
+      case "KITCHEN_TASK":
+        return prisma.kitchenTask.findFirst({
+          where: { AND: [await kitchenTaskListWhereForOwner(userId), { id: targetId }] },
+          select: { id: true, locationId: true },
+        });
+      default:
+        return null;
+    }
+  })();
+
+  const [loc, row] = await Promise.all([locationVerifyPromise, targetRowPromise]);
+  if (locationId && !loc) throw new Error("Target location not found.");
+  if (!row) return { assigned: false, fromLocationId: null };
+
+  const fromLocationId = row.locationId;
   let assigned = false;
 
   switch (target) {
-    case "MENU": {
-      const row = await prisma.menu.findFirst({
-        where: await menuByIdWhereForOwner(userId, targetId),
-        select: { id: true, locationId: true },
-      });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "MENU":
       await prisma.menu.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "ORDER": {
-      const row = await prisma.order.findFirst({
-        where: await orderByIdWhereForOwner(userId, targetId),
-        select: { id: true, locationId: true },
-      });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "ORDER":
       await prisma.order.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "BRAND": {
-      const brandScope = await brandListWhereForOwner(userId);
-      const row = await prisma.brand.findFirst({
-        where: { AND: [brandScope, { id: targetId }] },
-        select: { id: true, locationId: true },
-      });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "BRAND":
       await prisma.brand.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "PRODUCTION_BATCH": {
-      const row = await prisma.productionBatch.findFirst({ where: { id: targetId, userId }, select: { id: true, locationId: true } });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "PRODUCTION_BATCH":
       await prisma.productionBatch.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "PRODUCTION_WORK_ITEM": {
-      const row = await prisma.productionWorkItem.findFirst({ where: { id: targetId, userId }, select: { id: true, locationId: true } });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "PRODUCTION_WORK_ITEM":
       await prisma.productionWorkItem.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "PACKING_BATCH": {
-      const row = await prisma.packingBatch.findFirst({ where: { id: targetId, userId }, select: { id: true, locationId: true } });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "PACKING_BATCH":
       await prisma.packingBatch.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "PACKING_TASK": {
-      const row = await prisma.packingTask.findFirst({ where: { id: targetId, userId }, select: { id: true, locationId: true } });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "PACKING_TASK":
       await prisma.packingTask.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "DELIVERY_ROUTE": {
-      const row = await prisma.deliveryRoute.findFirst({ where: { id: targetId, userId }, select: { id: true, locationId: true } });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "DELIVERY_ROUTE":
       await prisma.deliveryRoute.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "INVENTORY_STOCK": {
-      const row = await prisma.inventoryStock.findFirst({ where: { id: targetId, userId }, select: { id: true, locationId: true } });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "INVENTORY_STOCK":
       await prisma.inventoryStock.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "PURCHASE_ORDER": {
-      const row = await prisma.purchaseOrder.findFirst({ where: { id: targetId, userId }, select: { id: true, locationId: true } });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "PURCHASE_ORDER":
       await prisma.purchaseOrder.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
-    case "KITCHEN_TASK": {
-      const row = await prisma.kitchenTask.findFirst({
-        where: { AND: [await kitchenTaskListWhereForOwner(userId), { id: targetId }] },
-        select: { id: true, locationId: true },
-      });
-      if (!row) return { assigned: false, fromLocationId: null };
-      fromLocationId = row.locationId;
+    case "KITCHEN_TASK":
       await prisma.kitchenTask.update({ where: { id: row.id }, data: { locationId } });
       assigned = true;
       break;
-    }
     case "PROFITABILITY_LINE":
     case "MENU_ITEM":
     case "CATERING_EVENT":
-      // Not implemented yet — wired through KitchenTask integration for now.
       return { assigned: false, fromLocationId: null };
   }
 
   if (assigned) {
-    const workspaceId = await resolveOwnerWorkspaceId(userId);
+    const workspaceId = await workspaceIdPromise;
     await prisma.locationAssignmentEvent.create({
       data: {
         userId,
@@ -339,8 +350,10 @@ export async function loadLocationOverviewKpis(userId: string): Promise<{
   const end = new Date();
   end.setHours(23, 59, 59, 999);
 
-  const orderScope = await orderListWhereForOwner(userId);
-  const locationScope = await locationListWhereForOwner(userId);
+  const [orderScope, locationScope] = await Promise.all([
+    orderListWhereForOwner(userId),
+    locationListWhereForOwner(userId),
+  ]);
   const [active, setup, missingHours, missingAddress, withDeliveryZones, total, withOrdersTodayRaw] = await Promise.all([
     prisma.location.count({ where: { AND: [locationScope, { status: "ACTIVE" }] } }),
     prisma.location.count({ where: { AND: [locationScope, { status: "SETUP" }] } }),
@@ -391,6 +404,7 @@ export async function countUnassignedRecords(userId: string): Promise<Record<str
     deliveryRouteScope,
     inventoryStockScope,
     purchaseOrderScope,
+    kitchenTaskScope,
   ] = await Promise.all([
     brandListWhereForOwner(userId),
     menuListWhereForOwner(userId),
@@ -400,6 +414,7 @@ export async function countUnassignedRecords(userId: string): Promise<Record<str
     deliveryRouteListWhereForOwner(userId),
     inventoryStockListWhereForOwner(userId),
     purchaseOrderListWhereForOwner(userId),
+    kitchenTaskListWhereForOwner(userId),
   ]);
   const [menus, orders, brands, productionBatches, packingBatches, routes, inventoryStocks, purchaseOrders, kitchenTasks] = await Promise.all([
     prisma.menu.count({ where: { AND: [menuScope, { locationId: null }] } }),
@@ -410,9 +425,7 @@ export async function countUnassignedRecords(userId: string): Promise<Record<str
     prisma.deliveryRoute.count({ where: { AND: [deliveryRouteScope, { locationId: null }] } }),
     prisma.inventoryStock.count({ where: { AND: [inventoryStockScope, { locationId: null }] } }),
     prisma.purchaseOrder.count({ where: { AND: [purchaseOrderScope, { locationId: null }] } }),
-    prisma.kitchenTask.count({
-      where: { AND: [await kitchenTaskListWhereForOwner(userId), { locationId: null }] },
-    }),
+    prisma.kitchenTask.count({ where: { AND: [kitchenTaskScope, { locationId: null }] } }),
   ]);
   return {
     menus,

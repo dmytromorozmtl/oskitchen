@@ -36,20 +36,21 @@ export async function recordExportJob(
   rowCount: number,
   filtersJson?: unknown,
 ): Promise<void> {
-  const workspaceId = await resolveOwnerWorkspaceId(userId);
-  await prisma.exportJob.create({
-    data: {
-      userId,
-      workspaceId: workspaceId ?? undefined,
-      type,
-      fileName,
-      rowCount,
-      status: ExportJobStatus.COMPLETED,
-      completedAt: new Date(),
-      createdById: createdById ?? undefined,
-      filtersJson: filtersJson === undefined ? undefined : (filtersJson as object),
-    },
-  });
+  await resolveOwnerWorkspaceId(userId).then((workspaceId) =>
+    prisma.exportJob.create({
+      data: {
+        userId,
+        workspaceId: workspaceId ?? undefined,
+        type,
+        fileName,
+        rowCount,
+        status: ExportJobStatus.COMPLETED,
+        completedAt: new Date(),
+        createdById: createdById ?? undefined,
+        filtersJson: filtersJson === undefined ? undefined : (filtersJson as object),
+      },
+    }),
+  );
 }
 
 export async function buildExportCsv(
@@ -60,6 +61,7 @@ export async function buildExportCsv(
   const [
     orderScope,
     menuScope,
+    productScope,
     ingredientScope,
     integrationScope,
     locationScope,
@@ -74,6 +76,7 @@ export async function buildExportCsv(
   ] = await Promise.all([
     orderListWhereForOwner(userId),
     menuListWhereForOwner(userId),
+    productListWhereForOwner(userId),
     ingredientListWhereForOwner(userId),
     integrationConnectionListWhereForOwner(userId),
     locationListWhereForOwner(userId),
@@ -142,9 +145,8 @@ export async function buildExportCsv(
       return { filename: "kitchenos-customers.csv", body, rowCount: rows.length };
     }
     case "products": {
-      const productWhere = await productListWhereForOwner(userId);
       const products = await prisma.product.findMany({
-        where: productWhere,
+        where: productScope,
         include: { menu: true },
         orderBy: [{ menuId: "asc" }, { sortOrder: "asc" }],
       });
@@ -163,9 +165,8 @@ export async function buildExportCsv(
       return { filename: "kitchenos-menu-items.csv", body, rowCount: products.length };
     }
     case "production": {
-      const productWhere = await productListWhereForOwner(userId);
       const products = await prisma.product.findMany({
-        where: productWhere,
+        where: productScope,
         include: { menu: true, productionTask: true },
         orderBy: [{ menuId: "asc" }, { sortOrder: "asc" }],
       });

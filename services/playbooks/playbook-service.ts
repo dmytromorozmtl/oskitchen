@@ -31,32 +31,40 @@ type Scope = { userId: string; email: string | null };
  * and trigger metadata are refreshed.
  */
 export async function ensureSystemPlaybooks(scope: Scope): Promise<void> {
-  for (const seed of SYSTEM_PLAYBOOK_TEMPLATES) {
-    const playbookScope = await playbookListWhereForOwner(scope.userId);
-    const existing = await prisma.playbook.findFirst({
-      where: {
-        AND: [playbookScope, { slug: seed.slug, systemTemplate: true }],
-      },
-      select: { id: true },
-    });
-    if (existing) {
-      await prisma.playbook.update({
-        where: { id: existing.id },
-        data: {
-          title: seed.title,
-          description: seed.description,
-          type: seed.type,
-          businessModesJson: seed.businessModes as Prisma.InputJsonValue,
-          recommendedModulesJson: seed.recommendedModules as Prisma.InputJsonValue,
-          defaultRolesJson: seed.defaultRoles as Prisma.InputJsonValue,
-          triggerType: seed.triggerType,
-          recurrenceRule: seed.recurrenceRule ?? null,
-        },
-      });
-      continue;
-    }
-    await createPlaybookFromSeed(scope, seed, { systemTemplate: true });
-  }
+  const playbookScope = await playbookListWhereForOwner(scope.userId);
+  const slugs = SYSTEM_PLAYBOOK_TEMPLATES.map((seed) => seed.slug);
+  const existingRows = await prisma.playbook.findMany({
+    where: {
+      AND: [playbookScope, { slug: { in: slugs }, systemTemplate: true }],
+    },
+    select: { id: true, slug: true },
+  });
+  const existingBySlug = new Map(
+    existingRows.flatMap((row) => (row.slug ? ([[row.slug, row.id]] as const) : [])),
+  );
+
+  await Promise.all(
+    SYSTEM_PLAYBOOK_TEMPLATES.map(async (seed) => {
+      const existingId = existingBySlug.get(seed.slug);
+      if (existingId) {
+        await prisma.playbook.update({
+          where: { id: existingId },
+          data: {
+            title: seed.title,
+            description: seed.description,
+            type: seed.type,
+            businessModesJson: seed.businessModes as Prisma.InputJsonValue,
+            recommendedModulesJson: seed.recommendedModules as Prisma.InputJsonValue,
+            defaultRolesJson: seed.defaultRoles as Prisma.InputJsonValue,
+            triggerType: seed.triggerType,
+            recurrenceRule: seed.recurrenceRule ?? null,
+          },
+        });
+        return;
+      }
+      await createPlaybookFromSeed(scope, seed, { systemTemplate: true });
+    }),
+  );
 }
 
 export async function createPlaybookFromSeed(
@@ -64,41 +72,52 @@ export async function createPlaybookFromSeed(
   seed: PlaybookTemplateSeed,
   opts: { systemTemplate?: boolean } = {},
 ): Promise<{ id: string }> {
-  const playbook = await prisma.playbook.create({
-    data: {
-      userId: scope.userId,
-      title: seed.title,
-      slug: seed.slug,
-      description: seed.description,
-      type: seed.type,
-      businessModesJson: seed.businessModes as Prisma.InputJsonValue,
-      recommendedModulesJson: seed.recommendedModules as Prisma.InputJsonValue,
-      defaultRolesJson: seed.defaultRoles as Prisma.InputJsonValue,
-      triggerType: seed.triggerType,
-      recurrenceRule: seed.recurrenceRule ?? null,
-      systemTemplate: opts.systemTemplate ?? false,
-      active: true,
-      status: "READY",
-      steps: {
-        create: seed.steps.map((s, idx) => ({
-          title: s.title,
-          description: s.description ?? null,
-          sortOrder: idx,
-          recommendedRole: s.recommendedRole ?? null,
-          moduleKey: s.moduleKey ?? null,
-          actionRoute: s.actionRoute ?? null,
-          estimatedMinutes: s.estimatedMinutes ?? null,
-          required: s.required ?? true,
-          checklistJson: (s.checklist ?? []) as Prisma.InputJsonValue,
-          taskTemplateJson: (s.taskTemplate ?? {}) as Prisma.InputJsonValue,
-        })),
+  const playbook = await prisma.$transaction(async (tx) => {
+    const row = await tx.playbook.create({
+      data: {
+        userId: scope.userId,
+        title: seed.title,
+        slug: seed.slug,
+        description: seed.description,
+        type: seed.type,
+        businessModesJson: seed.businessModes as Prisma.InputJsonValue,
+        recommendedModulesJson: seed.recommendedModules as Prisma.InputJsonValue,
+        defaultRolesJson: seed.defaultRoles as Prisma.InputJsonValue,
+        triggerType: seed.triggerType,
+        recurrenceRule: seed.recurrenceRule ?? null,
+        systemTemplate: opts.systemTemplate ?? false,
+        active: true,
+        status: "READY",
+        steps: {
+          create: seed.steps.map((s, idx) => ({
+            title: s.title,
+            description: s.description ?? null,
+            sortOrder: idx,
+            recommendedRole: s.recommendedRole ?? null,
+            moduleKey: s.moduleKey ?? null,
+            actionRoute: s.actionRoute ?? null,
+            estimatedMinutes: s.estimatedMinutes ?? null,
+            required: s.required ?? true,
+            checklistJson: (s.checklist ?? []) as Prisma.InputJsonValue,
+            taskTemplateJson: (s.taskTemplate ?? {}) as Prisma.InputJsonValue,
+          })),
+        },
       },
-    },
-    select: { id: true },
-  });
-  await recordPlaybookEvent(scope, "playbook_created", {
-    playbookId: playbook.id,
-    systemTemplate: !!opts.systemTemplate,
+      select: { id: true },
+    });
+    await tx.playbookEvent.create({
+      data: {
+        userId: scope.userId,
+        eventType: "playbook_created",
+        performedBy: scope.email ?? "user",
+        playbookId: row.id,
+        metadataJson: {
+          playbookId: row.id,
+          systemTemplate: !!opts.systemTemplate,
+        } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
   return playbook;
 }
@@ -135,19 +154,19 @@ export async function listPlaybooks(scope: Scope, filter: ListPlaybooksFilter = 
 }
 
 export async function getPlaybook(scope: Scope, idOrSlug: string) {
-  const where = await playbookByIdOrSlugWhereForOwner(scope.userId, idOrSlug);
-  const row = await prisma.playbook.findFirst({
-    where,
-    include: {
-      steps: { orderBy: { sortOrder: "asc" } },
-      runs: {
-        orderBy: { startedAt: "desc" },
-        take: 10,
-        include: { _count: { select: { steps: true } } },
+  return playbookByIdOrSlugWhereForOwner(scope.userId, idOrSlug).then((where) =>
+    prisma.playbook.findFirst({
+      where,
+      include: {
+        steps: { orderBy: { sortOrder: "asc" } },
+        runs: {
+          orderBy: { startedAt: "desc" },
+          take: 10,
+          include: { _count: { select: { steps: true } } },
+        },
       },
-    },
-  });
-  return row;
+    }),
+  );
 }
 
 export async function recommendedPlaybooksForMode(
@@ -174,38 +193,48 @@ export type StartRunInput = {
 };
 
 export async function startPlaybookRun(scope: Scope, input: StartRunInput) {
-  const playbookWhere = await playbookByIdWhereForOwner(scope.userId, input.playbookId);
-  const playbook = await prisma.playbook.findFirst({
-    where: playbookWhere,
-    include: { steps: { orderBy: { sortOrder: "asc" } } },
-  });
+  const playbook = await playbookByIdWhereForOwner(scope.userId, input.playbookId).then((playbookWhere) =>
+    prisma.playbook.findFirst({
+      where: playbookWhere,
+      include: { steps: { orderBy: { sortOrder: "asc" } } },
+    }),
+  );
   if (!playbook) throw new Error("Playbook not found");
 
-  const run = await prisma.playbookRun.create({
-    data: {
-      playbookId: playbook.id,
-      userId: scope.userId,
-      brandId: input.brandId ?? null,
-      locationId: input.locationId ?? null,
-      title: input.title ?? playbook.title,
-      status: "RUNNING",
-      businessMode: input.businessMode ?? null,
-      startedBy: scope.email ?? "user",
-      dueAt: input.dueAt ?? null,
-      steps: {
-        create: playbook.steps.map((step) => ({
-          stepId: step.id,
-          status: "NOT_STARTED",
-          assignedRole:
-            input.assignedRoleByStep?.[step.id] ?? step.recommendedRole ?? null,
-        })),
+  const run = await prisma.$transaction(async (tx) => {
+    const row = await tx.playbookRun.create({
+      data: {
+        playbookId: playbook.id,
+        userId: scope.userId,
+        brandId: input.brandId ?? null,
+        locationId: input.locationId ?? null,
+        title: input.title ?? playbook.title,
+        status: "RUNNING",
+        businessMode: input.businessMode ?? null,
+        startedBy: scope.email ?? "user",
+        dueAt: input.dueAt ?? null,
+        steps: {
+          create: playbook.steps.map((step) => ({
+            stepId: step.id,
+            status: "NOT_STARTED",
+            assignedRole:
+              input.assignedRoleByStep?.[step.id] ?? step.recommendedRole ?? null,
+          })),
+        },
       },
-    },
-    select: { id: true },
-  });
-  await recordPlaybookEvent(scope, "run_started", {
-    playbookId: playbook.id,
-    runId: run.id,
+      select: { id: true },
+    });
+    await tx.playbookEvent.create({
+      data: {
+        userId: scope.userId,
+        eventType: "run_started",
+        performedBy: scope.email ?? "user",
+        playbookId: playbook.id,
+        runId: row.id,
+        metadataJson: { playbookId: playbook.id, runId: row.id } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
   if (input.generateTasks) {
     const { generateTasksForRun } = await import("./playbook-task-generator");
@@ -237,21 +266,22 @@ export async function listRuns(
 }
 
 export async function getRun(scope: Scope, runId: string) {
-  const where = await playbookRunByIdWhereForOwner(scope.userId, runId);
-  return prisma.playbookRun.findFirst({
-    where,
-    include: {
-      playbook: {
-        include: { steps: { orderBy: { sortOrder: "asc" } } },
+  return playbookRunByIdWhereForOwner(scope.userId, runId).then((where) =>
+    prisma.playbookRun.findFirst({
+      where,
+      include: {
+        playbook: {
+          include: { steps: { orderBy: { sortOrder: "asc" } } },
+        },
+        steps: {
+          include: { step: true, task: { select: { id: true, status: true, title: true } } },
+        },
+        brand: { select: { id: true, name: true } },
+        location: { select: { id: true, name: true } },
+        events: { orderBy: { createdAt: "desc" }, take: 50 },
       },
-      steps: {
-        include: { step: true, task: { select: { id: true, status: true, title: true } } },
-      },
-      brand: { select: { id: true, name: true } },
-      location: { select: { id: true, name: true } },
-      events: { orderBy: { createdAt: "desc" }, take: 50 },
-    },
-  });
+    }),
+  );
 }
 
 export async function transitionRunStep(
@@ -267,19 +297,27 @@ export async function transitionRunStep(
   });
   if (!runStep) throw new Error("Run step not found");
   const now = new Date();
-  await prisma.playbookRunStep.update({
-    where: { id: runStepId },
-    data: {
-      status: next,
-      startedAt: next === "IN_PROGRESS" && !runStep.status ? now : undefined,
-      completedAt: isTerminalStepStatus(next) ? now : null,
-      blockedReason: next === "BLOCKED" ? patch.blockedReason ?? null : null,
-      notes: patch.notes ?? null,
-    },
-  });
-  await recordPlaybookEvent(scope, `step_${next.toLowerCase()}`, {
-    runId: runStep.runId,
-    stepId: runStep.stepId,
+  await prisma.$transaction(async (tx) => {
+    await tx.playbookRunStep.update({
+      where: { id: runStepId },
+      data: {
+        status: next,
+        startedAt: next === "IN_PROGRESS" && !runStep.status ? now : undefined,
+        completedAt: isTerminalStepStatus(next) ? now : null,
+        blockedReason: next === "BLOCKED" ? patch.blockedReason ?? null : null,
+        notes: patch.notes ?? null,
+      },
+    });
+    await tx.playbookEvent.create({
+      data: {
+        userId: scope.userId,
+        eventType: `step_${next.toLowerCase()}`,
+        performedBy: scope.email ?? "user",
+        runId: runStep.runId,
+        stepId: runStep.stepId,
+        metadataJson: { runId: runStep.runId, stepId: runStep.stepId } as Prisma.InputJsonValue,
+      },
+    });
   });
   await maybeAutoTransitionRun(scope, runStep.runId);
 }
@@ -301,47 +339,87 @@ async function maybeAutoTransitionRun(scope: Scope, runId: string) {
   if (anyBlocked) next = "BLOCKED";
   else if (allDone && requiredDone) next = "COMPLETED";
   else next = "RUNNING";
-  await prisma.playbookRun.update({
-    where: { id: runId },
-    data: {
-      status: next,
-      completedAt: next === "COMPLETED" ? new Date() : null,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.playbookRun.update({
+      where: { id: runId },
+      data: {
+        status: next,
+        completedAt: next === "COMPLETED" ? new Date() : null,
+      },
+    });
+    if (next === "COMPLETED") {
+      await tx.playbookEvent.create({
+        data: {
+          userId: scope.userId,
+          eventType: "run_completed",
+          performedBy: scope.email ?? "user",
+          runId,
+          metadataJson: { runId } as Prisma.InputJsonValue,
+        },
+      });
+    } else if (next === "BLOCKED") {
+      await tx.playbookEvent.create({
+        data: {
+          userId: scope.userId,
+          eventType: "run_blocked",
+          performedBy: scope.email ?? "user",
+          runId,
+          metadataJson: { runId } as Prisma.InputJsonValue,
+        },
+      });
+    }
   });
-  if (next === "COMPLETED") {
-    await recordPlaybookEvent(scope, "run_completed", { runId });
-  } else if (next === "BLOCKED") {
-    await recordPlaybookEvent(scope, "run_blocked", { runId });
-  }
 }
 
 export async function completeRun(scope: Scope, runId: string) {
-  const where = await playbookRunByIdWhereForOwner(scope.userId, runId);
-  const run = await prisma.playbookRun.findFirst({
-    where,
-    select: { id: true, status: true },
-  });
+  const run = await playbookRunByIdWhereForOwner(scope.userId, runId).then((where) =>
+    prisma.playbookRun.findFirst({
+      where,
+      select: { id: true, status: true },
+    }),
+  );
   if (!run) throw new Error("Run not found");
   if (isTerminalRunStatus(run.status)) return;
-  await prisma.playbookRun.update({
-    where: { id: runId },
-    data: { status: "COMPLETED", completedAt: new Date() },
+  await prisma.$transaction(async (tx) => {
+    await tx.playbookRun.update({
+      where: { id: runId },
+      data: { status: "COMPLETED", completedAt: new Date() },
+    });
+    await tx.playbookEvent.create({
+      data: {
+        userId: scope.userId,
+        eventType: "run_completed",
+        performedBy: scope.email ?? "user",
+        runId,
+        metadataJson: { runId } as Prisma.InputJsonValue,
+      },
+    });
   });
-  await recordPlaybookEvent(scope, "run_completed", { runId });
 }
 
 export async function cancelRun(scope: Scope, runId: string, reason?: string) {
-  const where = await playbookRunByIdWhereForOwner(scope.userId, runId);
-  const run = await prisma.playbookRun.findFirst({
-    where,
-    select: { id: true },
-  });
+  const run = await playbookRunByIdWhereForOwner(scope.userId, runId).then((where) =>
+    prisma.playbookRun.findFirst({
+      where,
+      select: { id: true },
+    }),
+  );
   if (!run) return;
-  await prisma.playbookRun.update({
-    where: { id: runId },
-    data: { status: "CANCELLED", completedAt: new Date(), notes: reason ?? null },
+  await prisma.$transaction(async (tx) => {
+    await tx.playbookRun.update({
+      where: { id: runId },
+      data: { status: "CANCELLED", completedAt: new Date(), notes: reason ?? null },
+    });
+    await tx.playbookEvent.create({
+      data: {
+        userId: scope.userId,
+        eventType: "run_cancelled",
+        performedBy: scope.email ?? "user",
+        runId,
+        metadataJson: { runId, reason: reason ?? null } as Prisma.InputJsonValue,
+      },
+    });
   });
-  await recordPlaybookEvent(scope, "run_cancelled", { runId, reason: reason ?? null });
 }
 
 export async function archivePlaybook(scope: Scope, playbookId: string) {
@@ -393,7 +471,7 @@ export async function getPlaybookKpis(scope: Scope) {
   const dayStart = new Date(new Date().setHours(0, 0, 0, 0));
   const now = new Date();
 
-  const [active, completedToday, blockedSteps, overdueRuns, templates] = await Promise.all([
+  const [active, completedToday, blockedSteps, overdueRuns, templates, tasksGenerated] = await Promise.all([
     prisma.playbookRun.count({
       where: { AND: [runScope, { status: { in: ["RUNNING", "BLOCKED"] } }] },
     }),
@@ -413,9 +491,9 @@ export async function getPlaybookKpis(scope: Scope) {
     prisma.playbook.count({
       where: { AND: [playbookScope, { active: true, systemTemplate: true }] },
     }),
+    prisma.kitchenTask.count({
+      where: { AND: [taskScope, { sourceType: "PLAYBOOK" }] },
+    }),
   ]);
-  const tasksGenerated = await prisma.kitchenTask.count({
-    where: { AND: [taskScope, { sourceType: "PLAYBOOK" }] },
-  });
   return { active, completedToday, blockedSteps, overdueRuns, templates, tasksGenerated };
 }

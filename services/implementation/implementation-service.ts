@@ -154,32 +154,26 @@ export async function listProjects(userId: string): Promise<ImplementationProjec
 
 export async function getActiveProject(userId: string): Promise<ImplementationProject | null> {
   const scope = await implementationProjectListWhereForOwner(userId);
-  const active = await prisma.implementationProject.findFirst({
-    where: {
-      AND: [
-        scope,
-        {
-          status: {
-            in: [
-              "DISCOVERY",
-              "SETUP",
-              "MIGRATION",
-              "TRAINING",
-              "TESTING",
-              "READY_FOR_GO_LIVE",
-              "DATA_IMPORT",
-              "CONFIGURATION",
-              "STAFF_TRAINING",
-              "TEST_RUN",
-            ],
-          },
-        },
-      ],
-    },
-    orderBy: { updatedAt: "desc" },
-  });
-  if (active) return active;
-  return prisma.implementationProject.findFirst({ where: scope, orderBy: { createdAt: "desc" } });
+  const activeStatuses: ImplementationStatus[] = [
+    "DISCOVERY",
+    "SETUP",
+    "MIGRATION",
+    "TRAINING",
+    "TESTING",
+    "READY_FOR_GO_LIVE",
+    "DATA_IMPORT",
+    "CONFIGURATION",
+    "STAFF_TRAINING",
+    "TEST_RUN",
+  ];
+  const [active, latest] = await Promise.all([
+    prisma.implementationProject.findFirst({
+      where: { AND: [scope, { status: { in: activeStatuses } }] },
+      orderBy: { updatedAt: "desc" },
+    }),
+    prisma.implementationProject.findFirst({ where: scope, orderBy: { createdAt: "desc" } }),
+  ]);
+  return active ?? latest;
 }
 
 export async function getProject(userId: string, projectId: string): Promise<ImplementationProjectWithRelations | null> {
@@ -205,17 +199,25 @@ export async function updateProjectStatus(params: {
   });
   if (!project) throw new Error("Project not found");
 
-  const updated = await prisma.implementationProject.update({
-    where: { id: project.id },
-    data: { status: params.status },
-  });
-
-  await recordEvent({
-    projectId: project.id,
-    eventType: "status_changed",
-    performedBy: params.performedBy ?? null,
-    summary: `Status changed: ${project.status} → ${params.status}`,
-    metadata: { from: project.status, to: params.status, reason: params.reason ?? null },
+  const updated = await prisma.$transaction(async (tx) => {
+    const row = await tx.implementationProject.update({
+      where: { id: project.id },
+      data: { status: params.status },
+    });
+    await tx.implementationEvent.create({
+      data: {
+        projectId: project.id,
+        eventType: "status_changed",
+        performedBy: params.performedBy ?? null,
+        summary: `Status changed: ${project.status} → ${params.status}`,
+        metadataJson: {
+          from: project.status,
+          to: params.status,
+          reason: params.reason ?? null,
+        } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
 
   return updated;
@@ -229,30 +231,35 @@ export async function updateChecklistItemStatus(params: {
   blockerReason?: string | null;
   performedBy?: string | null;
 }): Promise<ImplementationChecklistItem> {
+  const projectScope = await implementationProjectListWhereForOwner(params.userId);
   const item = await prisma.implementationChecklistItem.findFirst({
     where: {
       id: params.itemId,
       projectId: params.projectId,
-      project: await implementationProjectListWhereForOwner(params.userId),
+      project: projectScope,
     },
   });
   if (!item) throw new Error("Checklist item not found");
 
-  const updated = await prisma.implementationChecklistItem.update({
-    where: { id: item.id },
-    data: {
-      status: params.status,
-      blockerReason: params.status === "BLOCKED" ? params.blockerReason ?? "Blocker noted" : null,
-      completedAt: params.status === "DONE" ? new Date() : null,
-    },
-  });
-
-  await recordEvent({
-    projectId: params.projectId,
-    eventType: "checklist_status_changed",
-    performedBy: params.performedBy ?? null,
-    summary: `Checklist "${item.title}" → ${params.status}`,
-    metadata: { itemId: item.id, from: item.status, to: params.status },
+  const updated = await prisma.$transaction(async (tx) => {
+    const row = await tx.implementationChecklistItem.update({
+      where: { id: item.id },
+      data: {
+        status: params.status,
+        blockerReason: params.status === "BLOCKED" ? params.blockerReason ?? "Blocker noted" : null,
+        completedAt: params.status === "DONE" ? new Date() : null,
+      },
+    });
+    await tx.implementationEvent.create({
+      data: {
+        projectId: params.projectId,
+        eventType: "checklist_status_changed",
+        performedBy: params.performedBy ?? null,
+        summary: `Checklist "${item.title}" → ${params.status}`,
+        metadataJson: { itemId: item.id, from: item.status, to: params.status } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
 
   return updated;
@@ -266,26 +273,35 @@ export async function assignChecklistItem(params: {
   dueAt: Date | null;
   performedBy?: string | null;
 }): Promise<ImplementationChecklistItem> {
+  const projectScope = await implementationProjectListWhereForOwner(params.userId);
   const item = await prisma.implementationChecklistItem.findFirst({
     where: {
       id: params.itemId,
       projectId: params.projectId,
-      project: await implementationProjectListWhereForOwner(params.userId),
+      project: projectScope,
     },
   });
   if (!item) throw new Error("Checklist item not found");
 
-  const updated = await prisma.implementationChecklistItem.update({
-    where: { id: item.id },
-    data: { assignedToId: params.assignedToId, dueAt: params.dueAt },
-  });
-
-  await recordEvent({
-    projectId: params.projectId,
-    eventType: "checklist_assigned",
-    performedBy: params.performedBy ?? null,
-    summary: `Checklist "${item.title}" assigned`,
-    metadata: { itemId: item.id, assignedToId: params.assignedToId, dueAt: params.dueAt },
+  const updated = await prisma.$transaction(async (tx) => {
+    const row = await tx.implementationChecklistItem.update({
+      where: { id: item.id },
+      data: { assignedToId: params.assignedToId, dueAt: params.dueAt },
+    });
+    await tx.implementationEvent.create({
+      data: {
+        projectId: params.projectId,
+        eventType: "checklist_assigned",
+        performedBy: params.performedBy ?? null,
+        summary: `Checklist "${item.title}" assigned`,
+        metadataJson: {
+          itemId: item.id,
+          assignedToId: params.assignedToId,
+          dueAt: params.dueAt,
+        } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
 
   return updated;
@@ -298,29 +314,34 @@ export async function updatePhaseStatus(params: {
   status: ImplementationPhaseStatus;
   performedBy?: string | null;
 }): Promise<ImplementationPhase> {
+  const projectScope = await implementationProjectListWhereForOwner(params.userId);
   const phase = await prisma.implementationPhase.findFirst({
     where: {
       id: params.phaseId,
       projectId: params.projectId,
-      project: await implementationProjectListWhereForOwner(params.userId),
+      project: projectScope,
     },
   });
   if (!phase) throw new Error("Phase not found");
 
-  const updated = await prisma.implementationPhase.update({
-    where: { id: phase.id },
-    data: {
-      status: params.status,
-      completedAt: params.status === "COMPLETED" ? new Date() : null,
-    },
-  });
-
-  await recordEvent({
-    projectId: params.projectId,
-    eventType: "phase_status_changed",
-    performedBy: params.performedBy ?? null,
-    summary: `Phase ${phase.name} → ${params.status}`,
-    metadata: { phaseId: phase.id, from: phase.status, to: params.status },
+  const updated = await prisma.$transaction(async (tx) => {
+    const row = await tx.implementationPhase.update({
+      where: { id: phase.id },
+      data: {
+        status: params.status,
+        completedAt: params.status === "COMPLETED" ? new Date() : null,
+      },
+    });
+    await tx.implementationEvent.create({
+      data: {
+        projectId: params.projectId,
+        eventType: "phase_status_changed",
+        performedBy: params.performedBy ?? null,
+        summary: `Phase ${phase.name} → ${params.status}`,
+        metadataJson: { phaseId: phase.id, from: phase.status, to: params.status } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
 
   return updated;
@@ -341,8 +362,19 @@ export async function previewTasksFromChecklist(params: {
   userId: string;
   projectId: string;
 }): Promise<PreviewedTask[]> {
+  const [projectWhere, existingTasks] = await Promise.all([
+    implementationProjectByIdWhereForOwner(params.userId, params.projectId),
+    prisma.kitchenTask.findMany({
+      where: {
+        userId: params.userId,
+        sourceType: "IMPLEMENTATION",
+        sourceId: params.projectId,
+      },
+      select: { id: true, title: true },
+    }),
+  ]);
   const project = await prisma.implementationProject.findFirst({
-    where: await implementationProjectByIdWhereForOwner(params.userId, params.projectId),
+    where: projectWhere,
     include: {
       checklistItems: {
         where: { status: { in: ["TODO", "IN_PROGRESS"] } },
@@ -352,14 +384,6 @@ export async function previewTasksFromChecklist(params: {
   });
   if (!project) return [];
 
-  const existingTasks = await prisma.kitchenTask.findMany({
-    where: {
-      userId: params.userId,
-      sourceType: "IMPLEMENTATION",
-      sourceId: project.id,
-    },
-    select: { id: true, title: true },
-  });
   const existingByTitle = new Map(existingTasks.map((t) => [t.title.toLowerCase(), t.id]));
 
   return project.checklistItems.map((item) => {
@@ -384,15 +408,30 @@ export async function generateTasksFromChecklist(params: {
   itemIds: string[];
   performedBy?: string | null;
 }): Promise<{ created: number; skipped: number }> {
-  const project = await prisma.implementationProject.findFirst({
-    where: await implementationProjectByIdWhereForOwner(params.userId, params.projectId),
-  });
+  const [projectWhere, items] = await Promise.all([
+    implementationProjectByIdWhereForOwner(params.userId, params.projectId),
+    prisma.implementationChecklistItem.findMany({
+      where: { projectId: params.projectId, id: { in: params.itemIds } },
+    }),
+  ]);
+  const project = await prisma.implementationProject.findFirst({ where: projectWhere });
   if (!project) throw new Error("Project not found");
-
-  const items = await prisma.implementationChecklistItem.findMany({
-    where: { projectId: project.id, id: { in: params.itemIds } },
-  });
   if (items.length === 0) return { created: 0, skipped: 0 };
+
+  const pendingItems = items.filter((item) => !item.taskId);
+  const existingTasks =
+    pendingItems.length > 0
+      ? await prisma.kitchenTask.findMany({
+          where: {
+            userId: params.userId,
+            sourceType: "IMPLEMENTATION",
+            sourceId: project.id,
+            title: { in: pendingItems.map((item) => item.title) },
+          },
+          select: { id: true, title: true },
+        })
+      : [];
+  const existingByTitle = new Map(existingTasks.map((t) => [t.title.toLowerCase(), t.id]));
 
   let created = 0;
   let skipped = 0;
@@ -401,19 +440,11 @@ export async function generateTasksFromChecklist(params: {
       skipped += 1;
       continue;
     }
-    const existing = await prisma.kitchenTask.findFirst({
-      where: {
-        userId: params.userId,
-        sourceType: "IMPLEMENTATION",
-        sourceId: project.id,
-        title: item.title,
-      },
-      select: { id: true },
-    });
-    if (existing) {
+    const existingId = existingByTitle.get(item.title.toLowerCase());
+    if (existingId) {
       await prisma.implementationChecklistItem.update({
         where: { id: item.id },
-        data: { taskId: existing.id },
+        data: { taskId: existingId },
       });
       skipped += 1;
       continue;
@@ -473,22 +504,26 @@ export async function addRisk(params: {
   });
   if (!project) throw new Error("Project not found");
 
-  const risk = await prisma.implementationRisk.create({
-    data: {
-      projectId: project.id,
-      title: params.title,
-      mitigation: params.mitigation ?? null,
-      severity: params.severity ?? "medium",
-      status: "open",
-    },
-  });
-
-  await recordEvent({
-    projectId: project.id,
-    eventType: "risk_added",
-    performedBy: params.performedBy ?? null,
-    summary: `Risk added: ${params.title}`,
-    metadata: { riskId: risk.id, severity: params.severity ?? "medium" },
+  const risk = await prisma.$transaction(async (tx) => {
+    const row = await tx.implementationRisk.create({
+      data: {
+        projectId: project.id,
+        title: params.title,
+        mitigation: params.mitigation ?? null,
+        severity: params.severity ?? "medium",
+        status: "open",
+      },
+    });
+    await tx.implementationEvent.create({
+      data: {
+        projectId: project.id,
+        eventType: "risk_added",
+        performedBy: params.performedBy ?? null,
+        summary: `Risk added: ${params.title}`,
+        metadataJson: { riskId: row.id, severity: params.severity ?? "medium" } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
 
   return risk;
@@ -500,26 +535,31 @@ export async function resolveRisk(params: {
   riskId: string;
   performedBy?: string | null;
 }) {
+  const projectScope = await implementationProjectListWhereForOwner(params.userId);
   const risk = await prisma.implementationRisk.findFirst({
     where: {
       id: params.riskId,
       projectId: params.projectId,
-      project: await implementationProjectListWhereForOwner(params.userId),
+      project: projectScope,
     },
   });
   if (!risk) throw new Error("Risk not found");
 
-  const updated = await prisma.implementationRisk.update({
-    where: { id: risk.id },
-    data: { status: "resolved" },
-  });
-
-  await recordEvent({
-    projectId: params.projectId,
-    eventType: "risk_resolved",
-    performedBy: params.performedBy ?? null,
-    summary: `Risk resolved: ${risk.title}`,
-    metadata: { riskId: risk.id },
+  const updated = await prisma.$transaction(async (tx) => {
+    const row = await tx.implementationRisk.update({
+      where: { id: risk.id },
+      data: { status: "resolved" },
+    });
+    await tx.implementationEvent.create({
+      data: {
+        projectId: params.projectId,
+        eventType: "risk_resolved",
+        performedBy: params.performedBy ?? null,
+        summary: `Risk resolved: ${risk.title}`,
+        metadataJson: { riskId: risk.id } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
 
   return updated;

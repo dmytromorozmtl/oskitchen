@@ -64,21 +64,22 @@ export async function createMealPlan(input: CreateMealPlanInput): Promise<MealPl
     if (existing) return existing;
   }
 
-  const customer = await upsertCustomerByEmail({
-    userId: input.userId,
-    email: input.customerEmail,
-    name: input.customerName ?? null,
-    phone: input.customerPhone ?? null,
-    companyName: input.companyName ?? null,
-    source: "MEAL_PLAN",
-    type: "INDIVIDUAL",
-  });
-
+  const [customer, workspaceId] = await Promise.all([
+    upsertCustomerByEmail({
+      userId: input.userId,
+      email: input.customerEmail,
+      name: input.customerName ?? null,
+      phone: input.customerPhone ?? null,
+      companyName: input.companyName ?? null,
+      source: "MEAL_PLAN",
+      type: "INDIVIDUAL",
+    }),
+    resolveOwnerWorkspaceId(input.userId),
+  ]);
   const startDate = startOfDayUtc(input.startDate);
   const frequency = input.frequency ?? "WEEKLY";
   const status = input.status ?? "ACTIVE";
 
-  const workspaceId = await resolveOwnerWorkspaceId(input.userId);
   const plan = await prisma.mealPlan.create({
     data: {
       userId: input.userId,
@@ -116,33 +117,29 @@ export async function createMealPlan(input: CreateMealPlanInput): Promise<MealPl
     },
   });
 
-  await prisma.mealPlanEvent.create({
-    data: {
-      mealPlanId: plan.id,
-      eventType: MealPlanEventType.PLAN_CREATED,
-      performedBy: input.performedBy ?? null,
-      metadataJson: {
-        type: plan.type,
-        frequency: plan.frequency,
-        mealsPerCycle: plan.mealsPerCycle,
-      } as Prisma.InputJsonValue,
-    },
-  });
-
-  // First cycle
-  await prisma.mealPlanCycle.create({
-    data: {
-      mealPlanId: plan.id,
-      cycleStartDate: startDate,
-      cycleEndDate: cycleEndDate(startDate, frequency),
-      status: "NEEDS_SELECTION",
-      mealsPlanned: plan.mealsPerCycle,
-    },
-  });
-
-  // CRM timeline
-  try {
-    await prisma.customerTimelineEvent.create({
+  await Promise.all([
+    prisma.mealPlanEvent.create({
+      data: {
+        mealPlanId: plan.id,
+        eventType: MealPlanEventType.PLAN_CREATED,
+        performedBy: input.performedBy ?? null,
+        metadataJson: {
+          type: plan.type,
+          frequency: plan.frequency,
+          mealsPerCycle: plan.mealsPerCycle,
+        } as Prisma.InputJsonValue,
+      },
+    }),
+    prisma.mealPlanCycle.create({
+      data: {
+        mealPlanId: plan.id,
+        cycleStartDate: startDate,
+        cycleEndDate: cycleEndDate(startDate, frequency),
+        status: "NEEDS_SELECTION",
+        mealsPlanned: plan.mealsPerCycle,
+      },
+    }),
+    prisma.customerTimelineEvent.create({
       data: {
         customerId: customer.id,
         eventType: CustomerTimelineEventType.OTHER,
@@ -151,10 +148,10 @@ export async function createMealPlan(input: CreateMealPlanInput): Promise<MealPl
         summary: `Meal plan "${plan.name}" created`,
         metadataJson: { type: plan.type, frequency: plan.frequency } as Prisma.InputJsonValue,
       },
-    });
-  } catch (error) {
-    logger.warn("[meal-plans] CRM timeline event failed", error);
-  }
+    }).catch((error) => {
+      logger.warn("[meal-plans] CRM timeline event failed", error);
+    }),
+  ]);
 
   return plan;
 }
@@ -217,15 +214,17 @@ export async function updateMealPlan(scope: Scope, planId: string, input: Update
   });
   if (!existing) throw new Error("Meal plan not found.");
 
-  const updated = await prisma.mealPlan.update({ where: { id: existing.id }, data: input });
-  await prisma.mealPlanEvent.create({
-    data: {
-      mealPlanId: existing.id,
-      eventType: MealPlanEventType.PLAN_UPDATED,
-      performedBy: performedBy ?? null,
-      metadataJson: { keys: Object.keys(input) } as Prisma.InputJsonValue,
-    },
-  });
+  const [updated] = await Promise.all([
+    prisma.mealPlan.update({ where: { id: existing.id }, data: input }),
+    prisma.mealPlanEvent.create({
+      data: {
+        mealPlanId: existing.id,
+        eventType: MealPlanEventType.PLAN_UPDATED,
+        performedBy: performedBy ?? null,
+        metadataJson: { keys: Object.keys(input) } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
   return updated;
 }
 
@@ -248,30 +247,28 @@ export async function setMealPlanStatus(
     data.pausedUntil = null;
     data.pauseReason = null;
   }
-  const updated = await prisma.mealPlan.update({ where: { id: existing.id }, data });
-
   const eventType: MealPlanEventType =
     next === "PAUSED" ? "PLAN_PAUSED" :
     next === "ACTIVE" ? "PLAN_RESUMED" :
     next === "CANCELLED" ? "PLAN_CANCELLED" :
     next === "EXPIRED" ? "PLAN_EXPIRED" :
     "PLAN_UPDATED";
-
-  await prisma.mealPlanEvent.create({
-    data: {
-      mealPlanId: existing.id,
-      eventType,
-      performedBy: details?.performedBy ?? null,
-      metadataJson: {
-        from: existing.status,
-        to: next,
-        pausedUntil: details?.pausedUntil?.toISOString() ?? null,
-        pauseReason: details?.pauseReason ?? null,
-      } as Prisma.InputJsonValue,
-    },
-  });
-  try {
-    await prisma.customerTimelineEvent.create({
+  const [updated] = await Promise.all([
+    prisma.mealPlan.update({ where: { id: existing.id }, data }),
+    prisma.mealPlanEvent.create({
+      data: {
+        mealPlanId: existing.id,
+        eventType,
+        performedBy: details?.performedBy ?? null,
+        metadataJson: {
+          from: existing.status,
+          to: next,
+          pausedUntil: details?.pausedUntil?.toISOString() ?? null,
+          pauseReason: details?.pauseReason ?? null,
+        } as Prisma.InputJsonValue,
+      },
+    }),
+    prisma.customerTimelineEvent.create({
       data: {
         customerId: existing.customerId,
         eventType: CustomerTimelineEventType.OTHER,
@@ -279,10 +276,10 @@ export async function setMealPlanStatus(
         sourceId: existing.id,
         summary: `Meal plan "${existing.name}" → ${next}`,
       },
-    });
-  } catch (error) {
-    logger.warn("[meal-plans] CRM timeline event failed", error);
-  }
+    }).catch((error) => {
+      logger.warn("[meal-plans] CRM timeline event failed", error);
+    }),
+  ]);
   return updated;
 }
 
@@ -291,16 +288,16 @@ export async function setMealPlanStatus(
  * cycles that do not already exist for a given start date.
  */
 export async function materializeUpcomingCycles(scope: Scope, planId: string, count: number = 4) {
-  const plan = await prisma.mealPlan.findFirst({
-    where: await mealPlanByIdWhereForOwner(scope.userId, planId),
-  });
+  const planWhere = await mealPlanByIdWhereForOwner(scope.userId, planId);
+  const [plan, existingCycles] = await Promise.all([
+    prisma.mealPlan.findFirst({ where: planWhere }),
+    prisma.mealPlanCycle.findMany({
+      where: { mealPlanId: planId },
+      orderBy: { cycleStartDate: "desc" },
+      take: 1,
+    }),
+  ]);
   if (!plan) throw new Error("Meal plan not found.");
-
-  const existingCycles = await prisma.mealPlanCycle.findMany({
-    where: { mealPlanId: plan.id },
-    orderBy: { cycleStartDate: "desc" },
-    take: 1,
-  });
   const anchor = existingCycles[0]?.cycleStartDate ?? plan.startDate;
   const lastStart = startOfDayUtc(anchor);
   const after = nextCycleStart(lastStart, plan.frequency);
@@ -349,18 +346,20 @@ export async function skipCycle(scope: Scope, cycleId: string, performedBy?: str
   if (cycle.status === "GENERATED") {
     throw new Error("Cycle already has an order — cancel the order first.");
   }
-  const updated = await prisma.mealPlanCycle.update({
-    where: { id: cycle.id },
-    data: { status: "SKIPPED" },
-  });
-  await prisma.mealPlanEvent.create({
-    data: {
-      mealPlanId: cycle.mealPlanId,
-      cycleId: cycle.id,
-      eventType: MealPlanEventType.CYCLE_SKIPPED,
-      performedBy: performedBy ?? null,
-    },
-  });
+  const [updated] = await Promise.all([
+    prisma.mealPlanCycle.update({
+      where: { id: cycle.id },
+      data: { status: "SKIPPED" },
+    }),
+    prisma.mealPlanEvent.create({
+      data: {
+        mealPlanId: cycle.mealPlanId,
+        cycleId: cycle.id,
+        eventType: MealPlanEventType.CYCLE_SKIPPED,
+        performedBy: performedBy ?? null,
+      },
+    }),
+  ]);
   return updated;
 }
 
@@ -397,35 +396,40 @@ export async function setSelectionForCycle(
       locked: selection.locked ?? false,
     },
   });
-  await prisma.mealPlanCycle.update({
-    where: { id: cycle.id },
-    data: { status: cycle.status === "UPCOMING" || cycle.status === "NEEDS_SELECTION" ? "READY_TO_GENERATE" : cycle.status },
-  });
-  await prisma.mealPlanEvent.create({
-    data: {
-      mealPlanId: cycle.mealPlanId,
-      cycleId: cycle.id,
-      eventType: MealPlanEventType.CYCLE_SELECTIONS_CHANGED,
-      performedBy: performedBy ?? null,
-    },
-  });
+  await Promise.all([
+    prisma.mealPlanCycle.update({
+      where: { id: cycle.id },
+      data: { status: cycle.status === "UPCOMING" || cycle.status === "NEEDS_SELECTION" ? "READY_TO_GENERATE" : cycle.status },
+    }),
+    prisma.mealPlanEvent.create({
+      data: {
+        mealPlanId: cycle.mealPlanId,
+        cycleId: cycle.id,
+        eventType: MealPlanEventType.CYCLE_SELECTIONS_CHANGED,
+        performedBy: performedBy ?? null,
+      },
+    }),
+  ]);
   return created;
 }
 
 export async function removeSelection(scope: Scope, selectionId: string, performedBy?: string | null) {
   const selection = await prisma.mealPlanSelection.findFirst({
     where: { id: selectionId, cycle: { mealPlan: await mealPlanListWhereForOwner(scope.userId) } },
+    select: { id: true, cycleId: true, cycle: { select: { mealPlanId: true } } },
   });
   if (!selection) throw new Error("Selection not found.");
-  await prisma.mealPlanSelection.delete({ where: { id: selection.id } });
-  await prisma.mealPlanEvent.create({
-    data: {
-      mealPlanId: (await prisma.mealPlanCycle.findUnique({ where: { id: selection.cycleId }, select: { mealPlanId: true } }))?.mealPlanId ?? selection.cycleId,
-      cycleId: selection.cycleId,
-      eventType: MealPlanEventType.CYCLE_SELECTIONS_CHANGED,
-      performedBy: performedBy ?? null,
-    },
-  });
+  await Promise.all([
+    prisma.mealPlanSelection.delete({ where: { id: selection.id } }),
+    prisma.mealPlanEvent.create({
+      data: {
+        mealPlanId: selection.cycle.mealPlanId,
+        cycleId: selection.cycleId,
+        eventType: MealPlanEventType.CYCLE_SELECTIONS_CHANGED,
+        performedBy: performedBy ?? null,
+      },
+    }),
+  ]);
 }
 
 /**
@@ -437,12 +441,21 @@ export async function backfillLegacySubscriptions(userId: string): Promise<{ cre
     where: await customerSubscriptionListWhereForOwner(userId),
     include: { customer: { select: { id: true, email: true, name: true, phone: true } } },
   });
+  if (!legacy.length) return { created: 0 };
+
+  const existingPlans = await prisma.mealPlan.findMany({
+    where: {
+      legacySubscriptionId: { in: legacy.map((sub) => sub.id) },
+    },
+    select: { legacySubscriptionId: true },
+  });
+  const existingIds = new Set(
+    existingPlans.map((plan) => plan.legacySubscriptionId).filter((id): id is string => !!id),
+  );
+
   let created = 0;
   for (const sub of legacy) {
-    const existing = await prisma.mealPlan.findUnique({
-      where: { legacySubscriptionId: sub.id },
-    });
-    if (existing) continue;
+    if (existingIds.has(sub.id)) continue;
     try {
       await createMealPlan({
         userId,

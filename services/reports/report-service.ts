@@ -104,19 +104,20 @@ const runners: Record<ReportKey, Runner> = {
 
   /* ---------- Sales ---------- */
   revenue_report: async ({ userId, filters }) => {
-    const where = await whereOrdersInWindowForOwner({
+    const orders = await whereOrdersInWindowForOwner({
       userId,
       from: filters.from,
       to: filters.to,
       brandId: filters.brandId,
       locationId: filters.locationId,
       extra: filters.fulfillmentType ? { fulfillmentType: filters.fulfillmentType } : undefined,
-    });
-    const orders = await prisma.order.findMany({
-      where,
-      select: { createdAt: true, total: true, status: true },
-      take: MAX_EXPORT_ROWS,
-    });
+    }).then((where) =>
+      prisma.order.findMany({
+        where,
+        select: { createdAt: true, total: true, status: true },
+        take: MAX_EXPORT_ROWS,
+      }),
+    );
     const buckets = new Map<string, { gross: number; net: number; cancelled: number; count: number }>();
     for (const o of orders) {
       const key = isoDate(o.createdAt);
@@ -155,7 +156,7 @@ const runners: Record<ReportKey, Runner> = {
   },
 
   orders_report: async ({ userId, filters }) => {
-    const where = await whereOrdersInWindowForOwner({
+    const orders = await whereOrdersInWindowForOwner({
       userId,
       from: filters.from,
       to: filters.to,
@@ -165,23 +166,24 @@ const runners: Record<ReportKey, Runner> = {
         ...(filters.fulfillmentType ? { fulfillmentType: filters.fulfillmentType } : {}),
         ...(filters.status ? { status: filters.status as Prisma.OrderWhereInput["status"] } : {}),
       },
-    });
-    const orders = await prisma.order.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      take: MAX_EXPORT_ROWS,
-      select: {
-        id: true,
-        createdAt: true,
-        status: true,
-        fulfillmentType: true,
-        customerName: true,
-        customerEmail: true,
-        total: true,
-        importedFromExternal: { select: { provider: true } },
-        storefrontOrder: { select: { id: true } },
-      },
-    });
+    }).then((where) =>
+      prisma.order.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: MAX_EXPORT_ROWS,
+        select: {
+          id: true,
+          createdAt: true,
+          status: true,
+          fulfillmentType: true,
+          customerName: true,
+          customerEmail: true,
+          total: true,
+          importedFromExternal: { select: { provider: true } },
+          storefrontOrder: { select: { id: true } },
+        },
+      }),
+    );
     const filtered = filters.channel
       ? orders.filter((o) => channelOf(o) === filters.channel)
       : orders;
@@ -212,23 +214,24 @@ const runners: Record<ReportKey, Runner> = {
   },
 
   sales_by_channel: async ({ userId, filters }) => {
-    const where = await whereOrdersInWindowForOwner({
+    const orders = await whereOrdersInWindowForOwner({
       userId,
       from: filters.from,
       to: filters.to,
       brandId: filters.brandId,
       locationId: filters.locationId,
-    });
-    const orders = await prisma.order.findMany({
-      where,
-      select: {
-        status: true,
-        total: true,
-        importedFromExternal: { select: { provider: true } },
-        storefrontOrder: { select: { id: true } },
-      },
-      take: MAX_EXPORT_ROWS,
-    });
+    }).then((where) =>
+      prisma.order.findMany({
+        where,
+        select: {
+          status: true,
+          total: true,
+          importedFromExternal: { select: { provider: true } },
+          storefrontOrder: { select: { id: true } },
+        },
+        take: MAX_EXPORT_ROWS,
+      }),
+    );
     const buckets = new Map<string, { orderCount: number; revenue: number; label: string }>();
     for (const o of orders) {
       const channel = channelOf(o);
@@ -261,25 +264,26 @@ const runners: Record<ReportKey, Runner> = {
   },
 
   sales_by_product: async ({ userId, filters }) => {
-    const orderWhere = await whereOrdersInWindowForOwner({
+    const items = await whereOrdersInWindowForOwner({
       userId,
       from: filters.from,
       to: filters.to,
       brandId: filters.brandId,
       locationId: filters.locationId,
-    });
-    const items = await prisma.orderItem.findMany({
-      where: {
-        order: orderWhere,
-        ...(filters.productId ? { productId: filters.productId } : {}),
-      },
-      select: {
-        quantity: true,
-        orderId: true,
-        product: { select: { title: true, price: true } },
-      },
-      take: MAX_EXPORT_ROWS,
-    });
+    }).then((orderWhere) =>
+      prisma.orderItem.findMany({
+        where: {
+          order: orderWhere,
+          ...(filters.productId ? { productId: filters.productId } : {}),
+        },
+        select: {
+          quantity: true,
+          orderId: true,
+          product: { select: { title: true, price: true } },
+        },
+        take: MAX_EXPORT_ROWS,
+      }),
+    );
     const buckets = new Map<string, { qty: number; revenue: number; orders: Set<string> }>();
     for (const it of items) {
       const title = it.product?.title ?? "(unknown)";
@@ -604,25 +608,26 @@ const runners: Record<ReportKey, Runner> = {
 
   /* ---------- Customers ---------- */
   customer_report: async ({ scope, userId, filters }) => {
-    const customerScope = await kitchenCustomerListWhereForOwner(userId);
-    const and: Prisma.KitchenCustomerWhereInput[] = [customerScope];
-    if (filters.from) {
-      and.push({
-        OR: [{ lastOrderAt: { gte: filters.from } }, { firstOrderAt: { gte: filters.from } }],
+    const customers = await kitchenCustomerListWhereForOwner(userId).then((customerScope) => {
+      const and: Prisma.KitchenCustomerWhereInput[] = [customerScope];
+      if (filters.from) {
+        and.push({
+          OR: [{ lastOrderAt: { gte: filters.from } }, { firstOrderAt: { gte: filters.from } }],
+        });
+      }
+      return prisma.kitchenCustomer.findMany({
+        where: { AND: and },
+        orderBy: { lifetimeValueCents: "desc" },
+        take: MAX_EXPORT_ROWS,
+        select: {
+          name: true,
+          email: true,
+          phone: true,
+          totalOrders: true,
+          lifetimeValueCents: true,
+          lastOrderAt: true,
+        },
       });
-    }
-    const customers = await prisma.kitchenCustomer.findMany({
-      where: { AND: and },
-      orderBy: { lifetimeValueCents: "desc" },
-      take: MAX_EXPORT_ROWS,
-      select: {
-        name: true,
-        email: true,
-        phone: true,
-        totalOrders: true,
-        lifetimeValueCents: true,
-        lastOrderAt: true,
-      },
     });
     const pii =
       scope.isOwner ||
@@ -651,11 +656,14 @@ const runners: Record<ReportKey, Runner> = {
   },
 
   customer_retention: async ({ userId, filters }) => {
-    const orders = await prisma.order.findMany({
-      where: await whereOrdersInWindowForOwner({ userId, from: filters.from, to: filters.to }),
-      select: { customerEmail: true, createdAt: true },
-      take: MAX_EXPORT_ROWS,
-    });
+    const orders = await whereOrdersInWindowForOwner({ userId, from: filters.from, to: filters.to }).then(
+      (where) =>
+        prisma.order.findMany({
+          where,
+          select: { customerEmail: true, createdAt: true },
+          take: MAX_EXPORT_ROWS,
+        }),
+    );
     const repeat = computeRepeatRate(
       orders.map((o) => ({ email: o.customerEmail ?? "", orderId: "" })),
     );
@@ -831,21 +839,22 @@ const runners: Record<ReportKey, Runner> = {
   },
 
   audit_log_report: async ({ userId, filters }) => {
-    const jobs = await prisma.exportJob.findMany({
-      where: {
-        userId,
-        createdAt: { gte: filters.from, lte: filters.to },
-      },
-      orderBy: { createdAt: "desc" },
-      take: MAX_EXPORT_ROWS,
-      select: {
-        createdAt: true,
-        type: true,
-        rowCount: true,
-        fileName: true,
-        createdBy: { select: { email: true, fullName: true } },
-      },
-    });
+    const jobs = await exportJobListWhereForOwner(userId).then((exportScope) =>
+      prisma.exportJob.findMany({
+        where: {
+          AND: [exportScope, { createdAt: { gte: filters.from, lte: filters.to } }],
+        },
+        orderBy: { createdAt: "desc" },
+        take: MAX_EXPORT_ROWS,
+        select: {
+          createdAt: true,
+          type: true,
+          rowCount: true,
+          fileName: true,
+          createdBy: { select: { email: true, fullName: true } },
+        },
+      }),
+    );
     return {
       summary: [
         { label: "Exports", value: String(jobs.length) },
@@ -877,34 +886,34 @@ async function buildExecutiveSummary(
   cadence: "weekly" | "monthly",
 ): Promise<Omit<ReportResult, "definition" | "rangeLabel" | "status">> {
   const { userId, filters } = ctx;
-  const where = await whereOrdersInWindowForOwner({
-    userId,
-    from: filters.from,
-    to: filters.to,
-    brandId: filters.brandId,
-    locationId: filters.locationId,
-  });
 
-  const cateringQuoteWhere = await cateringQuoteListWhereForOwner(userId);
   const [orders, productionBatches, packingBatches, deliveryStops, cateringQuotes] =
     await Promise.all([
-      prisma.order.findMany({
-        where,
-        take: SERVICE_AGGREGATION_TAKE,
-        select: {
-          id: true,
-          status: true,
-          total: true,
-          customerEmail: true,
-          createdAt: true,
-          brandId: true,
-          locationId: true,
-          fulfillmentType: true,
-          importedFromExternal: { select: { provider: true } },
-          storefrontOrder: { select: { id: true } },
-          orderItems: { select: { quantity: true, product: { select: { title: true } } } },
-        },
-      }),
+      whereOrdersInWindowForOwner({
+        userId,
+        from: filters.from,
+        to: filters.to,
+        brandId: filters.brandId,
+        locationId: filters.locationId,
+      }).then((where) =>
+        prisma.order.findMany({
+          where,
+          take: SERVICE_AGGREGATION_TAKE,
+          select: {
+            id: true,
+            status: true,
+            total: true,
+            customerEmail: true,
+            createdAt: true,
+            brandId: true,
+            locationId: true,
+            fulfillmentType: true,
+            importedFromExternal: { select: { provider: true } },
+            storefrontOrder: { select: { id: true } },
+            orderItems: { select: { quantity: true, product: { select: { title: true } } } },
+          },
+        }),
+      ),
       prisma.productionBatch.findMany({
         where: {
           userId,
@@ -926,13 +935,15 @@ async function buildExecutiveSummary(
         take: SERVICE_AGGREGATION_TAKE,
         select: { status: true },
       }),
-      prisma.cateringQuote.findMany({
-        where: {
-          AND: [cateringQuoteWhere, { createdAt: { gte: filters.from, lte: filters.to } }],
-        },
-        take: SERVICE_AGGREGATION_TAKE,
-        select: { status: true, total: true },
-      }),
+      cateringQuoteListWhereForOwner(userId).then((cateringQuoteWhere) =>
+        prisma.cateringQuote.findMany({
+          where: {
+            AND: [cateringQuoteWhere, { createdAt: { gte: filters.from, lte: filters.to } }],
+          },
+          take: SERVICE_AGGREGATION_TAKE,
+          select: { status: true, total: true },
+        }),
+      ),
     ]);
 
   let netRevenue = 0;
@@ -1186,12 +1197,13 @@ export async function listReportExportHistory(userId: string, limit = 50): Promi
 }
 
 export async function listSavedReports(userId: string, take = 100) {
-  const reportScope = await resolveOwnerScopedWhere(userId);
-  return prisma.savedReport.findMany({
-    where: reportScope,
-    orderBy: [{ pinned: "desc" }, { updatedAt: "desc" }],
-    take,
-  });
+  return resolveOwnerScopedWhere(userId).then((reportScope) =>
+    prisma.savedReport.findMany({
+      where: reportScope,
+      orderBy: [{ pinned: "desc" }, { updatedAt: "desc" }],
+      take,
+    }),
+  );
 }
 
 export function previewSlice<T>(rows: T[], limit = PREVIEW_ROW_LIMIT): T[] {

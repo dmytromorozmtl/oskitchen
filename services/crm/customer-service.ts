@@ -261,29 +261,43 @@ export async function backfillCustomersFromOrders(userId: string): Promise<{ cre
     where: orderScope,
     _min: { customerName: true, customerPhone: true, createdAt: true },
   });
-  let created = 0;
-  for (const g of grouped) {
-    const email = normalizeEmail(g.customerEmail);
-    if (!email) continue;
-    const exists = await prisma.kitchenCustomer.findUnique({
-      where: { userId_email: { userId, email } },
-      select: { id: true },
-    });
-    if (exists) continue;
-    await prisma.kitchenCustomer.create({
-      data: {
-        userId,
-        workspaceId,
-        email,
-        name: g._min.customerName ?? null,
-        phone: normalizePhone(g._min.customerPhone),
-        status: "ACTIVE",
-        source: "MANUAL",
-      },
-    });
-    created += 1;
-  }
-  return { created };
+
+  const candidates = grouped
+    .map((g) => ({
+      email: normalizeEmail(g.customerEmail),
+      name: g._min.customerName ?? null,
+      phone: normalizePhone(g._min.customerPhone),
+    }))
+    .filter((row): row is typeof row & { email: string } => Boolean(row.email));
+
+  if (!candidates.length) return { created: 0 };
+
+  const existing = await prisma.kitchenCustomer.findMany({
+    where: { userId, email: { in: candidates.map((c) => c.email) } },
+    select: { email: true },
+  });
+  const existingEmails = new Set(existing.map((row) => row.email));
+
+  const toCreate = candidates.filter((c) => !existingEmails.has(c.email));
+  if (!toCreate.length) return { created: 0 };
+
+  await Promise.all(
+    toCreate.map((row) =>
+      prisma.kitchenCustomer.create({
+        data: {
+          userId,
+          workspaceId,
+          email: row.email,
+          name: row.name,
+          phone: row.phone,
+          status: "ACTIVE",
+          source: "MANUAL",
+        },
+      }),
+    ),
+  );
+
+  return { created: toCreate.length };
 }
 
 /** Find customers whose dedupe keys overlap. */

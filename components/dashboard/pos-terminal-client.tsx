@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { Tag, Wifi, WifiOff } from "lucide-react";
+import { toast } from "sonner";
+
+import { useDebounce } from "@/hooks/use-debounce";
 
 import { posCheckoutAction } from "@/actions/pos";
 import {
@@ -194,6 +197,7 @@ export function PosTerminalClient(props: {
   const [registerId, setRegisterId] = useState(props.registers[0]?.id ?? "");
   const [staffId, setStaffId] = useState(props.staff[0]?.id ?? "");
   const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 300);
   const [paymentMode, setPaymentMode] = useState<PaymentModeKey>("CASH");
   const [offlineCardLast4, setOfflineCardLast4] = useState("");
   const [offlineCardBrand, setOfflineCardBrand] = useState("visa");
@@ -532,11 +536,11 @@ export function PosTerminalClient(props: {
     if (speedMode) {
       return filterPosProductsForCashierSpeed({
         products,
-        query,
+        query: debouncedQuery,
         category: categoryFilter,
       });
     }
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return products;
     return products.filter(
       (p) =>
@@ -544,7 +548,7 @@ export function PosTerminalClient(props: {
         (p.barcode && p.barcode.toLowerCase() === q) ||
         p.id.toLowerCase().includes(q),
     );
-  }, [products, query, speedMode, categoryFilter]);
+  }, [products, debouncedQuery, speedMode, categoryFilter]);
 
   const cartTotal = useMemo(
     () => cart.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0),
@@ -761,28 +765,42 @@ export function PosTerminalClient(props: {
       return;
     }
     startTransition(async () => {
-      const res = await posCheckoutAction(buildCheckoutPayload());
+      const payload = buildCheckoutPayload();
+      const savedCart = [...cart];
+      const savedDiscountMode = discountMode;
+      const savedFixedDiscount = fixedDiscountInput;
+      const savedPercentDiscount = percentDiscountInput;
+
+      setCart([]);
+      resetDiscountState();
+      clearPosLocalCart(registerId);
+      showCheckoutStatus("Processing sale…", "info");
+
+      const res = await posCheckoutAction(payload);
       if (!res.ok) {
+        setCart(savedCart);
+        setDiscountMode(savedDiscountMode);
+        setFixedDiscountInput(savedFixedDiscount);
+        setPercentDiscountInput(savedPercentDiscount);
+        savePosLocalCart(registerId, savedCart);
         showCheckoutStatus(res.error, "error");
+        toast.error("Payment failed. Cart restored.");
         return;
       }
       if (paymentMode === "CARD_TERMINAL_PLACEHOLDER") {
         setPendingTerminal({ orderId: res.orderId, amount: amountDue });
-        setCart([]);
-        resetDiscountState();
         showCheckoutStatus(
           `Order ${res.orderId.slice(0, 8)}… ready — tap card to complete payment.`,
           "success",
         );
+        toast.success("Order placed!");
         return;
       }
-      setCart([]);
-      resetDiscountState();
-      clearPosLocalCart(registerId);
       showCheckoutStatus(
         `Sale complete — order ${res.orderId.slice(0, 8)}… receipt ${res.receiptNumber}`,
         "success",
       );
+      toast.success("Order placed!");
       if (showWelcome && !welcomeConfettiFired.current) {
         welcomeConfettiFired.current = true;
         fireCelebrationConfetti();
@@ -1034,6 +1052,7 @@ export function PosTerminalClient(props: {
           className={cn(
             POS_TERMINAL_DENSITY_PRODUCT_GRID_CLASS,
             posCashierSpeedProductGridClass(speedMode),
+            filtered.length > 40 && "max-h-[70vh] overflow-y-auto overscroll-contain",
           )}
           data-testid={speedMode ? "pos-speed-product-grid" : "pos-product-grid"}
         >

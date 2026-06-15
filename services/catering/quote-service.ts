@@ -356,15 +356,17 @@ export async function removeQuoteLine(scope: Scope, lineId: string, performedBy?
     select: { id: true, quoteId: true, title: true },
   });
   if (!item) throw new Error("Line not found.");
-  await prisma.cateringQuoteItem.delete({ where: { id: item.id } });
-  await prisma.cateringQuoteEvent.create({
-    data: {
-      quoteId: item.quoteId,
-      eventType: CateringQuoteAuditEventType.QUOTE_UPDATED,
-      performedBy: performedBy ?? null,
-      metadataJson: { removedLine: item.title } as Prisma.InputJsonValue,
-    },
-  });
+  await Promise.all([
+    prisma.cateringQuoteItem.delete({ where: { id: item.id } }),
+    prisma.cateringQuoteEvent.create({
+      data: {
+        quoteId: item.quoteId,
+        eventType: CateringQuoteAuditEventType.QUOTE_UPDATED,
+        performedBy: performedBy ?? null,
+        metadataJson: { removedLine: item.title } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
   return recomputeQuoteTotals(scope, item.quoteId);
 }
 
@@ -442,15 +444,17 @@ export async function updateQuoteFields(
   if (input.brandId !== undefined) data.brand = input.brandId ? { connect: { id: input.brandId } } : { disconnect: true };
   if (input.locationId !== undefined) data.location = input.locationId ? { connect: { id: input.locationId } } : { disconnect: true };
 
-  await prisma.cateringQuote.update({ where: { id: quote.id }, data });
-  await prisma.cateringQuoteEvent.create({
-    data: {
-      quoteId: quote.id,
-      eventType: CateringQuoteAuditEventType.QUOTE_UPDATED,
-      performedBy: performedBy ?? null,
-      metadataJson: { keys: Object.keys(input) } as Prisma.InputJsonValue,
-    },
-  });
+  await Promise.all([
+    prisma.cateringQuote.update({ where: { id: quote.id }, data }),
+    prisma.cateringQuoteEvent.create({
+      data: {
+        quoteId: quote.id,
+        eventType: CateringQuoteAuditEventType.QUOTE_UPDATED,
+        performedBy: performedBy ?? null,
+        metadataJson: { keys: Object.keys(input) } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
   return recomputeQuoteTotals(scope, quote.id);
 }
 
@@ -470,15 +474,17 @@ export async function setQuoteStatus(
   if (next === "ACCEPTED") data.acceptedAt = now;
   if (next === "REJECTED" || next === "DECLINED") data.rejectedAt = now;
 
-  await prisma.cateringQuote.update({ where: { id: quote.id }, data });
-  await prisma.cateringQuoteEvent.create({
-    data: {
-      quoteId: quote.id,
-      eventType: CateringQuoteAuditEventType.QUOTE_STATUS_CHANGED,
-      performedBy: performedBy ?? null,
-      metadataJson: { from: quote.status, to: next } as Prisma.InputJsonValue,
-    },
-  });
+  await Promise.all([
+    prisma.cateringQuote.update({ where: { id: quote.id }, data }),
+    prisma.cateringQuoteEvent.create({
+      data: {
+        quoteId: quote.id,
+        eventType: CateringQuoteAuditEventType.QUOTE_STATUS_CHANGED,
+        performedBy: performedBy ?? null,
+        metadataJson: { from: quote.status, to: next } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
   if (quote.customerId) {
     try {
       await prisma.customerTimelineEvent.create({
@@ -500,34 +506,39 @@ export async function setQuoteStatus(
 /* ============================ versions ============================ */
 
 export async function snapshotQuoteVersion(scope: Scope, quoteId: string, performedBy?: string | null, reason?: string | null) {
-  const quote = await prisma.cateringQuote.findFirst({
-    where: await cateringQuoteByIdWhereForOwner(scope.userId, quoteId),
-    include: { items: true, packages: true },
-  });
+  const ownerWhere = await cateringQuoteByIdWhereForOwner(scope.userId, quoteId);
+  const [quote, latest] = await Promise.all([
+    prisma.cateringQuote.findFirst({
+      where: ownerWhere,
+      include: { items: true, packages: true },
+    }),
+    prisma.cateringQuoteVersion.findFirst({
+      where: { quoteId },
+      orderBy: { versionNumber: "desc" },
+      select: { versionNumber: true },
+    }),
+  ]);
   if (!quote) throw new Error("Quote not found.");
-  const latest = await prisma.cateringQuoteVersion.findFirst({
-    where: { quoteId: quote.id },
-    orderBy: { versionNumber: "desc" },
-    select: { versionNumber: true },
-  });
   const versionNumber = (latest?.versionNumber ?? 0) + 1;
-  await prisma.cateringQuoteVersion.create({
-    data: {
-      quoteId: quote.id,
-      versionNumber,
-      createdBy: performedBy ?? null,
-      reason: reason ?? null,
-      snapshotJson: JSON.parse(JSON.stringify(quote)) as Prisma.InputJsonValue,
-    },
-  });
-  await prisma.cateringQuoteEvent.create({
-    data: {
-      quoteId: quote.id,
-      eventType: CateringQuoteAuditEventType.QUOTE_VERSION_SAVED,
-      performedBy: performedBy ?? null,
-      metadataJson: { versionNumber } as Prisma.InputJsonValue,
-    },
-  });
+  await Promise.all([
+    prisma.cateringQuoteVersion.create({
+      data: {
+        quoteId: quote.id,
+        versionNumber,
+        createdBy: performedBy ?? null,
+        reason: reason ?? null,
+        snapshotJson: JSON.parse(JSON.stringify(quote)) as Prisma.InputJsonValue,
+      },
+    }),
+    prisma.cateringQuoteEvent.create({
+      data: {
+        quoteId: quote.id,
+        eventType: CateringQuoteAuditEventType.QUOTE_VERSION_SAVED,
+        performedBy: performedBy ?? null,
+        metadataJson: { versionNumber } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
   return versionNumber;
 }
 
@@ -537,14 +548,16 @@ export async function rotatePublicLink(scope: Scope, quoteId: string, performedB
   const quote = await prisma.cateringQuote.findFirst({ where: await cateringQuoteByIdWhereForOwner(scope.userId, quoteId) });
   if (!quote) throw new Error("Quote not found.");
   const token = generatePublicProposalToken();
-  await prisma.cateringQuote.update({ where: { id: quote.id }, data: { publicToken: token } });
-  await prisma.cateringQuoteEvent.create({
-    data: {
-      quoteId: quote.id,
-      eventType: CateringQuoteAuditEventType.QUOTE_PUBLIC_LINK_GENERATED,
-      performedBy: performedBy ?? null,
-    },
-  });
+  await Promise.all([
+    prisma.cateringQuote.update({ where: { id: quote.id }, data: { publicToken: token } }),
+    prisma.cateringQuoteEvent.create({
+      data: {
+        quoteId: quote.id,
+        eventType: CateringQuoteAuditEventType.QUOTE_PUBLIC_LINK_GENERATED,
+        performedBy: performedBy ?? null,
+      },
+    }),
+  ]);
   return token;
 }
 
@@ -554,14 +567,16 @@ export async function revokePublicLink(scope: Scope, quoteId: string, performedB
   // Rotate to a guaranteed unique short string ("revoked-…") that no public
   // page expects to find, but keep `publicToken` non-null (it's required).
   const revokedToken = `revoked-${quote.id.slice(0, 8)}-${Date.now()}`;
-  await prisma.cateringQuote.update({ where: { id: quote.id }, data: { publicToken: revokedToken } });
-  await prisma.cateringQuoteEvent.create({
-    data: {
-      quoteId: quote.id,
-      eventType: CateringQuoteAuditEventType.QUOTE_PUBLIC_LINK_REVOKED,
-      performedBy: performedBy ?? null,
-    },
-  });
+  await Promise.all([
+    prisma.cateringQuote.update({ where: { id: quote.id }, data: { publicToken: revokedToken } }),
+    prisma.cateringQuoteEvent.create({
+      data: {
+        quoteId: quote.id,
+        eventType: CateringQuoteAuditEventType.QUOTE_PUBLIC_LINK_REVOKED,
+        performedBy: performedBy ?? null,
+      },
+    }),
+  ]);
   return revokedToken;
 }
 
@@ -605,18 +620,20 @@ export async function completeFollowUp(scope: Scope, followUpId: string, perform
     },
   });
   if (!followUp) throw new Error("Follow-up not found.");
-  const updated = await prisma.cateringQuoteFollowUp.update({
-    where: { id: followUp.id },
-    data: { status: "COMPLETED", completedAt: new Date() },
-  });
-  await prisma.cateringQuoteEvent.create({
-    data: {
-      quoteId: followUp.quoteId,
-      eventType: CateringQuoteAuditEventType.QUOTE_FOLLOW_UP_COMPLETED,
-      performedBy: performedBy ?? null,
-      metadataJson: { followUpId: followUp.id } as Prisma.InputJsonValue,
-    },
-  });
+  const [updated] = await Promise.all([
+    prisma.cateringQuoteFollowUp.update({
+      where: { id: followUp.id },
+      data: { status: "COMPLETED", completedAt: new Date() },
+    }),
+    prisma.cateringQuoteEvent.create({
+      data: {
+        quoteId: followUp.quoteId,
+        eventType: CateringQuoteAuditEventType.QUOTE_FOLLOW_UP_COMPLETED,
+        performedBy: performedBy ?? null,
+        metadataJson: { followUpId: followUp.id } as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
   return updated;
 }
 

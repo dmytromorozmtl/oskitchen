@@ -10,6 +10,7 @@ import {
 } from "@/actions/kitchen-daily-kds";
 import { KdsBumpNextStrip } from "@/components/kitchen/kds-bump-next-strip";
 import { KdsBumpUndoStrip } from "@/components/kitchen/kds-bump-undo-strip";
+import { VirtualList } from "@/components/ui/virtual-list";
 import { RushMode } from "@/components/kitchen/rush-mode";
 import { KdsQueueStatusStrip } from "@/components/kitchen/kds-queue-status-strip";
 import { KdsRecallNextStrip } from "@/components/kitchen/kds-recall-next-strip";
@@ -271,21 +272,30 @@ export function KdsDailyService({
   function handleBump(orderId: string) {
     triggerKdsHaptic("bump");
     setActionError(null);
+    const previousStatus = orders.find((order) => order.id === orderId)?.status ?? "PREPARING";
+    const ticketLabel = formatKdsTicketNumber(orderId);
+
+    setOrders((prev) =>
+      prev.map((order) => (order.id === orderId ? { ...order, status: "READY" as const } : order)),
+    );
+    showBumpConfirmation(orderId);
+    scheduleBumpUndo(orderId, ticketLabel);
+    setVoiceoverAnnouncement(kdsVoiceoverBumpAnnouncement(ticketLabel));
     setPendingOrderId(orderId);
+
     startBump(async () => {
       const res = await bumpDailyKdsOrderAction(orderId);
       setPendingOrderId(null);
-      if (res.ok) {
-        const ticketLabel = formatKdsTicketNumber(orderId);
-        showBumpConfirmation(orderId);
-        scheduleBumpUndo(orderId, ticketLabel);
-        setVoiceoverAnnouncement(kdsVoiceoverBumpAnnouncement(ticketLabel));
-        setOrders((prev) =>
-          prev.map((order) => (order.id === orderId ? { ...order, status: "READY" } : order)),
-        );
-      } else {
+      if (!res.ok) {
         triggerKdsHaptic("error");
         setActionError(res.error ?? "Could not bump order. Try again or check permissions.");
+        setOrders((prev) =>
+          prev.map((order) =>
+            order.id === orderId ? { ...order, status: previousStatus } : order,
+          ),
+        );
+        setConfirmedBumpId(null);
+        setUndoBump(null);
       }
     });
   }
@@ -410,44 +420,88 @@ export function KdsDailyService({
         <div className={kdsTabletLandscapeLaneLayoutClass()}>
           {preparing.length > 0 ? (
             <KdsTicketSection title="On the line" count={preparing.length}>
-              {preparing.map((order) => (
-                <KdsTicketCard
-                  key={order.id}
-                  order={order}
-                  isNew={recentArrivals.has(order.id)}
-                  isConfirmed={confirmedBumpId === order.id}
-                  canBump={canBump}
-                  canRecall={false}
-                  pending={pendingOrderId !== null}
-                  pendingOrderId={pendingOrderId}
-                  onBump={handleBump}
-                  onRecall={handleRecall}
-                />
-              ))}
+              <KdsTicketList
+                orders={preparing}
+                recentArrivals={recentArrivals}
+                confirmedBumpId={confirmedBumpId}
+                canBump={canBump}
+                canRecall={false}
+                pending={pendingOrderId !== null}
+                pendingOrderId={pendingOrderId}
+                onBump={handleBump}
+                onRecall={handleRecall}
+              />
             </KdsTicketSection>
           ) : null}
 
           {ready.length > 0 ? (
             <KdsTicketSection title="Expo / Ready" count={ready.length} tone="ready">
-              {ready.map((order) => (
-                <KdsTicketCard
-                  key={order.id}
-                  order={order}
-                  isNew={recentArrivals.has(order.id)}
-                  isConfirmed={confirmedBumpId === order.id}
-                  canBump={false}
-                  canRecall={canRecall}
-                  pending={pendingOrderId !== null}
-                  pendingOrderId={pendingOrderId}
-                  onBump={handleBump}
-                  onRecall={handleRecall}
-                />
-              ))}
+              <KdsTicketList
+                orders={ready}
+                recentArrivals={recentArrivals}
+                confirmedBumpId={confirmedBumpId}
+                canBump={false}
+                canRecall={canRecall}
+                pending={pendingOrderId !== null}
+                pendingOrderId={pendingOrderId}
+                onBump={handleBump}
+                onRecall={handleRecall}
+              />
             </KdsTicketSection>
           ) : null}
         </div>
       )}
     </div>
+  );
+}
+
+function KdsTicketList({
+  orders,
+  recentArrivals,
+  confirmedBumpId,
+  canBump,
+  canRecall,
+  pending,
+  pendingOrderId,
+  onBump,
+  onRecall,
+}: {
+  orders: KdsDailyOrder[];
+  recentArrivals: Set<string>;
+  confirmedBumpId: string | null;
+  canBump: boolean;
+  canRecall: boolean;
+  pending: boolean;
+  pendingOrderId: string | null;
+  onBump: (orderId: string) => void;
+  onRecall: (orderId: string) => void;
+}) {
+  const renderTicket = (order: KdsDailyOrder) => (
+    <KdsTicketCard
+      key={order.id}
+      order={order}
+      isNew={recentArrivals.has(order.id)}
+      isConfirmed={confirmedBumpId === order.id}
+      canBump={canBump}
+      canRecall={canRecall}
+      pending={pending}
+      pendingOrderId={pendingOrderId}
+      onBump={onBump}
+      onRecall={onRecall}
+    />
+  );
+
+  if (orders.length <= 20) {
+    return <>{orders.map(renderTicket)}</>;
+  }
+
+  return (
+    <VirtualList
+      items={orders}
+      estimateSize={220}
+      className="max-h-[70vh] overflow-auto"
+      renderItem={(order) => <div className="pb-3">{renderTicket(order)}</div>}
+    />
   );
 }
 

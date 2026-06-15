@@ -88,15 +88,23 @@ export async function createOrUpdateMapping(input: CreateMappingInput): Promise<
   const externalProductId = input.externalProductId || input.externalTitle;
   const externalVariantId = input.externalVariantId ?? "";
 
-  const outcome = await runMatch({
-    userId: input.userId,
-    provider: providerKey,
-    externalTitle: input.externalTitle,
-    externalSku: input.externalSku,
-    externalCategory: input.externalCategory,
-    externalProductId,
-    brandId: input.brandId,
-  });
+  const [outcome, workspaceId, mappingWhere] = await Promise.all([
+    runMatch({
+      userId: input.userId,
+      provider: providerKey,
+      externalTitle: input.externalTitle,
+      externalSku: input.externalSku,
+      externalCategory: input.externalCategory,
+      externalProductId,
+      brandId: input.brandId,
+    }),
+    resolveOwnerWorkspaceId(input.userId),
+    mappingScopeAnd(input.userId, {
+      provider: input.provider,
+      externalProductId,
+      externalVariantId,
+    }),
+  ]);
 
   const candidateId = shouldAttachCandidate(outcome.label) ? outcome.candidateId : null;
   let status: ProductMappingStatus;
@@ -108,13 +116,8 @@ export async function createOrUpdateMapping(input: CreateMappingInput): Promise<
     status = "NEEDS_REVIEW";
   }
 
-  const workspaceId = await resolveOwnerWorkspaceId(input.userId);
   const existing = await prisma.productMapping.findFirst({
-    where: await mappingScopeAnd(input.userId, {
-      provider: input.provider,
-      externalProductId,
-      externalVariantId,
-    }),
+    where: mappingWhere,
     select: { workspaceId: true },
   });
 
@@ -201,26 +204,40 @@ export type ApproveInput = {
 };
 
 export async function approveMapping(input: ApproveInput): Promise<{ ok: boolean; error?: string }> {
-  const existing = await prisma.productMapping.findFirst({
-    where: await productMappingByIdWhereForOwner(input.userId, input.mappingId),
-    select: {
-      id: true,
-      status: true,
-      internalProductId: true,
-      externalTitle: true,
-      providerKey: true,
-      provider: true,
-      confidenceLabel: true,
-    },
-  });
+  const mappingWhere = await productMappingByIdWhereForOwner(input.userId, input.mappingId);
+  const existingSelect = {
+    id: true,
+    status: true,
+    internalProductId: true,
+    externalTitle: true,
+    providerKey: true,
+    provider: true,
+    confidenceLabel: true,
+  } as const;
+
+  let existing: Awaited<ReturnType<typeof prisma.productMapping.findFirst<{ select: typeof existingSelect }>>>;
+  let product: { id: string } | null = null;
+
+  if (input.internalProductId) {
+    const productWhere = await productByIdWhereForOwner(input.userId, input.internalProductId);
+    [existing, product] = await Promise.all([
+      prisma.productMapping.findFirst({ where: mappingWhere, select: existingSelect }),
+      prisma.product.findFirst({ where: productWhere, select: { id: true } }),
+    ]);
+  } else {
+    existing = await prisma.productMapping.findFirst({ where: mappingWhere, select: existingSelect });
+    const targetProductId = existing?.internalProductId;
+    if (targetProductId) {
+      product = await prisma.product.findFirst({
+        where: await productByIdWhereForOwner(input.userId, targetProductId),
+        select: { id: true },
+      });
+    }
+  }
+
   if (!existing) return { ok: false, error: "Mapping not found" };
   const targetProductId = input.internalProductId ?? existing.internalProductId;
   if (!targetProductId) return { ok: false, error: "Pick a OS Kitchen product before approving." };
-
-  const product = await prisma.product.findFirst({
-    where: await productByIdWhereForOwner(input.userId, targetProductId),
-    select: { id: true },
-  });
   if (!product) return { ok: false, error: "Product is not in this workspace." };
 
   await prisma.$transaction([
@@ -301,18 +318,22 @@ export type ChangeStatusInput = {
 };
 
 export async function changeMappingStatus(input: ChangeStatusInput): Promise<{ ok: boolean; error?: string }> {
-  const existing = await prisma.productMapping.findFirst({
-    where: await productMappingByIdWhereForOwner(input.userId, input.mappingId),
-    select: { id: true, status: true, internalProductId: true },
-  });
-  if (!existing) return { ok: false, error: "Mapping not found" };
+  const mappingWhere = await productMappingByIdWhereForOwner(input.userId, input.mappingId);
+  const existingSelect = { id: true, status: true, internalProductId: true } as const;
+
+  let existing: Awaited<ReturnType<typeof prisma.productMapping.findFirst<{ select: typeof existingSelect }>>>;
   if (input.internalProductId) {
-    const product = await prisma.product.findFirst({
-      where: await productByIdWhereForOwner(input.userId, input.internalProductId),
-      select: { id: true },
-    });
+    const productWhere = await productByIdWhereForOwner(input.userId, input.internalProductId);
+    const [mapping, product] = await Promise.all([
+      prisma.productMapping.findFirst({ where: mappingWhere, select: existingSelect }),
+      prisma.product.findFirst({ where: productWhere, select: { id: true } }),
+    ]);
+    existing = mapping;
     if (!product) return { ok: false, error: "Product is not in this workspace." };
+  } else {
+    existing = await prisma.productMapping.findFirst({ where: mappingWhere, select: existingSelect });
   }
+  if (!existing) return { ok: false, error: "Mapping not found" };
 
   await prisma.$transaction([
     prisma.productMapping.update({
@@ -416,18 +437,21 @@ export type ArchiveInput = {
 
 export async function bulkArchive(input: ArchiveInput): Promise<{ archived: number }> {
   if (input.mappingIds.length === 0) return { archived: 0 };
-  const result = await prisma.productMapping.updateMany({
-    where: await mappingScopeAnd(input.userId, { id: { in: input.mappingIds } }),
-    data: { status: "ARCHIVED" },
-  });
-  await prisma.productMappingEvent.createMany({
-    data: input.mappingIds.map((mappingId) => ({
-      userId: input.userId,
-      mappingId,
-      eventType: "ARCHIVED" as ProductMappingEventType,
-      performedById: input.performedById ?? undefined,
-    })),
-  });
+  const scope = await mappingScopeAnd(input.userId, { id: { in: input.mappingIds } });
+  const [result] = await Promise.all([
+    prisma.productMapping.updateMany({
+      where: scope,
+      data: { status: "ARCHIVED" },
+    }),
+    prisma.productMappingEvent.createMany({
+      data: input.mappingIds.map((mappingId) => ({
+        userId: input.userId,
+        mappingId,
+        eventType: "ARCHIVED" as ProductMappingEventType,
+        performedById: input.performedById ?? undefined,
+      })),
+    }),
+  ]);
   return { archived: result.count };
 }
 
@@ -439,19 +463,22 @@ export type BulkIgnoreInput = {
 
 export async function bulkIgnore(input: BulkIgnoreInput): Promise<{ ignored: number }> {
   if (input.mappingIds.length === 0) return { ignored: 0 };
-  const result = await prisma.productMapping.updateMany({
-    where: await mappingScopeAnd(input.userId, { id: { in: input.mappingIds } }),
-    data: { status: "IGNORED" },
-  });
-  await prisma.productMappingEvent.createMany({
-    data: input.mappingIds.map((mappingId) => ({
-      userId: input.userId,
-      mappingId,
-      eventType: "CHANGED" as ProductMappingEventType,
-      performedById: input.performedById ?? undefined,
-      metadataJson: { to: "IGNORED" } as Prisma.InputJsonValue,
-    })),
-  });
+  const scope = await mappingScopeAnd(input.userId, { id: { in: input.mappingIds } });
+  const [result] = await Promise.all([
+    prisma.productMapping.updateMany({
+      where: scope,
+      data: { status: "IGNORED" },
+    }),
+    prisma.productMappingEvent.createMany({
+      data: input.mappingIds.map((mappingId) => ({
+        userId: input.userId,
+        mappingId,
+        eventType: "CHANGED" as ProductMappingEventType,
+        performedById: input.performedById ?? undefined,
+        metadataJson: { to: "IGNORED" } as Prisma.InputJsonValue,
+      })),
+    }),
+  ]);
   return { ignored: result.count };
 }
 
@@ -508,18 +535,17 @@ export type CreateModifierInput = {
 };
 
 export async function upsertModifierMapping(input: CreateModifierInput) {
-  const owns = await prisma.productMapping.findFirst({
-    where: await productMappingByIdWhereForOwner(input.userId, input.productMappingId),
-    select: { id: true },
-  });
+  const ownerWhere = await productMappingByIdWhereForOwner(input.userId, input.productMappingId);
+  const modifierWhere = {
+    productMappingId: input.productMappingId,
+    externalModifierName: input.externalModifierName,
+    externalOptionName: input.externalOptionName ?? null,
+  };
+  const [owns, existing] = await Promise.all([
+    prisma.productMapping.findFirst({ where: ownerWhere, select: { id: true } }),
+    prisma.productModifierMapping.findFirst({ where: modifierWhere }),
+  ]);
   if (!owns) return { ok: false as const, error: "Mapping not found" };
-  const existing = await prisma.productModifierMapping.findFirst({
-    where: {
-      productMappingId: input.productMappingId,
-      externalModifierName: input.externalModifierName,
-      externalOptionName: input.externalOptionName ?? null,
-    },
-  });
   const data = {
     productMappingId: input.productMappingId,
     provider: input.provider,
@@ -532,21 +558,24 @@ export async function upsertModifierMapping(input: CreateModifierInput) {
       input.status ??
       (input.internalModifierKey ? ("APPROVED" as ProductModifierMappingStatus) : ("SUGGESTED" as ProductModifierMappingStatus)),
   };
-  const row = existing
-    ? await prisma.productModifierMapping.update({ where: { id: existing.id }, data })
-    : await prisma.productModifierMapping.create({ data });
-  await prisma.productMappingEvent.create({
-    data: {
-      userId: input.userId,
-      mappingId: input.productMappingId,
-      eventType: "MODIFIER_MAPPED",
-      performedById: input.performedById ?? undefined,
-      metadataJson: {
-        modifierId: row.id,
-        key: row.internalModifierKey,
-        option: row.internalOptionValue,
-      } as Prisma.InputJsonValue,
-    },
+  const row = await prisma.$transaction(async (tx) => {
+    const saved = existing
+      ? await tx.productModifierMapping.update({ where: { id: existing.id }, data })
+      : await tx.productModifierMapping.create({ data });
+    await tx.productMappingEvent.create({
+      data: {
+        userId: input.userId,
+        mappingId: input.productMappingId,
+        eventType: "MODIFIER_MAPPED",
+        performedById: input.performedById ?? undefined,
+        metadataJson: {
+          modifierId: saved.id,
+          key: saved.internalModifierKey,
+          option: saved.internalOptionValue,
+        } as Prisma.InputJsonValue,
+      },
+    });
+    return saved;
   });
   return { ok: true as const, modifier: row };
 }

@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { dashboardLayoutErrorDetail } from "@/lib/dashboard/layout-error-detail";
+import { NavigationPrefetch } from "@/components/dashboard/navigation-prefetch";
 import { OfflineIndicator } from "@/components/pwa/offline-indicator";
 import { DemoBanner } from "@/components/demo/demo-banner";
 import { DemoModeGuidedPathHost } from "@/components/dashboard/demo-mode-guided-path";
@@ -267,6 +268,7 @@ export async function DashboardLayoutContent({
           </ModuleRouteGate>
         </PageShell>
         <SupportWidget />
+        <NavigationPrefetch />
         <OfflineIndicator />
         <NpsSurveyPrompt workspaceCreatedAt={workspaceForNps?.createdAt?.toISOString() ?? null} />
       </DashboardShell>

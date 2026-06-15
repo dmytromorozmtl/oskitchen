@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { VendorCabinetSubnav } from "@/components/marketplace/vendor-cabinet-subnav";
+import { NavigationPrefetch } from "@/components/dashboard/navigation-prefetch";
 import { VendorCabinetPwaRegister } from "@/components/marketplace/vendor-cabinet-pwa-register";
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function VendorCabinetLayout({ children }: { children: React.Reac
   return (
     <div className="min-h-screen bg-background">
       <VendorCabinetPwaRegister />
+      <NavigationPrefetch />
       <header className="border-b border-border/80 bg-card/80">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">

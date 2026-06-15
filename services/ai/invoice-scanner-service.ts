@@ -93,35 +93,56 @@ async function resolveSupplierId(
   return created.id;
 }
 
-async function findOrCreateIngredient(
+async function resolveScannedInvoiceLines(
   userId: string,
   workspaceId: string | null,
-  line: ScannedInvoiceLineItem,
-): Promise<string> {
-  if (line.ingredientId) return line.ingredientId;
+  lineItems: ScannedInvoiceLineItem[],
+): Promise<Array<ScannedInvoiceLineItem & { ingredientId: string }>> {
+  const validLines = lineItems.filter((line) => line.quantity > 0);
+  if (validLines.length === 0) return [];
 
   const ingredientWhere = await ingredientListWhereForOwner(userId);
-  const name = line.name.trim();
-  const existing = await prisma.ingredient.findFirst({
-    where: {
-      AND: [ingredientWhere, { name: { equals: name, mode: "insensitive" } }],
-    },
-    select: { id: true },
-  });
-  if (existing) return existing.id;
+  const names = [...new Set(validLines.map((line) => line.name.trim()).filter(Boolean))];
+  const existing =
+    names.length > 0
+      ? await prisma.ingredient.findMany({
+          where: {
+            AND: [
+              ingredientWhere,
+              {
+                OR: names.map((name) => ({
+                  name: { equals: name, mode: "insensitive" as const },
+                })),
+              },
+            ],
+          },
+          select: { id: true, name: true },
+        })
+      : [];
+  const existingByLower = new Map(existing.map((row) => [row.name.toLowerCase(), row.id]));
 
-  const created = await prisma.ingredient.create({
-    data: {
-      userId,
-      workspaceId,
-      name,
-      unit: line.unit || "each",
-      costPerUnit: line.unitPrice > 0 ? line.unitPrice : 0,
-      currentStock: 0,
-      active: true,
-    },
-  });
-  return created.id;
+  return Promise.all(
+    validLines.map(async (line) => {
+      if (line.ingredientId) return { ...line, ingredientId: line.ingredientId };
+      const name = line.name.trim();
+      const existingId = existingByLower.get(name.toLowerCase());
+      if (existingId) return { ...line, ingredientId: existingId };
+
+      const created = await prisma.ingredient.create({
+        data: {
+          userId,
+          workspaceId,
+          name,
+          unit: line.unit || "each",
+          costPerUnit: line.unitPrice > 0 ? line.unitPrice : 0,
+          currentStock: 0,
+          active: true,
+        },
+      });
+      existingByLower.set(name.toLowerCase(), created.id);
+      return { ...line, ingredientId: created.id };
+    }),
+  );
 }
 
 async function incrementIngredientStock(
@@ -139,26 +160,33 @@ async function incrementIngredientStock(
   });
 
   if (stockRow) {
-    await prisma.inventoryStock.update({
-      where: { id: stockRow.id },
-      data: { quantityOnHand: { increment: quantity } },
-    });
+    await prisma.$transaction([
+      prisma.inventoryStock.update({
+        where: { id: stockRow.id },
+        data: { quantityOnHand: { increment: quantity } },
+      }),
+      prisma.ingredient.update({
+        where: { id: ingredientId },
+        data: { currentStock: { increment: quantity } },
+      }),
+    ]);
   } else {
-    await prisma.inventoryStock.create({
-      data: {
-        userId,
-        workspaceId,
-        ingredientId,
-        quantityOnHand: quantity,
-        unit,
-      },
-    });
+    await prisma.$transaction([
+      prisma.inventoryStock.create({
+        data: {
+          userId,
+          workspaceId,
+          ingredientId,
+          quantityOnHand: quantity,
+          unit,
+        },
+      }),
+      prisma.ingredient.update({
+        where: { id: ingredientId },
+        data: { currentStock: { increment: quantity } },
+      }),
+    ]);
   }
-
-  await prisma.ingredient.update({
-    where: { id: ingredientId },
-    data: { currentStock: { increment: quantity } },
-  });
 }
 
 /**
@@ -174,21 +202,17 @@ export async function createSupplyFromInvoice(
   },
 ): Promise<CreateSupplyFromInvoiceResult> {
   const performedById = options?.performedById ?? userId;
-  const supplierId = await resolveSupplierId(userId, workspaceId, invoice.supplier);
-
-  const resolvedLines: Array<ScannedInvoiceLineItem & { ingredientId: string }> = [];
-  for (const line of invoice.lineItems) {
-    if (line.quantity <= 0) continue;
-    const ingredientId = await findOrCreateIngredient(userId, workspaceId, line);
-    resolvedLines.push({ ...line, ingredientId });
-  }
+  const [supplierId, orderNumber, resolvedLines] = await Promise.all([
+    resolveSupplierId(userId, workspaceId, invoice.supplier),
+    nextPurchaseOrderNumber(userId),
+    resolveScannedInvoiceLines(userId, workspaceId, invoice.lineItems),
+  ]);
 
   if (resolvedLines.length === 0) {
     throw new Error("No valid line items to receive.");
   }
 
   const subtotal = resolvedLines.reduce((sum, line) => sum + line.total, 0);
-  const orderNumber = await nextPurchaseOrderNumber(userId);
 
   const po = await prisma.purchaseOrder.create({
     data: {
@@ -222,40 +246,41 @@ export async function createSupplyFromInvoice(
     include: { lines: true },
   });
 
-  let stockUpdated = 0;
-  for (const line of po.lines) {
-    await prisma.receivingEvent.create({
-      data: {
-        purchaseOrderId: po.id,
-        lineId: line.id,
-        ingredientId: line.ingredientId,
-        receivedQuantity: line.quantity,
-        unit: line.unit,
-        receivedById: performedById,
-        notes: INVOICE_SCANNER_NOTES_MARKER,
-      },
-    });
-
-    await incrementIngredientStock(
-      userId,
-      workspaceId,
-      line.ingredientId,
-      Number(line.quantity),
-      line.unit,
-    );
-    stockUpdated += 1;
-
-    if (Number(line.unitCost) > 0) {
-      await prisma.supplierPriceHistory.create({
+  await Promise.all(
+    po.lines.map(async (line) => {
+      await prisma.receivingEvent.create({
         data: {
+          purchaseOrderId: po.id,
+          lineId: line.id,
           ingredientId: line.ingredientId,
-          oldUnitCost: null,
-          newUnitCost: line.unitCost,
-          source: "INVOICE_SCANNER",
+          receivedQuantity: line.quantity,
+          unit: line.unit,
+          receivedById: performedById,
+          notes: INVOICE_SCANNER_NOTES_MARKER,
         },
       });
-    }
-  }
+
+      await incrementIngredientStock(
+        userId,
+        workspaceId,
+        line.ingredientId,
+        Number(line.quantity),
+        line.unit,
+      );
+
+      if (Number(line.unitCost) > 0) {
+        await prisma.supplierPriceHistory.create({
+          data: {
+            ingredientId: line.ingredientId,
+            oldUnitCost: null,
+            newUnitCost: line.unitCost,
+            source: "INVOICE_SCANNER",
+          },
+        });
+      }
+    }),
+  );
+  const stockUpdated = po.lines.length;
 
   const supplierInvoice = await prisma.supplierInvoice.create({
     data: {
@@ -323,21 +348,17 @@ export async function createDraftPurchaseOrderFromInvoice(
   },
 ): Promise<CreateDraftPurchaseOrderFromInvoiceResult> {
   const performedById = options?.performedById ?? userId;
-  const supplierId = await resolveSupplierId(userId, workspaceId, invoice.supplier);
-
-  const resolvedLines: Array<ScannedInvoiceLineItem & { ingredientId: string }> = [];
-  for (const line of invoice.lineItems) {
-    if (line.quantity <= 0) continue;
-    const ingredientId = await findOrCreateIngredient(userId, workspaceId, line);
-    resolvedLines.push({ ...line, ingredientId });
-  }
+  const [supplierId, orderNumber, resolvedLines] = await Promise.all([
+    resolveSupplierId(userId, workspaceId, invoice.supplier),
+    nextPurchaseOrderNumber(userId),
+    resolveScannedInvoiceLines(userId, workspaceId, invoice.lineItems),
+  ]);
 
   if (resolvedLines.length === 0) {
     throw new Error("No valid line items for draft PO.");
   }
 
   const subtotal = resolvedLines.reduce((sum, line) => sum + line.total, 0);
-  const orderNumber = await nextPurchaseOrderNumber(userId);
 
   const po = await prisma.purchaseOrder.create({
     data: {
@@ -433,14 +454,10 @@ export async function createSupplierDocumentFromReceipt(
   },
 ): Promise<CreateSupplierDocumentFromReceiptResult> {
   const performedById = options?.performedById ?? userId;
-  const supplierId = await resolveSupplierId(userId, workspaceId, invoice.supplier);
-
-  const resolvedLines: Array<ScannedInvoiceLineItem & { ingredientId: string }> = [];
-  for (const line of invoice.lineItems) {
-    if (line.quantity <= 0) continue;
-    const ingredientId = await findOrCreateIngredient(userId, workspaceId, line);
-    resolvedLines.push({ ...line, ingredientId });
-  }
+  const [supplierId, resolvedLines] = await Promise.all([
+    resolveSupplierId(userId, workspaceId, invoice.supplier),
+    resolveScannedInvoiceLines(userId, workspaceId, invoice.lineItems),
+  ]);
 
   if (resolvedLines.length === 0) {
     throw new Error("No valid line items for supplier document.");

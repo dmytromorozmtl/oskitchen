@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { PrefetchLink } from "@/components/ui/prefetch-link";
 
 import { cn } from "@/lib/utils";
 
@@ -31,7 +32,7 @@ export function VendorCabinetSubnav() {
       {VENDOR_CABINET_LINKS.map((link) => {
         const active = isActive(pathname, link.href, "exact" in link ? link.exact : false);
         return (
-          <Link
+          <PrefetchLink
             key={link.href}
             href={link.href}
             className={cn(
@@ -42,7 +43,7 @@ export function VendorCabinetSubnav() {
             )}
           >
             {link.label}
-          </Link>
+          </PrefetchLink>
         );
       })}
     </nav>

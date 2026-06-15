@@ -35,30 +35,32 @@ type Scope = { userId: string; email: string | null };
  * Idempotent; safe to call on every page load.
  */
 export async function ensureWorkspaceTemplates(): Promise<void> {
-  for (const seed of WORKSPACE_TEMPLATE_REGISTRY) {
-    await prisma.workspaceTemplate.upsert({
-      where: { key: seed.key },
-      create: {
-        key: seed.key,
-        title: seed.title,
-        description: seed.description,
-        category: seed.category,
-        businessModesJson: seed.businessModes as Prisma.InputJsonValue,
-        version: seed.version,
-        systemTemplate: true,
-        active: true,
-        templateJson: seed as unknown as Prisma.InputJsonValue,
-      },
-      update: {
-        title: seed.title,
-        description: seed.description,
-        category: seed.category,
-        businessModesJson: seed.businessModes as Prisma.InputJsonValue,
-        version: seed.version,
-        templateJson: seed as unknown as Prisma.InputJsonValue,
-      },
-    });
-  }
+  await Promise.all(
+    WORKSPACE_TEMPLATE_REGISTRY.map((seed) =>
+      prisma.workspaceTemplate.upsert({
+        where: { key: seed.key },
+        create: {
+          key: seed.key,
+          title: seed.title,
+          description: seed.description,
+          category: seed.category,
+          businessModesJson: seed.businessModes as Prisma.InputJsonValue,
+          version: seed.version,
+          systemTemplate: true,
+          active: true,
+          templateJson: seed as unknown as Prisma.InputJsonValue,
+        },
+        update: {
+          title: seed.title,
+          description: seed.description,
+          category: seed.category,
+          businessModesJson: seed.businessModes as Prisma.InputJsonValue,
+          version: seed.version,
+          templateJson: seed as unknown as Prisma.InputJsonValue,
+        },
+      }),
+    ),
+  );
 }
 
 export async function listSystemTemplates() {
@@ -208,40 +210,49 @@ export async function applyTemplate(
   }
 
   // --- module_pins ---
-  if (wants.has("module_pins")) {
-    for (const pin of template.sections.modulePins) {
-      try {
-        const existing = await prisma.kitchenModulePreference.findUnique({
-          where: { userId_moduleKey: { userId: scope.userId, moduleKey: pin.moduleKey } },
-        });
-        if (existing?.pinned) {
-          continue;
-        }
-        if (existing) {
-          await prisma.kitchenModulePreference.update({
-            where: { id: existing.id },
-            data: { pinned: true },
+  if (wants.has("module_pins") && template.sections.modulePins.length > 0) {
+    const pins = template.sections.modulePins;
+    const existingPrefs = await prisma.kitchenModulePreference.findMany({
+      where: {
+        userId: scope.userId,
+        moduleKey: { in: pins.map((pin) => pin.moduleKey) },
+      },
+    });
+    const prefByKey = new Map(existingPrefs.map((pref) => [pref.moduleKey, pref]));
+
+    await Promise.all(
+      pins.map(async (pin) => {
+        try {
+          const existing = prefByKey.get(pin.moduleKey);
+          if (existing?.pinned) {
+            return;
+          }
+          if (existing) {
+            await prisma.kitchenModulePreference.update({
+              where: { id: existing.id },
+              data: { pinned: true },
+            });
+          } else {
+            await prisma.kitchenModulePreference.create({
+              data: {
+                userId: scope.userId,
+                moduleKey: pin.moduleKey,
+                enabled: true,
+                pinned: true,
+              },
+            });
+          }
+          rollback.pinnedModuleKeys.push(pin.moduleKey);
+          resultChanges.push({
+            section: "module_pins",
+            action: "create",
+            summary: `Pinned ${pin.moduleKey}`,
           });
-        } else {
-          await prisma.kitchenModulePreference.create({
-            data: {
-              userId: scope.userId,
-              moduleKey: pin.moduleKey,
-              enabled: true,
-              pinned: true,
-            },
-          });
+        } catch (e) {
+          errors.push(`module_pin ${pin.moduleKey}: ${e instanceof Error ? e.message : "failed"}`);
         }
-        rollback.pinnedModuleKeys.push(pin.moduleKey);
-        resultChanges.push({
-          section: "module_pins",
-          action: "create",
-          summary: `Pinned ${pin.moduleKey}`,
-        });
-      } catch (e) {
-        errors.push(`module_pin ${pin.moduleKey}: ${e instanceof Error ? e.message : "failed"}`);
-      }
-    }
+      }),
+    );
     rollback.appliedSections.push("module_pins");
   }
 
@@ -291,39 +302,41 @@ export async function applyTemplate(
   }
 
   // --- setup_tasks ---
-  if (wants.has("setup_tasks")) {
-    for (const seed of template.sections.setupTasks) {
-      try {
-        const task = await prisma.kitchenTask.create({
-          data: {
-            userId: scope.userId,
-            title: seed.title,
-            description: seed.description ?? `From template: ${template.title}`,
-            taskType: "ADMIN",
-            status: "OPEN",
-            priority: seed.priority ?? "MEDIUM",
-            sourceType: "IMPLEMENTATION",
-            sourceId: null,
-            sourceLabel: `Template: ${template.title}`,
-            estimatedMinutes: seed.estimatedMinutes ?? null,
-            metadataJson: {
-              templateKey: template.key,
-              templateApplicationId: application.id,
-              actionRoute: seed.actionRoute,
-            } as Prisma.InputJsonValue,
-          },
-          select: { id: true },
-        });
-        rollback.generatedTaskIds.push(task.id);
-        resultChanges.push({
-          section: "setup_tasks",
-          action: "create",
-          summary: `Created task: ${seed.title}`,
-        });
-      } catch (e) {
-        errors.push(`setup_task ${seed.title}: ${e instanceof Error ? e.message : "failed"}`);
-      }
-    }
+  if (wants.has("setup_tasks") && template.sections.setupTasks.length > 0) {
+    await Promise.all(
+      template.sections.setupTasks.map(async (seed) => {
+        try {
+          const task = await prisma.kitchenTask.create({
+            data: {
+              userId: scope.userId,
+              title: seed.title,
+              description: seed.description ?? `From template: ${template.title}`,
+              taskType: "ADMIN",
+              status: "OPEN",
+              priority: seed.priority ?? "MEDIUM",
+              sourceType: "IMPLEMENTATION",
+              sourceId: null,
+              sourceLabel: `Template: ${template.title}`,
+              estimatedMinutes: seed.estimatedMinutes ?? null,
+              metadataJson: {
+                templateKey: template.key,
+                templateApplicationId: application.id,
+                actionRoute: seed.actionRoute,
+              } as Prisma.InputJsonValue,
+            },
+            select: { id: true },
+          });
+          rollback.generatedTaskIds.push(task.id);
+          resultChanges.push({
+            section: "setup_tasks",
+            action: "create",
+            summary: `Created task: ${seed.title}`,
+          });
+        } catch (e) {
+          errors.push(`setup_task ${seed.title}: ${e instanceof Error ? e.message : "failed"}`);
+        }
+      }),
+    );
     rollback.appliedSections.push("setup_tasks");
   }
 
@@ -341,16 +354,26 @@ export async function applyTemplate(
   }
 
   const finalStatus: TemplateApplicationStatus = errors.length === 0 ? "APPLIED" : "PARTIALLY_APPLIED";
-  await prisma.templateApplication.update({
-    where: { id: application.id },
-    data: {
-      status: finalStatus,
-      resultJson: { changes: resultChanges, errors } as unknown as Prisma.InputJsonValue,
-      rollbackJson: rollback as unknown as Prisma.InputJsonValue,
-      appliedAt: new Date(),
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.templateApplication.update({
+      where: { id: application.id },
+      data: {
+        status: finalStatus,
+        resultJson: { changes: resultChanges, errors } as unknown as Prisma.InputJsonValue,
+        rollbackJson: rollback as unknown as Prisma.InputJsonValue,
+        appliedAt: new Date(),
+      },
+    });
+    await tx.templateApplicationEvent.create({
+      data: {
+        applicationId: application.id,
+        userId: scope.userId,
+        eventType: "apply_finished",
+        performedBy: scope.email ?? "user",
+        metadataJson: { status: finalStatus, errors } as Prisma.InputJsonValue,
+      },
+    });
   });
-  await recordEvent(scope, application.id, "apply_finished", { status: finalStatus, errors });
 
   return {
     applicationId: application.id,
@@ -377,42 +400,54 @@ export async function rollbackApplication(
   const errors: string[] = [];
   let reverted = 0;
 
-  // 1) Un-pin modules
-  for (const moduleKey of plan.pinnedModuleKeys) {
-    try {
-      const pref = await prisma.kitchenModulePreference.findUnique({
-        where: { userId_moduleKey: { userId: scope.userId, moduleKey } },
-      });
-      if (pref && pref.pinned) {
+  const [pinnedPrefs, taskScope] = await Promise.all([
+    plan.pinnedModuleKeys.length > 0
+      ? prisma.kitchenModulePreference.findMany({
+          where: {
+            userId: scope.userId,
+            moduleKey: { in: plan.pinnedModuleKeys },
+            pinned: true,
+          },
+        })
+      : Promise.resolve([]),
+    kitchenTaskListWhereForOwner(scope.userId),
+  ]);
+  const scopedTasks =
+    plan.generatedTaskIds.length > 0
+      ? await prisma.kitchenTask.findMany({
+          where: { AND: [taskScope, { id: { in: plan.generatedTaskIds } }] },
+          select: { id: true, status: true },
+        })
+      : [];
+
+  await Promise.all(
+    pinnedPrefs.map(async (pref) => {
+      try {
         await prisma.kitchenModulePreference.update({
           where: { id: pref.id },
           data: { pinned: false },
         });
         reverted++;
+      } catch (e) {
+        errors.push(`unpin ${pref.moduleKey}: ${e instanceof Error ? e.message : "failed"}`);
       }
-    } catch (e) {
-      errors.push(`unpin ${moduleKey}: ${e instanceof Error ? e.message : "failed"}`);
-    }
-  }
+    }),
+  );
 
-  // 2) Delete setup tasks that haven't been completed
-  for (const taskId of plan.generatedTaskIds) {
-    try {
-      const taskScope = await kitchenTaskListWhereForOwner(scope.userId);
-      const task = await prisma.kitchenTask.findFirst({
-        where: { AND: [taskScope, { id: taskId }] },
-        select: { status: true },
-      });
-      if (task && task.status === "OPEN") {
-        await prisma.kitchenTask.delete({ where: { id: taskId } });
-        reverted++;
-      } else if (task) {
-        errors.push(`task ${taskId}: status=${task.status} (kept)`);
+  await Promise.all(
+    scopedTasks.map(async (task) => {
+      try {
+        if (task.status === "OPEN") {
+          await prisma.kitchenTask.delete({ where: { id: task.id } });
+          reverted++;
+        } else {
+          errors.push(`task ${task.id}: status=${task.status} (kept)`);
+        }
+      } catch (e) {
+        errors.push(`task ${task.id}: ${e instanceof Error ? e.message : "failed"}`);
       }
-    } catch (e) {
-      errors.push(`task ${taskId}: ${e instanceof Error ? e.message : "failed"}`);
-    }
-  }
+    }),
+  );
 
   // 3) Revert business mode
   if (plan.changedBusinessMode) {
@@ -428,26 +463,40 @@ export async function rollbackApplication(
   }
 
   // 4) Mark seeded playbooks inactive (do not delete — runs may reference them)
-  for (const playbookId of plan.seededPlaybookIds) {
-    try {
-      await prisma.playbook.update({
-        where: { id: playbookId },
-        data: { active: false, status: "ARCHIVED" },
-      });
-      reverted++;
-    } catch (e) {
-      errors.push(`playbook ${playbookId}: ${e instanceof Error ? e.message : "failed"}`);
-    }
+  if (plan.seededPlaybookIds.length > 0) {
+    await Promise.all(
+      plan.seededPlaybookIds.map(async (playbookId) => {
+        try {
+          await prisma.playbook.update({
+            where: { id: playbookId },
+            data: { active: false, status: "ARCHIVED" },
+          });
+          reverted++;
+        } catch (e) {
+          errors.push(`playbook ${playbookId}: ${e instanceof Error ? e.message : "failed"}`);
+        }
+      }),
+    );
   }
 
-  await prisma.templateApplication.update({
-    where: { id: app.id },
-    data: {
-      status: "ROLLED_BACK",
-      rolledBackAt: new Date(),
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.templateApplication.update({
+      where: { id: app.id },
+      data: {
+        status: "ROLLED_BACK",
+        rolledBackAt: new Date(),
+      },
+    });
+    await tx.templateApplicationEvent.create({
+      data: {
+        applicationId: app.id,
+        userId: scope.userId,
+        eventType: "rolled_back",
+        performedBy: scope.email ?? "user",
+        metadataJson: { reverted, errors } as Prisma.InputJsonValue,
+      },
+    });
   });
-  await recordEvent(scope, app.id, "rolled_back", { reverted, errors });
 
   return { ok: true, reverted, errors };
 }

@@ -94,6 +94,9 @@ export async function loadReadinessInputs(
     storefrontDomainScope,
     storefrontScope,
     usageEventScope,
+    customerScope,
+    printedLabelScope,
+    projectMetaWhere,
   ] = await Promise.all([
     orderListWhereForOwner(userId),
     menuListWhereForOwner(userId),
@@ -108,6 +111,9 @@ export async function loadReadinessInputs(
     storefrontDomainListWhereForOwner(userId),
     storefrontSettingsListWhereForOwner(userId),
     usageEventListWhereForOwner(userId),
+    kitchenCustomerListWhereForOwner(userId),
+    printedLabelListWhereForOwner(userId),
+    projectId ? goLiveProjectByIdWhereForOwner(userId, projectId) : Promise.resolve(null),
   ]);
   const [
     settings,
@@ -135,7 +141,7 @@ export async function loadReadinessInputs(
     prisma.kitchenSettings.findUnique({ where: { userId } }),
     prisma.menu.findFirst({ where: menuScope }),
     prisma.product.count({ where: productScope }),
-    prisma.kitchenCustomer.count({ where: await kitchenCustomerListWhereForOwner(userId) }),
+    prisma.kitchenCustomer.count({ where: customerScope }),
     prisma.productMapping.count({
       where: { AND: [mappingScope, { status: { in: ["APPROVED", "CONFIRMED"] } }] },
     }),
@@ -165,7 +171,7 @@ export async function loadReadinessInputs(
     prisma.productionBatch.count({ where: productionBatchScope }),
     prisma.packingTask.count({ where: packingTaskScope }),
     prisma.packingVerificationSession.count({ where: packingVerificationScope }),
-    prisma.printedLabel.count({ where: await printedLabelListWhereForOwner(userId) }),
+    prisma.printedLabel.count({ where: printedLabelScope }),
     prisma.deliveryRoute.count({ where: deliveryRouteScope }),
     prisma.staffMember.count({ where: { AND: [staffScope, { active: true }] } }),
     prisma.subscription.findUnique({ where: { userId } }),
@@ -176,9 +182,9 @@ export async function loadReadinessInputs(
     projectId
       ? prisma.goLiveApproval.count({ where: { projectId } })
       : Promise.resolve(0),
-    projectId
+    projectMetaWhere
       ? prisma.goLiveProject.findFirst({
-          where: await goLiveProjectByIdWhereForOwner(userId, projectId),
+          where: projectMetaWhere,
           select: { metadataJson: true },
         })
       : Promise.resolve(null),
@@ -235,17 +241,14 @@ export async function loadReadinessInputs(
   const hasAnalytics = usageEventCount > 0;
   const webhooksHealthy = brokenConnections === 0;
   const storefrontPublished = storefrontDomain > 0 || storefrontPublish > 0;
-  const { trainingReadinessSnapshot } = await import("@/services/training/training-service");
-  const trainingSnap = await trainingReadinessSnapshot(userId);
+  const [trainingSnap, staffSnap, billingSnap, workspaceId] = await Promise.all([
+    import("@/services/training/training-service").then((m) => m.trainingReadinessSnapshot(userId)),
+    import("@/services/staff/staff-readiness-service").then((m) => m.loadStaffReadinessSnapshot(userId)),
+    import("@/services/billing/billing-readiness-service").then((m) => m.loadBillingReadinessSnapshot(userId)),
+    resolveOwnerWorkspaceId(userId),
+  ]);
   const trainingCompletions = trainingSnap.completedAssignments;
 
-  const { loadStaffReadinessSnapshot } = await import("@/services/staff/staff-readiness-service");
-  const staffSnap = await loadStaffReadinessSnapshot(userId);
-
-  const { loadBillingReadinessSnapshot } = await import("@/services/billing/billing-readiness-service");
-  const billingSnap = await loadBillingReadinessSnapshot(userId);
-
-  const workspaceId = await resolveOwnerWorkspaceId(userId);
   const [ssoView, channelPilotLiveProofSlices] = await Promise.all([
     workspaceId
       ? getWorkspaceSsoAdminView({ workspaceId, ownerUserId: userId })
@@ -395,14 +398,14 @@ export async function createProject(input: CreateProjectInput): Promise<GoLivePr
   }
 
   const defaults = rollbackPlansForLaunchMode(project.launchMode);
-  for (const plan of defaults) {
-    await prisma.goLiveRollbackPlan.create({
-      data: {
+  if (defaults.length > 0) {
+    await prisma.goLiveRollbackPlan.createMany({
+      data: defaults.map((plan) => ({
         projectId: project.id,
         title: plan.title,
         triggerCondition: plan.triggerCondition,
         rollbackStepsJson: plan.steps as unknown as Prisma.InputJsonValue,
-      },
+      })),
     });
   }
 
@@ -423,17 +426,18 @@ export async function refreshAutoValidation(
   userId: string,
   projectId: string,
 ): Promise<void> {
-  const project = await prisma.goLiveProject.findFirst({
-    where: await goLiveProjectByIdWhereForOwner(userId, projectId),
-    select: { id: true, businessType: true, launchMode: true, status: true },
-  });
+  const projectWhere = await goLiveProjectByIdWhereForOwner(userId, projectId);
+  const [project, inputs, checklist] = await Promise.all([
+    prisma.goLiveProject.findFirst({
+      where: projectWhere,
+      select: { id: true, businessType: true, launchMode: true, status: true },
+    }),
+    loadReadinessInputs(userId, projectId),
+    prisma.goLiveChecklistItem.findMany({
+      where: { projectId, autoValidated: true },
+    }),
+  ]);
   if (!project) return;
-
-  const inputs = await loadReadinessInputs(userId, projectId);
-
-  const checklist = await prisma.goLiveChecklistItem.findMany({
-    where: { projectId, autoValidated: true },
-  });
 
   const SIGNAL: Record<string, boolean> = {
     business_profile: inputs.hasBusinessProfile,
@@ -456,40 +460,46 @@ export async function refreshAutoValidation(
     storefront_published: inputs.storefrontPublished,
   };
 
-  for (const item of checklist) {
-    const satisfied = SIGNAL[item.key];
-    if (satisfied === undefined) continue;
-    const target: GoLiveChecklistStatus = satisfied
-      ? "DONE"
-      : item.required
-        ? "BLOCKED"
-        : "TODO";
-    if (item.status !== target) {
-      await prisma.goLiveChecklistItem.update({
-        where: { id: item.id },
-        data: { status: target, validatedAt: satisfied ? new Date() : null },
-      });
-    }
-  }
+  await Promise.all(
+    checklist.flatMap((item) => {
+      const satisfied = SIGNAL[item.key];
+      if (satisfied === undefined) return [];
+      const target: GoLiveChecklistStatus = satisfied
+        ? "DONE"
+        : item.required
+          ? "BLOCKED"
+          : "TODO";
+      if (item.status === target) return [];
+      return [
+        prisma.goLiveChecklistItem.update({
+          where: { id: item.id },
+          data: { status: target, validatedAt: satisfied ? new Date() : null },
+        }),
+      ];
+    }),
+  );
 
   const report = validateLaunch(inputs, project.businessType ?? null, project.status);
-  await prisma.goLiveProject.update({
-    where: { id: projectId },
-    data: {
-      readinessScore: report.readiness.score,
-      riskLevel: report.riskLevel,
-      status: report.recommendedStatus,
-    },
-  });
-
-  await recordEvent({
-    projectId,
-    eventType: "AUTO_VALIDATION",
-    summary: `Readiness ${report.readiness.score}% / risk ${report.riskLevel}`,
-    metadata: {
-      blockerCount: report.blockers.length,
-      criticalBlockers: report.blockers.filter((b) => b.severity === "CRITICAL").length,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.goLiveProject.update({
+      where: { id: projectId },
+      data: {
+        readinessScore: report.readiness.score,
+        riskLevel: report.riskLevel,
+        status: report.recommendedStatus,
+      },
+    });
+    await tx.goLiveProjectEvent.create({
+      data: {
+        projectId,
+        eventType: "AUTO_VALIDATION",
+        summary: `Readiness ${report.readiness.score}% / risk ${report.riskLevel}`,
+        metadataJson: {
+          blockerCount: report.blockers.length,
+          criticalBlockers: report.blockers.filter((b) => b.severity === "CRITICAL").length,
+        } as Prisma.InputJsonValue,
+      },
+    });
   });
 }
 
@@ -505,11 +515,12 @@ export type ChecklistUpdateInput = {
 };
 
 export async function updateChecklistItem(input: ChecklistUpdateInput) {
+  const projectScope = await goLiveProjectListWhereForOwner(input.userId);
   const item = await prisma.goLiveChecklistItem.findFirst({
     where: {
       id: input.itemId,
       projectId: input.projectId,
-      project: await goLiveProjectListWhereForOwner(input.userId),
+      project: projectScope,
     },
   });
   if (!item) return { ok: false as const, error: "Checklist item not found" };
@@ -530,12 +541,16 @@ export async function updateChecklistItem(input: ChecklistUpdateInput) {
   if (input.dueAt !== undefined) data.dueAt = input.dueAt;
   if (input.blockerSeverity !== undefined) data.blockerSeverity = input.blockerSeverity;
 
-  await prisma.goLiveChecklistItem.update({ where: { id: item.id }, data });
-  await recordEvent({
-    projectId: input.projectId,
-    eventType: "CHECKLIST_UPDATED",
-    performedById: input.performedById ?? null,
-    summary: `${item.title} → ${input.status ?? item.status}`,
+  await prisma.$transaction(async (tx) => {
+    await tx.goLiveChecklistItem.update({ where: { id: item.id }, data });
+    await tx.goLiveProjectEvent.create({
+      data: {
+        projectId: input.projectId,
+        eventType: "CHECKLIST_UPDATED",
+        performedById: input.performedById ?? undefined,
+        summary: `${item.title} → ${input.status ?? item.status}`,
+      },
+    });
   });
   return { ok: true as const };
 }
@@ -548,33 +563,42 @@ export type RunSimulationInput = {
 };
 
 export async function runSimulationForProject(input: RunSimulationInput) {
+  const projectWherePromise = goLiveProjectByIdWhereForOwner(input.userId, input.projectId);
+  const [projectWhere, inputs] = await Promise.all([
+    projectWherePromise,
+    loadReadinessInputs(input.userId, input.projectId),
+  ]);
   const project = await prisma.goLiveProject.findFirst({
-    where: await goLiveProjectByIdWhereForOwner(input.userId, input.projectId),
+    where: projectWhere,
     select: { id: true, businessType: true },
   });
   if (!project) return { ok: false as const, error: "Project not found" };
-  const inputs = await loadReadinessInputs(input.userId, input.projectId);
   const start = Date.now();
   const report = runSimulation(input.simulationType, inputs, project.businessType ?? null);
   const durationMs = Date.now() - start;
-  const row = await prisma.goLiveSimulation.create({
-    data: {
-      projectId: input.projectId,
-      simulationType: input.simulationType,
-      result: report.result,
-      startedAt: new Date(start),
-      completedAt: new Date(),
-      durationMs,
-      outputJson: report as unknown as Prisma.InputJsonValue,
-      triggeredById: input.performedById ?? undefined,
-    },
-  });
-  await recordEvent({
-    projectId: input.projectId,
-    eventType: "SIMULATION_RAN",
-    performedById: input.performedById ?? null,
-    summary: `${input.simulationType} → ${report.result}`,
-    metadata: { simulationId: row.id, findings: report.findings.length },
+  const row = await prisma.$transaction(async (tx) => {
+    const simulation = await tx.goLiveSimulation.create({
+      data: {
+        projectId: input.projectId,
+        simulationType: input.simulationType,
+        result: report.result,
+        startedAt: new Date(start),
+        completedAt: new Date(),
+        durationMs,
+        outputJson: report as unknown as Prisma.InputJsonValue,
+        triggeredById: input.performedById ?? undefined,
+      },
+    });
+    await tx.goLiveProjectEvent.create({
+      data: {
+        projectId: input.projectId,
+        eventType: "SIMULATION_RAN",
+        performedById: input.performedById ?? undefined,
+        summary: `${input.simulationType} → ${report.result}`,
+        metadataJson: { simulationId: simulation.id, findings: report.findings.length } as Prisma.InputJsonValue,
+      },
+    });
+    return simulation;
   });
   return { ok: true as const, simulation: row, report };
 }
@@ -639,22 +663,27 @@ export async function createIncident(input: IncidentInput) {
     select: { id: true },
   });
   if (!exists) return { ok: false as const, error: "Project not found" };
-  const incident = await prisma.goLiveIncident.create({
-    data: {
-      projectId: input.projectId,
-      severity: input.severity,
-      category: input.category,
-      title: input.title,
-      description: input.description,
-      reportedById: input.performedById ?? undefined,
-    },
-  });
-  await recordEvent({
-    projectId: input.projectId,
-    eventType: "INCIDENT_OPENED",
-    performedById: input.performedById ?? null,
-    summary: `[${incident.severity}] ${incident.title}`,
-    metadata: { incidentId: incident.id, category: incident.category },
+  const incident = await prisma.$transaction(async (tx) => {
+    const row = await tx.goLiveIncident.create({
+      data: {
+        projectId: input.projectId,
+        severity: input.severity,
+        category: input.category,
+        title: input.title,
+        description: input.description,
+        reportedById: input.performedById ?? undefined,
+      },
+    });
+    await tx.goLiveProjectEvent.create({
+      data: {
+        projectId: input.projectId,
+        eventType: "INCIDENT_OPENED",
+        performedById: input.performedById ?? undefined,
+        summary: `[${row.severity}] ${row.title}`,
+        metadataJson: { incidentId: row.id, category: row.category } as Prisma.InputJsonValue,
+      },
+    });
+    return row;
   });
   return { ok: true as const, incident };
 }
@@ -670,35 +699,40 @@ export type IncidentUpdateInput = {
 };
 
 export async function updateIncident(input: IncidentUpdateInput) {
+  const projectScope = await goLiveProjectListWhereForOwner(input.userId);
   const existing = await prisma.goLiveIncident.findFirst({
     where: {
       id: input.incidentId,
       projectId: input.projectId,
-      project: await goLiveProjectListWhereForOwner(input.userId),
+      project: projectScope,
     },
   });
   if (!existing) return { ok: false as const, error: "Incident not found" };
-  await prisma.goLiveIncident.update({
-    where: { id: existing.id },
-    data: {
-      status: input.status ?? undefined,
-      resolution: input.resolution ?? undefined,
-      assignedToId: input.assignedToId === undefined ? undefined : input.assignedToId,
-      acknowledgedAt:
-        input.status === "ACKNOWLEDGED" || input.status === "IN_PROGRESS"
-          ? existing.acknowledgedAt ?? new Date()
-          : existing.acknowledgedAt,
-      resolvedAt:
-        input.status === "RESOLVED" || input.status === "CLOSED"
-          ? existing.resolvedAt ?? new Date()
-          : existing.resolvedAt,
-    },
-  });
-  await recordEvent({
-    projectId: input.projectId,
-    eventType: "INCIDENT_UPDATED",
-    performedById: input.performedById ?? null,
-    summary: `${existing.title} → ${input.status ?? existing.status}`,
+  await prisma.$transaction(async (tx) => {
+    await tx.goLiveIncident.update({
+      where: { id: existing.id },
+      data: {
+        status: input.status ?? undefined,
+        resolution: input.resolution ?? undefined,
+        assignedToId: input.assignedToId === undefined ? undefined : input.assignedToId,
+        acknowledgedAt:
+          input.status === "ACKNOWLEDGED" || input.status === "IN_PROGRESS"
+            ? existing.acknowledgedAt ?? new Date()
+            : existing.acknowledgedAt,
+        resolvedAt:
+          input.status === "RESOLVED" || input.status === "CLOSED"
+            ? existing.resolvedAt ?? new Date()
+            : existing.resolvedAt,
+      },
+    });
+    await tx.goLiveProjectEvent.create({
+      data: {
+        projectId: input.projectId,
+        eventType: "INCIDENT_UPDATED",
+        performedById: input.performedById ?? undefined,
+        summary: `${existing.title} → ${input.status ?? existing.status}`,
+      },
+    });
   });
   return { ok: true as const };
 }
@@ -719,20 +753,25 @@ export async function createRollbackPlan(input: RollbackPlanInput) {
     select: { id: true },
   });
   if (!exists) return { ok: false as const, error: "Project not found" };
-  const plan = await prisma.goLiveRollbackPlan.create({
-    data: {
-      projectId: input.projectId,
-      title: input.title,
-      triggerCondition: input.triggerCondition,
-      rollbackStepsJson: input.steps as unknown as Prisma.InputJsonValue,
-      ownerId: input.ownerId ?? undefined,
-    },
-  });
-  await recordEvent({
-    projectId: input.projectId,
-    eventType: "ROLLBACK_PLAN_CREATED",
-    performedById: input.performedById ?? null,
-    summary: input.title,
+  const plan = await prisma.$transaction(async (tx) => {
+    const row = await tx.goLiveRollbackPlan.create({
+      data: {
+        projectId: input.projectId,
+        title: input.title,
+        triggerCondition: input.triggerCondition,
+        rollbackStepsJson: input.steps as unknown as Prisma.InputJsonValue,
+        ownerId: input.ownerId ?? undefined,
+      },
+    });
+    await tx.goLiveProjectEvent.create({
+      data: {
+        projectId: input.projectId,
+        eventType: "ROLLBACK_PLAN_CREATED",
+        performedById: input.performedById ?? undefined,
+        summary: input.title,
+      },
+    });
+    return row;
   });
   return { ok: true as const, plan };
 }
@@ -784,18 +823,22 @@ export async function transitionStatus(input: StatusTransitionInput) {
     data.lockedAt = new Date();
   }
 
-  await prisma.goLiveProject.update({ where: { id: input.projectId }, data });
-  await recordEvent({
-    projectId: input.projectId,
-    eventType: "STATUS_TRANSITION",
-    performedById: input.performedById ?? null,
-    summary: `${project.status} → ${input.target}`,
-    metadata: {
-      fromStatus: project.status,
-      toStatus: input.target,
-      override: input.override === true,
-      auditSnapshot: buildGoLiveAuditSnapshot(inputs, report),
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.goLiveProject.update({ where: { id: input.projectId }, data });
+    await tx.goLiveProjectEvent.create({
+      data: {
+        projectId: input.projectId,
+        eventType: "STATUS_TRANSITION",
+        performedById: input.performedById ?? undefined,
+        summary: `${project.status} → ${input.target}`,
+        metadataJson: {
+          fromStatus: project.status,
+          toStatus: input.target,
+          override: input.override === true,
+          auditSnapshot: buildGoLiveAuditSnapshot(inputs, report),
+        } as Prisma.InputJsonValue,
+      },
+    });
   });
 
   return { ok: true as const, report };

@@ -1,9 +1,10 @@
 /* OS Kitchen production service worker — critical ops shell + offline POS sync */
-const CACHE_VERSION = "kitchenos-v2";
+const CACHE_VERSION = "kitchenos-v3";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
 const CRITICAL_PREFIXES = [
+  "/dashboard/today",
   "/dashboard/production",
   "/dashboard/kitchen",
   "/dashboard/kds",
