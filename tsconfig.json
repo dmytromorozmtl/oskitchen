@@ -1,0 +1,41 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "next-env.d.ts",
+    "middleware.ts",
+    "instrumentation.ts",
+    "next.config.ts",
+    "sentry.*.config.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx",
+    "hooks/**/*.ts",
+    "hooks/**/*.tsx",
+    "actions/**/*.ts",
+    "actions/**/*.tsx",
+    "services/**/*.ts",
+    "services/**/*.tsx",
+    "stores/**/*.ts",
+    "stores/**/*.tsx",
+    "types/**/*.ts",
+    "prisma/**/*.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "playwright.config.ts",
+    "e2e",
+    "tests",
+    "scripts",
+    "**/.next.trash.*/**",
+    "**/.next.deploy-trash.*/**",
+    "**/.next-stale-*/**",
+    ".vercel/**",
+    ".next/cache/**",
+    ".next/static/**",
+    ".next/server/**"
+  ]
+}
