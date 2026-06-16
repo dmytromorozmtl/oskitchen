@@ -5,7 +5,7 @@ import { SkipToContent } from "@/components/a11y/skip-to-content";
 import { RouteAwareMarketingTags } from "@/components/analytics/route-aware-marketing-tags";
 import { OfflineIndicator } from "@/components/pwa/offline-indicator";
 import { RegisterServiceWorker } from "@/components/pwa/register-service-worker";
-import { Providers } from "@/components/providers/providers";
+import { RouteAwareProviders } from "@/components/providers/route-aware-providers";
 import {
   OrganizationSchema,
   SoftwareApplicationSchema,
@@ -95,11 +95,11 @@ export default function RootLayout({
         <OrganizationSchema />
         <SoftwareApplicationSchema />
         <WebSiteSchema />
-        <Providers>
+        <RouteAwareProviders>
           <div id="main-content" tabIndex={-1}>
             {children}
           </div>
-        </Providers>
+        </RouteAwareProviders>
         <RouteAwareMarketingTags />
         <RegisterServiceWorker />
         <OfflineIndicator />
