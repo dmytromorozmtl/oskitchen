@@ -1,6 +1,16 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: perf-verification-21
+Timestamp: 2026-06-16T01:00:00.000Z
+Task: Step 17 — curl 500 check on critical pages
+Category: Performance
+Checked: 59 routes on https://os-kitchen.com — 19×200 (marketing), 40×307 (auth redirect), 0×500
+Fixed: n/a
+Result: OK — Step 17 PASS
+Evidence: curl probe all critical marketing + dashboard + vendor paths
+
+---
 Cycle: perf-verification-20
 Timestamp: 2026-06-16T00:20:00.000Z
 Task: Step 15 close + Step 16 RSC curl verify
