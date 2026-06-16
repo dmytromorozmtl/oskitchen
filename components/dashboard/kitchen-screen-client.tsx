@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { format, formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
 
 import {
   assignProductionWorkItemStaffFormAction,
@@ -67,6 +69,28 @@ function buildKitchenHref(opts: {
   if (opts.cardSize === "compact") p.set("card", "compact");
   const q = p.toString();
   return q ? `/dashboard/kitchen?${q}` : "/dashboard/kitchen";
+}
+
+function syncKitchenUrl(opts: {
+  station: string | null;
+  mode: KitchenScreenMode;
+  fullscreen: boolean;
+  cardSize: "large" | "compact";
+}) {
+  const href = buildKitchenHref(opts);
+  window.history.replaceState(null, "", href);
+}
+
+function KitchenFullscreenPortal({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return createPortal(
+    <div className="fixed inset-0 z-kitchen-fullscreen flex flex-col overflow-hidden bg-zinc-950 text-zinc-50">
+      {children}
+    </div>,
+    document.body,
+  );
 }
 
 function KitchenEmpty({
@@ -140,15 +164,21 @@ export function KitchenScreenClient({
   kitchenPermissions: KitchenUiPermissions;
 }) {
   const router = useRouter();
-  const sp = useSearchParams();
   const [isPending, startTransition] = React.useTransition();
   const [clock, setClock] = React.useState(() => new Date());
   const [lastRefresh, setLastRefresh] = React.useState(() => new Date());
+  const [workItems, setWorkItems] = React.useState(bundle.workItems);
+  const [legacyOpen, setLegacyOpen] = React.useState(bundle.legacyOpen);
 
-  const stationSlug = normalizeKitchenStationSlug(sp.get("station") ?? initialStation);
-  const mode = normalizeKitchenScreenMode(sp.get("mode") ?? initialMode);
-  const fullscreen = (sp.get("fullscreen") ?? (initialFullscreen ? "1" : "")) === "1";
-  const cardSize = normalizeKitchenCardSize(sp.get("card") ?? initialCardSize);
+  const [stationSlug, setStationSlug] = React.useState(() => normalizeKitchenStationSlug(initialStation));
+  const [mode, setMode] = React.useState<KitchenScreenMode>(() => normalizeKitchenScreenMode(initialMode));
+  const [fullscreen, setFullscreen] = React.useState(initialFullscreen);
+  const [cardSize, setCardSize] = React.useState<"large" | "compact">(() => normalizeKitchenCardSize(initialCardSize));
+
+  React.useEffect(() => {
+    setWorkItems(bundle.workItems);
+    setLegacyOpen(bundle.legacyOpen);
+  }, [bundle.workItems, bundle.legacyOpen]);
 
   React.useEffect(() => {
     const t = setInterval(() => setClock(new Date()), 30_000);
@@ -166,29 +196,28 @@ export function KitchenScreenClient({
   }, [router]);
 
   const filtered = React.useMemo(() => {
-    const f = filterKitchenWorkItems(bundle.workItems, {
+    const f = filterKitchenWorkItems(workItems, {
       stationSlug,
       mode,
       viewerStaffId: bundle.viewerStaffId,
     });
     return sortKitchenWorkQueue(f);
-  }, [bundle.workItems, bundle.viewerStaffId, mode, stationSlug]);
+  }, [workItems, bundle.viewerStaffId, mode, stationSlug]);
 
   const lateFiltered = countLate(filtered);
 
-  const pushQuery = (patch: Partial<{ station: string | null; mode: KitchenScreenMode; fullscreen: boolean; cardSize: "large" | "compact" }>) => {
+  const applyView = (
+    patch: Partial<{ station: string | null; mode: KitchenScreenMode; fullscreen: boolean; cardSize: "large" | "compact" }>,
+  ) => {
     const nextStation = patch.station !== undefined ? patch.station : stationSlug;
     const nextMode = patch.mode ?? mode;
     const nextFs = patch.fullscreen ?? fullscreen;
     const nextCard = patch.cardSize ?? cardSize;
-    router.replace(
-      buildKitchenHref({
-        station: nextStation,
-        mode: nextMode,
-        fullscreen: nextFs,
-        cardSize: nextCard,
-      }),
-    );
+    setStationSlug(nextStation);
+    setMode(nextMode);
+    setFullscreen(nextFs);
+    setCardSize(nextCard);
+    syncKitchenUrl({ station: nextStation, mode: nextMode, fullscreen: nextFs, cardSize: nextCard });
   };
 
   const heading = kitchenScreenHeading(bundle.businessType);
@@ -199,6 +228,18 @@ export function KitchenScreenClient({
       router.refresh();
       setLastRefresh(new Date());
     });
+
+  const patchWorkItem = React.useCallback((id: string, patch: Partial<KitchenWorkRowDTO>) => {
+    setWorkItems((prev) => prev.map((w) => (w.id === id ? { ...w, ...patch } : w)));
+  }, []);
+
+  const removeWorkItem = React.useCallback((id: string) => {
+    setWorkItems((prev) => prev.filter((w) => w.id !== id));
+  }, []);
+
+  const insertWorkItem = React.useCallback((item: KitchenWorkRowDTO) => {
+    setWorkItems((prev) => sortKitchenWorkQueue([...prev, item]));
+  }, []);
 
   const inner = (
     <div className={cn("kitchen-screen flex min-h-0 flex-1 flex-col gap-4", fullscreen ? "text-zinc-50" : "")}>
@@ -237,7 +278,7 @@ export function KitchenScreenClient({
             variant={fullscreen ? "premium" : "outline"}
             size="lg"
             className="min-h-11 rounded-xl"
-            onClick={() => pushQuery({ fullscreen: !fullscreen })}
+            onClick={() => applyView({ fullscreen: !fullscreen })}
           >
             {fullscreen ? "Exit full screen" : "Full screen"}
           </Button>
@@ -246,7 +287,7 @@ export function KitchenScreenClient({
             variant="outline"
             size="lg"
             className="min-h-11 rounded-xl"
-            onClick={() => pushQuery({ cardSize: cardSize === "large" ? "compact" : "large" })}
+            onClick={() => applyView({ cardSize: cardSize === "large" ? "compact" : "large" })}
           >
             {cardSize === "large" ? "Compact cards" : "Large cards"}
           </Button>
@@ -259,8 +300,8 @@ export function KitchenScreenClient({
             const active = (tab.slug === "all" && !stationSlug) || tab.slug === stationSlug;
             const count =
               tab.slug === "all"
-                ? bundle.workItems.length
-                : bundle.workItems.filter((w) => tab.match((w.station ?? "").trim() || "")).length;
+                ? workItems.length
+                : workItems.filter((w) => tab.match((w.station ?? "").trim() || "")).length;
             return (
               <Button
                 key={tab.slug}
@@ -268,11 +309,7 @@ export function KitchenScreenClient({
                 size="lg"
                 variant={active ? "premium" : "outline"}
                 className="min-h-11 shrink-0 rounded-xl"
-                disabled={!kitchenPermissions["kitchen.configure"]}
-                onClick={() => {
-                  if (!kitchenPermissions["kitchen.configure"]) return;
-                  pushQuery({ station: tab.slug === "all" ? null : tab.slug });
-                }}
+                onClick={() => applyView({ station: tab.slug === "all" ? null : tab.slug })}
               >
                 {tab.label}
                 <span className="ml-2 tabular-nums opacity-80">({count})</span>
@@ -282,11 +319,7 @@ export function KitchenScreenClient({
         </div>
         <Select
           value={mode}
-          disabled={!kitchenPermissions["kitchen.configure"]}
-          onValueChange={(v) => {
-            if (!kitchenPermissions["kitchen.configure"]) return;
-            pushQuery({ mode: normalizeKitchenScreenMode(v) });
-          }}
+          onValueChange={(v) => applyView({ mode: normalizeKitchenScreenMode(v) })}
         >
           <SelectTrigger className="min-h-11 w-[220px] rounded-xl text-base">
             <SelectValue placeholder="Mode" />
@@ -306,8 +339,8 @@ export function KitchenScreenClient({
       </p>
 
       <KitchenEmpty
-        hasFiltered={filtered.length === 0 && bundle.workItems.length > 0}
-        hasAnyWork={bundle.workItems.length > 0}
+        hasFiltered={filtered.length === 0 && workItems.length > 0}
+        hasAnyWork={workItems.length > 0}
         stationSlug={stationSlug}
         userRole={bundle.userRole}
         platformBypass={bundle.platformBypass}
@@ -315,8 +348,12 @@ export function KitchenScreenClient({
 
       <div
         className={cn(
-          "grid min-h-0 flex-1 gap-4 pb-8",
-          cardSize === "large" ? "xl:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+          "grid min-h-0 flex-1 gap-4",
+          fullscreen
+            ? "grid-cols-1 overflow-y-auto pb-4"
+            : cardSize === "large"
+              ? "xl:grid-cols-2 pb-8"
+              : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-8",
         )}
       >
         {filtered.map((w) => (
@@ -328,46 +365,56 @@ export function KitchenScreenClient({
             viewerStaffId={bundle.viewerStaffId}
             isPending={isPending}
             startTransition={startTransition}
-            routerRefresh={refresh}
+            patchWorkItem={patchWorkItem}
+            removeWorkItem={removeWorkItem}
+            insertWorkItem={insertWorkItem}
             kitchenPermissions={kitchenPermissions}
           />
         ))}
       </div>
 
+      {!fullscreen ? (
       <div className="space-y-3 border-t pt-6">
         <h2 className="text-xl font-bold tracking-tight sm:text-2xl">Legacy · Cook / pack / label</h2>
         <p className="text-sm text-muted-foreground">
           Menu product checkpoints (unchanged). Prep lines use the command center above.
         </p>
         <div className={cn("grid gap-4", cardSize === "large" ? "xl:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3")}>
-          {bundle.legacyOpen.map((row) => (
+          {legacyOpen.map((row) => (
             <LegacyProductCard
               key={row.productId}
               row={row}
               cardSize={cardSize}
               isPending={isPending}
               startTransition={startTransition}
-              routerRefresh={refresh}
+              onLegacyPatch={(productId, patch) =>
+                setLegacyOpen((prev) =>
+                  prev.map((r) => (r.productId === productId ? { ...r, ...patch } : r)),
+                )
+              }
             />
           ))}
-          {!bundle.legacyOpen.length ? (
+          {!legacyOpen.length ? (
             <Card className="border-dashed p-8 text-center text-muted-foreground sm:col-span-2 xl:col-span-2">
               All caught up — cook/pack/label tasks appear when menu products need production.
             </Card>
           ) : null}
         </div>
       </div>
+      ) : null}
     </div>
   );
 
   if (fullscreen) {
     return (
-      <div className="fixed inset-0 z-kitchen-fullscreen flex flex-col overflow-auto bg-zinc-950 p-3 sm:p-5">
-        {inner}
-        <p className="mt-4 text-center text-[11px] text-zinc-500">
+      <KitchenFullscreenPortal>
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-3 sm:p-5">
+          {inner}
+        </div>
+        <p className="shrink-0 border-t border-zinc-800 px-3 py-2 text-center text-[11px] text-zinc-500 sm:px-5">
           Allergen and nutrition data must be verified by your business. OS Kitchen does not replace label compliance.
         </p>
-      </div>
+      </KitchenFullscreenPortal>
     );
   }
 
@@ -381,7 +428,9 @@ function KitchenWorkCard({
   viewerStaffId,
   isPending,
   startTransition,
-  routerRefresh,
+  patchWorkItem,
+  removeWorkItem,
+  insertWorkItem,
   kitchenPermissions,
 }: {
   w: KitchenWorkRowDTO;
@@ -390,7 +439,9 @@ function KitchenWorkCard({
   viewerStaffId: string | null;
   isPending: boolean;
   startTransition: (fn: () => void) => void;
-  routerRefresh: () => void;
+  patchWorkItem: (id: string, patch: Partial<KitchenWorkRowDTO>) => void;
+  removeWorkItem: (id: string) => void;
+  insertWorkItem: (item: KitchenWorkRowDTO) => void;
   kitchenPermissions: KitchenUiPermissions;
 }) {
   const late = w.dueAt ? isWorkLate(new Date(w.dueAt), w.status) : false;
@@ -399,23 +450,54 @@ function KitchenWorkCard({
   const [holdReason, setHoldReason] = React.useState<string>(HOLD_REASONS[0]);
 
   const runStatus = (status: string, appendNote?: string) => {
+    const snapshot = w;
+    const prevStatus = w.status;
+    const prevNotes = w.notes;
+    if (status === "DONE") {
+      removeWorkItem(w.id);
+    } else {
+      patchWorkItem(w.id, {
+        status: status as KitchenWorkRowDTO["status"],
+        notes: appendNote ? (prevNotes ? `${prevNotes}\n${appendNote}` : appendNote) : prevNotes,
+      });
+    }
     startTransition(async () => {
       const fd = new FormData();
       fd.set("workItemId", w.id);
       fd.set("status", status);
       if (appendNote) fd.set("appendNote", appendNote);
-      await updateProductionWorkItemStatusFormAction(fd);
-      routerRefresh();
+      try {
+        await updateProductionWorkItemStatusFormAction(fd);
+      } catch {
+        if (status === "DONE") {
+          insertWorkItem(snapshot);
+        } else {
+          patchWorkItem(w.id, { status: prevStatus, notes: prevNotes });
+        }
+        toast.error("Could not update task. Check permissions and try again.");
+      }
     });
   };
 
   const runAssign = (staffMemberId: string) => {
+    if (!staffMemberId) {
+      toast.error("Select a staff member first.");
+      return;
+    }
+    const prevId = w.assignedToId;
+    const prevName = w.assignedToName;
+    const nextName = staffMembers.find((s) => s.id === staffMemberId)?.name ?? null;
+    patchWorkItem(w.id, { assignedToId: staffMemberId, assignedToName: nextName });
     startTransition(async () => {
       const fd = new FormData();
       fd.set("workItemId", w.id);
       fd.set("staffMemberId", staffMemberId);
-      await assignProductionWorkItemStaffFormAction(fd);
-      routerRefresh();
+      try {
+        await assignProductionWorkItemStaffFormAction(fd);
+      } catch {
+        patchWorkItem(w.id, { assignedToId: prevId, assignedToName: prevName });
+        toast.error("Could not assign staff. Check permissions and try again.");
+      }
     });
   };
 
@@ -561,22 +643,24 @@ function LegacyProductCard({
   cardSize,
   isPending,
   startTransition,
-  routerRefresh,
+  onLegacyPatch,
 }: {
   row: KitchenLegacyRowDTO;
   cardSize: "large" | "compact";
   isPending: boolean;
   startTransition: (fn: () => void) => void;
-  routerRefresh: () => void;
+  onLegacyPatch: (productId: string, patch: Partial<Pick<KitchenLegacyRowDTO, "cooked" | "packed" | "labeled">>) => void;
 }) {
   const pad = cardSize === "large" ? "p-6" : "p-4";
   const patch = (p: Partial<{ cooked: boolean; packed: boolean; labeled: boolean }>) => {
+    const prev = { cooked: row.cooked, packed: row.packed, labeled: row.labeled };
+    onLegacyPatch(row.productId, p);
     startTransition(async () => {
       const res = await updateProductionTask(row.productId, p);
       if (res && "error" in res && res.error) {
-        console.error(res.error);
+        onLegacyPatch(row.productId, prev);
+        toast.error(res.error);
       }
-      routerRefresh();
     });
   };
 

@@ -118,27 +118,27 @@ export default async function TodayOperationsPage({
       aiBriefingError = briefingLoad.error;
     }
   }
-  const gettingStarted = await loadGettingStartedStatus(
-    dataUserId,
-    resolveOperatorSinceDate(profile?.createdAt),
-  ).catch((error) => {
-    console.error("[today] getting started load failed", error);
-    return emptyGettingStartedPayload();
-  });
-  const onboardingTtv = profile?.createdAt
-    ? await loadOnboardingTtvMeasurement(dataUserId, profile.createdAt).catch((error) => {
-        console.error("[today] onboarding TTV load failed", error);
-        return null;
-      })
-    : null;
-  const dailyPlWidget = await loadDailyPlWidgetModel(dataUserId).catch((error) => {
-    console.error("[today] daily P&L widget load failed", error);
-    return null;
-  });
-  const laborCostWidget = await loadLaborCostWidgetModel(dataUserId).catch((error) => {
-    console.error("[today] labor cost widget load failed", error);
-    return null;
-  });
+  const operatorSince = resolveOperatorSinceDate(profile?.createdAt);
+  const [gettingStarted, onboardingTtv, dailyPlWidget, laborCostWidget] = await Promise.all([
+    loadGettingStartedStatus(dataUserId, operatorSince).catch((error) => {
+      console.error("[today] getting started load failed", error);
+      return emptyGettingStartedPayload();
+    }),
+    profile?.createdAt
+      ? loadOnboardingTtvMeasurement(dataUserId, profile.createdAt).catch((error) => {
+          console.error("[today] onboarding TTV load failed", error);
+          return null;
+        })
+      : Promise.resolve(null),
+    loadDailyPlWidgetModel(dataUserId).catch((error) => {
+      console.error("[today] daily P&L widget load failed", error);
+      return null;
+    }),
+    loadLaborCostWidgetModel(dataUserId).catch((error) => {
+      console.error("[today] labor cost widget load failed", error);
+      return null;
+    }),
+  ]);
   let commercialInflectionUiSlice = null;
   try {
     commercialInflectionUiSlice = commercialOps
