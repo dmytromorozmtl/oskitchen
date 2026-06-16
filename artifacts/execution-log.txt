@@ -1,6 +1,16 @@
 # Execution log continuity (FINAL-24) — 220-task cyclic executor
 
 ---
+Cycle: perf-verification-20
+Timestamp: 2026-06-16T00:20:00.000Z
+Task: Step 15 close + Step 16 RSC curl verify
+Category: Performance
+Checked: Lighthouse /dashboard/pos/terminal (→ login) runs 80–81/100 after deploy c8e54811; public RSC curl probe 10/10 OK
+Fixed: n/a — Step 15 PASS, Step 16 PASS
+Result: OK — proceed to Step 17 (500 errors)
+Evidence: Lighthouse 81/81/80; routes /, /login, /pricing, /dashboard/pos/terminal, /dashboard/today doc+rsc
+
+---
 Cycle: perf-verification-19
 Timestamp: 2026-06-15T23:45:00.000Z
 Task: Step 15 — deploy + Lighthouse verify
